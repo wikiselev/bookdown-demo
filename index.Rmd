@@ -12,6 +12,8 @@ always_allow_html: yes
 
 # About the course
 
+test
+
 Recent technological advances have made it possible to obtain genome-wide transcriptome data from single cells using high-throughput sequencing (scRNA-seq). Even though scRNA-seq makes it possible to address problems that are intractable with bulk RNA-seq data, analysing scRNA-seq is also more challenging.
 
 In this course we will be surveying the existing problems as well as the available computational and statistical frameworks available for the analysis of scRNA-seq.
