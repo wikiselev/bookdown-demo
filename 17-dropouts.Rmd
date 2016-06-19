@@ -151,26 +151,18 @@ DESeq_table <- readRDS("usoskin/DESeq_table.rds")
 length(unique(DESeq_table$Gene))
 ```
 
-We will demonstrate some of the methods starting from the simplest one proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html), which identifies genes with significant variation above technical noise (ERCCs).
+Another method proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html) 
+dentifies genes with significant variation above technical noise as measured by spike-ins. However, we find using all genes as
+spike-ins often performs better than using a relatively small number of spike-ins (only 9 ERCCs were detected in this dataset). 
 
 To use the method, we first normalize for library size then calculate
 the mean and the square coefficient of variation (variation divided by
 the squared mean expression). A quadratic curve is fit to the relationship
-between these two variables for the ERCC spike-in (subject to just
-technical variation) then a chi-square test is used to find genes
+between these two variables for the "spike-ins" then a chi-square test is used to find genes
 significantly above the curve. This has been provided for you as the
 Brenneck_getVariableGenes(counts, spikes) function.
 
-In the figure above blue points are the ERCC spike-ins. The red curve
-is the fitted technical noise model and the dashed line is the 95%
-CI. Pink dots are the genes with significant biological variability
-after multiple-testing correction. Since our dataset is relatively
-homogeneous only  genes are identified as significantly
-variable.
 
-We can also use the Brennecke method introduced earlier to identify 
-highly variable genes. However, there are only 9 spike-ins detected in this dataset
-so we will use the entire dataset as spike-ins. 
 ```{r, fig.width = 7, fig.height = 6}
 Brennecke_HVG <- M3Drop::Brennecke_getVariableGenes(
     uso_list$data,
@@ -179,6 +171,12 @@ Brennecke_HVG <- M3Drop::Brennecke_getVariableGenes(
 )
 length(Brennecke_HVG)
 ```
+In the figure above the red curve
+is the fitted technical noise model and the dashed line is the 95%
+CI. Pink dots are the genes with significant biological variability
+after multiple-testing correction. Since our dataset is relatively
+homogeneous only  genes are identified as significantly
+variable.
 
 __Exercise__: Plot a heatmap of the expression of the HVGs and DESeq DE genes. Do they look differentially expressed?
 
