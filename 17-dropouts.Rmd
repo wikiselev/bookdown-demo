@@ -92,7 +92,7 @@ will be shifted to the right of the curve. This happens because the MM
 curve is a convex function, whereas averaging dropout rate and
 expression is a linear function.
 
-```{r, fig.width = 8.5, fig.height = 6, echo=FALSE}
+```{r, fig.width = 8.5, fig.height = 6, echo=TRUE}
 K = 49.473
 S_sim = 10^seq(from=-3, to=4, by=0.05)
 MM = 1-S_sim/(K+S_sim)
