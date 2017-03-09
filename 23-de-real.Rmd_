@@ -11,6 +11,9 @@ opts_chunk$set(fig.align = "center")
 ```
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
+library(edgeR)
+library(monocle)
+library(MAST)
 library(ROCR)
 set.seed(1)
 ```
@@ -132,7 +135,6 @@ DE_Quality_AUC(pVals)
 We've already used edgeR for differential expression in Chapter 16. edgeR is based on a negative binomial model of gene expression and uses a generalized linear model (GLM) framework, the enables us to include other factors such as batch to the model.
 
 ```{r edger-plot, fig.cap="ROC curve for edgeR.", message=FALSE}
-require("edgeR")
 dge <- DGEList(counts=counts, norm.factors = rep(1, length(counts[1,])), group=group)
 group_edgeR <- factor(group)
 design <- model.matrix(~group_edgeR)
@@ -149,7 +151,6 @@ DE_Quality_AUC(pVals)
 [Monocle](https://bioconductor.org/packages/release/bioc/html/monocle.html) can use several different models for DE. For count data it recommends the Negative Binomial model (negbinomial.size). For normalized data it recommends log-transforming it then using a normal distribution (gaussianff). Similar to edgeR this method uses a GLM framework so in theory can account for batches, however in practice the model fails for this dataset if batches are included.
 
 ```{r Monocle-plot, fig.cap="ROC curve for Monocle.", message=FALSE}
-require("monocle")
 pd <- data.frame(group=group, batch=batch)
 rownames(pd) <- colnames(counts)
 pd <- new("AnnotatedDataFrame", data = pd)
@@ -168,7 +169,6 @@ __Exercise__: Compare the results using the negative binomial model on counts an
 
 __Answer__:
 ```{r Monocle-plot2, fig.cap="ROC curve for Monocle-gaussian.", message=FALSE, echo=FALSE, warning=FALSE}
-require("monocle")
 pd <- data.frame(group=group, batch=batch)
 rownames(pd) <- colnames(norm)
 pd <- new("AnnotatedDataFrame", data = pd)
@@ -187,7 +187,6 @@ DE_Quality_AUC(pVals)
 [MAST](https://bioconductor.org/packages/release/bioc/html/MAST.html) is based on a zero-inflated negative binomial model. It tests for differential expression using a hurdle model to combine tests of discrete (0 vs not zero) and continuous (non-zero values) aspects of gene expression. Again this uses a linear modelling framework to enable complex models to be considered.
 
 ```{r MAST-plot, fig.cap="ROC curve for MAST.", message=FALSE}
-require("MAST")
 log_counts <- log(counts+1)/log(2)
 fData = data.frame(names=rownames(log_counts))
 rownames(fData) = rownames(log_counts);
@@ -216,7 +215,7 @@ DE_Quality_AUC(pVals)
 [BPSC](https://academic.oup.com/bioinformatics/article/32/14/2128/2288270/Beta-Poisson-model-for-single-cell-RNA-seq-data) uses the Poisson-Beta model of single-cell gene expression, which we discussed in the previous chapter, and combines it with generalized linear models which we've already encountered when using edgeR. BPSC performs comparisons of one or more groups to a reference group ("control") and can include other factors such as batches in the model.
 
 ```{r, message=FALSE, eval=FALSE}
-require("BPSC")
+library(BPSC)
 bpsc_data <- norm[,batch=="NA19101.r1" | batch=="NA19239.r1"]
 bpsc_group = group[batch=="NA19101.r1" | batch=="NA19239.r1"]
 
@@ -233,7 +232,7 @@ DE_Quality_AUC(pVals)
 [SCDE](http://hms-dbmi.github.io/scde/) is the first single-cell specific DE method. It fits a zero-inflated negative binomial model to expression data using Bayesian statistics. The usage below tests for differences in mean expression of individual genes across groups but recent versions include methods to test for differences in mean expression or dispersion of groups of genes, usually representing a pathway.
 
 ```{r, eval=FALSE}
-require("scde")
+library(scde)
 cnts <- apply(
     counts,
     2,
