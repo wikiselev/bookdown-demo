@@ -11,97 +11,242 @@ opts_chunk$set(fig.align = "center")
 ```
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
-library(DESeq2)
-library(scde)
 library(ROCR)
-library(limma)
 set.seed(1)
 ```
 
 ## Introduction
 
-The main advantage of using synthetic data is that we have full
-control over all aspects of the data, and this facilitates the
-interpretation of the results. However, the transcriptional bursting
-model is unable to capture the full complexity of a real scRNA-seq
-dataset. Next, we are going to analyze the difference between the
-transcriptomes of the two stages of the mouse embryo development (_mid2cell_ and _16cell_) again from the `deng`. However, this time we need to use the raw counts instead of the normalized counts. This is a major requirement for the DE analysis tools like `DESeq2`, `edgeR`, `scde` etc.
-```{r de-real-deng-fpkm}
-deng <- readRDS("deng/deng_raw.rds")
-# select cells at different stages
-deng <- deng[ , c(which(colnames(deng) == "mid2cell"),
-                  which(colnames(deng) == "16cell")[1:12])]
-# keep those genes that are expressed in at least 6 cells
-deng <- deng[rowSums(deng > 0) > 5, ]
-pheatmap::pheatmap(
-    log2(deng + 1),
-    cutree_cols = 2,
-    kmeans_k = 100,
-    show_rownames = FALSE
-)
-```
+To test different single-cell differential expression methods we will be using the Blischak dataset from Chapters 7-17.
+For this experiment bulk RNA-seq data for each cell-line was generated in addition to single-cell data. We will use the
+differentially expressed genes identified using standard methods on this bulk data as the ground truth for evaluating the
+accuracy of each single-cell method. To save time we have pre-computed these for you, run the commands below to load these data.
 
-As you can see, the cells cluster well by their developmental stage.
-
-We can now use the same methods as before to obtain a list of
-differentially expressed genes.
-
-Because `scde` is very slow here we will only use a subset of genes. You should not do that with your real dataset, though. Here we do it just for demostration purposes:
 ```{r}
-deng <- deng[sample(1:nrow(deng), 1000), ]
+DE <- read.table("ForCourse_Blis_TPs.txt")
+notDE <- read.table("ForCourse_Blis_TNs.txt")
+GroundTruth <- list(DE=as.character(unlist(DE)), notDE=as.character(unlist(notDE)))
 ```
 
-## KS-test
+This ground truth has been produce for the comparison of individual NA19101 to NA19239. Now load the respective single-cell data:
+
+```{r}
+molecules <- read.table("blischak/molecules.txt", sep = "\t")
+anno <- read.table("blischak/annotation.txt", sep = "\t", header = TRUE)
+keep <- anno[,1] == "NA19101" | anno[,1] == "NA19239"
+data <- molecules[,keep]
+group <- anno[keep,1]
+batch <- anno[keep,4]
+# remove genes that aren't expressed in at least 6 cells
+gkeep <- rowSums(data > 0) > 5;
+counts <- data[gkeep,]
+# Library size normalization
+lib_size = colSums(counts)
+norm <- t(t(counts)/lib_size*median(lib_size)) # Variant of CPM for datasets with library sizes of fewer than 1,000,000 molecules
+```
+
+Now we will compare various single-cell DE methods. Note that we will only be running methods which are available as R-packages and run relatively quickly.
+
+## Kolmogorov-Smirnov test
+
+The types of test that are easiest to work with are non-parametric
+ones. The most commonly used non-parametric test is the
+[Kolmogorov-Smirnov test](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test) (KS-test) and we can use it to compare the distributions for each gene in the two individuals.
+
+The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experession and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros).
+
+```{r ks-statistic, out.width = '60%', fig.cap="Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))"}
+knitr::include_graphics("figures/KS2_Example.png")
+```
+
+Now run the test:
 
 ```{r, message=FALSE, warning=FALSE}
-pVals <- rep(1, nrow(deng))
-for (i in 1:nrow(deng)) {
-    res <- ks.test(
-        deng[i, 1:12],
-        deng[i, 13:24]
-    )
-    pVals[i] <- res$p.value
+pVals <- apply(norm, 1, function(x) {ks.test(x[group =="NA19101"], x[group=="NA19239"])$p.value})
+# multiple testing correction
+pVals <- p.adjust(pVals, method = "fdr")
+```
+This code "applies" the function to each row (specified by 1) of the expression matrix, data. In the function we are returning just the p.value from the ks.test output. We can now consider how many of the ground truth positive and negative DE genes are detected by the KS-test:
+
+### Evaluating Accuracy
+```{r}
+sigDE <- names(pVals)[pVals < 0.05]
+length(sigDE)
+sum(GroundTruth$DE %in% sigDE)
+length(GroundTruth$DE)
+sum(GroundTruth$notDE %in% sigDE)
+length(GroundTruth$notDE)
+```
+
+As you can see many more of our ground truth negative genes were identified as DE by the KS-test (false positives) than ground truth positive genes (true positives), however this may be due to the larger number of notDE genes thus we typically normalize these counts as the True positive rate (TPR), TP/(TP + FN), and False positive rate (FPR), FP/(FP+TP).
+
+```{r}
+tp <- sum(GroundTruth$DE %in% sigDE)
+fp <- sum(GroundTruth$notDE %in% sigDE)
+tn <- sum(GroundTruth$notDE %in% names(pVals)[pVals >= 0.05])
+fn <- sum(GroundTruth$DE %in% names(pVals)[pVals >= 0.05])
+tpr <- tp/(tp + fn)
+fpr <- fp/(fp + tn)
+cat(c(tpr, fpr))
+```
+Now we can see the TPR is much higher than the FPR indicating the KS test is identifying DE genes.
+
+So far we've only evaluated the performance at a single significance threshold. Often it is informative to vary the threshold and evaluate performance across a range of values. This is then plotted as a reveiver-operating-characteristic curve (ROC) and a general accuracy statistic can be calculated as the area under this curve (AUC). We will use the ROCR package to facilitate this plotting.
+
+```{r ks-roc-plot, fig.cap="ROC curve for KS-test."}
+pVals <- pVals[names(pVals) %in% GroundTruth$DE | names(pVals) %in% GroundTruth$notDE] # Only consider genes for which we know the ground truth
+truth <- rep(1, times = length(pVals));
+truth[names(pVals) %in% GroundTruth$DE] = 0;
+pred <- ROCR::prediction(pVals, truth)
+perf <- ROCR::performance(pred, "tpr", "fpr")
+ROCR::plot(perf)
+aucObj <- ROCR::performance(pred, "auc")
+aucObj@y.values[[1]] # AUC
+```
+Finally to facilitate the comparisons of other DE methods let's put this code into a function so we don't need to repeat it:
+
+```{r}
+DE_Quality_AUC <- function(pVals) {
+        pVals <- pVals[names(pVals) %in% GroundTruth$DE | names(pVals) %in% GroundTruth$notDE] # Only consider genes for which we know the ground truth
+        truth <- rep(1, times = length(pVals));
+        truth[names(pVals) %in% GroundTruth$DE] = 0;
+        pred <- ROCR::prediction(pVals, truth)
+        perf <- ROCR::performance(pred, "tpr", "fpr")
+        ROCR::plot(perf)
+        aucObj <- ROCR::performance(pred, "auc")
+        return(aucObj@y.values[[1]])
 }
-# Bonferroni correction
-pVals <- p.adjust(pVals, method = "bonferroni")
+```
+## Wilcox/Mann-Whitney-U Test
+
+The Wilcox-rank-sum test is another non-parametric test, but tests specifically if values in one group are greater/less than the values in the other group. Thus it is often considered a test for difference in median expression between two groups; whereas the KS-test is sensitive to any change in distribution of expression values.
+
+```{r wilcox-plot, fig.cap="ROC curve for Wilcox test.", message=FALSE, warning=FALSE}
+pVals <- apply(norm, 1, function(x) {ks.test(x[group =="NA19101"], x[group=="NA19239"])$p.value})
+# multiple testing correction
+pVals <- p.adjust(pVals, method = "fdr")
+DE_Quality_AUC(pVals)
 ```
 
-## DESeq2
+## edgeR
+We've already used edgeR for differential expression in Chapter 16. edgeR is based on a negative binomial model of gene expression and uses a generalized linear model (GLM) framework, the enables us to include other factors such as batch to the model.
 
-```{r, message=FALSE, warning=FALSE}
-cond <- factor(
-    c(
-        rep("mid2cell", 12),
-        rep("16cell", 12)
-    )
-)
-colnames(deng) <- 1:ncol(deng)
-dds <- DESeq2::DESeqDataSetFromMatrix(
-    deng,
-    colData = DataFrame(cond),
-    design = ~ cond
-)
-dds <- DESeq2::DESeq(dds)
-resDESeq <- DESeq2::results(dds)
-pValsDESeq <- resDESeq$padj
+```{r edger-plot, fig.cap="ROC curve for edgeR.", message=FALSE}
+require("edgeR")
+dge <- DGEList(counts=counts, norm.factors = rep(1, length(counts[1,])), group=group)
+group_edgeR <- factor(group)
+design <- model.matrix(~group_edgeR)
+dge <- estimateDisp(dge, design = design, trend.method="none")
+fit <- glmFit(dge, design)
+res <- glmLRT(fit)
+pVals <- res$table[,4]
+names(pVals) <- rownames(res$table)
+
+pVals <- p.adjust(pVals, method = "fdr")
+DE_Quality_AUC(pVals)
+```
+## Monocle
+[Monocle](https://bioconductor.org/packages/release/bioc/html/monocle.html) can use several different models for DE. For count data it recommends the Negative Binomial model (negbinomial.size). For normalized data it recommends log-transforming it then using a normal distribution (gaussianff). Similar to edgeR this method uses a GLM framework so in theory can account for batches, however in practice the model fails for this dataset if batches are included.
+
+```{r Monocle-plot, fig.cap="ROC curve for Monocle.", message=FALSE}
+require("monocle")
+pd <- data.frame(group=group, batch=batch)
+rownames(pd) <- colnames(counts)
+pd <- new("AnnotatedDataFrame", data = pd)
+
+Obj <- newCellDataSet(as.matrix(counts), phenoData=pd, expressionFamily=negbinomial.size())
+Obj <- estimateSizeFactors(Obj)
+Obj <- estimateDispersions(Obj)
+res <- differentialGeneTest(Obj,fullModelFormulaStr="~group")
+
+pVals <- res[,3]
+names(pVals) <- rownames(res)
+pVals <- p.adjust(pVals, method = "fdr")
+DE_Quality_AUC(pVals)
+```
+__Exercise__: Compare the results using the negative binomial model on counts and those from using the normal/gaussian model (gaussianff()) on log-transformed normalized counts.
+
+__Answer__:
+```{r Monocle-plot2, fig.cap="ROC curve for Monocle-gaussian.", message=FALSE, echo=FALSE, warning=FALSE}
+require("monocle")
+pd <- data.frame(group=group, batch=batch)
+rownames(pd) <- colnames(norm)
+pd <- new("AnnotatedDataFrame", data = pd)
+
+Obj_log <- newCellDataSet(as.matrix(log(norm+1)/log(2)), phenoData=pd, expressionFamily=gaussianff())
+Obj_log <- estimateSizeFactors(Obj_log)
+Obj_log <- estimateDispersions(Obj_log)
+res <- differentialGeneTest(Obj_log,fullModelFormulaStr="~group")
+
+pVals <- res[,3]
+names(pVals) <- rownames(res)
+pVals <- p.adjust(pVals, method = "fdr")
+DE_Quality_AUC(pVals)
+```
+## MAST
+[MAST](https://bioconductor.org/packages/release/bioc/html/MAST.html) is based on a zero-inflated negative binomial model. It tests for differential expression using a hurdle model to combine tests of discrete (0 vs not zero) and continuous (non-zero values) aspects of gene expression. Again this uses a linear modelling framework to enable complex models to be considered.
+
+```{r MAST-plot, fig.cap="ROC curve for MAST.", message=FALSE}
+require("MAST")
+log_counts <- log(counts+1)/log(2)
+fData = data.frame(names=rownames(log_counts))
+rownames(fData) = rownames(log_counts);
+cData = data.frame(cond=group)
+rownames(cData) = colnames(log_counts)
+
+obj <- FromMatrix(as.matrix(log_counts), cData, fData)
+colData(obj)$cngeneson <- scale(colSums(assay(obj)>0))
+cond <- factor(colData(obj)$cond)
+
+zlmCond <- zlm.SingleCellAssay(~cond + cngeneson, obj) # Recommended to model 
+
+summaryCond <- summary(zlmCond, doLRT="condNA19101")
+summaryDt <- summaryCond$datatable
+
+summaryDt <- as.data.frame(summaryDt)
+pVals <- unlist(summaryDt[summaryDt$component == "H",4]) # H = hurdle model
+names(pVals) <- unlist(summaryDt[summaryDt$component == "H",1])
+pVals <- p.adjust(pVals, method = "fdr")
+DE_Quality_AUC(pVals)
+```
+## Slow Methods (>1h to run) - These methods are too slow to run today but we encourage you to try them out on your own:
+
+## BPSC
+
+[BPSC](https://academic.oup.com/bioinformatics/article/32/14/2128/2288270/Beta-Poisson-model-for-single-cell-RNA-seq-data) uses the Poisson-Beta model of single-cell gene expression, which we discussed in the previous chapter, and combines it with generalized linear models which we've already encountered when using edgeR. BPSC performs comparisons of one or more groups to a reference group ("control") and can include other factors such as batches in the model.
+
+```{r, message=FALSE, eval=FALSE}
+require("BPSC")
+bpsc_data <- norm[,batch=="NA19101.r1" | batch=="NA19239.r1"]
+bpsc_group = group[batch=="NA19101.r1" | batch=="NA19239.r1"]
+
+control_cells <- which(bpsc_group == "NA19101")
+design <- model.matrix(~bpsc_group)
+coef=2 # group label
+res=BPglm(data=bpsc_data, controlIds=control_cells, design=design, coef=coef, estIntPar=FALSE, useParallel = FALSE)
+pVals = res$PVAL
+pVals <- p.adjust(pVals, method = "fdr")
+DE_Quality_AUC(pVals)
 ```
 
 ## SCDE
+[SCDE](http://hms-dbmi.github.io/scde/) is the first single-cell specific DE method. It fits a zero-inflated negative binomial model to expression data using Bayesian statistics. The usage below tests for differences in mean expression of individual genes across groups but recent versions include methods to test for differences in mean expression or dispersion of groups of genes, usually representing a pathway.
 
-```{r}
+```{r, eval=FALSE}
+require("scde")
 cnts <- apply(
-    deng,
+    counts,
     2,
     function(x) {
         storage.mode(x) <- 'integer'
         return(x)
     }
 )
-names(cond) <- 1:length(cond)
-colnames(cnts) <- 1:length(cond) 
+names(group) <- 1:length(group)
+colnames(cnts) <- 1:length(group)
 o.ifm <- scde::scde.error.models(
     counts = cnts,
-    groups = cond,
+    groups = group,
     n.cores = 1,
     threshold.segmentation = TRUE,
     save.crossfit.plots = FALSE,
@@ -119,131 +264,13 @@ resSCDE <- scde::scde.expression.difference(
     o.ifm,
     cnts,
     priors,
-    groups = cond,
+    groups = group,
     n.randomizations = 100,
     n.cores = 1,
     verbose = 0
 )
 # Convert Z-scores into 2-tailed p-values
-pValsSCDE <- pnorm(abs(resSCDE$cZ), lower.tail = FALSE) * 2 
-pValsSCDE <- p.adjust(pValsSCDE, method = "bonferroni")
+pVals <- pnorm(abs(resSCDE$cZ), lower.tail = FALSE) * 2
+pVals <- p.adjust(pVals, method = "fdr")
+DE_Quality_AUC(pVals)
 ```
-
-## Comparison of the methods
-```{r de-real-comparison}
-vennDiagram(
-    vennCounts(
-        cbind(
-            pVals < 0.05,
-            pValsDESeq < 0.05,
-            pValsSCDE < 0.05
-        )
-    ),
-    names = c("KS-test", "DESeq2", "SCDE"),
-    circle.col = c("red", "blue", "green")
-)
-```
-
-__Exercise 1:__ How does this Venn diagram correspond to what you would expect based on the synthetic data? 
-
-## Visualisation
-
-To further characterize the list of genes, we can calculate the
-average fold-changes and compare the ones that were called as
-differentially expressed to the ones that were not. 
-
-```{r de-real-deng-hist, fig.height=7}
-group1 <- deng[, 1:12] # mid2cell stage
-group2 <- deng[, 13:24] # 16cell stage
-ksGenesChangedInds <- which(pVals<.05)
-deSeqGenesChangedInds <- which(pValsDESeq<.05)
-scdeGenesChangedInds <- which(pValsSCDE<.05)
-ksGenesNotChangedInds <- which(pVals>=.05)
-deSeqGenesNotChangedInds <- which(pValsDESeq>=.05)
-scdeGenesNotChangedInds <- which(pValsSCDE>=.05)
-meanFoldChange <- rowSums(group1)/rowSums(group2)
-
-par(mfrow=c(2,1))
-hist(log2(meanFoldChange[ksGenesChangedInds]),
-     freq = FALSE,
-     xlab = "# fold-change",
-     col = rgb(1, 0, 0, 1/4))
-hist(log2(meanFoldChange[deSeqGenesChangedInds]),
-     freq = FALSE,
-     xlab = "# fold-change",
-     col = rgb(0, 0, 1, 1/4))
-```
-
-__Exercise 2:__ Create the histogram of fold-changes for SCDE. Compare
-the estimated fold-changes between the different methods? What do the
-genes where they differ have in common?
-
-### Volcano plots
-
-A popular method for illustrating the difference between two
-conditions is the volcano plot which compares the magnitude of the
-change and the significance.
-
-```{r de-real-deng-volcano, fig.height=7}
-par(mfrow=c(2,1))
-plot(log2(meanFoldChange),
-     -log10(pVals),
-     xlab = "mean expression change",
-     ylab = "-log10(P-value), KS-test") 
-points(log2(meanFoldChange[ksGenesChangedInds]),
-       -log10(pVals[ksGenesChangedInds]),
-       col = "red")
-
-plot(log2(meanFoldChange), 
-     -log10(pValsDESeq),
-     xlab = "mean expression change",
-     ylab = "-log10(P-value), DESeq2")
-points(log2(meanFoldChange[deSeqGenesChangedInds]),
-       -log10(pValsDESeq[deSeqGenesChangedInds]),
-       col = "blue")
-
-```
-
-### MA-plot
-
-Another popular method for illustrating the difference between two
-conditions is the MA-plot, in which the data has been transformed onto the M (log ratios) and A (mean average) scale:
-```{r de-real-deng-ma-plot, fig.height=7}
-par(mfrow=c(2,1))
-plot(log2(rowMeans(group1)),
-     log2(meanFoldChange),
-     ylab = "mean fold change",
-     xlab = "mean expression") 
-points(log2(rowMeans(group1[ksGenesChangedInds,])),
-       log2(meanFoldChange[ksGenesChangedInds]),
-       col = "red")
-
-plot(log2(rowMeans(group1)),
-     log2(meanFoldChange),
-     ylab = "mean fold change",
-     xlab = "mean expression")
-points(log2(rowMeans(group1[deSeqGenesChangedInds,])),
-       log2(meanFoldChange[deSeqGenesChangedInds]),
-       col = "blue")
-```
-
-__Exercise 3:__ The volcano and MA-plots for the SCDE are missing - can
-you generate them? Compare to the synthetic data, what do they tell
-you about the properties of the genes that have changed?
-
-### Heatmap of DE genes
-
-Finally, we can plot heatmaps of the genes that were called as DE by
-the intersection of the three.
-
-```{r de-real-deng-heatmap}
-allChangedInds <- intersect(which(pValsDESeq<.05),
-                            intersect(which(pValsSCDE<.05),
-                                      which(pVals<.05)))
-pheatmap::pheatmap(log2(1 + deng[allChangedInds,]),
-                   cutree_cols = 2,
-                   show_rownames = FALSE)
-```
-
-__Exercise 4:__ Create heatmaps for the genes that were detected by at least 2/3 methods.
-
