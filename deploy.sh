@@ -9,8 +9,10 @@ docker run hemberglab/scrna.seq.course:latest
 
 # copy files from the docker
 alias dl='docker ps -l -q'
-docker cp `dl`:_book $WORKSPACE/docs
-docker cp `dl`:blischak $WORKSPACE/docs/blischak
+docker cp `dl`:_book $WORKSPACE/tmp1
+cp -r tmp1/* docs
+docker cp `dl`:blischak $WORKSPACE/tmp2
+cp -r tmp2/* docs/blischak
 
 # push changes to the website
 git add docs/*
