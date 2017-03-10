@@ -26,8 +26,8 @@ differentially expressed genes identified using standard methods on this bulk da
 accuracy of each single-cell method. To save time we have pre-computed these for you, run the commands below to load these data.
 
 ```{r}
-DE <- read.table("TPs.txt")
-notDE <- read.table("TNs.txt")
+DE <- read.table("blischak/TPs.txt")
+notDE <- read.table("blischak/TNs.txt")
 GroundTruth <- list(DE=as.character(unlist(DE)), notDE=as.character(unlist(notDE)))
 ```
 
