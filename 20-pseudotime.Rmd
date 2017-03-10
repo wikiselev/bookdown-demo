@@ -14,6 +14,7 @@ library(TSCAN)
 library(M3Drop)
 library(monocle)
 library(destiny)
+library(SLICER)
 set.seed(1)
 ```
 
@@ -62,8 +63,12 @@ documentation but no vignette/workflow
 Unfortunately only two tools discussed (Monocle and TSCAN) meet the
 gold standard of open-source software hosted in a reputable repository.
 
-The following figure from the paper summarises some of the features of
+The following figures from the paper summarise some of the features of
 the various tools.
+
+```{r pseudotime-methods-description, out.width = '90%', fig.cap="Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016)."}
+knitr::include_graphics("figures/cannoodt_pseudotime_properties.png")
+```
 
 ```{r pseudotime-methods, out.width = '90%', fig.cap="Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016)."}
 knitr::include_graphics("figures/cannoodt_pseudotime_methods.png")
