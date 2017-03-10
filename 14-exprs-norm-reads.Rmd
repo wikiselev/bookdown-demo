@@ -8,6 +8,7 @@ knit: bookdown::preview_chapter
 library(scRNA.seq.funcs)
 library(scater, quietly = TRUE)
 options(stringsAsFactors = FALSE)
+set.seed(1234567)
 library(knitr)
 opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
 reads <- readRDS("blischak/reads.rds")

@@ -85,6 +85,7 @@ We will continue to work with the Blischak data that was used in the previous ch
 library(scRNA.seq.funcs)
 library(scater, quietly = TRUE)
 options(stringsAsFactors = FALSE)
+set.seed(1234567)
 umi <- readRDS("blischak/umi.rds")
 umi.qc <- umi[fData(umi)$use, pData(umi)$use]
 endog_genes <- !fData(umi.qc)$is_feature_control
