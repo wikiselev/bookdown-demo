@@ -175,7 +175,7 @@ pd <- new("AnnotatedDataFrame", data = pd)
 
 Obj_log <- newCellDataSet(as.matrix(log(norm+1)/log(2)), phenoData=pd, expressionFamily=gaussianff())
 Obj_log <- estimateSizeFactors(Obj_log)
-Obj_log <- estimateDispersions(Obj_log)
+# Obj_log <- estimateDispersions(Obj_log)
 res <- differentialGeneTest(Obj_log,fullModelFormulaStr="~group")
 
 pVals <- res[,3]
