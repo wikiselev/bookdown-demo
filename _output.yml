@@ -8,7 +8,7 @@ bookdown::gitbook:
       before: |
         <li><a href="index.html">Table of Contents</a></li>
       after: |
-        <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2016</a></li>
+        <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2017</a></li>
     download: [pdf]
     edit:
       link: https://github.com/hemberg-lab/scRNA.seq.course/edit/master/%s

@@ -30,6 +30,18 @@ Please follow this link and register for the __"Analysis of single cell RNA-seq 
 ## GitHub
 <a href="https://github.com/hemberg-lab/scRNA.seq.course" target="blank">https://github.com/hemberg-lab/scRNA.seq.course</a>
 
+## Docker container
+
+If you do not want to install all the packages manually, you can run a course docker container which contains all the required packages.
+
+Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker container:
+
+```
+docker run -it hemberglab/scrna.seq.course:latest R
+```
+
+It will download the course docker image (may take some time) and start a new R session with all packages installed and all data files available.
+
 ## License
 <b>GPL-3</b>
 
