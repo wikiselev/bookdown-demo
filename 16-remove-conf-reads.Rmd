@@ -15,6 +15,7 @@ library(RUVSeq)
 library(scater, quietly = TRUE)
 library(scran)
 library(edgeR)
+set.seed(1234567)
 options(stringsAsFactors = FALSE)
 reads <- readRDS("blischak/reads.rds")
 reads.qc <- reads[fData(reads)$use, pData(reads)$use]

@@ -28,6 +28,7 @@ library(RUVSeq)
 library(scater, quietly = TRUE)
 library(scran)
 library(edgeR)
+set.seed(1234567)
 options(stringsAsFactors = FALSE)
 umi <- readRDS("blischak/umi.rds")
 umi.qc <- umi[fData(umi)$use, pData(umi)$use]
