@@ -64,9 +64,9 @@ How to best account for errors in UMIs remains an active area of research. The b
 
 2. Currently an open question. The problem may be mitigated by removing UMIs with few reads to support their association with a particular transcript, or by removing all multi-mapping reads.
 
-3. Simple saturation (aka "collision probability") correction proposed by [Grun, Kester and van Oudenaarden (2014)](http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html#methods) :
+3. Simple saturation (aka "collision probability") correction proposed by [Grun, Kester and van Oudenaarden (2014)](http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html#methods) to estimate the true number of molecules $M$:
 
-$$True \approx -N*log(1 - \frac{n}{N})$$ 
+$$M \approx -N*log(1 - \frac{n}{N})$$ 
 where N = total number of unique UMI barcodes and n = number of observations of a specific barcode.
 	+ An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content. 
 
@@ -80,7 +80,7 @@ __Exercise 1__ Blischak et al. used 6bp UMI barcodes for their experiments and y
 molecules <- read.table("blischak/molecules.txt", sep = "\t")
 ```
 
-Correct this data for collisions and sequencing errors assuming a 1% per base-pair sequencing error rate.
+Estimate the true number of molecules by correcting for collisions and sequencing errors using the simple saturation approach. Assume a 1% per base-pair sequencing error rate and that the errors follow a binomial distribution.
 
 ## Downstream Analysis
 
