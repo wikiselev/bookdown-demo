@@ -9,7 +9,7 @@ library(knitr)
 opts_chunk$set(fig.align = "center", echo=FALSE)
 ```
 
-Many analyses of scRNA-seq data take as their starting point an __expression matrix__. By convention, the each row of the expression matrix represents a gene and each column represents a cell. Each entry represents the expression level of a particular gene in a given cell. The units by which the expression is meassured depends on the protocol and the normalization strategy used.
+Many analyses of scRNA-seq data take as their starting point an __expression matrix__. By convention, the each row of the expression matrix represents a gene and each column represents a cell (although some authors use the transpose). Each entry represents the expression level of a particular gene in a given cell. The units by which the expression is meassured depends on the protocol and the normalization strategy used.
 
 ## Reads QC
 
