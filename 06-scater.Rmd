@@ -17,9 +17,11 @@ knit: bookdown::preview_chapter
 * Seamless integration into the Bioconductor universe
 * Simple normalisation methods
 
-We highly recommend to use [scater](http://bioconductor.org/packages/scater/) for all single-cell RNA-seq analyses and [scater](http://bioconductor.org/packages/scater/) is the basis of the first part of the course (disclaimer: one of the teachers on this course, Davis McCarthy, is the primary developer of scater).
+We highly recommend to use [scater](http://bioconductor.org/packages/scater/) for all single-cell RNA-seq analyses and [scater](http://bioconductor.org/packages/scater/) is the basis of the first part of the course.
 
 ## scater workflow
+
+As illustrated in the figure below, [scater](http://bioconductor.org/packages/scater/) will help you with quality control, filtering and normalization of your expression matrix following mapping and alignment.
 
 ![](figures/scater_qc_workflow.png)
 
