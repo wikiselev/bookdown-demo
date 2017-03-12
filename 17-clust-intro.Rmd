@@ -9,17 +9,17 @@ library(knitr)
 opts_chunk$set(fig.align = "center", echo=FALSE)
 ```
 
-Once we have normalized the data and removed confounders we can carry out analyses that will allow us to interpret the data biologically. The exact nature of the analysis depends on the dataset and the biological question at hand. Nevertheless, there are a few operations which are useful in a wide range of contexts and we will be discussing some of them. We will start with the clustering of scRNA-seq data.
+Once we have normalized the data and removed confounders we can carry out analyses that are relevant to the biological questions at hand. The exact nature of the analysis depends on the dataset. Nevertheless, there are a few aspects that are useful in a wide range of contexts and we will be discussing some of them in the next few chapters. We will start with the clustering of scRNA-seq data.
 
 ## Introduction
 
-One of the most promising applications of scRNA-seq is the discovery
-and annotation of cell-types based on the transcription
+One of the most promising applications of scRNA-seq is _de novo_ discovery
+and annotation of cell-types based on transcription
 profiles. Computationally, this is a hard problem as it amounts to
 __unsupervised clustering__. That is, we need to identify groups of
 cells based on the similarities of the transcriptomes without any
-prior knowledge of the labels. The problem is made more challenging
-due to the high level of noise and the large number of dimensions
+prior knowledge of the labels. Moreover, in most situations we do not even know the number of clusters _a priori_. The problem is made even more challenging
+due to the high level of noise (both technical and biological) and the large number of dimensions
 (i.e. genes). 
 
 ## Dimensionality reductions
@@ -29,27 +29,13 @@ some sort of dimensionality reduction method. By projecting
 the data onto a lower-dimensional sub-space, one is often able to
 significantly reduce the amount of noise. An additional benefit is
 that it is typically much easier to visualize the data in a 2 or
-3-dimensional subspace. Here we will introduce some of the popular dimensionality reduction methods.
-
-### PCA
-
-PCA analysis was introduced in chapter \@ref(visual-pca).
-
-### Spectral
-
-Spectral decomposition is the factorization of a matrix into a canonical form, whereby the matrix is represented in terms of its eigenvalues and eigenvectors.
-
-In application to scRNA-seq data, the matrix can be either an input expression matrix, or matrix of distances between the cells. The computed eigenvectors are similar to the projections of the data to PCs (chapter \@ref(visual-pca).).
-
-### tSNE
-
-tSNE analysis was introduced in chapter \@ref(visual-tsne).
+3-dimensional subspace. We have already discussed PCA (chapter \@ref(visual-pca)) and t-SNE (chapter \@ref(visual-pca)).
 
 ## Clustering methods
 
 __Unsupervised clustering__ is useful in many different applications and
 it has been widely studied in machine learning. Some of the most
-popular approaches are discussed below.
+popular approaches are __hierarchical clustering__, __k-means clustering__ and __graph-based clustering__.
 
 ### Hierarchical clustering
 
@@ -94,8 +80,7 @@ knitr::include_graphics("figures/graph_network.jpg")
 ```
 
 Some of these methods can be applied
-to scRNA-seq data and one example is the  method, which is based
-on the concept of identifying groups of tightly connected nodes.
+to scRNA-seq data by building a graph where each node represents a cell. Note that constructing the graph and assigning weights to the edges is not trivial. One advantage of graph-based methods is that some of them are very efficient and can be applied to networks containing millions of nodes.
 
 ## Challenges in clustering
 
