@@ -25,11 +25,11 @@ endog_genes <- !fData(umi.qc)$is_feature_control
 
 ## PCA plot {#visual-pca}
 
-The easiest thing to overview the data is to transform it using the principal component analysis and then visualize the first two principal components.
+The easiest way to overview the data is by transforming it using the principal component analysis and then visualize the first two principal components.
 
 [Principal component analysis (PCA)](https://en.wikipedia.org/wiki/Principal_component_analysis) is a statistical procedure that uses a transformation to convert a set of observations into a set of values of linearly uncorrelated variables called principal components (PCs). The number of principal components is less than or equal to the number of original variables.
 
-Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. Typically, the eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html)).
+Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. The eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html)).
 
 ```{r clust-pca, echo=FALSE, fig.cap="Schematic representation of PCA dimensionality reduction", out.width='100%'}
 knitr::include_graphics("figures/pca.png")
@@ -62,7 +62,7 @@ Comparing Figure \@ref(fig:expr-overview-pca-before-qc) and Figure \@ref(fig:exp
 By default only the top 500 most variable genes are used by scater to calculate the PCA. This can be adjusted by changing the `ntop` argument. 
 
 __Exercise 1__
-How do the PCA plots change if when all 14,214 genes are used? Or when only top 50 genes are used?
+How do the PCA plots change if when all 14,214 genes are used? Or when only top 50 genes are used? Why does the fraction of variance accounted for by the first PC change so dramatically?
 
 __Our answer__
 
@@ -124,7 +124,7 @@ Furthermore tSNE requires you to provide a value of "perplexity" which reflects 
 You can read more about the pitfalls of using tSNE [here](http://distill.pub/2016/misread-tsne/).
 
 __Exercise 2__
-How do the tSNE plots change when a perplexity of 10 or 200 is used?
+How do the tSNE plots change when a perplexity of 10 or 200 is used? How does the choice of perplexity affect the interpretation of the results?
 
 __Our answer__
 
