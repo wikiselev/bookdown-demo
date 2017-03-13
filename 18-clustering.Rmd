@@ -82,7 +82,7 @@ motivate choosing the value of $k$ that you think looks best?
 different cells migrate between clusters using the "Cell Labels"/"Stability" tabs
 panel.
 
-* __Exercise 4__: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use $k=3$. MH: there is no question here... we should ask them to do something more specific, such as running a GO analysis or identifying possible surface markers
+* __Exercise 4__: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use $k=3$.
 
 * __Exercise 5__: Change the marker genes threshold (the default is 0.85). Does __SC3__ find more marker genes?
 
