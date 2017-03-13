@@ -2,7 +2,7 @@
 knit: bookdown::preview_chapter
 ---
 
-# Confounding factors
+# Identifying confounding factors
 
 ## Introduction
 

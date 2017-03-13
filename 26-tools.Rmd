@@ -25,3 +25,7 @@ Extensive list of software packages (and the people developing these methods) fo
 Tallulah Andrews' single cell processing scripts:
 
 * [scRNASeqPipeline](https://github.com/tallulandrews/scRNASeqPipeline)
+
+## scRNA-seq public datasets
+
+* [Hemberg group's public datasets](https://hemberg-lab.github.io/scRNA.seq.datasets/)
