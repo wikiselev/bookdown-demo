@@ -66,11 +66,11 @@ gold standard of open-source software hosted in a reputable repository.
 The following figures from the paper summarise some of the features of
 the various tools.
 
-```{r pseudotime-methods-description, out.width = '90%', fig.cap="Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016)."}
+```{r pseudotime-methods-description, out.width = '90%', fig.cap="Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).", echo=FALSE}
 knitr::include_graphics("figures/cannoodt_pseudotime_properties.png")
 ```
 
-```{r pseudotime-methods, out.width = '90%', fig.cap="Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016)."}
+```{r pseudotime-methods, out.width = '90%', fig.cap="Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016).", echo=FALSE}
 knitr::include_graphics("figures/cannoodt_pseudotime_methods.png")
 ```
 
@@ -237,7 +237,7 @@ determine which value of "k" (dimensions) yields an embedding that
 most resembles a trajectory. Then we estimate the [locally linear
 embedding](https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction) of the cells.
 
-```{r slicer-analyis}
+```{r slicer-analyis, message=FALSE, warning=FALSE}
 slicer_genes <- select_genes(t(deng))
 k <- select_k(t(deng[slicer_genes,]), kmin = 5)
 slicer_traj_lle <- lle(t(deng[slicer_genes,]), m = 2, k)$Y
