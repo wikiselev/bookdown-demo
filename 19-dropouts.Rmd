@@ -26,8 +26,8 @@ non-parametric tests. Some recent scRNASeq methods model a different
 dropout rate for each gene (eg. [MAST](https://github.com/RGLab/MAST),
 [BASiCS](https://github.com/catavallejos/TutorialBASiCS)) while other
 methods try to fit the relationship between expression level and
-dropout rate across genes for a specific application (eg. SCDE,
-ZIFA). We will be using our new package Michaelis-Menten Modelling of
+dropout rate across genes for a specific application (eg. [SCDE](http://hms-dbmi.github.io/scde/),
+[ZIFA](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0805-z)). We will be using our new package Michaelis-Menten Modelling of
 Dropouts (M3Drop) which specifically focuses on modelling and gaining
 biological insights from dropouts.
 
@@ -66,7 +66,7 @@ The Michaelis-Menten (MM) Equation is the standard model of enzyme
 kinetics. We use it to model dropouts in single-cell RNASeq because
 most dropouts occur as a result of failing to be reverse-transcribed
 to sufficient levels. The details are omitted here, but in this model
-the probability that a transcript will not be found is given by
+the probability that a transcript will __not__ be present is given by
 
 $$P_{dropout} = K/(K + S)$$
 
@@ -151,23 +151,20 @@ DESeq_table <- readRDS("usoskin/DESeq_table.rds")
 length(unique(DESeq_table$Gene))
 ```
 
-We will demonstrate some of the methods starting from the simplest one proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html), which identifies genes with significant variation above technical noise (ERCCs).
+We will demonstrate some of the methods starting from the simplest one proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html), which identifies genes with significant variation above technical noise (here it is assumed that the technical noise can be estimated using ERCCs).
 
-To use the method, we first normalize for library size then calculate
+To use the Brennecke method, we first normalize for library size then calculate
 the mean and the square coefficient of variation (variation divided by
 the squared mean expression). A quadratic curve is fit to the relationship
-between these two variables for the ERCC spike-in (subject to just
-technical variation) then a chi-square test is used to find genes
+between these two variables for the ERCC spike-in, and then a chi-square test is used to find genes
 significantly above the curve. This has been provided for you as the
 Brennecke_getVariableGenes(counts, spikes) function. However, there are only 9 spike-ins detected in this dataset
-so we will use the entire dataset as spike-ins. 
+so we will use the entire dataset to estimate the technical noise. 
 
 In the figure below the red curve
 is the fitted technical noise model and the dashed line is the 95%
 CI. Pink dots are the genes with significant biological variability
-after multiple-testing correction. Since our dataset is relatively
-homogeneous only  genes are identified as significantly
-variable.
+after multiple-testing correction. 
 
 ```{r, fig.width = 7, fig.height = 6}
 Brennecke_HVG <- M3Drop::BrenneckeGetVariableGenes(
