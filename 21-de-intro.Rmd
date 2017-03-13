@@ -28,11 +28,11 @@ RT-qPCR. These data can be used to benchmark DE finding algorithms.
 
 ## Single cell RNA-seq
 
-In contrast to the bulk RNA-seq in scRNA-seq we usually do not have a defined
-set of experimental conditions, but instead, as was shown in the previous chapter
-(\@ref(clust-methods)) we can identify the cell groups by using the unsupervised
+In contrast to bulk RNA-seq, in scRNA-seq we usually do not have a defined
+set of experimental conditions. Instead, as was shown in a previous chapter
+(\@ref(clust-methods)) we can identify the cell groups by using an unsupervised
 clustering approach. Once the groups have been identified one can find differentially
-expressed genes by either looking at the differences in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for the comparison of the two groups of cells.
+expressed genes either by comparing the differences in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for pairwise comparisons.
 
 ## Differences in Distribution
 
@@ -40,7 +40,7 @@ Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) fo
 
 There are two main approaches to comparing distributions. Firstly, we can use existing statistical models/distributions and fit the same type of model to the expression in each group then test for differences in the parameters for each model, or test whether the model fits better if a particular paramter is allowed to be different according to group. For instance in Chapter \@ref(dealing-with-confounders) we used edgeR to test whether allowing mean expression to be different in different batches significantly improved the fit of a negative binomial model of the data.
 
-Alternatively, we can use a non-parametric test which does not assume expression values follow any particular distribution, e.g. the KS-test. Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data.
+Alternatively, we can use a non-parametric test which does not assume expression values follow any particular distribution, e.g. the [Kolmogorov-Smirnov test (KS-test)](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test). Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data. Moreover, if the conditions for a parametric test hold, then it will typically be more powerful than a non-parametric test.
 
 ## Models of single-cell RNASeq data
 
@@ -57,9 +57,9 @@ $\mu = mu$
 Variance:
 $\sigma^2 = mu + mu^2/size$
 
-It is parameterized by the mean expression (mu) and the dispersion (size), which is inversely related to the variance. The negative binomial model fits bulk RNA-seq data very well and underlies most statistical methods designed for such data. In addition, it has been show to fit the distribution of molecule counts obtained from data tagged by unique molecular identifiers (UMIs) quite well ([Grun et al. 2014](http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html), [Islam et al. 2011](http://genome.cshlp.org/content/21/7/1160)).
+It is parameterized by the mean expression (mu) and the dispersion (size), which is inversely related to the variance. The negative binomial model fits bulk RNA-seq data very well and it is used for most statistical methods designed for such data. In addition, it has been show to fit the distribution of molecule counts obtained from data tagged by unique molecular identifiers (UMIs) quite well ([Grun et al. 2014](http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html), [Islam et al. 2011](http://genome.cshlp.org/content/21/7/1160)).
 
-However, a raw negative binomial model does not fit full-transcript data very well due to the high dropout rates relative to the non-zero read counts. For this type of data a variety of zero-inflated negative binomial models have been proposed (e.g. [MAST](https://bioconductor.org/packages/release/bioc/html/MAST.html), [SCDE](https://bioconductor.org/packages/release/bioc/html/scde.html)).
+However, a raw negative binomial model does not fit full-length transcript data as well due to the high dropout rates relative to the non-zero read counts. For this type of data a variety of zero-inflated negative binomial models have been proposed (e.g. [MAST](https://bioconductor.org/packages/release/bioc/html/MAST.html), [SCDE](https://bioconductor.org/packages/release/bioc/html/scde.html)).
 
 ```{r zero-inflation-plot, fig.cap="Zero-inflated Negative Binomial distribution"}
 d = 0.5;
@@ -71,9 +71,9 @@ Mean:
 $\mu = mu \cdot (1 - d)$
 
 Variance:
-$\sigma^2 = mu \cdot (1-d) \cdot (1 + d \cdot mu + mu / size)$
+$\sigma^2 = \mu \cdot (1-d) \cdot (1 + d \cdot \mu + \mu / size)$
 
-These models introduce a new parameter d, for the dropout rate, to the negative binomial model. As we saw in Chapter 19, the dropout rate of a gene is strongly correlated with the mean expression of the gene. Different zero-inflated negative binomial models use different relationships between mu and d and some may fit mu and d to the expression of each gene independently.
+These models introduce a new parameter $d$, for the dropout rate, to the negative binomial model. As we saw in Chapter 19, the dropout rate of a gene is strongly correlated with the mean expression of the gene. Different zero-inflated negative binomial models use different relationships between mu and d and some may fit $\mu$ and $d$ to the expression of each gene independently.
 
 Finally, several methods use a Poisson-Beta distribution which is based on a mechanistic model of transcriptional bursting. There is strong experimental support for this model ([Kim and Marioni, 2013](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-1-r7)) and it provides a good fit to scRNA-seq data but it is less easy to use than the negative-binomial models and much less existing methods upon which to build than the negative binomial model.
 
@@ -91,7 +91,7 @@ $\mu = g \cdot a / (a + b)$
 Variance:
 $\sigma^2 = g^2 \cdot a \cdot b/((a + b + 1) \cdot (a + b)^2)$
 
-This model uses three parameters: "a" the rate of activation of transcription; "b" the rate of inhibition of transcription; and "g" the rate of transcript production while transcription is active at the locus. Differential expression methods may test each of the parameters for differences across groups or only one (often "g").
+This model uses three parameters: $a$ the rate of activation of transcription; $b$ the rate of inhibition of transcription; and $g$ the rate of transcript production while transcription is active at the locus. Differential expression methods may test each of the parameters for differences across groups or only one (often $g$).
 
 All of these models may be further expanded to explicitly account for other sources of gene expression differences such as batch-effect or library depth depending on the particular DE algorithm.
 
