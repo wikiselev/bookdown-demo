@@ -19,8 +19,8 @@ set.seed(1)
 ```
 
 In many situations, one is studying a process where cells change
-continuously. This includes for example many differentiation processes
-taking place during development, where following a stimulus, cells
+continuously. This includes, for example, many differentiation processes
+taking place during development: following a stimulus, cells
 will change from one cell-type to another. Ideally, we would like to
 monitor the expression levels of an individual cell over
 time. Unfortunately, such monitoring is not possible with scRNA-seq
@@ -38,7 +38,7 @@ In this chapter we will consider four different tools: Monocle, TSCAN,
 destiny and SLICER for ordering cells according to their pseudotime
 development. To illustrate the methods we will be using a dataset on
 mouse embryonic development [@Deng2014-mx]. The dataset consists of
-268 cells from 10 different time-points of early mouse development.
+268 cells from 10 different time-points of early mouse development. In this case, there is no need for pseudotime alignment since the cell labels provide information about the development trajectory. Thus, the labels allow us to establish a ground truth so that we can evaluate and compare the different methods.
 
 A recent review by Cannoodt et al provides a detailed summary of the
 various computational methods for trajectory inference from
@@ -78,7 +78,7 @@ knitr::include_graphics("figures/cannoodt_pseudotime_methods.png")
 ## TSCAN
 
 TSCAN combines clustering with pseudotime analysis. First it clusters the cells using `mclust`,
-which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters together. The branch of this tree that connects the largest number of clusters is the main branch which is used to determine pseudotime.
+which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters. The branch of this tree that connects the largest number of clusters is the main branch which is used to determine pseudotime.
 
 First we will try to use all genes to order the cells.
 ```{r tscan-all-genes}
@@ -181,7 +181,7 @@ plot(
 
 ## Diffusion maps
 
-[Diffusion maps](https://en.wikipedia.org/wiki/Diffusion_map) were introduced by [Ronald Coifman and Stephane Lafon](http://www.sciencedirect.com/science/article/pii/S1063520306000546). Briefly, the underlying idea is to assume that the data are samples from a diffusion process. The method infers the low-dimensional manifold by estimating the eigenvalues and eigenvectors for the diffusion operator related to the data.
+[Diffusion maps](https://en.wikipedia.org/wiki/Diffusion_map) were introduced by [Ronald Coifman and Stephane Lafon](http://www.sciencedirect.com/science/article/pii/S1063520306000546), and the underlying idea is to assume that the data are samples from a diffusion process. The method infers the low-dimensional manifold by estimating the eigenvalues and eigenvectors for the diffusion operator related to the data.
 
 [Haghverdi et al](http://biorxiv.org/content/biorxiv/early/2015/08/04/023309.full.pdf) have applied the diffusion maps concept to the analysis of single-cell RNA-seq data to create an R package called [destiny](http://bioconductor.org/packages/destiny).
 
@@ -234,8 +234,8 @@ the genes to use in builing the cell trajectory. The function uses
 "neighbourhood variance" to identify genes that vary smoothly, rather
 than fluctuating randomly, across the set of cells. Following this, we
 determine which value of "k" (dimensions) yields an embedding that
-most resembles a trajectory. Then we estimate the locally linear
-embedding of the cells.
+most resembles a trajectory. Then we estimate the [locally linear
+embedding](https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction) of the cells.
 
 ```{r slicer-analyis}
 slicer_genes <- select_genes(t(deng))
@@ -332,7 +332,8 @@ plot(
 __Exercise 6__: Compare destiny and SLICER to TSCAN and Monocle.
 
 ## Expression of genes through time
-Each package also enables the visualization of expression through pseudotime.
+
+Each package also enables the visualization of expression through pseudotime. Following individual genes is very helpful for identifying genes that play an important role in the differentiation process. We illustrate the procedure using the Obox6 gene which is known to be important during early development.
 
 __TSCAN__
 ```{r Obox6-tscan}
