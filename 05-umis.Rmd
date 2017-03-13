@@ -75,14 +75,6 @@ An important caveat of this method is that it assumes that all UMIs are equally 
 knitr::include_graphics("figures/UMI-Seq-amp.png")
 ```
 
-__Exercise 1__ Blischak et al. used 6bp UMI barcodes for their experiments and you can load this data using the command below.
-
-```{r, echo=TRUE, include=TRUE}
-molecules <- read.table("blischak/molecules.txt", sep = "\t")
-```
-
-Estimate the true number of molecules by correcting for collisions and sequencing errors using the simple saturation approach. Assume a 1% per base-pair sequencing error rate and that the errors follow a binomial distribution.
-
 ## Downstream Analysis
 
 Current UMI platforms (DropSeq, InDrop, ICell8) exhibit low and highly variable capture efficiency as shown in the figure below. 
@@ -93,38 +85,24 @@ knitr::include_graphics("figures/UMI-Seq-capture.png")
 
 This variability can introduce strong biases and it needs to be considered in downstream analysis. Recent analyses often pool cells/genes together based on cell-type or biological pathway to increase the power. Robust statistical analyses of this data is still an open research question and it remains to be determined how to best adjust for biases.
 
-__Exercise 2__ Load the read counts from the Blischak data using the command below.
+__Exercise 1__ We have provided you with UMI counts and read counts from induced pluripotent stem cells generated from three different individuals [@Tung2016-an] (see: Chapter @ref(exprs-qc) for details of this dataset).
 
 ```{r, echo=TRUE, include=TRUE}
-reads <- read.table("blischak/reads.txt", sep = "\t")
+umi_counts <- read.table("blischak/molecules.txt", sep = "\t")
+read_counts <- read.table("blischak/reads.txt", sep = "\t")
 ```
-Using this data and the unadjusted molecule counts from above:
+Using this data:
 
 1. Plot the variability in capture efficiency
 
 2. Determine the amplification rate: average number of reads per UMI.
 
 ```{r, include=FALSE}
-# Exercise Solutions
-# 
-# Exericse 1
-
-# Collisions
-N <- 4^6
-molecules <- -N*log(1- molecules/N)
-
-# Sequencing Errors
-prob_error <- 1-pbinom(0,size=5, prob=0.01) # ~0.05
-molecules <- ceiling(molecules*(1-prob_error))
-## Both these corrections are overly simple and approximate thus alternative 
-## methods (UMI-tools, estimating UMI frequencies) should be employed whenever possible.
-
-# Exericse 2
-molecules <- read.table("blischak/molecules.txt", sep = "\t")
+# Exercise 1
 # Part 1
-plot(colSums(molecules), colSums(molecules > 0), xlab="Total Molecules Detected", ylab="Total Genes Detected")
+plot(colSums(umi_counts), colSums(umi_counts > 0), xlab="Total Molecules Detected", ylab="Total Genes Detected")
 
 # Part 2
-amp_rate <- sum(reads)/sum(molecules)
+amp_rate <- sum(read_counts)/sum(umi_counts)
 amp_rate
 ```
