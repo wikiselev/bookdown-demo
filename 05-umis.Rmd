@@ -67,8 +67,9 @@ How to best account for errors in UMIs remains an active area of research. The b
 3. Simple saturation (aka "collision probability") correction proposed by [Grun, Kester and van Oudenaarden (2014)](http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html#methods) to estimate the true number of molecules $M$:
 
 $$M \approx -N*log(1 - \frac{n}{N})$$ 
-where N = total number of unique UMI barcodes and n = number of observations of a specific barcode.
-	+ An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content. 
+where N = total number of unique UMI barcodes and n = number of observed barcodes.
+ 
+An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content. 
 
 ```{r intro-umi-amp, out.width = '60%', fig.cap="Per gene amplification rate"}
 knitr::include_graphics("figures/UMI-Seq-amp.png")
