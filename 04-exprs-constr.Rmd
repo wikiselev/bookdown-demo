@@ -47,6 +47,8 @@ __Note__, if the _spike-ins_ are used, the reference sequence should be augmente
 
 __Note__, when UMIs are used, their barcodes should be removed from the read sequence. A common practice is to add the barcode to the read name.
 
+Add example on how to use a pseudoaligner
+
 Once the reads for each cell have been mapped to the reference genome,
 we need to make sure that a sufficient number of reads from each cell
 could be mapped to the reference genome. In our experience, the
