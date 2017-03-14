@@ -21,10 +21,10 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
                 shape_by = "individual",
-                exprs_values = "counts")
+                exprs_values = "log2_counts")
 ```
 ```{r norm-ours-rle-raw-reads, fig.cap = "Cell-wise RLE of the tung data"}
-boxplot(calc_cell_RLE(counts(reads.qc[endog_genes, ])),
+boxplot(calc_cell_RLE(get_exprs(reads.qc[endog_genes, ], exprs_values = "log2_counts"))),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
@@ -163,16 +163,8 @@ eff_length <- abs(fData(reads.qc.ann)$end_position -
 ```
 
 ```{r}
-tpm(reads.qc.ann) <-
-    calculateTPM(
-        reads.qc.ann,
-        eff_length
-    )
-fpkm(reads.qc.ann) <-
-    calculateFPKM(
-        reads.qc.ann,
-        eff_length
-    )
+tpm(reads.qc.ann) <- log2(calculateTPM(reads.qc.ann, eff_length) + 1)
+fpkm(reads.qc.ann) <- log2(calculateFPKM(reads.qc.ann, eff_length) + 1)
 ```
 
 ```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the tung data after FPKM normalisation"}

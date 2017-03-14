@@ -18,20 +18,20 @@ endog_genes <- !fData(reads.qc)$is_feature_control
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
-                exprs_values = "counts")
+                exprs_values = "log2_counts")
 ```
 
 ```{r confound-find-pcs-total-features-reads, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
 scater::plotQC(reads.qc[endog_genes, ],
                type = "find-pcs",
                variable = "total_features",
-               exprs_values = "counts")
+               exprs_values = "log2_counts")
 ```
 
 ```{r confound-find-expl-vars-reads, fig.cap = "Explanatory variables"}
 scater::plotQC(reads.qc[endog_genes, ],
                type = "expl",
-               exprs_values = "counts",
+               exprs_values = "log2_counts",
                variables = c("total_features",
                              "total_counts",
                              "batch",
