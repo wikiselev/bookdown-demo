@@ -246,10 +246,14 @@ plot(slicer_traj_lle, xlab = "LLE Comp 1", ylab = "LLE Comp 2",
 ```
 
 With the locally linear embedding computed we can construct a
-k-nearest neighbour graph that is fully connected.
+k-nearest neighbour graph that is fully connected. This plot displays
+a (yellow) circle for each cell, with the cell ID number overlaid in
+blue. Here we show the graph computed using 10 nearest
+neighbours. Here, SLICER appears to detect one major trajectory with
+one branch.
 
 ```{r slicer-build-graph}
-slicer_traj_graph <- conn_knn_graph(slicer_traj_lle, 5)
+slicer_traj_graph <- conn_knn_graph(slicer_traj_lle, 10)
 plot(slicer_traj_graph, main = "Fully connected kNN graph from SLICER")
 ```
 
@@ -264,7 +268,7 @@ start <- ends[1]
 Having defined a start cell we can order the cells in the estimated pseudotime.
 
 ```{r}
-pseudotime_order_slicer<- cell_order(slicer_traj_graph, start)
+pseudotime_order_slicer <- cell_order(slicer_traj_graph, start)
 branches <- assign_branches(slicer_traj_graph, start)
 
 pseudotime_slicer <-
@@ -302,7 +306,8 @@ Like the previous method, SLICER here provides a good ordering for the
 early time points and struggles for later time points.
 
 __Exercise 4__ Do you get a better results if you use different
-"start" cells?
+"start" cells? What about changing the number of nearest neighbours in
+the call to `conn_knn_graph`?
 
 __Exercise 5__ How does the ordering change if you use a different set
 of genes from those chosen by SLICER (e.g. the genes identified by M3Drop)?
