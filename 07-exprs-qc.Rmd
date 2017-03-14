@@ -17,7 +17,7 @@ Since there is currently no standard method for performing scRNASeq the expected
 
 To illustrate cell QC, we consider a
 [dataset](http://jdblischak.github.io/singleCellSeq/analysis/) of
- induced pluripotent stem cells generated from three different individuals [@Tung2016-an] in [Yoav Gilad](http://giladlab.uchicago.edu/)'s lab at the
+ induced pluripotent stem cells generated from three different individuals [@Tung2017-ba] in [Yoav Gilad](http://giladlab.uchicago.edu/)'s lab at the
 University of Chicago. The experiments were carried out on the
 Fluidigm C1 platform and to facilitate the quantification both unique
 molecular identifiers (UMIs) and ERCC _spike-ins_ were used. The data files are located in the `tung` folder in your working directory. These files are the copies of the original files made on the 15/03/16. We will use these copies for reproducibility purposes.
