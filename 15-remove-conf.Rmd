@@ -36,7 +36,7 @@ library(scran)
 library(edgeR)
 set.seed(1234567)
 options(stringsAsFactors = FALSE)
-umi <- readRDS("blischak/umi.rds")
+umi <- readRDS("tung/umi.rds")
 umi.qc <- umi[fData(umi)$use, pData(umi)$use]
 endog_genes <- !fData(umi.qc)$is_feature_control
 erccs <- fData(umi.qc)$is_feature_control
@@ -246,4 +246,4 @@ plotSmear(
 
 ## Exercise
 
-Perform the same analysis with read counts of the Blischak data. Use `blischak/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.
+Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.

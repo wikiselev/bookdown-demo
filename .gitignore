@@ -6,5 +6,3 @@
 */.DS_*
 *.Rproj
 .Rbuildignore
-blischak/reads.rds
-blischak/umi.rds

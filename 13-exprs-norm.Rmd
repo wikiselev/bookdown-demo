@@ -79,20 +79,20 @@ The __RLE__, __TMM__, and __UQ__ size-factor methods were developed for bulk RNA
 
 __Note:__ edgeR makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/release/bioc/html/DESeq.html) may give different results to the `estimateSizeFactorsForMatrix` method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
 
-We will continue to work with the Blischak data that was used in the previous chapter.
+We will continue to work with the `tung` data that was used in the previous chapter.
 
 ```{r, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
 library(scater, quietly = TRUE)
 options(stringsAsFactors = FALSE)
 set.seed(1234567)
-umi <- readRDS("blischak/umi.rds")
+umi <- readRDS("tung/umi.rds")
 umi.qc <- umi[fData(umi)$use, pData(umi)$use]
 endog_genes <- !fData(umi.qc)$is_feature_control
 ```
 
 ### Raw
-```{r norm-pca-raw, fig.cap = "PCA plot of the blischak data"}
+```{r norm-pca-raw, fig.cap = "PCA plot of the tung data"}
 scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
@@ -100,7 +100,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "counts")
 ```
 
-```{r norm-ours-rle-raw, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-raw, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(counts(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
@@ -109,14 +109,14 @@ boxplot(calc_cell_RLE(counts(umi.qc[endog_genes, ])),
 
 ### CPM
 scater performs this normalisation by default, you can control it by changing `exprs_values` parameter to `"exprs"`.
-```{r norm-pca-cpm, fig.cap = "PCA plot of the blischak data after CPM normalisation"}
+```{r norm-pca-cpm, fig.cap = "PCA plot of the tung data after CPM normalisation"}
 scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
                 shape_by = "individual",
                 exprs_values = "exprs")
 ```
-```{r norm-ours-rle-cpm, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-cpm, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
@@ -125,7 +125,7 @@ boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
 
 
 ### TMM
-```{r norm-pca-tmm, fig.cap = "PCA plot of the blischak data after TMM normalisation"}
+```{r norm-pca-tmm, fig.cap = "PCA plot of the tung data after TMM normalisation"}
 umi.qc <- 
     scater::normaliseExprs(umi.qc,
                            method = "TMM",
@@ -136,7 +136,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
-```{r norm-ours-rle-tmm, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-tmm, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
@@ -144,7 +144,7 @@ boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
 ```
 
 ### scran
-```{r norm-pca-lsf, fig.cap = "PCA plot of the blischak data after LSF normalisation"}
+```{r norm-pca-lsf, fig.cap = "PCA plot of the tung data after LSF normalisation"}
 qclust <- scran::quickCluster(umi.qc, min.size = 30)
 umi.qc <- scran::computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
 umi.qc <- scater::normalize(umi.qc)
@@ -154,7 +154,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "exprs")
 ```
-```{r norm-ours-rle-scran, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-scran, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
@@ -162,7 +162,7 @@ boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
 ```
 
 ### Size-factor (RLE)
-```{r norm-pca-rle, fig.cap = "PCA plot of the blischak data after RLE normalisation"}
+```{r norm-pca-rle, fig.cap = "PCA plot of the tung data after RLE normalisation"}
 umi.qc <- 
     scater::normaliseExprs(umi.qc,
                            method = "RLE", 
@@ -173,7 +173,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
-```{r norm-ours-rle-rle, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-rle, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
@@ -182,7 +182,7 @@ boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
 
 
 ### Upperquantile
-```{r norm-pca-uq, fig.cap = "PCA plot of the blischak data after UQ normalisation"}
+```{r norm-pca-uq, fig.cap = "PCA plot of the tung data after UQ normalisation"}
 umi.qc <- 
     scater::normaliseExprs(umi.qc,
                            method = "upperquartile", 
@@ -194,7 +194,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
-```{r norm-ours-rle-uq, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-uq, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
@@ -208,7 +208,7 @@ A final way to correct for library size is to downsample the expression matrix s
 
 ```
 
-```{r norm-pca-downsample, fig.cap = "PCA plot of the blischak data after downsampling"}
+```{r norm-pca-downsample, fig.cap = "PCA plot of the tung data after downsampling"}
 norm_counts(umi.qc) <- 
     scRNA.seq.funcs::Down_Sample_Matrix(counts(umi.qc))
 scater::plotPCA(umi.qc[endog_genes, ],
@@ -217,7 +217,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
-```{r norm-ours-rle-downsample, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-downsample, fig.cap = "Cell-wise RLE of the tung data"}
 tmp <- norm_counts(umi.qc[endog_genes, ])
 # ignore genes which are not detected in any cells following downsampling
 boxplot(calc_cell_RLE(tmp[rowMeans(tmp) > 0, ]), 
@@ -308,7 +308,7 @@ fpkm(umi.qc.ann) <-
 ```
 
 Plot the results as a PCA plot:
-```{r norm-pca-fpkm, fig.cap = "PCA plot of the blischak data after FPKM normalisation"}
+```{r norm-pca-fpkm, fig.cap = "PCA plot of the tung data after FPKM normalisation"}
 scater::plotPCA(umi.qc.ann,
                 colour_by = "batch",
                 size_by = "total_features",
@@ -316,7 +316,7 @@ scater::plotPCA(umi.qc.ann,
                 exprs_values = "fpkm")
 ```
 
-```{r norm-pca-tpm, fig.cap = "PCA plot of the blischak data after TPM normalisation"}
+```{r norm-pca-tpm, fig.cap = "PCA plot of the tung data after TPM normalisation"}
 scater::plotPCA(umi.qc.ann,
                 colour_by = "batch",
                 size_by = "total_features",
@@ -330,4 +330,4 @@ __Note:__ The PCA looks for differences between cells. Gene length is the same a
 
 ## Exercise
 
-Perform the same analysis with read counts of the Blischak data. Use `blischak/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
+Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).

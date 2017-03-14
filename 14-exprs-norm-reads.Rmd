@@ -11,40 +11,40 @@ options(stringsAsFactors = FALSE)
 set.seed(1234567)
 library(knitr)
 opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
-reads <- readRDS("blischak/reads.rds")
+reads <- readRDS("tung/reads.rds")
 reads.qc <- reads[fData(reads)$use, pData(reads)$use]
 endog_genes <- !fData(reads.qc)$is_feature_control
 ```
 
-```{r norm-pca-raw-reads, fig.cap = "PCA plot of the blischak data"}
+```{r norm-pca-raw-reads, fig.cap = "PCA plot of the tung data"}
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
                 shape_by = "individual",
                 exprs_values = "counts")
 ```
-```{r norm-ours-rle-raw-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-raw-reads, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(counts(reads.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
 ```
 
-```{r norm-pca-cpm-reads, fig.cap = "PCA plot of the blischak data after CPM normalisation"}
+```{r norm-pca-cpm-reads, fig.cap = "PCA plot of the tung data after CPM normalisation"}
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
                 shape_by = "individual",
                 exprs_values = "exprs")
 ```
-```{r norm-ours-rle-cpm-reads, fig.cap = "Cell-wise RLE of the blischak data", warning=FALSE}
+```{r norm-ours-rle-cpm-reads, fig.cap = "Cell-wise RLE of the tung data", warning=FALSE}
 boxplot(calc_cell_RLE(exprs(reads.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim = c(-1,1))
 ```
 
-```{r norm-pca-tmm-reads, fig.cap = "PCA plot of the blischak data after TMM normalisation"}
+```{r norm-pca-tmm-reads, fig.cap = "PCA plot of the tung data after TMM normalisation"}
 reads.qc <- 
     scater::normaliseExprs(reads.qc,
                            method = "TMM",
@@ -55,14 +55,14 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
-```{r norm-ours-rle-tmm-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-tmm-reads, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
 ```
 
-```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the blischak data after LSF normalisation"}
+```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the tung data after LSF normalisation"}
 qclust <- scran::quickCluster(reads.qc, min.size = 30)
 reads.qc <- scran::computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- scater::normalize(reads.qc)
@@ -73,14 +73,14 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 exprs_values = "exprs")
 ```
 
-```{r norm-ours-rle-scran-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-scran-reads, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(exprs(reads.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
 ```
 
-```{r norm-pca-rle-reads, fig.cap = "PCA plot of the blischak data after RLE normalisation"}
+```{r norm-pca-rle-reads, fig.cap = "PCA plot of the tung data after RLE normalisation"}
 reads.qc <- 
     scater::normaliseExprs(reads.qc,
                            method = "RLE",
@@ -92,14 +92,14 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 
-```{r norm-ours-rle-rle-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-rle-reads, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
 ```
 
-```{r norm-pca-uq-reads, fig.cap = "PCA plot of the blischak data after UQ normalisation"}
+```{r norm-pca-uq-reads, fig.cap = "PCA plot of the tung data after UQ normalisation"}
 reads.qc <- 
     scater::normaliseExprs(reads.qc,
                            method = "upperquartile", 
@@ -111,14 +111,14 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
-```{r norm-ours-rle-uq-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-uq-reads, fig.cap = "Cell-wise RLE of the tung data"}
 boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
 ```
 
-```{r norm-pca-downsample-reads, fig.cap = "PCA plot of the blischak data after downsampling"}
+```{r norm-pca-downsample-reads, fig.cap = "PCA plot of the tung data after downsampling"}
 norm_counts(reads.qc) <- 
     scRNA.seq.funcs::Down_Sample_Matrix(counts(reads.qc))
 scater::plotPCA(reads.qc[endog_genes, ],
@@ -127,7 +127,7 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
-```{r norm-ours-rle-downsample-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-downsample-reads, fig.cap = "Cell-wise RLE of the tung data"}
 tmp <- norm_counts(reads.qc[endog_genes, ])
 # ignore genes which are not detected in any cells following downsampling
 boxplot(calc_cell_RLE(tmp[rowMeans(tmp) > 0, ]), 
@@ -175,7 +175,7 @@ fpkm(reads.qc.ann) <-
     )
 ```
 
-```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the blischak data after FPKM normalisation"}
+```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the tung data after FPKM normalisation"}
 scater::plotPCA(reads.qc.ann,
                 colour_by = "batch",
                 size_by = "total_features",
@@ -183,7 +183,7 @@ scater::plotPCA(reads.qc.ann,
                 exprs_values = "fpkm")
 ```
 
-```{r norm-pca-tpm-reads, fig.cap = "PCA plot of the blischak data after TPM normalisation"}
+```{r norm-pca-tpm-reads, fig.cap = "PCA plot of the tung data after TPM normalisation"}
 scater::plotPCA(reads.qc.ann,
                 colour_by = "batch",
                 size_by = "total_features",

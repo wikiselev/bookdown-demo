@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Expression QC (UMI)
+# Expression QC (UMI) {#exprs-qc}
 
 ## Introduction
 
@@ -13,15 +13,14 @@ the biological signals of interest in the downstream analysis.
 Since there is currently no standard method for performing scRNASeq the expected values for the various QC measures that will be presented here can vary substantially from experiment to experiment. Thus, to perform QC we will be looking for cells which are outliers with respect to the rest of the dataset rather than comparing to independent quality standards. Consequently, care should be taken when comparing quality metrics across datasets collected using different protocols.
 
 
-## Blischak dataset
+## Tung dataset
 
 To illustrate cell QC, we consider a
 [dataset](http://jdblischak.github.io/singleCellSeq/analysis/) of
- induced pluripotent stem cells generated from three different individuals [@Tung2016-an] by John
-Blischak in [Yoav Gilad](http://giladlab.uchicago.edu/)'s lab at the
+ induced pluripotent stem cells generated from three different individuals [@Tung2016-an] in [Yoav Gilad](http://giladlab.uchicago.edu/)'s lab at the
 University of Chicago. The experiments were carried out on the
 Fluidigm C1 platform and to facilitate the quantification both unique
-molecular identifiers (UMIs) and ERCC _spike-ins_ were used. The data files are located in the `blischak` folder in your working directory. These files are the copies of the original files made on the 15/03/16. We will use these copies for reproducibility purposes.
+molecular identifiers (UMIs) and ERCC _spike-ins_ were used. The data files are located in the `tung` folder in your working directory. These files are the copies of the original files made on the 15/03/16. We will use these copies for reproducibility purposes.
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -36,8 +35,8 @@ options(stringsAsFactors = FALSE)
 
 Load the data and annotations:
 ```{r}
-molecules <- read.table("blischak/molecules.txt", sep = "\t")
-anno <- read.table("blischak/annotation.txt", sep = "\t", header = TRUE)
+molecules <- read.table("tung/molecules.txt", sep = "\t")
+anno <- read.table("tung/annotation.txt", sep = "\t", header = TRUE)
 ```
 
 Inspect a small portion of the expression matrix
@@ -378,11 +377,9 @@ dim(umi[fData(umi)$use, pData(umi)$use])
 
 Save the data:
 ```{r}
-saveRDS(umi, file = "blischak/umi.rds")
+saveRDS(umi, file = "tung/umi.rds")
 ```
-
-If you want to further check yourself you can download our [`umi`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/umi.rds) object. If you followed the steps above it should be exactly the same as yours.
 
 ## Big Exercise
 
-Perform exactly the same QC analysis with read counts of the same Blischak data. Use `blischak/reads.txt` file to load the reads. Once you have finished please compare your results to ours (next chapter).
+Perform exactly the same QC analysis with read counts of the same Blischak data. Use `tung/reads.txt` file to load the reads. Once you have finished please compare your results to ours (next chapter).

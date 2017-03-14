@@ -16,7 +16,7 @@ opts_chunk$set(out.width='90%', fig.align = 'center')
 ```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
 options(stringsAsFactors = FALSE)
-umi <- readRDS("blischak/umi.rds")
+umi <- readRDS("tung/umi.rds")
 umi.qc <- umi[fData(umi)$use, pData(umi)$use]
 endog_genes <- !fData(umi.qc)$is_feature_control
 ```
@@ -26,7 +26,7 @@ The `umi.qc` dataset contains filtered cells and genes. Our next step is to expl
 ## Correlations with PCs
 
 Let's first look again at the PCA plot of the QCed dataset:
-```{r confound-pca, fig.cap = "PCA plot of the blischak data"}
+```{r confound-pca, fig.cap = "PCA plot of the tung data"}
 scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
@@ -81,4 +81,4 @@ Ideally, we would like to compensate for all of these differences and biases.
 
 ## Exercise
 
-Perform the same analysis with read counts of the Blischak data. Use `blischak/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
+Perform the same analysis with read counts of the Blischak data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).

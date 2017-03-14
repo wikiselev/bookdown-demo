@@ -6,9 +6,9 @@ output: html_document
 
 ## Introduction
 
-In this chapter we will continue to work with the filtered __blischak__ dataset produced in the previous chapter. We will explore different ways of visualizing the data to allow you to asses what happened to the expression matrix after the quality control step. [scater](https://github.com/davismcc/scater) package provides several very useful functions to simplify visualisation. 
+In this chapter we will continue to work with the filtered `Tung` dataset produced in the previous chapter. We will explore different ways of visualizing the data to allow you to asses what happened to the expression matrix after the quality control step. [scater](https://github.com/davismcc/scater) package provides several very useful functions to simplify visualisation. 
 
-One important aspect of single-cell RNA-seq is to control for batch effects. Batch effects are technical artefacts that are added to the samples during handling. For example, if two sets of samples were prepared in different labs or even on different days in the same lab, then we may observe greater similarities between the samples that were handled together. In the worst case scenario, batch effects may be [mistaken](http://f1000research.com/articles/4-121/v1) for true biological variation. The Blischak data allows us to explore these issues in a controlled manner since some of the salient aspects of how the samples were handled have been recorded. Ideally, we expect to see batches from the same individual grouping together and distinct groups corresponding to each individual. 
+One important aspect of single-cell RNA-seq is to control for batch effects. Batch effects are technical artefacts that are added to the samples during handling. For example, if two sets of samples were prepared in different labs or even on different days in the same lab, then we may observe greater similarities between the samples that were handled together. In the worst case scenario, batch effects may be [mistaken](http://f1000research.com/articles/4-121/v1) for true biological variation. The `Tung` data allows us to explore these issues in a controlled manner since some of the salient aspects of how the samples were handled have been recorded. Ideally, we expect to see batches from the same individual grouping together and distinct groups corresponding to each individual. 
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -18,7 +18,7 @@ opts_chunk$set(out.width='90%', fig.align = 'center')
 ```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
 options(stringsAsFactors = FALSE)
-umi <- readRDS("blischak/umi.rds")
+umi <- readRDS("tung/umi.rds")
 umi.qc <- umi[fData(umi)$use, pData(umi)$use]
 endog_genes <- !fData(umi.qc)$is_feature_control
 ```
@@ -37,7 +37,7 @@ knitr::include_graphics("figures/pca.png")
 
 ### Before QC
 
-```{r expr-overview-pca-before-qc, fig.cap = "PCA plot of the blischak data"}
+```{r expr-overview-pca-before-qc, fig.cap = "PCA plot of the tung data"}
 scater::plotPCA(umi[endog_genes, ],
                 ntop = 500,
                 colour_by = "batch",
@@ -48,7 +48,7 @@ scater::plotPCA(umi[endog_genes, ],
 
 ### After QC
 
-```{r expr-overview-pca-after-qc, fig.cap = "PCA plot of the blischak data"}
+```{r expr-overview-pca-after-qc, fig.cap = "PCA plot of the tung data"}
 scater::plotPCA(umi.qc[endog_genes, ],
                 ntop = 500,
                 colour_by = "batch",
@@ -66,7 +66,7 @@ How do the PCA plots change if when all 14,214 genes are used? Or when only top 
 
 __Our answer__
 
-```{r expr-overview-pca-after-qc-exercise1-1, fig.cap = "PCA plot of the blischak data (14214 genes)", echo=FALSE}
+```{r expr-overview-pca-after-qc-exercise1-1, fig.cap = "PCA plot of the tung data (14214 genes)", echo=FALSE}
 scater::plotPCA(umi.qc[endog_genes, ],
                 ntop = 14214,
                 colour_by = "batch",
@@ -75,7 +75,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "counts")
 ```
 
-```{r expr-overview-pca-after-qc-exercise1-2, fig.cap = "PCA plot of the blischak data (50 genes)", echo=FALSE}
+```{r expr-overview-pca-after-qc-exercise1-2, fig.cap = "PCA plot of the tung data (50 genes)", echo=FALSE}
 scater::plotPCA(umi.qc[endog_genes, ],
                 ntop = 50,
                 colour_by = "batch",
@@ -93,7 +93,7 @@ An alternative to PCA for visualizing scRNASeq data is a tSNE plot. [tSNE](https
 
 ### Before QC
 
-```{r expr-overview-tsne-before-qc, fig.cap = "tSNE map of the blischak data"}
+```{r expr-overview-tsne-before-qc, fig.cap = "tSNE map of the tung data"}
 scater::plotTSNE(umi[endog_genes, ],
                  ntop = 500,
                  perplexity = 130,
@@ -106,7 +106,7 @@ scater::plotTSNE(umi[endog_genes, ],
 
 ### After QC
 
-```{r expr-overview-tsne-after-qc, fig.cap = "tSNE map of the blischak data"}
+```{r expr-overview-tsne-after-qc, fig.cap = "tSNE map of the tung data"}
 scater::plotTSNE(umi.qc[endog_genes, ],
                  ntop = 500,
                  perplexity = 130,
@@ -128,7 +128,7 @@ How do the tSNE plots change when a perplexity of 10 or 200 is used? How does th
 
 __Our answer__
 
-```{r expr-overview-tsne-after-qc-exercise2-1, fig.cap = "tSNE map of the blischak data (perplexity = 10)", echo=FALSE}
+```{r expr-overview-tsne-after-qc-exercise2-1, fig.cap = "tSNE map of the tung data (perplexity = 10)", echo=FALSE}
 scater::plotTSNE(umi.qc[endog_genes, ],
                  ntop = 500,
                  perplexity = 10,
@@ -139,7 +139,7 @@ scater::plotTSNE(umi.qc[endog_genes, ],
                  rand_seed = 123456)
 ```
 
-```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the blischak data (perplexity = 200)", echo=FALSE}
+```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the tung data (perplexity = 200)", echo=FALSE}
 scater::plotTSNE(umi.qc[endog_genes, ],
                  ntop = 500,
                  perplexity = 200,
@@ -150,8 +150,6 @@ scater::plotTSNE(umi.qc[endog_genes, ],
                  rand_seed = 123456)
 ```
 
-If your answers are different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/07-exprs-overview.Rmd) (you need to search for this exercise in the opened file).
-
 ## Big Exercise
 
-Perform the same analysis with read counts of the Blischak data. Use `blischak/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
+Perform the same analysis with read counts of the Blischak data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).

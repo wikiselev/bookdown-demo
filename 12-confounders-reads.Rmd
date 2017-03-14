@@ -9,12 +9,12 @@ library(scater, quietly = TRUE)
 library(knitr)
 options(stringsAsFactors = FALSE)
 opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
-reads <- readRDS("blischak/reads.rds")
+reads <- readRDS("tung/reads.rds")
 reads.qc <- reads[fData(reads)$use, pData(reads)$use]
 endog_genes <- !fData(reads.qc)$is_feature_control
 ```
 
-```{r confound-pca-reads, fig.cap = "PCA plot of the blischak data"}
+```{r confound-pca-reads, fig.cap = "PCA plot of the tung data"}
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",

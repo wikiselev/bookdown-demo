@@ -24,7 +24,7 @@ When sequencing UMI containing data, techniques are used to specifically sequenc
 
 ## Mapping Barcodes
 
-Since the number of unique barcodes (4^N, N=length of UMI) is much smaller than the total number of molecules per cell (~10^6), each barcode will typically be assigned to multiple transcripts. Hence, to identify unique molecules both barcode and mapping location (transcript) must be used. The first step is to map UMI reads, for which we recommend using STAR since it is fast and outputs good quality BAM-alignments. Moreover, mapping locations can be useful for eg. identifying poorly-annotated 3' UTRs of transcripts.
+Since the number of unique barcodes ($4^N$, $N$ - length of UMI) is much smaller than the total number of molecules per cell (~$10^6$), each barcode will typically be assigned to multiple transcripts. Hence, to identify unique molecules both barcode and mapping location (transcript) must be used. The first step is to map UMI reads, for which we recommend using STAR since it is fast and outputs good quality BAM-alignments. Moreover, mapping locations can be useful for eg. identifying poorly-annotated 3' UTRs of transcripts.
 
 UMI-sequencing typically consists of paired-end reads where one read from each pair captures the cell and UMI barcodes while the other read consists of exonic sequence from the transcript (Figure \@ref(fig:intro-umi-reads)). Note that trimming and/or filtering to remove reads containing poly-A sequence is recommended to avoid erors due to these read mapping to genes/transcripts with internal poly-A/poly-T sequences.
 
@@ -88,8 +88,8 @@ This variability can introduce strong biases and it needs to be considered in do
 __Exercise 1__ We have provided you with UMI counts and read counts from induced pluripotent stem cells generated from three different individuals [@Tung2016-an] (see: Chapter \@ref(exprs-qc) for details of this dataset).
 
 ```{r, echo=TRUE, include=TRUE}
-umi_counts <- read.table("blischak/molecules.txt", sep = "\t")
-read_counts <- read.table("blischak/reads.txt", sep = "\t")
+umi_counts <- read.table("tung/molecules.txt", sep = "\t")
+read_counts <- read.table("tung/reads.txt", sep = "\t")
 ```
 Using this data:
 

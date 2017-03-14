@@ -6,7 +6,7 @@ knit: bookdown::preview_chapter
 
 ## Introduction
 
-[scater](http://bioconductor.org/packages/scater/) is a R package single-cell RNA-seq analysis. The package contains several useful methods for quality control, visualisation and pre-processing of data prior to further downstream analysis.
+[scater](http://bioconductor.org/packages/scater/) is a R package single-cell RNA-seq analysis [@McCarthy2017-kb]. The package contains several useful methods for quality control, visualisation and pre-processing of data prior to further downstream analysis.
 
 [scater](http://bioconductor.org/packages/scater/) features the following functionality:
 
