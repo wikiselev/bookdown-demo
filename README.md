@@ -6,9 +6,13 @@ In this course we will discuss some of the questions that can be addressed using
 
 The number of computational tools is increasing rapidly and we are doing our best to keep up to date with what is available. One of the main constraints for this course is that we would like to use tools that are implemented in R and that run reasonably fast. Moreover, we will also confess to being somewhat biased towards methods that have been developed either by us or by our friends and colleagues. 
 
+## Web page
+
+__[http://hemberg-lab.github.io/scRNA.seq.course](http://hemberg-lab.github.io/scRNA.seq.course)__
+
 ## Video
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/IrlNcJwPClQ?list=PLEyKDyF1qdObdFBc3JncwXAnMUHlcd0ap" frameborder="0" allowfullscreen></iframe>
+__[https://www.youtube.com/embed/IrlNcJwPClQ?list=PLEyKDyF1qdObdFBc3JncwXAnMUHlcd0ap](https://www.youtube.com/embed/IrlNcJwPClQ?list=PLEyKDyF1qdObdFBc3JncwXAnMUHlcd0ap)__
 
 ## Registration  
 
