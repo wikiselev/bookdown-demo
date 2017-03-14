@@ -27,7 +27,7 @@ scater object in advance. We have also annotated the cells with the cell type in
 
 Let's load the data and look at it:
 ```{r}
-pollen <- readRDS("clustering/pollen.rds")
+pollen <- readRDS("pollen/pollen.rds")
 pollen
 ```
 
