@@ -59,6 +59,8 @@ scater::plotPCA(umi[endog_genes, ],
 
 Clearly log-transformation is benefitial for our data - it reduces the variance on the first principal component and already separates some biological effects. Moreover, it makes the distribution of the expression values more normal. In the following analysis and chapters we will be using log-transformed raw counts by default.
 
+__However, note that just a log-transformation is not enough to account for different technical factors between the cells (e.g. sequencing depth). Therefore, please do not use `log2_counts` for your downstream analysis, instead as a minimum suitable data use the `exprs` slot of the scater object, which not just log-transformed, but also normalised by library size (CPM normalisation). In the course we use `log2_counts` only for demonstration purposes!__
+
 ### After QC
 
 ```{r expr-overview-pca-after-qc, fig.cap = "PCA plot of the tung data"}
