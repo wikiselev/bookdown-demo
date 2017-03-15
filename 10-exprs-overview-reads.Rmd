@@ -17,7 +17,7 @@ library(knitr)
 opts_chunk$set(out.width='90%', fig.align = 'center')
 ```
 
-```{r expr-overview-pca-before-qc-reads, fig.cap = "PCA plot of the tung data"}
+```{r expr-overview-pca-before-qc-reads1, fig.cap = "PCA plot of the tung data"}
 scater::plotPCA(reads[endog_genes, ],
                 ntop = 500,
                 colour_by = "batch",
@@ -26,7 +26,7 @@ scater::plotPCA(reads[endog_genes, ],
                 exprs_values = "counts")
 ```
 
-```{r expr-overview-pca-before-qc-reads, fig.cap = "PCA plot of the tung data"}
+```{r expr-overview-pca-before-qc-reads2, fig.cap = "PCA plot of the tung data"}
 scater::plotPCA(reads[endog_genes, ],
                 ntop = 500,
                 colour_by = "batch",
