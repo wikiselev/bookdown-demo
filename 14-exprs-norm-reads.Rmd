@@ -24,7 +24,7 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 exprs_values = "log2_counts")
 ```
 ```{r norm-ours-rle-raw-reads, fig.cap = "Cell-wise RLE of the tung data"}
-boxplot(calc_cell_RLE(get_exprs(reads.qc[endog_genes, ], exprs_values = "log2_counts"))),
+boxplot(calc_cell_RLE(get_exprs(reads.qc[endog_genes, ], exprs_values = "log2_counts")),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
