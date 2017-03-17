@@ -82,7 +82,7 @@ a = 0.1
 b = 0.1
 g = 100
 lambdas = rbeta(1000, a, b)
-counts = sapply(lambdas, function(l) {rpois(1, lambda=l)})
+counts = sapply(g*lambdas, function(l) {rpois(1, lambda=l)})
 hist(counts, col="grey50", xlab="Read Counts", main="Poisson-Beta")
 ```
 Mean:
