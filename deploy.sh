@@ -3,9 +3,9 @@
 WORKSPACE=$1
 
 # get the docker
-docker pull hemberglab/scrna.seq.course:latest
+docker pull quay.io/hemberg-group/scrna-seq-course:latest
 # run the docker
-docker run hemberglab/scrna.seq.course:latest
+docker run hemberg-group/scrna-seq-course:latest
 
 # copy files from the docker
 alias dl='docker ps -l -q'
@@ -22,4 +22,4 @@ git commit -m "update the course website"
 
 # cleanup after docker usage
 docker rm `dl`
-docker rmi hemberglab/scrna.seq.course:latest
+docker rmi hemberg-group/scrna-seq-course:latest
