@@ -1,7 +1,7 @@
 FROM rocker/r-base
 
 RUN apt-get update \ 
-	&& apt-get install -y --no-install-recommends \
+	&& apt-get install -f \
 	    libssl-dev \
         libcurl4-openssl-dev \
         libxml2-dev \
