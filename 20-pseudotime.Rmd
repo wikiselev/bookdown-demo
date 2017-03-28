@@ -145,7 +145,7 @@ fd <- data.frame(gene = geneNames)
 fd <- new("AnnotatedDataFrame", data=fd)
 
 dCellData <- monocle::newCellDataSet(d, phenoData = pd, featureData = fd)
-dCellData <- monocle::setOrderingFilter(dCellData, 1:length(m3dGenes))
+dCellData <- monocle::setOrderingFilter(dCellData, which(geneNames %in% m3dGenes))
 dCellDataSet <- monocle::reduceDimension(dCellData, pseudo_expr = 1)
 dCellDataSet <- monocle::orderCells(dCellDataSet, reverse = TRUE)
 monocle::plot_cell_trajectory(dCellDataSet)
