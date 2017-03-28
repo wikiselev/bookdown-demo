@@ -5,9 +5,7 @@ RUN apt-get update -y --no-install-recommends \
 	    libssl-dev \
         libcurl4-openssl-dev \
         libxml2-dev \
-        libglib2.0-0=2.50.3-1 \
-        libglib2.0-dev \
-        libcairo2-dev \
+        libcairo2 \
 	    pandoc \
 	    pandoc-citeproc \
 	    r-cran-rjava \
