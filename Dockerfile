@@ -6,6 +6,7 @@ RUN apt-get update \
         libcurl4-openssl-dev \
         libxml2-dev \
         libcairo2-dev \
+        libglib2.0-dev \
 	    pandoc \
 	    pandoc-citeproc \
 	    r-cran-rjava \
