@@ -1,6 +1,6 @@
 FROM rocker/r-base
 
-RUN apt-get update \ 
+RUN apt-get update -y --no-install-recommends \ 
 	&& apt-get install -f \
 	    libssl-dev \
         libcurl4-openssl-dev \
