@@ -24,12 +24,14 @@ Please follow this link and register for the __"Analysis of single cell RNA-seq 
 
 ## Docker image
 
+[![Docker Repository on Quay](https://quay.io/repository/hemberg-group/scrna-seq-course/status "Docker Repository on Quay")](https://quay.io/repository/hemberg-group/scrna-seq-course)
+
 The course can be reproduced without any package installation by running the course docker image which contains all the required packages.
 
 Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker image:
 
 ```
-docker run -it hemberglab/scrna.seq.course:latest R
+docker run -it quay.io/hemberg-group/scrna-seq-course:latest R
 ```
 
 It will download the course docker image (may take some time) and start a new R session in a docker container with all packages installed and all data files available.
