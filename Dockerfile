@@ -2,19 +2,15 @@ FROM rocker/r-base
 
 RUN apt-get update -y --no-install-recommends \ 
 	&& apt-get -y install -f \
-	    libssl-dev \
+        libssl-dev \
         libcurl4-openssl-dev \
         libxml2-dev \
         libcairo2 \
-	    pandoc \
-	    pandoc-citeproc \
-	    r-cran-rjava \
-	    python \
-	    texlive-full
-# texlive is requred for pdf creation, but takes a lot of time, so skip for now
-# as DockerHub only allows for 2 hours builds
-# will switch it on once we move to e.g. Quay.
-#	    texlive-full
+        pandoc \
+        pandoc-citeproc \
+        r-cran-rjava \
+        python \
+        texlive-full
 
 # install R packages
 RUN Rscript -e "install.packages('devtools')"
