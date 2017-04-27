@@ -1,16 +1,16 @@
 FROM rocker/r-base
 
-RUN apt-get update
-RUN apt-get -y install \
-    libcurl4-gnutls-dev \
-    libssl-dev \
-    libxml2-dev \
-    libcairo2 \
-    pandoc \
-    pandoc-citeproc \
-    r-cran-rjava \
-    python \
-    texlive-full
+RUN apt-get update \
+        && apt-get install -y --no-install-recommends \
+            libcurl4-gnutls-dev \
+            libssl-dev \
+            libxml2-dev \
+            libcairo2 \
+            pandoc \
+            pandoc-citeproc \
+            r-cran-rjava \
+            python \
+            texlive-full
 
 # install R packages
 RUN Rscript -e "install.packages('devtools')"
