@@ -1,12 +1,13 @@
 ---
-knit: bookdown::preview_chapter
+output: html_document
 ---
 
 # Normalization for library size (Reads)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
-library(scater, quietly = TRUE)
+library(scater)
+library(scran)
 options(stringsAsFactors = FALSE)
 set.seed(1234567)
 library(knitr)
@@ -17,149 +18,171 @@ endog_genes <- !fData(reads.qc)$is_feature_control
 ```
 
 ```{r norm-pca-raw-reads, fig.cap = "PCA plot of the tung data"}
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "log2_counts")
-```
-```{r norm-ours-rle-raw-reads, fig.cap = "Cell-wise RLE of the tung data"}
-boxplot(calc_cell_RLE(get_exprs(reads.qc[endog_genes, ], exprs_values = "log2_counts")),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim=c(-1,1))
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "log2_counts"
+)
 ```
 
 ```{r norm-pca-cpm-reads, fig.cap = "PCA plot of the tung data after CPM normalisation"}
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "exprs")
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "exprs"
+)
 ```
 ```{r norm-ours-rle-cpm-reads, fig.cap = "Cell-wise RLE of the tung data", warning=FALSE}
-boxplot(calc_cell_RLE(exprs(reads.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim = c(-1,1))
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", CPM = "exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 ```{r norm-pca-tmm-reads, fig.cap = "PCA plot of the tung data after TMM normalisation"}
-reads.qc <- 
-    scater::normaliseExprs(reads.qc,
-                           method = "TMM",
-                           feature_set = endog_genes)
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "norm_counts")
+reads.qc <- normaliseExprs(
+    reads.qc,
+    method = "TMM",
+    feature_set = endog_genes
+)
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "norm_exprs"
+)
 ```
 ```{r norm-ours-rle-tmm-reads, fig.cap = "Cell-wise RLE of the tung data"}
-boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim=c(-1,1))
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", TMM = "norm_exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 ```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the tung data after LSF normalisation"}
-qclust <- scran::quickCluster(reads.qc, min.size = 30)
-reads.qc <- scran::computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
-reads.qc <- scater::normalize(reads.qc)
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "exprs")
+qclust <- quickCluster(reads.qc, min.size = 30)
+reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
+reads.qc <- normalize(reads.qc)
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "exprs"
+)
 ```
 
 ```{r norm-ours-rle-scran-reads, fig.cap = "Cell-wise RLE of the tung data"}
-boxplot(calc_cell_RLE(exprs(reads.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim=c(-1,1))
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", scran = "exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 ```{r norm-pca-rle-reads, fig.cap = "PCA plot of the tung data after RLE normalisation"}
-reads.qc <- 
-    scater::normaliseExprs(reads.qc,
-                           method = "RLE",
-                           feature_set = endog_genes)
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "norm_counts")
+reads.qc <- normaliseExprs(
+    reads.qc,
+    method = "RLE",
+    feature_set = endog_genes
+)
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "norm_exprs"
+)
 ```
 
 ```{r norm-ours-rle-rle-reads, fig.cap = "Cell-wise RLE of the tung data"}
-boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim=c(-1,1))
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", RLE = "norm_exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 ```{r norm-pca-uq-reads, fig.cap = "PCA plot of the tung data after UQ normalisation"}
-reads.qc <- 
-    scater::normaliseExprs(reads.qc,
-                           method = "upperquartile", 
-                           feature_set = endog_genes,
-                           p = 0.99)
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "norm_counts")
+reads.qc <- normaliseExprs(
+    reads.qc,
+    method = "upperquartile", 
+    feature_set = endog_genes,
+    p = 0.99
+)
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "norm_exprs"
+)
 ```
 ```{r norm-ours-rle-uq-reads, fig.cap = "Cell-wise RLE of the tung data"}
-boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim=c(-1,1))
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", UQ = "norm_exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 ```{r norm-pca-downsample-reads, fig.cap = "PCA plot of the tung data after downsampling"}
-norm_counts(reads.qc) <- 
-    scRNA.seq.funcs::Down_Sample_Matrix(counts(reads.qc))
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "norm_counts")
+norm_counts(reads.qc) <- Down_Sample_Matrix(counts(reads.qc))
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "norm_counts"
+)
 ```
 ```{r norm-ours-rle-downsample-reads, fig.cap = "Cell-wise RLE of the tung data"}
-tmp <- norm_counts(reads.qc[endog_genes, ])
-# ignore genes which are not detected in any cells following downsampling
-boxplot(calc_cell_RLE(tmp[rowMeans(tmp) > 0, ]), 
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim = c(-1, 1))
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", DownSample = "norm_counts"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 ```{r}
-reads.qc <-
-    scater::getBMFeatureAnnos(reads.qc,
-                              filters = "ensembl_gene_id", 
-                              attributes = c("ensembl_gene_id",
-                                             "hgnc_symbol",
-                                             "chromosome_name",
-                                             "start_position",
-                                             "end_position"), 
-                              feature_symbol = "hgnc_symbol",
-                              feature_id = "ensembl_gene_id",
-                              biomart = "ENSEMBL_MART_ENSEMBL", 
-                              dataset = "hsapiens_gene_ensembl",
-                              host = "www.ensembl.org")
+reads.qc <- getBMFeatureAnnos(
+    reads.qc,
+    filters = "ensembl_gene_id", 
+    attributes = c(
+        "ensembl_gene_id",
+        "hgnc_symbol",
+        "chromosome_name",
+        "start_position",
+        "end_position"
+    ), 
+    feature_symbol = "hgnc_symbol",
+    feature_id = "ensembl_gene_id",
+    biomart = "ENSEMBL_MART_ENSEMBL", 
+    dataset = "hsapiens_gene_ensembl",
+    host = "www.ensembl.org"
+)
 ```
 
 ```{r}
-reads.qc.ann <-
-    reads.qc[!is.na(fData(reads.qc)$ensembl_gene_id), ]
+reads.qc.ann <- reads.qc[!is.na(fData(reads.qc)$ensembl_gene_id), ]
 ```
 
 ```{r}
-eff_length <- abs(fData(reads.qc.ann)$end_position -
-                      fData(reads.qc.ann)$start_position)/1000
+eff_length <- 
+    abs(fData(reads.qc.ann)$end_position - fData(reads.qc.ann)$start_position) / 1000
 ```
 
 ```{r}
@@ -168,17 +191,21 @@ fpkm(reads.qc.ann) <- log2(calculateFPKM(reads.qc.ann, eff_length) + 1)
 ```
 
 ```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the tung data after FPKM normalisation"}
-scater::plotPCA(reads.qc.ann,
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "fpkm")
+plotPCA(
+    reads.qc.ann,
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "fpkm"
+)
 ```
 
 ```{r norm-pca-tpm-reads, fig.cap = "PCA plot of the tung data after TPM normalisation"}
-scater::plotPCA(reads.qc.ann,
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "tpm")
+plotPCA(
+    reads.qc.ann,
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "tpm"
+)
 ```
