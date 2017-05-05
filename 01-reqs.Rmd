@@ -15,7 +15,7 @@ If you do not want to install all the packages required for the course manually,
 Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker image:
 
 ```
-docker run -it hemberglab/scrna.seq.course:latest R
+docker run -it quay.io/hemberg-group/scrna-seq-course:latest R
 ```
 
 It will download the course docker image (may take some time) and start a new R session in a docker container with all packages installed and all data files available.
