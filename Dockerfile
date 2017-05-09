@@ -1,9 +1,9 @@
 FROM rocker/r-base
 
-RUN apt-get update \
-        && apt-get install -y --no-install-recommends \
-            libcurl4-gnutls-dev \
+RUN apt-get update -y --no-install-recommends \ 
+        && apt-get -y install -f \
             libssl-dev \
+            libcurl4-openssl-dev \
             libxml2-dev \
             libcairo2 \
             pandoc \
