@@ -2,6 +2,13 @@
 
 WORKSPACE=$1
 
+# Delete every Docker containers
+# Must be run first because images are attached to containers
+docker rm -f $(docker ps -a -q)
+
+# Delete every Docker image
+docker rmi -f $(docker images -q)
+
 # get the docker
 docker pull quay.io/hemberg-group/scrna-seq-course:latest
 # run the docker
@@ -19,7 +26,3 @@ git add docs/*
 git add tung/*
 git commit -m "update the course website"
 # git push origin master
-
-# cleanup after docker usage
-docker rm `dl`
-docker rmi quay.io/hemberg-group/scrna-seq-course
