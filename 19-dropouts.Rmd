@@ -76,7 +76,7 @@ describing just the technical noise expected in the dataset.
 
 If the dataset contains spike-in RNAs they can be used to directly model
 technical noise. However, measurements of spike-ins may not experience
-the same technical noise as endogenous transcripts (Risso & teichman REFERENCE).
+the same technical noise as endogenous transcripts [(Svensson et al., 2017)](https://www.nature.com/nmeth/journal/v14/n4/full/nmeth.4220.html).
 In addition, scRNASeq experiments often contain only a small number of
 spike-ins which reduces our confidence in fitted model parameters.
 
@@ -127,7 +127,7 @@ An alternative to finding HVGs is to identify genes with unexpectedly high numbe
 The frequency of zeros, know as the "dropout rate", is very closely related to expression level
 in scRNASeq data. Zeros are the dominant feature of single-cell RNASeq data, typically accounting
 for over half of the entries in the final expression matrix. These zeros predominantly result
-from the failure of mRNAs failing to be reversed transcribed (REF-me). Reverse transcription
+from the failure of mRNAs failing to be reversed transcribed [(Andrews and Hemberg, 2016)](http://www.biorxiv.org/content/early/2017/05/25/065094). Reverse transcription
 is an enzyme reaction thus can be modelled using the Michaelis-Menten equation:
 
 $$P_{dropout} = 1 - S/(K + S)$$
