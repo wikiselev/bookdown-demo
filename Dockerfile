@@ -33,7 +33,7 @@ RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')
 RUN Rscript -e "devtools::install_github('hemberg-lab/SC3')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')"
 RUN Rscript -e "devtools::install_github('JustinaZ/pcaReduce')"
-RUN Rscript -e "devtools::install_github('satijalab/seurat')"
+RUN Rscript -e "install.packages('Seurat')"
   
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('M3Drop')"
 
