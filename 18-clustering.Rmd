@@ -10,6 +10,7 @@ opts_chunk$set(fig.align = "center")
 ```
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
+library(Seurat)
 library(pcaMethods)
 library(pcaReduce)
 library(SC3)
@@ -278,8 +279,6 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 Here we follow an [example](http://satijalab.org/seurat/get_started.html) created by the authors of `SEURAT` (8,500 Pancreas cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors:
 
 ```{r, message=FALSE, warning=FALSE}
-library(Seurat)
-library(Matrix)
 pollen_seurat <- new("seurat", raw.data = get_exprs(pollen, exprs_values = "tpm"))
 pollen_seurat <- Setup(pollen_seurat, project = "Pollen")
 pollen_seurat <- MeanVarPlot(pollen_seurat)
