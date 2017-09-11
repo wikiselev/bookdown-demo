@@ -10,7 +10,6 @@ opts_chunk$set(fig.align = "center")
 ```
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-library(Seurat)
 library(pcaMethods)
 library(pcaReduce)
 library(SC3)
@@ -278,7 +277,8 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 
 Here we follow an [example](http://satijalab.org/seurat/get_started.html) created by the authors of `SEURAT` (8,500 Pancreas cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors:
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+library(Seurat)
 pollen_seurat <- new("seurat", raw.data = get_exprs(pollen, exprs_values = "tpm"))
 pollen_seurat <- Setup(pollen_seurat, project = "Pollen")
 pollen_seurat <- MeanVarPlot(pollen_seurat)
@@ -293,14 +293,14 @@ TSNEPlot(pollen_seurat, do.label = T)
 __Exercise 12__: Compare the results between `SC3` and `SEURAT`.
 
 __Our solution__:
-```{r, echo=FALSE}
+```{r, echo=TRUE, eval=FALSE}
 pData(pollen)$SEURAT <- as.character(pollen_seurat@ident)
 sc3_plot_expression(pollen, k = 11, show_pdata = "SEURAT")
 ```
 
 
 Seurat can also find marker genes, e.g. marker genes for cluster 2:
-```{r}
+```{r, eval=FALSE}
 markers <- FindMarkers(pollen_seurat, 2)
 FeaturePlot(pollen_seurat, 
             head(rownames(markers)), 
