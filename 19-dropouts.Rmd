@@ -179,11 +179,8 @@ Unlike the Michaelis-Menten and HVG methods there isn't a reliable statistical t
 selected by this model, so we will consider the top 1500 genes instead.
 
 ```{r, fig.width=8, fig.height=5}
-DANB_fit <- NBumiFitModel(usoskin1) # DANB is fit to the raw count matrix
-# Check the fit of the model
-par(mfrow=c(1,2))
-stats <- NBumiCheckFitFS(count_mat, DANB_fit)
-c(stats$gene_error,stats$cell_error)
+usoskin_int <- NBumiConvertToInteger(usoskin1)
+DANB_fit <- NBumiFitModel(usoskin_int) # DANB is fit to the raw count matrix
 # Perform DANB feature selection
 DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit)
 DANB_genes <- names(DropFS[1:1500])
@@ -207,6 +204,7 @@ consider the significance of the correlations.
 
 ```{r}
 cor_mat <- cor(t(expr_matrix), method="spearman") #Gene-gene correlations
+diag(cor_mat) <- rep(0, times=nrow(expr_matrix))
 score <- apply(cor_mat, 1, function(x) {max(abs(x))}) #Correlation of highest magnitude
 names(score) <- rownames(expr_matrix);
 score <- score[order(-score)]
@@ -223,7 +221,7 @@ pca <- prcomp(log(expr_matrix+1)/log(2)); # PCA is typically performed on log-tr
 
 plot(pca$rotation[,1], pca$rotation[,2], pch=16, col=cell_colors[as.factor(celltype_labs)]) # plot projection
 
-score <- abs(pca$x[,c(1,2)]) # calculate loadings for components 1 and 2
+score <- rowSums(abs(pca$x[,c(1,2)])) # calculate loadings for components 1 and 2
 names(score) <- rownames(expr_matrix)
 score <- score[order(-score)]
 PCA_genes = names(score[1:1500])
@@ -242,7 +240,6 @@ M3Drop::M3DropExpressionHeatmap(
     M3Drop_genes,
     uso_list$data,
     cell_labels = uso_list$labels,
-    key_genes = uso_markers
 )
 ```
 
