@@ -67,7 +67,7 @@ expr_matrix <- uso_list$data # Normalized & filtered expression matrix
 celltype_labs <- uso_list$labels # filtered cell-type labels
 cell_colors <- brewer.pal(max(3,length(unique(celltype_labs))), "Set3")
 ```
-Exercise 1__: How many cells & genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?
+__Exercise 1__: How many cells & genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?
 ## Identifying Genes vs a Null Model ##
 
 There are two main approaches to unsupervised feature selection. The
