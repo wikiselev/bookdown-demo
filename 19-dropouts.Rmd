@@ -202,7 +202,7 @@ result it is more appropriate to take the top few thousand genes as ranked by ge
 consider the significance of the correlations.
 
 
-```{r}
+```{r, eval=FALSE}
 cor_mat <- cor(t(expr_matrix), method="spearman") #Gene-gene correlations
 diag(cor_mat) <- rep(0, times=nrow(expr_matrix))
 score <- apply(cor_mat, 1, function(x) {max(abs(x))}) #Correlation of highest magnitude
