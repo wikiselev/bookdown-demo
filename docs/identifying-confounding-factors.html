@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Analysis of single cell RNA-seq data</title>
   <meta name="description" content="Analysis of single cell RNA-seq data">
-  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Analysis of single cell RNA-seq data" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-07-26">
+<meta name="date" content="2017-09-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -298,12 +298,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>19.6</b> SINCERA</a></li>
 <li class="chapter" data-level="19.7" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>19.7</b> SEURAT</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html"><i class="fa fa-check"></i><b>20</b> Identification of important genes</a><ul>
-<li class="chapter" data-level="20.1" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#fitting-the-models"><i class="fa fa-check"></i><b>20.1</b> Fitting the models</a></li>
-<li class="chapter" data-level="20.2" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#the-michaelis-menten-equation"><i class="fa fa-check"></i><b>20.2</b> The Michaelis-Menten Equation</a></li>
-<li class="chapter" data-level="20.3" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#right-outliers"><i class="fa fa-check"></i><b>20.3</b> Right outliers</a></li>
-<li class="chapter" data-level="20.4" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#validation-of-de-results"><i class="fa fa-check"></i><b>20.4</b> Validation of DE results</a></li>
-<li class="chapter" data-level="20.5" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#comparing-m3drop-to-other-methods"><i class="fa fa-check"></i><b>20.5</b> Comparing M3Drop to other methods</a></li>
+<li class="chapter" data-level="20" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>20</b> Feature Selection</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>20.0.1</b> Highly Variable Genes</a></li>
+<li class="chapter" data-level="20.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>20.0.2</b> High Dropout Genes</a></li>
+<li class="chapter" data-level="20.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>20.1</b> Correlated Expression</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>20.1.1</b> Comparing Methods</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>21</b> Pseudotime analysis</a><ul>
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
@@ -374,14 +374,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scater, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 umi &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;tung/umi.rds&quot;</span>)
-umi.qc &lt;-<span class="st"> </span>umi[<span class="kw">fData</span>(umi)$use, <span class="kw">pData</span>(umi)$use]
-endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(umi.qc)$is_feature_control</code></pre></div>
+umi.qc &lt;-<span class="st"> </span>umi[<span class="kw">fData</span>(umi)<span class="op">$</span>use, <span class="kw">pData</span>(umi)<span class="op">$</span>use]
+endog_genes &lt;-<span class="st"> </span><span class="op">!</span><span class="kw">fData</span>(umi.qc)<span class="op">$</span>is_feature_control</code></pre></div>
 <p>The <code>umi.qc</code> dataset contains filtered cells and genes. Our next step is to explore technical drivers of variability in the data to inform data normalisation before downstream analysis.</p>
 </div>
 <div id="correlations-with-pcs" class="section level2">
 <h2><span class="header-section-number">12.2</span> Correlations with PCs</h2>
 <p>Let’s first look again at the PCA plot of the QCed dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
                 <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
                 <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
                 <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>)</code></pre></div>
@@ -395,7 +395,7 @@ Figure 12.1: PCA plot of the tung data
 <p>Let’s test whether some of the variables correlate with any of the PCs.</p>
 <div id="detected-genes" class="section level3">
 <h3><span class="header-section-number">12.2.1</span> Detected genes</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotQC</span>(umi.qc[endog_genes, ],
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotQC</span>(umi.qc[endog_genes, ],
                <span class="dt">type =</span> <span class="st">&quot;find-pcs&quot;</span>,
                <span class="dt">variable =</span> <span class="st">&quot;total_features&quot;</span>,
                <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>)</code></pre></div>
@@ -411,7 +411,7 @@ Figure 12.2: PC correlation with the number of detected genes
 <div id="explanatory-variables" class="section level2">
 <h2><span class="header-section-number">12.3</span> Explanatory variables</h2>
 <p>scater can also compute the marginal <span class="math inline">\(R^2\)</span> for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal <span class="math inline">\(R^2\)</span> values for the variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotQC</span>(umi.qc[endog_genes, ],
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotQC</span>(umi.qc[endog_genes, ],
                <span class="dt">type =</span> <span class="st">&quot;expl&quot;</span>,
                <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
                <span class="dt">variables =</span> <span class="kw">c</span>(<span class="st">&quot;total_features&quot;</span>,
@@ -456,7 +456,7 @@ Figure 12.3: Explanatory variables
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,

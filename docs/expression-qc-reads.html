@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Analysis of single cell RNA-seq data</title>
   <meta name="description" content="Analysis of single cell RNA-seq data">
-  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Analysis of single cell RNA-seq data" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-07-26">
+<meta name="date" content="2017-09-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -298,12 +298,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>19.6</b> SINCERA</a></li>
 <li class="chapter" data-level="19.7" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>19.7</b> SEURAT</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html"><i class="fa fa-check"></i><b>20</b> Identification of important genes</a><ul>
-<li class="chapter" data-level="20.1" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#fitting-the-models"><i class="fa fa-check"></i><b>20.1</b> Fitting the models</a></li>
-<li class="chapter" data-level="20.2" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#the-michaelis-menten-equation"><i class="fa fa-check"></i><b>20.2</b> The Michaelis-Menten Equation</a></li>
-<li class="chapter" data-level="20.3" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#right-outliers"><i class="fa fa-check"></i><b>20.3</b> Right outliers</a></li>
-<li class="chapter" data-level="20.4" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#validation-of-de-results"><i class="fa fa-check"></i><b>20.4</b> Validation of DE results</a></li>
-<li class="chapter" data-level="20.5" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#comparing-m3drop-to-other-methods"><i class="fa fa-check"></i><b>20.5</b> Comparing M3Drop to other methods</a></li>
+<li class="chapter" data-level="20" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>20</b> Feature Selection</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>20.0.1</b> Highly Variable Genes</a></li>
+<li class="chapter" data-level="20.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>20.0.2</b> High Dropout Genes</a></li>
+<li class="chapter" data-level="20.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>20.1</b> Correlated Expression</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>20.1.1</b> Comparing Methods</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>21</b> Pseudotime analysis</a><ul>
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
@@ -374,8 +374,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;tung/reads.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)
 anno &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;tung/annotation.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
-    <span class="kw">head</span>(reads[ , <span class="dv">1</span>:<span class="dv">3</span>]), <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
+    <span class="kw">head</span>(reads[ , <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]), <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
     <span class="dt">caption =</span> <span class="st">&#39;A table of the first 6 rows and 3 columns of the molecules table.&#39;</span>
 )</code></pre></div>
 <table>
@@ -427,7 +427,7 @@ anno &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span clas
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
     <span class="kw">head</span>(anno), <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
     <span class="dt">caption =</span> <span class="st">&#39;A table of the first 6 rows of the anno table.&#39;</span>
 )</code></pre></div>
@@ -488,12 +488,12 @@ anno &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span clas
 </tbody>
 </table>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pheno_data &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;AnnotatedDataFrame&quot;</span>, anno)
-<span class="kw">rownames</span>(pheno_data) &lt;-<span class="st"> </span>pheno_data$sample_id
-reads &lt;-<span class="st"> </span>scater::<span class="kw">newSCESet</span>(
+<span class="kw">rownames</span>(pheno_data) &lt;-<span class="st"> </span>pheno_data<span class="op">$</span>sample_id
+reads &lt;-<span class="st"> </span>scater<span class="op">::</span><span class="kw">newSCESet</span>(
     <span class="dt">countData =</span> reads,
     <span class="dt">phenoData =</span> pheno_data
 )</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keep_feature &lt;-<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">counts</span>(reads) &gt;<span class="st"> </span><span class="dv">0</span>) &gt;<span class="st"> </span><span class="dv">0</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keep_feature &lt;-<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">counts</span>(reads) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>
 reads &lt;-<span class="st"> </span>reads[keep_feature, ]</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ercc &lt;-<span class="st"> </span><span class="kw">featureNames</span>(reads)[<span class="kw">grepl</span>(<span class="st">&quot;ERCC-&quot;</span>, <span class="kw">featureNames</span>(reads))]
 mt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;ENSG00000198899&quot;</span>, <span class="st">&quot;ENSG00000198727&quot;</span>, <span class="st">&quot;ENSG00000198888&quot;</span>,
@@ -501,12 +501,12 @@ mt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quo
         <span class="st">&quot;ENSG00000198695&quot;</span>, <span class="st">&quot;ENSG00000198712&quot;</span>, <span class="st">&quot;ENSG00000198804&quot;</span>,
         <span class="st">&quot;ENSG00000198763&quot;</span>, <span class="st">&quot;ENSG00000228253&quot;</span>, <span class="st">&quot;ENSG00000198938&quot;</span>,
         <span class="st">&quot;ENSG00000198840&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads &lt;-<span class="st"> </span>scater::<span class="kw">calculateQCMetrics</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads &lt;-<span class="st"> </span>scater<span class="op">::</span><span class="kw">calculateQCMetrics</span>(
     reads,
     <span class="dt">feature_controls =</span> <span class="kw">list</span>(<span class="dt">ERCC =</span> ercc, <span class="dt">MT =</span> mt)
 )</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(
-    reads$total_counts,
+    reads<span class="op">$</span>total_counts,
     <span class="dt">breaks =</span> <span class="dv">100</span>
 )
 <span class="kw">abline</span>(<span class="dt">v =</span> <span class="fl">1.3e6</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
@@ -516,8 +516,8 @@ mt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quo
 Figure 9.1: Histogram of library sizes for all cells
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_by_total_counts &lt;-<span class="st"> </span>(reads$total_counts &gt;<span class="st"> </span><span class="fl">1.3e6</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_by_total_counts &lt;-<span class="st"> </span>(reads<span class="op">$</span>total_counts <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.3e6</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
     <span class="kw">as.data.frame</span>(<span class="kw">table</span>(filter_by_total_counts)),
     <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
     <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
@@ -543,7 +543,7 @@ Figure 9.1: Histogram of library sizes for all cells
 </tbody>
 </table>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(
-    reads$total_features,
+    reads<span class="op">$</span>total_features,
     <span class="dt">breaks =</span> <span class="dv">100</span>
 )
 <span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">7000</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
@@ -553,8 +553,8 @@ Figure 9.1: Histogram of library sizes for all cells
 Figure 9.2: Histogram of the number of detected genes in all cells
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_by_expr_features &lt;-<span class="st"> </span>(reads$total_features &gt;<span class="st"> </span><span class="dv">7000</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_by_expr_features &lt;-<span class="st"> </span>(reads<span class="op">$</span>total_features <span class="op">&gt;</span><span class="st"> </span><span class="dv">7000</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
     <span class="kw">as.data.frame</span>(<span class="kw">table</span>(filter_by_expr_features)),
     <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
     <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
@@ -579,7 +579,7 @@ Figure 9.2: Histogram of the number of detected genes in all cells
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPhenoData</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotPhenoData</span>(
     reads,
     <span class="kw">aes_string</span>(<span class="dt">x =</span> <span class="st">&quot;total_features&quot;</span>,
                <span class="dt">y =</span> <span class="st">&quot;pct_counts_feature_controls_MT&quot;</span>,
@@ -591,7 +591,7 @@ Figure 9.2: Histogram of the number of detected genes in all cells
 Figure 9.3: Percentage of counts in MT genes
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPhenoData</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotPhenoData</span>(
     reads,
     <span class="kw">aes_string</span>(<span class="dt">x =</span> <span class="st">&quot;total_features&quot;</span>,
                <span class="dt">y =</span> <span class="st">&quot;pct_counts_feature_controls_ERCC&quot;</span>,
@@ -603,9 +603,9 @@ Figure 9.3: Percentage of counts in MT genes
 Figure 9.4: Percentage of counts in ERCCs
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_by_ERCC &lt;-<span class="st"> </span>reads$batch !=<span class="st"> &quot;NA19098.r2&quot;</span> &amp;
-<span class="st">    </span>reads$pct_counts_feature_controls_ERCC &lt;<span class="st"> </span><span class="dv">25</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_by_ERCC &lt;-<span class="st"> </span>reads<span class="op">$</span>batch <span class="op">!=</span><span class="st"> &quot;NA19098.r2&quot;</span> <span class="op">&amp;</span>
+<span class="st">    </span>reads<span class="op">$</span>pct_counts_feature_controls_ERCC <span class="op">&lt;</span><span class="st"> </span><span class="dv">25</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
   <span class="kw">as.data.frame</span>(<span class="kw">table</span>(filter_by_ERCC)),
   <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
   <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
@@ -630,8 +630,8 @@ Figure 9.4: Percentage of counts in ERCCs
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_by_MT &lt;-<span class="st"> </span>reads$pct_counts_feature_controls_MT &lt;<span class="st"> </span><span class="dv">30</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_by_MT &lt;-<span class="st"> </span>reads<span class="op">$</span>pct_counts_feature_controls_MT <span class="op">&lt;</span><span class="st"> </span><span class="dv">30</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
   <span class="kw">as.data.frame</span>(<span class="kw">table</span>(filter_by_MT)),
   <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
   <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
@@ -656,18 +656,18 @@ Figure 9.4: Percentage of counts in ERCCs
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads$use &lt;-<span class="st"> </span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads<span class="op">$</span>use &lt;-<span class="st"> </span>(
     <span class="co"># sufficient features (genes)</span>
-    filter_by_expr_features &amp;
+    filter_by_expr_features <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># sufficient molecules counted</span>
-<span class="st">    </span>filter_by_total_counts &amp;
+<span class="st">    </span>filter_by_total_counts <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># sufficient endogenous RNA</span>
-<span class="st">    </span>filter_by_ERCC &amp;
+<span class="st">    </span>filter_by_ERCC <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># remove cells with unusual number of reads in MT genes</span>
 <span class="st">    </span>filter_by_MT
 )</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
-  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(reads$use)),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
+  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(reads<span class="op">$</span>use)),
   <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
   <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
   <span class="dt">caption =</span> <span class="st">&#39;The number of cells removed by manual filter (FALSE)&#39;</span>
@@ -691,20 +691,20 @@ Figure 9.4: Percentage of counts in ERCCs
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads$use_default &lt;-<span class="st"> </span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads<span class="op">$</span>use_default &lt;-<span class="st"> </span>(
     <span class="co"># remove cells with unusual numbers of genes</span>
-    !reads$filter_on_total_features &amp;
+    <span class="op">!</span>reads<span class="op">$</span>filter_on_total_features <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># sufficient molecules counted</span>
-<span class="st">    </span>!reads$filter_on_total_counts &amp;
+<span class="st">    </span><span class="op">!</span>reads<span class="op">$</span>filter_on_total_counts <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># sufficient endogenous RNA</span>
-<span class="st">    </span>!reads$filter_on_pct_counts_feature_controls_ERCC &amp;
+<span class="st">    </span><span class="op">!</span>reads<span class="op">$</span>filter_on_pct_counts_feature_controls_ERCC <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># remove cells with unusual number of reads in MT genes</span>
-<span class="st">    </span>!reads$filter_on_pct_counts_feature_controls_MT &amp;
+<span class="st">    </span><span class="op">!</span>reads<span class="op">$</span>filter_on_pct_counts_feature_controls_MT <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># controls shouldn&#39;t be used in downstream analysis</span>
-<span class="st">    </span>!reads$is_cell_control
+<span class="st">    </span><span class="op">!</span>reads<span class="op">$</span>is_cell_control
 )</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
-  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(reads$use_default)),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
+  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(reads<span class="op">$</span>use_default)),
   <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
   <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
   <span class="dt">caption =</span> <span class="st">&#39;The number of cells removed by default filter (FALSE)&#39;</span>
@@ -729,7 +729,7 @@ Figure 9.4: Percentage of counts in ERCCs
 </tbody>
 </table>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads &lt;-
-scater::<span class="kw">plotPCA</span>(reads,
+scater<span class="op">::</span><span class="kw">plotPCA</span>(reads,
                 <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>, 
                 <span class="dt">shape_by =</span> <span class="st">&quot;use&quot;</span>,
                 <span class="dt">pca_data_input =</span> <span class="st">&quot;pdata&quot;</span>,
@@ -863,8 +863,8 @@ scater::<span class="kw">plotPCA</span>(reads,
 Figure 9.5: PCA plot used for automatic detection of cell outliers
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
-  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(reads$outlier)),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
+  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(reads<span class="op">$</span>outlier)),
   <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
   <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
   <span class="dt">caption =</span> <span class="st">&#39;The number of cells removed by automatic filter (FALSE)&#39;</span>
@@ -888,13 +888,13 @@ Figure 9.5: PCA plot used for automatic detection of cell outliers
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">def &lt;-<span class="st"> </span><span class="kw">colnames</span>(reads)[!reads$use_default]
-auto &lt;-<span class="st"> </span><span class="kw">colnames</span>(reads)[reads$outlier]
-man &lt;-<span class="st"> </span><span class="kw">colnames</span>(reads)[!reads$use]
-venn.diag &lt;-<span class="st"> </span>limma::<span class="kw">vennCounts</span>(<span class="kw">cbind</span>(<span class="kw">colnames</span>(reads) %in%<span class="st"> </span>def,
-                                     <span class="kw">colnames</span>(reads) %in%<span class="st"> </span>auto,
-                                     <span class="kw">colnames</span>(reads) %in%<span class="st"> </span>man))
-limma::<span class="kw">vennDiagram</span>(venn.diag,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">def &lt;-<span class="st"> </span><span class="kw">colnames</span>(reads)[<span class="op">!</span>reads<span class="op">$</span>use_default]
+auto &lt;-<span class="st"> </span><span class="kw">colnames</span>(reads)[reads<span class="op">$</span>outlier]
+man &lt;-<span class="st"> </span><span class="kw">colnames</span>(reads)[<span class="op">!</span>reads<span class="op">$</span>use]
+venn.diag &lt;-<span class="st"> </span>limma<span class="op">::</span><span class="kw">vennCounts</span>(<span class="kw">cbind</span>(<span class="kw">colnames</span>(reads) <span class="op">%in%</span><span class="st"> </span>def,
+                                     <span class="kw">colnames</span>(reads) <span class="op">%in%</span><span class="st"> </span>auto,
+                                     <span class="kw">colnames</span>(reads) <span class="op">%in%</span><span class="st"> </span>man))
+limma<span class="op">::</span><span class="kw">vennDiagram</span>(venn.diag,
                    <span class="dt">names =</span> <span class="kw">c</span>(<span class="st">&quot;Default&quot;</span>, <span class="st">&quot;Automatic&quot;</span>, <span class="st">&quot;Manual&quot;</span>),
                    <span class="dt">circle.col =</span> <span class="kw">c</span>(<span class="st">&quot;magenta&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;green&quot;</span>))</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:cell-filt-comp-reads"></span>
@@ -903,17 +903,17 @@ limma::<span class="kw">vennDiagram</span>(venn.diag,
 Figure 9.6: Comparison of the default, automatic and manual cell filters
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotQC</span>(reads, <span class="dt">type =</span> <span class="st">&quot;highest-expression&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotQC</span>(reads, <span class="dt">type =</span> <span class="st">&quot;highest-expression&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:top50-gene-expr-reads"></span>
 <img src="08-exprs-qc-reads_files/figure-html/top50-gene-expr-reads-1.png" alt="Number of total counts consumed by the top 50 expressed genes" width="90%" />
 <p class="caption">
 Figure 9.7: Number of total counts consumed by the top 50 expressed genes
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_genes &lt;-<span class="st"> </span><span class="kw">apply</span>(<span class="kw">counts</span>(reads[, <span class="kw">pData</span>(reads)$use]), <span class="dv">1</span>, 
-                      function(x) <span class="kw">length</span>(x[x &gt;<span class="st"> </span><span class="dv">1</span>]) &gt;=<span class="st"> </span><span class="dv">2</span>)
-<span class="kw">fData</span>(reads)$use &lt;-<span class="st"> </span>filter_genes</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_genes &lt;-<span class="st"> </span><span class="kw">apply</span>(<span class="kw">counts</span>(reads[, <span class="kw">pData</span>(reads)<span class="op">$</span>use]), <span class="dv">1</span>, 
+                      <span class="cf">function</span>(x) <span class="kw">length</span>(x[x <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>]) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span>)
+<span class="kw">fData</span>(reads)<span class="op">$</span>use &lt;-<span class="st"> </span>filter_genes</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
     <span class="kw">as.data.frame</span>(<span class="kw">table</span>(filter_genes)),
     <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
     <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
@@ -938,10 +938,10 @@ Figure 9.7: Number of total counts consumed by the top 50 expressed genes
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(reads[<span class="kw">fData</span>(reads)$use, <span class="kw">pData</span>(reads)$use])</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(reads[<span class="kw">fData</span>(reads)<span class="op">$</span>use, <span class="kw">pData</span>(reads)<span class="op">$</span>use])</code></pre></div>
 <pre><code>## Features  Samples 
 ##    16061      605</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set_exprs</span>(reads, <span class="st">&quot;log2_counts&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">counts</span>(reads) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set_exprs</span>(reads, <span class="st">&quot;log2_counts&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">counts</span>(reads) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saveRDS</span>(reads, <span class="dt">file =</span> <span class="st">&quot;tung/reads.rds&quot;</span>)</code></pre></div>
 <p>By comparing Figure <a href="exprs-qc.html#fig:cell-filt-comp">8.6</a> and Figure <a href="expression-qc-reads.html#fig:cell-filt-comp-reads">9.6</a>, it is clear that the reads based filtering removed 49 more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.</p>
 
@@ -963,7 +963,7 @@ Figure 9.7: Number of total counts consumed by the top 50 expressed genes
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,

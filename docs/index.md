@@ -1,7 +1,7 @@
 --- 
 title: "Analysis of single cell RNA-seq data"
 author: "Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg"
-date: "2017-07-26"
+date: "2017-09-18"
 knit: "bookdown::render_book"
 documentclass: book
 bibliography: [book.bib]
@@ -41,6 +41,8 @@ docker run -it quay.io/hemberg-group/scrna-seq-course:latest R
 ```
 
 It will download the course docker image (may take some time) and start a new R session in a docker container with all packages installed and all data files available.
+
+Note: It is currently not possible to plot figures interactively from the Docker, however figures can still be written to file for inspection.
 
 ## License
 <b>GPL-3</b>

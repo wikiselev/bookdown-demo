@@ -161,7 +161,7 @@ we must carry out feature selection. First, we use M3Drop:
 
 ```r
 m3dGenes <- as.character(
-    M3Drop::M3DropDifferentialExpression(deng)$Gene
+    M3Drop::M3DropFeatureSelection(deng)$Gene
 )
 ```
 
@@ -189,7 +189,7 @@ dCellData <- newCellDataSet(d, phenoData = pd, featureData = fd, expressionFamil
 dCellData <- setOrderingFilter(dCellData, which(geneNames %in% m3dGenes))
 dCellData <- estimateSizeFactors(dCellData)
 dCellDataSet <- reduceDimension(dCellData, pseudo_expr = 1)
-dCellDataSet <- orderCells(dCellDataSet, reverse = TRUE)
+dCellDataSet <- orderCells(dCellDataSet, reverse = FALSE)
 plot_cell_trajectory(dCellDataSet)
 ```
 
@@ -298,6 +298,7 @@ embedding](https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction) of 
 
 
 ```r
+require("lle")
 slicer_genes <- select_genes(t(deng))
 k <- select_k(t(deng[slicer_genes,]), kmin = 30, kmax=60)
 ```

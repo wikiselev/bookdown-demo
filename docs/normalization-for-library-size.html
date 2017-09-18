@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Analysis of single cell RNA-seq data</title>
   <meta name="description" content="Analysis of single cell RNA-seq data">
-  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Analysis of single cell RNA-seq data" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-07-26">
+<meta name="date" content="2017-09-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -298,12 +298,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>19.6</b> SINCERA</a></li>
 <li class="chapter" data-level="19.7" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>19.7</b> SEURAT</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html"><i class="fa fa-check"></i><b>20</b> Identification of important genes</a><ul>
-<li class="chapter" data-level="20.1" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#fitting-the-models"><i class="fa fa-check"></i><b>20.1</b> Fitting the models</a></li>
-<li class="chapter" data-level="20.2" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#the-michaelis-menten-equation"><i class="fa fa-check"></i><b>20.2</b> The Michaelis-Menten Equation</a></li>
-<li class="chapter" data-level="20.3" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#right-outliers"><i class="fa fa-check"></i><b>20.3</b> Right outliers</a></li>
-<li class="chapter" data-level="20.4" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#validation-of-de-results"><i class="fa fa-check"></i><b>20.4</b> Validation of DE results</a></li>
-<li class="chapter" data-level="20.5" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#comparing-m3drop-to-other-methods"><i class="fa fa-check"></i><b>20.5</b> Comparing M3Drop to other methods</a></li>
+<li class="chapter" data-level="20" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>20</b> Feature Selection</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>20.0.1</b> Highly Variable Genes</a></li>
+<li class="chapter" data-level="20.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>20.0.2</b> High Dropout Genes</a></li>
+<li class="chapter" data-level="20.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>20.1</b> Correlated Expression</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>20.1.1</b> Comparing Methods</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>21</b> Pseudotime analysis</a><ul>
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
@@ -382,55 +382,55 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">14.3</span> Normalisations</h2>
 <p>The simplest way to normalize this data is to convert it to counts per million (<strong>CPM</strong>) by dividing each column by its total then multiplying by 1,000,000. Note that spike-ins should be excluded from the calculation of total expression in order to correct for total cell RNA content, therefore we will only use endogenous genes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_cpm &lt;-
-function (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span>) 
+<span class="cf">function</span> (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span>) 
 {
-    norm_factor &lt;-<span class="st"> </span><span class="kw">colSums</span>(expr_mat[-spikes, ])
-    <span class="kw">return</span>(<span class="kw">t</span>(<span class="kw">t</span>(expr_mat)/norm_factor)) *<span class="st"> </span><span class="dv">10</span>^<span class="dv">6</span>
+    norm_factor &lt;-<span class="st"> </span><span class="kw">colSums</span>(expr_mat[<span class="op">-</span>spikes, ])
+    <span class="kw">return</span>(<span class="kw">t</span>(<span class="kw">t</span>(expr_mat)<span class="op">/</span>norm_factor)) <span class="op">*</span><span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">6</span>
 }</code></pre></div>
 <p>One potential drawback of <strong>CPM</strong> is if your sample contains genes that are both very highly expressed and differentially expressed across the cells. In this case, the total molecules in the cell may depend of whether such genes are on/off in the cell and normalizing by total molecules may hide the differential expression of those genes and/or falsely create differential expression for the remaining genes.</p>
 <p><strong>Note</strong>: RPKM, FPKM and TPM are variants on CPM which further adjust counts by the length of the respective gene/transcript.</p>
 <p>To deal with this potentiality several other measures were devised:</p>
 <p>The <strong>size factor (SF)</strong> was proposed and popularized by DESeq (<a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106">Anders and Huber (2010)</a>). First the geometric mean of each gene across all cells is calculated. The size factor for each cell is the median across genes of the ratio of the expression to the gene’s geometric mean. A drawback to this method is that since it uses the geometric mean only genes with non-zero expression values across all cells can be used in its calculation, making it unadvisable for large low-depth scRNASeq experiments. edgeR &amp; scater call this method <strong>RLE</strong> for “relative log expression”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_sf &lt;-
-function (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span>) 
+<span class="cf">function</span> (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span>) 
 {
-    geomeans &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="kw">rowMeans</span>(<span class="kw">log</span>(expr_mat[-spikes, ])))
-    SF &lt;-<span class="st"> </span>function(cnts) {
-        <span class="kw">median</span>((cnts/geomeans)[(<span class="kw">is.finite</span>(geomeans) &amp;<span class="st"> </span>geomeans &gt;<span class="st"> </span>
+    geomeans &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="kw">rowMeans</span>(<span class="kw">log</span>(expr_mat[<span class="op">-</span>spikes, ])))
+    SF &lt;-<span class="st"> </span><span class="cf">function</span>(cnts) {
+        <span class="kw">median</span>((cnts<span class="op">/</span>geomeans)[(<span class="kw">is.finite</span>(geomeans) <span class="op">&amp;</span><span class="st"> </span>geomeans <span class="op">&gt;</span><span class="st"> </span>
 <span class="st">            </span><span class="dv">0</span>)])
     }
-    norm_factor &lt;-<span class="st"> </span><span class="kw">apply</span>(expr_mat[-spikes, ], <span class="dv">2</span>, SF)
-    <span class="kw">return</span>(<span class="kw">t</span>(<span class="kw">t</span>(expr_mat)/norm_factor))
+    norm_factor &lt;-<span class="st"> </span><span class="kw">apply</span>(expr_mat[<span class="op">-</span>spikes, ], <span class="dv">2</span>, SF)
+    <span class="kw">return</span>(<span class="kw">t</span>(<span class="kw">t</span>(expr_mat)<span class="op">/</span>norm_factor))
 }</code></pre></div>
 <p>The <strong>upperquartile (UQ)</strong> was proposed by <a href="http://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-11-94">Bullard et al (2010)</a>. Here each column is divided by the 75% quantile of the counts for each library. Often the calculated quantile is scaled by the median across cells to keep the absolute level of expression relatively consistent. A drawback to this method is that for low-depth scRNASeq experiments the large number of undetected genes may result in the 75% quantile being zero (or close to it). This limitation can be overcome by generalizing the idea and using a higher quantile (eg. the 99% quantile is the default in scater) or by excluding zeros prior to calculating the 75% quantile.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_uq &lt;-
-function (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span>) 
+<span class="cf">function</span> (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span>) 
 {
-    UQ &lt;-<span class="st"> </span>function(x) {
-        <span class="kw">quantile</span>(x[x &gt;<span class="st"> </span><span class="dv">0</span>], <span class="fl">0.75</span>)
+    UQ &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+        <span class="kw">quantile</span>(x[x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>], <span class="fl">0.75</span>)
     }
-    uq &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">apply</span>(expr_mat[-spikes, ], <span class="dv">2</span>, UQ))
-    norm_factor &lt;-<span class="st"> </span>uq/<span class="kw">median</span>(uq)
-    <span class="kw">return</span>(<span class="kw">t</span>(<span class="kw">t</span>(expr_mat)/norm_factor))
+    uq &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">apply</span>(expr_mat[<span class="op">-</span>spikes, ], <span class="dv">2</span>, UQ))
+    norm_factor &lt;-<span class="st"> </span>uq<span class="op">/</span><span class="kw">median</span>(uq)
+    <span class="kw">return</span>(<span class="kw">t</span>(<span class="kw">t</span>(expr_mat)<span class="op">/</span>norm_factor))
 }</code></pre></div>
 <p>Another method is called <strong>TMM</strong> is the weighted trimmed mean of M-values (to the reference) proposed by <a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-3-r25">Robinson and Oshlack (2010)</a>. The M-values in question are the gene-wise log2 fold changes between individual cells. One cell is used as the reference then the M-values for each other cell is calculated compared to this reference. These values are then trimmed by removing the top and bottom ~30%, and the average of the remaining values is calculated by weighting them to account for the effect of the log scale on variance. Each non-reference cell is multiplied by the calculated factor. Two potential issues with this method are insufficient non-zero genes left after trimming, and the assumption that most genes are not differentially expressed.</p>
 <p>Finally the <code>scran</code> package implements a variant on CPM specialized for single-cell data (<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0947-7">Lun et al 2016</a>). Briefly this method deals with the problem of vary large numbers of zero values per cell by pooling cells together calculating a normalization factor (similar to CPM) for the sum of each pool. Since each cell is found in many different pools, cell-specific factors can be deconvoluted from the collection of pool-specific factors using linear algebra.</p>
 <p>We will use visual inspection of PCA plots and calculation of cell-wise relative log expression (<code>calc_cell_RLE()</code>) to compare the efficiency of different normalization methods. Cells with many[few] reads have higher[lower] than median expression for most genes resulting in a positive[negative] RLE across the cell, whereas normalized cells have an RLE close to zero.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_cell_RLE &lt;-
-function (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span>) 
+<span class="cf">function</span> (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span>) 
 {
-    RLE_gene &lt;-<span class="st"> </span>function(x) {
-        if (<span class="kw">median</span>(<span class="kw">unlist</span>(x)) &gt;<span class="st"> </span><span class="dv">0</span>) {
-            <span class="kw">log</span>((x +<span class="st"> </span><span class="dv">1</span>)/(<span class="kw">median</span>(<span class="kw">unlist</span>(x)) +<span class="st"> </span><span class="dv">1</span>))/<span class="kw">log</span>(<span class="dv">2</span>)
+    RLE_gene &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+        <span class="cf">if</span> (<span class="kw">median</span>(<span class="kw">unlist</span>(x)) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {
+            <span class="kw">log</span>((x <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)<span class="op">/</span>(<span class="kw">median</span>(<span class="kw">unlist</span>(x)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))<span class="op">/</span><span class="kw">log</span>(<span class="dv">2</span>)
         }
-        else {
+        <span class="cf">else</span> {
             <span class="kw">rep</span>(<span class="ot">NA</span>, <span class="dt">times =</span> <span class="kw">length</span>(x))
         }
     }
-    if (!<span class="kw">is.null</span>(spikes)) {
-        RLE_matrix &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(expr_mat[-spikes, ], <span class="dv">1</span>, RLE_gene))
+    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(spikes)) {
+        RLE_matrix &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(expr_mat[<span class="op">-</span>spikes, ], <span class="dv">1</span>, RLE_gene))
     }
-    else {
+    <span class="cf">else</span> {
         RLE_matrix &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(expr_mat, <span class="dv">1</span>, RLE_gene))
     }
     cell_RLE &lt;-<span class="st"> </span><span class="kw">apply</span>(RLE_matrix, <span class="dv">2</span>, median, <span class="dt">na.rm =</span> T)
@@ -446,8 +446,8 @@ function (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 <span class="kw">set.seed</span>(<span class="dv">1234567</span>)
 umi &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;tung/umi.rds&quot;</span>)
-umi.qc &lt;-<span class="st"> </span>umi[<span class="kw">fData</span>(umi)$use, <span class="kw">pData</span>(umi)$use]
-endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(umi.qc)$is_feature_control</code></pre></div>
+umi.qc &lt;-<span class="st"> </span>umi[<span class="kw">fData</span>(umi)<span class="op">$</span>use, <span class="kw">pData</span>(umi)<span class="op">$</span>use]
+endog_genes &lt;-<span class="st"> </span><span class="op">!</span><span class="kw">fData</span>(umi.qc)<span class="op">$</span>is_feature_control</code></pre></div>
 <div id="raw" class="section level3">
 <h3><span class="header-section-number">14.3.1</span> Raw</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
@@ -629,19 +629,19 @@ Figure 14.11: Cell-wise RLE of the tung data
 <h2><span class="header-section-number">14.4</span> Downsampling</h2>
 <p>A final way to correct for library size is to downsample the expression matrix so that each cell has approximately the same total number of molecules. The benefit of this method is that zero values will be introduced by the down sampling thus eliminating any biases due to differing numbers of detected genes. However, the major drawback is that the process is not deterministic so each time the downsampling is run the resulting expression matrix is slightly different. Thus, often analyses must be run on multiple downsamplings to ensure results are robust.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Down_Sample_Matrix &lt;-
-function (expr_mat) 
+<span class="cf">function</span> (expr_mat) 
 {
     min_lib_size &lt;-<span class="st"> </span><span class="kw">min</span>(<span class="kw">colSums</span>(expr_mat))
-    down_sample &lt;-<span class="st"> </span>function(x) {
-        prob &lt;-<span class="st"> </span>min_lib_size/<span class="kw">sum</span>(x)
-        <span class="kw">return</span>(<span class="kw">unlist</span>(<span class="kw">lapply</span>(x, function(y) {
+    down_sample &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+        prob &lt;-<span class="st"> </span>min_lib_size<span class="op">/</span><span class="kw">sum</span>(x)
+        <span class="kw">return</span>(<span class="kw">unlist</span>(<span class="kw">lapply</span>(x, <span class="cf">function</span>(y) {
             <span class="kw">rbinom</span>(<span class="dv">1</span>, y, prob)
         })))
     }
     down_sampled_mat &lt;-<span class="st"> </span><span class="kw">apply</span>(expr_mat, <span class="dv">2</span>, down_sample)
     <span class="kw">return</span>(down_sampled_mat)
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">norm_counts</span>(umi.qc) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">Down_Sample_Matrix</span>(<span class="kw">counts</span>(umi.qc)) +<span class="st"> </span><span class="dv">1</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">norm_counts</span>(umi.qc) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">Down_Sample_Matrix</span>(<span class="kw">counts</span>(umi.qc)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
 <span class="kw">plotPCA</span>(
     umi.qc[endog_genes, ],
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
@@ -716,10 +716,10 @@ Figure 14.13: Cell-wise RLE of the tung data
 <span class="co">#     host = &quot;www.ensembl.org&quot;</span>
 <span class="co"># )</span></code></pre></div>
 <p>Some of the genes were not annotated, therefore we filter them out:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc.ann &lt;-<span class="st"> </span>umi.qc[!<span class="kw">is.na</span>(<span class="kw">fData</span>(umi.qc)$ensembl_gene_id), ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc.ann &lt;-<span class="st"> </span>umi.qc[<span class="op">!</span><span class="kw">is.na</span>(<span class="kw">fData</span>(umi.qc)<span class="op">$</span>ensembl_gene_id), ]</code></pre></div>
 <p>Now we compute the total gene length in Kilobases by using the <code>end_position</code> and <code>start_position</code> fields:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eff_length &lt;-<span class="st"> </span>
-<span class="st">    </span><span class="kw">abs</span>(<span class="kw">fData</span>(umi.qc.ann)$end_position -<span class="st"> </span><span class="kw">fData</span>(umi.qc.ann)$start_position) /<span class="st"> </span><span class="dv">1000</span></code></pre></div>
+<span class="st">    </span><span class="kw">abs</span>(<span class="kw">fData</span>(umi.qc.ann)<span class="op">$</span>end_position <span class="op">-</span><span class="st"> </span><span class="kw">fData</span>(umi.qc.ann)<span class="op">$</span>start_position) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(eff_length, <span class="kw">rowMeans</span>(<span class="kw">counts</span>(umi.qc.ann)))</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:length-vs-mean"></span>
 <img src="13-exprs-norm_files/figure-html/length-vs-mean-1.png" alt="Gene length vs Mean Expression for the raw data" width="90%" />
@@ -729,8 +729,8 @@ Figure 14.14: Gene length vs Mean Expression for the raw data
 </div>
 <p>There is no relationship between gene length and mean expression so FPKMs &amp; TPMs are inappropriate for this dataset. But we will demonstrate them anyway.</p>
 <p>Now we are ready to perform the normalisations:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tpm</span>(umi.qc.ann) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateTPM</span>(umi.qc.ann, eff_length) +<span class="st"> </span><span class="dv">1</span>)
-<span class="kw">fpkm</span>(umi.qc.ann) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateFPKM</span>(umi.qc.ann, eff_length) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tpm</span>(umi.qc.ann) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateTPM</span>(umi.qc.ann, eff_length) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
+<span class="kw">fpkm</span>(umi.qc.ann) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateFPKM</span>(umi.qc.ann, eff_length) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
 <p>Plot the results as a PCA plot:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     umi.qc.ann,
@@ -783,7 +783,7 @@ Figure 14.16: PCA plot of the tung data after TPM normalisation
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,

@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Analysis of single cell RNA-seq data</title>
   <meta name="description" content="Analysis of single cell RNA-seq data">
-  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Analysis of single cell RNA-seq data" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-07-26">
+<meta name="date" content="2017-09-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -298,12 +298,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>19.6</b> SINCERA</a></li>
 <li class="chapter" data-level="19.7" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>19.7</b> SEURAT</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html"><i class="fa fa-check"></i><b>20</b> Identification of important genes</a><ul>
-<li class="chapter" data-level="20.1" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#fitting-the-models"><i class="fa fa-check"></i><b>20.1</b> Fitting the models</a></li>
-<li class="chapter" data-level="20.2" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#the-michaelis-menten-equation"><i class="fa fa-check"></i><b>20.2</b> The Michaelis-Menten Equation</a></li>
-<li class="chapter" data-level="20.3" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#right-outliers"><i class="fa fa-check"></i><b>20.3</b> Right outliers</a></li>
-<li class="chapter" data-level="20.4" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#validation-of-de-results"><i class="fa fa-check"></i><b>20.4</b> Validation of DE results</a></li>
-<li class="chapter" data-level="20.5" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#comparing-m3drop-to-other-methods"><i class="fa fa-check"></i><b>20.5</b> Comparing M3Drop to other methods</a></li>
+<li class="chapter" data-level="20" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>20</b> Feature Selection</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>20.0.1</b> Highly Variable Genes</a></li>
+<li class="chapter" data-level="20.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>20.0.2</b> High Dropout Genes</a></li>
+<li class="chapter" data-level="20.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>20.1</b> Correlated Expression</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>20.1.1</b> Comparing Methods</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>21</b> Pseudotime analysis</a><ul>
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
@@ -390,7 +390,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&#39;https://bioconductor.org/biocLite.R&#39;</span>)
 <span class="kw">biocLite</span>(<span class="st">&#39;BiocInstaller&#39;</span>)</code></pre></div>
 <p><a href="https://github.com/hemberg-lab/scRNA.seq.funcs">scRNA.seq.funcs</a> - R package containing some special functions used in this course:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;hemberg-lab/scRNA.seq.funcs&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;hemberg-lab/scRNA.seq.funcs&quot;</span>)</code></pre></div>
 </div>
 <div id="plotting" class="section level3">
 <h3><span class="header-section-number">2.3.2</span> Plotting</h3>
@@ -421,7 +421,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="clustering" class="section level3">
 <h3><span class="header-section-number">2.3.4</span> Clustering</h3>
 <p><a href="https://github.com/JustinaZ/pcaReduce">pcaReduce</a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;JustinaZ/pcaReduce&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;JustinaZ/pcaReduce&quot;</span>)</code></pre></div>
 <p><a href="http://bioconductor.org/pcaMethods">pcaMethods</a> is a <a href="https://github.com/JustinaZ/pcaReduce">pcaReduce</a> dependency:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
 <span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
@@ -430,13 +430,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
 <span class="kw">biocLite</span>(<span class="st">&quot;SC3&quot;</span>)</code></pre></div>
 <p><a href="https://github.com/satijalab/seurat">SEURAT</a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&#39;satijalab/seurat&#39;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&#39;satijalab/seurat&#39;</span>)</code></pre></div>
 </div>
 <div id="dropouts" class="section level3">
 <h3><span class="header-section-number">2.3.5</span> Dropouts</h3>
-<p><a href="http://bioconductor.org/packages/M3Drop">M3Drop</a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;M3Drop&quot;</span>)</code></pre></div>
+<p><a href="https://github.com/tallulandrews/M3Drop">M3Drop</a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&#39;tallulandrews/M3Drop&#39;</span>)</code></pre></div>
 </div>
 <div id="pseudotime" class="section level3">
 <h3><span class="header-section-number">2.3.6</span> Pseudotime</h3>
@@ -453,7 +452,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
 <span class="kw">biocLite</span>(<span class="st">&quot;destiny&quot;</span>)</code></pre></div>
 <p><a href="https://github.com/jw156605/SLICER">SLICER</a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&#39;jw156605/SLICER&#39;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&#39;jw156605/SLICER&#39;</span>)</code></pre></div>
 </div>
 <div id="differential-expression" class="section level3">
 <h3><span class="header-section-number">2.3.7</span> Differential Expression</h3>
@@ -472,7 +471,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
 <span class="kw">biocLite</span>(<span class="st">&quot;MAST&quot;</span>)</code></pre></div>
 <p><a href="http://hms-dbmi.github.io/scde/">scde</a> (optional)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;hms-dbmi/scde&quot;</span>, <span class="dt">build_vignettes =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;hms-dbmi/scde&quot;</span>, <span class="dt">build_vignettes =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <ul>
 <li><p>Installation on Mac OS X may require <a href="http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/">this additional gfortran library</a>:</p>
 <pre><code>curl -O http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
@@ -511,7 +510,7 @@ sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /</code></pre></li>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,

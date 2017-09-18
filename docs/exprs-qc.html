@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Analysis of single cell RNA-seq data</title>
   <meta name="description" content="Analysis of single cell RNA-seq data">
-  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Analysis of single cell RNA-seq data" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-07-26">
+<meta name="date" content="2017-09-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -298,12 +298,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>19.6</b> SINCERA</a></li>
 <li class="chapter" data-level="19.7" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>19.7</b> SEURAT</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html"><i class="fa fa-check"></i><b>20</b> Identification of important genes</a><ul>
-<li class="chapter" data-level="20.1" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#fitting-the-models"><i class="fa fa-check"></i><b>20.1</b> Fitting the models</a></li>
-<li class="chapter" data-level="20.2" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#the-michaelis-menten-equation"><i class="fa fa-check"></i><b>20.2</b> The Michaelis-Menten Equation</a></li>
-<li class="chapter" data-level="20.3" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#right-outliers"><i class="fa fa-check"></i><b>20.3</b> Right outliers</a></li>
-<li class="chapter" data-level="20.4" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#validation-of-de-results"><i class="fa fa-check"></i><b>20.4</b> Validation of DE results</a></li>
-<li class="chapter" data-level="20.5" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#comparing-m3drop-to-other-methods"><i class="fa fa-check"></i><b>20.5</b> Comparing M3Drop to other methods</a></li>
+<li class="chapter" data-level="20" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>20</b> Feature Selection</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>20.0.1</b> Highly Variable Genes</a></li>
+<li class="chapter" data-level="20.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>20.0.2</b> High Dropout Genes</a></li>
+<li class="chapter" data-level="20.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>20.1</b> Correlated Expression</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>20.1.1</b> Comparing Methods</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>21</b> Pseudotime analysis</a><ul>
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
@@ -383,8 +383,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">molecules &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;tung/molecules.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)
 anno &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;tung/annotation.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Inspect a small portion of the expression matrix</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
-    <span class="kw">head</span>(molecules[ , <span class="dv">1</span>:<span class="dv">3</span>]), <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
+    <span class="kw">head</span>(molecules[ , <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]), <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
     <span class="dt">caption =</span> <span class="st">&#39;A table of the first 6 rows and 3 columns of the molecules table.&#39;</span>
 )</code></pre></div>
 <table>
@@ -436,7 +436,7 @@ anno &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span clas
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
     <span class="kw">head</span>(anno), <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
     <span class="dt">caption =</span> <span class="st">&#39;A table of the first 6 rows of the anno table.&#39;</span>
 )</code></pre></div>
@@ -499,13 +499,13 @@ anno &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span clas
 <p>The data consists of 3 individuals and 3 replicates and therefore has 9 batches in total.</p>
 <p>We standardize the analysis by using the scater package. First, create the scater SCESet classes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pheno_data &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;AnnotatedDataFrame&quot;</span>, anno)
-<span class="kw">rownames</span>(pheno_data) &lt;-<span class="st"> </span>pheno_data$sample_id
-umi &lt;-<span class="st"> </span>scater::<span class="kw">newSCESet</span>(
+<span class="kw">rownames</span>(pheno_data) &lt;-<span class="st"> </span>pheno_data<span class="op">$</span>sample_id
+umi &lt;-<span class="st"> </span>scater<span class="op">::</span><span class="kw">newSCESet</span>(
     <span class="dt">countData =</span> molecules,
     <span class="dt">phenoData =</span> pheno_data
 )</code></pre></div>
 <p>Remove genes that are not expressed in any cell:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keep_feature &lt;-<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">counts</span>(umi) &gt;<span class="st"> </span><span class="dv">0</span>) &gt;<span class="st"> </span><span class="dv">0</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keep_feature &lt;-<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">counts</span>(umi) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>
 umi &lt;-<span class="st"> </span>umi[keep_feature, ]</code></pre></div>
 <p>Define control features (genes) - ERCC spike-ins and mitochondrial genes (<a href="http://jdblischak.github.io/singleCellSeq/analysis/qc-filter-ipsc.html">provided</a> by the authors):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ercc &lt;-<span class="st"> </span><span class="kw">featureNames</span>(umi)[<span class="kw">grepl</span>(<span class="st">&quot;ERCC-&quot;</span>, <span class="kw">featureNames</span>(umi))]
@@ -515,7 +515,7 @@ mt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quo
         <span class="st">&quot;ENSG00000198763&quot;</span>, <span class="st">&quot;ENSG00000228253&quot;</span>, <span class="st">&quot;ENSG00000198938&quot;</span>,
         <span class="st">&quot;ENSG00000198840&quot;</span>)</code></pre></div>
 <p>Calculate the quality metrics:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi &lt;-<span class="st"> </span>scater::<span class="kw">calculateQCMetrics</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi &lt;-<span class="st"> </span>scater<span class="op">::</span><span class="kw">calculateQCMetrics</span>(
     umi,
     <span class="dt">feature_controls =</span> <span class="kw">list</span>(<span class="dt">ERCC =</span> ercc, <span class="dt">MT =</span> mt)
 )</code></pre></div>
@@ -526,7 +526,7 @@ mt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quo
 <h3><span class="header-section-number">8.3.1</span> Library size</h3>
 <p>Next we consider the total number of RNA molecules detected per sample (if we were using read counts rather than UMI counts this would be the total number of reads). Wells with few reads/molecules are likely to have been broken or failed to capture a cell, and should thus be removed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(
-    umi$total_counts,
+    umi<span class="op">$</span>total_counts,
     <span class="dt">breaks =</span> <span class="dv">100</span>
 )
 <span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">25000</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
@@ -566,7 +566,7 @@ Figure 8.1: Histogram of library sizes for all cells
 <h3><span class="header-section-number">8.3.2</span> Detected genes (1)</h3>
 <p>In addition to ensuring sufficient sequencing depth for each sample, we also want to make sure that the reads are distributed across the transcriptome. Thus, we count the total number of unique genes detected in each sample.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(
-    umi$total_features,
+    umi<span class="op">$</span>total_features,
     <span class="dt">breaks =</span> <span class="dv">100</span>
 )
 <span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">7000</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
@@ -603,7 +603,7 @@ Figure 8.2: Histogram of the number of detected genes in all cells
 <div id="erccs-and-mts" class="section level3">
 <h3><span class="header-section-number">8.3.3</span> ERCCs and MTs</h3>
 <p>Another measure of cell quality is the ratio between ERCC <em>spike-in</em> RNAs and endogenous RNAs. This ratio can be used to estimate the total amount of RNA in the captured cells. Cells with a high level of <em>spike-in</em> RNAs had low starting amounts of RNA, likely due to the cell being dead or stressed which may result in the RNA being degraded.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPhenoData</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotPhenoData</span>(
     umi,
     <span class="kw">aes_string</span>(<span class="dt">x =</span> <span class="st">&quot;total_features&quot;</span>,
                <span class="dt">y =</span> <span class="st">&quot;pct_counts_feature_controls_MT&quot;</span>,
@@ -615,7 +615,7 @@ Figure 8.2: Histogram of the number of detected genes in all cells
 Figure 8.3: Percentage of counts in MT genes
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPhenoData</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotPhenoData</span>(
     umi,
     <span class="kw">aes_string</span>(<span class="dt">x =</span> <span class="st">&quot;total_features&quot;</span>,
                <span class="dt">y =</span> <span class="st">&quot;pct_counts_feature_controls_ERCC&quot;</span>,
@@ -680,18 +680,18 @@ Figure 8.4: Percentage of counts in ERCCs
 <div id="manual" class="section level3">
 <h3><span class="header-section-number">8.4.1</span> Manual</h3>
 <p>Now we can define a cell filter based on our previous analysis:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi$use &lt;-<span class="st"> </span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi<span class="op">$</span>use &lt;-<span class="st"> </span>(
     <span class="co"># sufficient features (genes)</span>
-    filter_by_expr_features &amp;
+    filter_by_expr_features <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># sufficient molecules counted</span>
-<span class="st">    </span>filter_by_total_counts &amp;
+<span class="st">    </span>filter_by_total_counts <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># sufficient endogenous RNA</span>
-<span class="st">    </span>filter_by_ERCC &amp;
+<span class="st">    </span>filter_by_ERCC <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># remove cells with unusual number of reads in MT genes</span>
 <span class="st">    </span>filter_by_MT
 )</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
-  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(umi$use)),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
+  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(umi<span class="op">$</span>use)),
   <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
   <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
   <span class="dt">caption =</span> <span class="st">&#39;The number of cells removed by manual filter (FALSE)&#39;</span>
@@ -719,20 +719,20 @@ Figure 8.4: Percentage of counts in ERCCs
 <div id="default-thresholds" class="section level3">
 <h3><span class="header-section-number">8.4.2</span> Default Thresholds</h3>
 <p>Results from the biological analysis of single-cell RNA-seq data are often strongly influenced by outliers. Thus, it is important to include multiple filters. A robust way of detecting outliers is through the median absolute difference which is defined as <span class="math inline">\(d_i = |r_i - m|\)</span>, where <span class="math inline">\(r_i\)</span> is the number of reads in cell <span class="math inline">\(i\)</span> and <span class="math inline">\(m\)</span> is the median number of reads across the all cells in the sample. By default, scater removes all cells where <span class="math inline">\(d_i&gt;5*\)</span>median(<span class="math inline">\(d_i\)</span>). A similar filter is used for the number of detected genes. Furthermore, scater removes all cells where &gt;80% of counts were assigned to control genes and any cells that have been marked as controls.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi$use_default &lt;-<span class="st"> </span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi<span class="op">$</span>use_default &lt;-<span class="st"> </span>(
     <span class="co"># remove cells with unusual numbers of genes</span>
-    !umi$filter_on_total_features &amp;
+    <span class="op">!</span>umi<span class="op">$</span>filter_on_total_features <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># remove cells with unusual numbers molecules counted</span>
-<span class="st">    </span>!umi$filter_on_total_counts &amp;
+<span class="st">    </span><span class="op">!</span>umi<span class="op">$</span>filter_on_total_counts <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># &lt; 80% ERCC spike-in</span>
-<span class="st">    </span>!umi$filter_on_pct_counts_feature_controls_ERCC &amp;
+<span class="st">    </span><span class="op">!</span>umi<span class="op">$</span>filter_on_pct_counts_feature_controls_ERCC <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># &lt; 80% mitochondrial</span>
-<span class="st">    </span>!umi$filter_on_pct_counts_feature_controls_MT &amp;
+<span class="st">    </span><span class="op">!</span>umi<span class="op">$</span>filter_on_pct_counts_feature_controls_MT <span class="op">&amp;</span>
 <span class="st">    </span><span class="co"># controls shouldn&#39;t be used in downstream analysis</span>
-<span class="st">    </span>!umi$is_cell_control
+<span class="st">    </span><span class="op">!</span>umi<span class="op">$</span>is_cell_control
 )</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
-  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(umi$use_default)),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
+  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(umi<span class="op">$</span>use_default)),
   <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
   <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
   <span class="dt">caption =</span> <span class="st">&#39;The number of cells removed by default filter (FALSE)&#39;</span>
@@ -771,7 +771,7 @@ Figure 8.4: Percentage of counts in ERCCs
 </ul>
 <p>scater first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi &lt;-
-scater::<span class="kw">plotPCA</span>(umi,
+scater<span class="op">::</span><span class="kw">plotPCA</span>(umi,
                 <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>, 
                 <span class="dt">shape_by =</span> <span class="st">&quot;use&quot;</span>,
                 <span class="dt">pca_data_input =</span> <span class="st">&quot;pdata&quot;</span>,
@@ -867,8 +867,8 @@ scater::<span class="kw">plotPCA</span>(umi,
 Figure 8.5: PCA plot used for automatic detection of cell outliers
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
-  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(umi$outlier)),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
+  <span class="kw">as.data.frame</span>(<span class="kw">table</span>(umi<span class="op">$</span>outlier)),
   <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
   <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
   <span class="dt">caption =</span> <span class="st">&#39;The number of cells removed by automatic filter (FALSE)&#39;</span>
@@ -913,7 +913,7 @@ Figure 8.6: Comparison of the default, automatic and manual cell filters
 <h3><span class="header-section-number">8.6.1</span> Gene expression</h3>
 <p>In addition to removing cells with poor quality, it is usually a good idea to exclude genes where we suspect that technical artefacts may have skewed the results. Moreover, inspection of the gene expression profiles may provide insights about how the experimental procedures could be improved.</p>
 <p>It is often instructive to consider the number of reads consumed by the top 50 expressed genes.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotQC</span>(umi, <span class="dt">type =</span> <span class="st">&quot;highest-expression&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotQC</span>(umi, <span class="dt">type =</span> <span class="st">&quot;highest-expression&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:top50-gene-expr"></span>
 <img src="07-exprs-qc_files/figure-html/top50-gene-expr-1.png" alt="Number of total counts consumed by the top 50 expressed genes" width="90%" />
 <p class="caption">
@@ -925,10 +925,10 @@ Figure 8.7: Number of total counts consumed by the top 50 expressed genes
 <div id="gene-filtering" class="section level3">
 <h3><span class="header-section-number">8.6.2</span> Gene filtering</h3>
 <p>It is typically a good idea to remove genes whose expression level is considered <strong>“undetectable”</strong>. We define a gene as detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells (<strong>note</strong> <code>pData(umi)$use</code> filter applied to the <code>umi</code> dataset).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_genes &lt;-<span class="st"> </span><span class="kw">apply</span>(<span class="kw">counts</span>(umi[ , <span class="kw">pData</span>(umi)$use]), <span class="dv">1</span>, 
-                      function(x) <span class="kw">length</span>(x[x &gt;<span class="st"> </span><span class="dv">1</span>]) &gt;=<span class="st"> </span><span class="dv">2</span>)
-<span class="kw">fData</span>(umi)$use &lt;-<span class="st"> </span>filter_genes</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filter_genes &lt;-<span class="st"> </span><span class="kw">apply</span>(<span class="kw">counts</span>(umi[ , <span class="kw">pData</span>(umi)<span class="op">$</span>use]), <span class="dv">1</span>, 
+                      <span class="cf">function</span>(x) <span class="kw">length</span>(x[x <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>]) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span>)
+<span class="kw">fData</span>(umi)<span class="op">$</span>use &lt;-<span class="st"> </span>filter_genes</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(
     <span class="kw">as.data.frame</span>(<span class="kw">table</span>(filter_genes)),
     <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,
     <span class="dt">row.names =</span> <span class="ot">FALSE</span>,
@@ -959,11 +959,11 @@ Figure 8.7: Number of total counts consumed by the top 50 expressed genes
 <div id="save-the-data" class="section level2">
 <h2><span class="header-section-number">8.7</span> Save the data</h2>
 <p>Dimensions of the QCed dataset (do not forget about the gene filter we defined above):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(umi[<span class="kw">fData</span>(umi)$use, <span class="kw">pData</span>(umi)$use])</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(umi[<span class="kw">fData</span>(umi)<span class="op">$</span>use, <span class="kw">pData</span>(umi)<span class="op">$</span>use])</code></pre></div>
 <pre><code>## Features  Samples 
 ##    14063      654</code></pre>
 <p>Let’s create an additional slot with log-transformed counts (we will need it in the next chapters):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set_exprs</span>(umi, <span class="st">&quot;log2_counts&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">counts</span>(umi) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set_exprs</span>(umi, <span class="st">&quot;log2_counts&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">counts</span>(umi) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
 <p>Save the data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saveRDS</span>(umi, <span class="dt">file =</span> <span class="st">&quot;tung/umi.rds&quot;</span>)</code></pre></div>
 </div>
@@ -996,7 +996,7 @@ Figure 8.7: Number of total counts consumed by the top 50 expressed genes
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,

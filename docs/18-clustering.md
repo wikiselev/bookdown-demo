@@ -443,127 +443,25 @@ Here we follow an [example](http://satijalab.org/seurat/get_started.html) create
 
 ```r
 library(Seurat)
-library(Matrix)
 pollen_seurat <- new("seurat", raw.data = get_exprs(pollen, exprs_values = "tpm"))
 pollen_seurat <- Setup(pollen_seurat, project = "Pollen")
 pollen_seurat <- MeanVarPlot(pollen_seurat)
-```
-
-
-
-\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-24-1} \end{center}
-
-```r
 pollen_seurat <- RegressOut(pollen_seurat, latent.vars = c("nUMI"), 
                             genes.regress = pollen_seurat@var.genes)
-```
-
-```
-## [1] "Regressing out nUMI"
-```
-
-```r
 pollen_seurat <- PCAFast(pollen_seurat)
-```
-
-```
-## [1] "PC1"
-##  [1] "MAP1B"     "TUBA1A"    "SOX11"     "DPYSL2"    "DCX"      
-##  [6] "STMN2"     "RTN1"      "GPM6A"     "DPYSL3"    "MLLT11"   
-## [11] "SOX4"      "MAP2"      "CRMP1"     "LOC150568" "NREP"     
-## [16] "CALM1"     "FAM110B"   "NFIB"      "MAPT"      "TUBB2B"   
-## [21] "RUFY3"     "NNAT"      "CXADR"     "FXYD6"     "MIR100HG" 
-## [26] "FOXG1"     "POU3F2"    "KIF5C"     "MN1"       "NCAM1"    
-## [1] ""
-##  [1] "MYL12A"    "ARHGDIB"   "S100A11"   "IFITM1"    "CKS2"     
-##  [6] "SRGN"      "IFITM3"    "ANXA1"     "IFI30"     "GTSF1"    
-## [11] "MT2A"      "ISG15"     "KRT8"      "CD53"      "ANXA2"    
-## [16] "HIST1H1C"  "HIST1H2BK" "LAPTM5"    "LGALS1"    "NOB1"     
-## [21] "MPO"       "PRG2"      "KRT18"     "AIF1"      "NUCB2"    
-## [26] "PRAME"     "PSMB9"     "SFXN4"     "TRAP1"     "RNF114"   
-## [31] "CD52"     
-## [1] ""
-## [1] ""
-## [1] "PC2"
-##  [1] "S100A6"   "CD44"     "TPM1"     "ANXA2"    "IFITM3"   "ANXA1"   
-##  [7] "S100A11"  "RND3"     "LGALS1"   "IGFBP3"   "DKK1"     "MT2A"    
-## [13] "THBS1"    "TGFBI"    "PLS3"     "TMSB10"   "SERPINE1" "KRT7"    
-## [19] "FN1"      "S100A10"  "TIMP1"    "CTGF"     "SAT1"     "PLAUR"   
-## [25] "CAV1"     "DDAH1"    "TPM2"     "MYL6"     "EMP1"     "CCND1"   
-## [1] ""
-##  [1] "MPO"          "SRGN"         "PRG2"         "AIF1"        
-##  [5] "MS4A3"        "GTSF1"        "CTSG"         "TESC"        
-##  [9] "MZB1"         "LOC100190986" "CD53"         "LAPTM5"      
-## [13] "ARHGDIB"      "TRAP1"        "SPNS3"        "RNASE2"      
-## [17] "PRTN3"        "BTK"          "APOC2"        "CD33"        
-## [21] "LOC100272216" "HSH2D"        "CLEC5A"       "SLC43A1"     
-## [25] "PRAME"        "DOK3"         "SERPINB10"    "PLEK"        
-## [29] "DOCK2"        "CD52"         "NDUFV1"      
-## [1] ""
-## [1] ""
-## [1] "PC3"
-##  [1] "COL1A2"    "LUM"       "DCN"       "GREM1"     "PSG5"     
-##  [6] "TNFRSF11B" "SERPINE1"  "TPM2"      "COL1A1"    "LOX"      
-## [11] "TIMP3"     "VIM"       "TAGLN"     "CRYAB"     "S100A4"   
-## [16] "SULF1"     "GLIPR1"    "DKK1"      "COX7A1"    "RGS4"     
-## [21] "CCDC80"    "SERPINE2"  "FN1"       "THBS1"     "KRT34"    
-## [26] "ALDH1A1"   "KIAA1199"  "FGF7"      "TIMP1"     "WBP5"     
-## [1] ""
-##  [1] "KRT81"    "STEAP4"   "LCN2"     "S100A9"   "KRT15"    "ELF3"    
-##  [7] "CEACAM6"  "CLDN4"    "RARRES1"  "SLPI"     "KLK5"     "GRB7"    
-## [13] "DHRS3"    "CXorf61"  "RARRES3"  "KLK6"     "IFI27"    "AZGP1"   
-## [19] "S100A8"   "MYEOV"    "CXCL17"   "KLK8"     "PDZK1IP1" "BMP3"    
-## [25] "MUC1"     "FOLR1"    "TNFSF10"  "MIEN1"    "KRT23"    "VGLL1"   
-## [31] "ALDH1A3" 
-## [1] ""
-## [1] ""
-## [1] "PC4"
-##  [1] "PPME1"    "S100A11"  "KIAA1598" "NUCB2"    "SEMA3C"   "MRPS10"  
-##  [7] "MAPT"     "STMN2"    "GTSF1"    "TRIM16"   "DLX6-AS1" "MYT1L"   
-## [13] "KRT18"    "PQBP1"    "MT2A"     "ANXA1"    "CXADR"    "POLR2C"  
-## [19] "CDK5R1"   "MPO"      "DLX5"     "INA"      "BCL11B"   "PRG2"    
-## [25] "KRT8"     "ATAT1"    "PRAME"    "CBWD3"    "S100A10"  "TAF11"   
-## [1] ""
-##  [1] "CD74"     "HLA-DPA1" "HLA-DRA"  "MS4A1"    "HLA-DQA1" "HLA-DRB5"
-##  [7] "HLA-DQB1" "HLA-DQA2" "BLNK"     "HLA-DMA"  "HLA-DRB1" "IRF4"    
-## [13] "HLA-DPB1" "HLA-DMB"  "ELK2AP"   "MIR155HG" "CHI3L2"   "TCL1A"   
-## [19] "CD48"     "LRMP"     "SLAMF1"   "BCL2A1"   "LY86"     "CLECL1"  
-## [25] "HLA-A"    "CRIP1"    "CD27"     "CCL3"     "CYTIP"    "JUN"     
-## [31] "PTN"     
-## [1] ""
-## [1] ""
-## [1] "PC5"
-##  [1] "GLI3"    "PTN"     "SLC1A3"  "PTPRZ1"  "MDK"     "GPX3"    "CDO1"   
-##  [8] "CLU"     "ITGB8"   "JUN"     "AIF1L"   "FAM107A" "ATP1B2"  "FOS"    
-## [15] "TSPAN6"  "HEPN1"   "PAX6"    "HOPX"    "FABP7"   "ID4"     "PON2"   
-## [22] "SHISA2"  "GPM6B"   "PELI2"   "PMP2"    "ABAT"    "FBXO32"  "NFIA"   
-## [29] "C1orf61" "CNN3"   
-## [1] ""
-##  [1] "HLA-DPA1" "CD74"     "HLA-DRA"  "HLA-DQA1" "MS4A1"    "HLA-DRB5"
-##  [7] "HLA-DQB1" "HLA-DQA2" "BLNK"     "HLA-DMA"  "HLA-DRB1" "IRF4"    
-## [13] "LPXN"     "MIR155HG" "ELK2AP"   "HLA-DPB1" "HLA-DMB"  "LRMP"    
-## [19] "CHI3L2"   "CD48"     "BCL2A1"   "TCL1A"    "CLECL1"   "SLAMF1"  
-## [25] "LY86"     "IFI30"    "CRIP1"    "CD27"     "CCL3"     "IGJ"     
-## [31] "LAPTM5"  
-## [1] ""
-## [1] ""
-```
-
-```r
 pollen_seurat <- RunTSNE(pollen_seurat)
 pollen_seurat <- FindClusters(pollen_seurat)
 TSNEPlot(pollen_seurat, do.label = T)
 ```
 
-
-
-\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-24-2} \end{center}
-
 __Exercise 12__: Compare the results between `SC3` and `SEURAT`.
 
 __Our solution__:
 
-\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-25-1} \end{center}
+```r
+pData(pollen)$SEURAT <- as.character(pollen_seurat@ident)
+sc3_plot_expression(pollen, k = 11, show_pdata = "SEURAT")
+```
 
 
 Seurat can also find marker genes, e.g. marker genes for cluster 2:
@@ -575,9 +473,5 @@ FeaturePlot(pollen_seurat,
             cols.use = c("lightgrey", "blue"), 
             nCol = 3)
 ```
-
-
-
-\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-26-1} \end{center}
 
 __Exercise 13__: Compare marker genes provided by `SEURAT` and `SC3`.

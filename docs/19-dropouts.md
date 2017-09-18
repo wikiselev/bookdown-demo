@@ -3,31 +3,40 @@
 output: html_document
 ---
 
-# Identification of important genes
+# Feature Selection
 
 
 
 ```r
 library(scRNA.seq.funcs)
+library(matrixStats)
 library(M3Drop)
-library(limma)
+library(RColorBrewer)
 set.seed(1)
 ```
 
-One of the key differences between single-cell RNASeq and bulk RNASeq
-is the large number of dropouts (zero expression) for genes with even
-moderately high levels of average expression. These zeros violate
-assumptions made by many statistical tools used for bulk RNASeq,
-eg. Negative Binomial expression used by DESeq2, normality assumptions
-of correlation methods, or assumptions of few tied-ranks for many
-non-parametric tests. Some recent scRNASeq methods model a different
-dropout rate for each gene (eg. [MAST](https://github.com/RGLab/MAST),
-[BASiCS](https://github.com/catavallejos/TutorialBASiCS)) while other
-methods try to fit the relationship between expression level and
-dropout rate across genes for a specific application (eg. [SCDE](http://hms-dbmi.github.io/scde/),
-[ZIFA](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0805-z)). We will be using our new package Michaelis-Menten Modelling of
-Dropouts (M3Drop) which specifically focuses on modelling and gaining
-biological insights from dropouts.
+Single-cell RNASeq is capable of measuring the expression of many
+thousands of genes in every cell. However, in most situations only a
+portion of those will show a response to the biological condition of
+interest, e.g. differences in cell-type, drivers of differentiation,
+respond to an environmental stimulus. Most genes detected in a scRNASeq
+experiment will only be detected at different levels due to technical
+noise. One consequence of this is that technical noise and batch
+effects can obscure the biological signal of interest.
+
+Thus, it is often advantageous to perform feature selection to remove
+those genes which only exhibit technical noise from downstream analysis.
+Not only does this generally increase the signal:noise ratio in the data;
+it also reduces the computational complexity of analyses, by reducing
+the total amount of data to be processed.
+
+For scRNASeq data, we will be focusing on unsupervised methods of feature
+selection which don't require any a priori information, such as cell-type
+labels or biological group, since they are not available, or may be unreliable,
+for many experiments. In contrast, differential expression (Chapter \ref())
+can be considered a form of supervised feature selection since it uses the
+known biological label of each sample to identify features (i.e. genes) which
+are expressed at different levels across groups.
 
 For this section we will be working with the [Usoskin et
 al](http://www.nature.com/neuro/journal/v18/n1/full/nn.3881.html)
@@ -55,10 +64,8 @@ table(colnames(usoskin1))
 ## 139 169  81 233
 ```
 
-## Fitting the models
-
-First we must normalize & QC the dataset. M3Drop contains a built-in
-function for this which removes cells with few detected genes, removes
+This data can be QCed and normalized for library size using M3Drop,
+which removes cells with few detected genes, removes
 undetected genes, and converts raw counts to CPM.
 
 
@@ -69,141 +76,58 @@ uso_list <- M3Drop::M3DropCleanData(
     min_detected_genes = 2000,
     is.counts = TRUE
 )
+expr_matrix <- uso_list$data # Normalized & filtered expression matrix
+celltype_labs <- uso_list$labels # filtered cell-type labels
+cell_colors <- brewer.pal(max(3,length(unique(celltype_labs))), "Set3")
 ```
-
 __Exercise 1__: How many cells & genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?
+## Identifying Genes vs a Null Model ##
 
-## The Michaelis-Menten Equation
+There are two main approaches to unsupervised feature selection. The
+first is to identify genes which behave differently from a null model
+describing just the technical noise expected in the dataset.
 
-The Michaelis-Menten (MM) Equation is the standard model of enzyme
-kinetics. We use it to model dropouts in single-cell RNASeq because
-most dropouts occur as a result of failing to be reverse-transcribed
-to sufficient levels. The details are omitted here, but in this model
-the probability that a transcript will __not__ be present is given by
+If the dataset contains spike-in RNAs they can be used to directly model
+technical noise. However, measurements of spike-ins may not experience
+the same technical noise as endogenous transcripts [(Svensson et al., 2017)](https://www.nature.com/nmeth/journal/v14/n4/full/nmeth.4220.html).
+In addition, scRNASeq experiments often contain only a small number of
+spike-ins which reduces our confidence in fitted model parameters.
 
-$$P_{dropout} = K/(K + S)$$
+### Highly Variable Genes ###
 
-where $S$ is the mRNA concentration in the cell (we will estimate this as average expression) and $K$ is the Michaelis-Menten constant. 
+The first method proposed to identify features in scRNASeq datasets
+was to identify highly variable genes (HVG). HVG assumes that if genes
+have large differences in expression across cells some of those differences
+are due to biological difference between the cells rather than technical noise.
+However, because of the nature of count data, there is a positive relationship
+between the mean expression of a gene and the variance in the read counts across
+cells. This relationship must be corrected for to properly identify HVGs.
 
-
-Other models that have been proposed are:
-
-* $P=Logistic(\log(S))$ used by [SCDE](http://hms-dbmi.github.io/scde/) (determining differential expression) and
-* $P=e^{-\lambda*S^2}$ used by [ZIFA (zero-inflated PCA)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0805-z).
-
-Now we will fit all three models to the normalized Usoskin data:
-
-```r
-models <- M3Drop::M3DropDropoutModels(uso_list$data)
-title(main = "Usoskin")
-```
-
+__Exercise 2__
+Using the functions rowMeans and rowVars to plot the relationship between mean expression
+and variance for all genes in this dataset. (Hint: use log="xy" to plot on a log-scale).
 
 
 \begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-5-1} \end{center}
-
-## Right outliers
-
-There are many outliers to the right of the fitted MM curve. Genes
-which are expressed at different levels in subpopulations of our cells
-will be shifted to the right of the curve. This happens because the MM
-curve is a convex function, whereas averaging dropout rate and
-expression is a linear function.
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-6-1} \end{center}
-__Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures. 
-
-__Exercise 2__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
-
-We use M3Drop to identify significant outliers to the right of the MM
-curve. We also apply 1% FDR multiple testing correction:
-
-
-```r
-DE_genes <- M3Drop::M3DropDifferentialExpression(
-    uso_list$data,
-    mt_method = "fdr",
-    mt_threshold = 0.01
-) 
-title(main = "Usoskin")
-```
-
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-7-1} \end{center}
-
-Check which of the known neuron markers are identified as DE:
-
-```r
-uso_markers <- 
-    c("Nefh", "Tac1", "Mrgprd", "Th", "Vim", "B2m", 
-      "Col6a2", "Ntrk1", "Calca", "P2rx3", "Pvalb")
-rbind(uso_markers, uso_markers %in% DE_genes$Gene) 
-```
-
-```
-##             [,1]   [,2]   [,3]     [,4]   [,5]   [,6]    [,7]     [,8]   
-## uso_markers "Nefh" "Tac1" "Mrgprd" "Th"   "Vim"  "B2m"   "Col6a2" "Ntrk1"
-##             "TRUE" "TRUE" "TRUE"   "TRUE" "TRUE" "FALSE" "FALSE"  "TRUE" 
-##             [,9]    [,10]   [,11]  
-## uso_markers "Calca" "P2rx3" "Pvalb"
-##             "TRUE"  "TRUE"  "TRUE"
-```
-
-## Validation of DE results
-
-We can also plot the expression levels of these genes to check they really are DE genes.
-
-```r
-M3Drop::M3DropExpressionHeatmap(
-    DE_genes$Gene,
-    uso_list$data,
-    cell_labels = uso_list$labels,
-    key_genes = uso_markers
-)
-```
-
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-9-1} \end{center}
-
-## Comparing M3Drop to other methods
-
-We can compare the genes identified as DE using M3Drop to those
-identified using other methods. Running differential expression
-methods which compare two groups at a time is slow for this dataset (6
-possible pairs of groups x 15,708 genes) thus we have provided you
-with the output for DESeq. Load it using:
-
-```r
-DESeq_table <- readRDS("usoskin/DESeq_table.rds")
-length(unique(DESeq_table$Gene))
-```
-
-```
-## [1] 2604
-```
-
-We will demonstrate some of the methods starting from the simplest one proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html), which identifies genes with significant variation above technical noise (here it is assumed that the technical noise can be estimated using ERCCs).
-
+A popular method to correct for the relationship between variance and mean expression
+was proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html).
 To use the Brennecke method, we first normalize for library size then calculate
 the mean and the square coefficient of variation (variation divided by
 the squared mean expression). A quadratic curve is fit to the relationship
 between these two variables for the ERCC spike-in, and then a chi-square test is used to find genes
-significantly above the curve. This has been provided for you as the
-Brennecke_getVariableGenes(counts, spikes) function. However, there are only 9 spike-ins detected in this dataset
-so we will use the entire dataset to estimate the technical noise. 
+significantly above the curve. This method is included in the M3Drop package as the
+Brennecke_getVariableGenes(counts, spikes) function. However, this dataset does not contain spike-ins
+so we will use the entire dataset to estimate the technical noise.
 
 In the figure below the red curve
 is the fitted technical noise model and the dashed line is the 95%
 CI. Pink dots are the genes with significant biological variability
-after multiple-testing correction. 
+after multiple-testing correction.
 
 
 ```r
 Brennecke_HVG <- M3Drop::BrenneckeGetVariableGenes(
-    uso_list$data,
+    expr_matrix,
     fdr = 0.01,
     minBiolDisp = 0.5
 )
@@ -211,45 +135,176 @@ Brennecke_HVG <- M3Drop::BrenneckeGetVariableGenes(
 
 
 
+\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-6-1} \end{center}
+
+```r
+HVG_genes <- Brennecke_HVG$Gene
+```
+### High Dropout Genes ###
+
+An alternative to finding HVGs is to identify genes with unexpectedly high numbers of zeros.
+The frequency of zeros, know as the "dropout rate", is very closely related to expression level
+in scRNASeq data. Zeros are the dominant feature of single-cell RNASeq data, typically accounting
+for over half of the entries in the final expression matrix. These zeros predominantly result
+from the failure of mRNAs failing to be reversed transcribed [(Andrews and Hemberg, 2016)](http://www.biorxiv.org/content/early/2017/05/25/065094). Reverse transcription
+is an enzyme reaction thus can be modelled using the Michaelis-Menten equation:
+
+$$P_{dropout} = 1 - S/(K + S)$$
+
+where $S$ is the mRNA concentration in the cell (we will estimate this as average expression)
+and $K$ is the Michaelis-Menten constant.
+
+Because the Michaelis-Menten equation is a convex non-linear function, genes which are
+differentially expression across two or more populations of cells in our dataset will
+be shifted up/right of the Michaelis-Menten model (see Figure below).
+
+
+```r
+K = 49
+S_sim = 10^seq(from=-3, to=4, by=0.05) # range of expression values
+MM = 1-S_sim/(K+S_sim)
+plot(S_sim, MM, type="l", lwd=3, xlab="Expression", ylab="Dropout Rate", xlim=c(1,1000))
+S1 = 10; P1 = 1-S1/(K+S1) # Expression & dropouts for cells in condition 1
+S2 = 750; P2 = 1-S2/(K+S2) # Expression & dropouts for cells in condition 2
+points(c(S1,S2),c(P1,P2), pch=16, col="grey85", cex=3)
+mix = 0.5; # proportion of cells in condition 1
+points(S1*mix+S2*(1-mix), P1*mix+P2*(1-mix), pch=16, col="grey35", cex=3)
+```
+
+
+
+\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-7-1} \end{center}
+__Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures.
+
+__Exercise 3__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
+
+We use M3Drop to identify significant outliers to the right of the MM
+curve. We also apply 1% FDR multiple testing correction:
+
+
+```r
+M3Drop_genes <- M3Drop::M3DropFeatureSelection(
+    expr_matrix,
+    mt_method = "fdr",
+    mt_threshold = 0.01
+)
+title(main = "Usoskin")
+```
+
+
+
+\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-8-1} \end{center}
+
+```r
+M3Drop_genes <- M3Drop_genes$Gene
+```
+
+An alternative method is contained in the M3Drop package that is tailored specifically for
+UMI-tagged data which generally contains many zeros resulting from low sequencing coverage
+in addition to those resulting from insufficient reverse-transcription. This model is the
+Depth-Adjusted Negative Binomial (DANB). This method describes each expression observation
+as a negative binomial model with a mean related to both the mean expression of the
+respective gene and the sequencing depth of the respective cell, and a variance related to
+the mean-expression of the gene.
+
+Unlike the Michaelis-Menten and HVG methods there isn't a reliable statistical test for features
+selected by this model, so we will consider the top 1500 genes instead.
+
+
+```r
+usoskin_int <- NBumiConvertToInteger(usoskin1)
+DANB_fit <- NBumiFitModel(usoskin_int) # DANB is fit to the raw count matrix
+# Perform DANB feature selection
+DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit)
+DANB_genes <- names(DropFS[1:1500])
+```
+
+## Correlated Expression ##
+
+A completely different approach to feature selection is to use gene-gene correlations. This method
+is based on the idea that multiple genes will be differentially expressed between different cell-types
+or cell-states. Genes which are expressed in the same cell-population will be positively correlated
+with each other where as genes expressed in different cell-populations will be negatively correated with
+each other. Thus important genes can be identified by the magnitude of their correlation
+with other genes.
+
+The limitation of this method is that it assumes technical noise is random and independent for each cell,
+thus shouldn't produce gene-gene correlations, but this assumption is violated by batch effects which are
+generally systematic between different experimental batches and will produce gene-gene correlations. As a
+result it is more appropriate to take the top few thousand genes as ranked by gene-gene correlation than
+consider the significance of the correlations.
+
+
+
+```r
+cor_mat <- cor(t(expr_matrix), method="spearman") #Gene-gene correlations
+diag(cor_mat) <- rep(0, times=nrow(expr_matrix))
+score <- apply(cor_mat, 1, function(x) {max(abs(x))}) #Correlation of highest magnitude
+names(score) <- rownames(expr_matrix);
+score <- score[order(-score)]
+Cor_genes = names(score[1:1500])
+```
+Lastly, another common method for feature selection in scRNASeq data is to use PCA loadings. Genes with
+high PCA loadings are likely to be highly variable and correlated with many other variable genes, thus
+may be relevant to the underlying biology. However, as with gene-gene correlations PCA loadings tend to
+be susceptible to detecting systematic variation due to batch effects; thus it is recommended to plot the PCA
+results to determine those components corresponding to the biological variation rather than batch effects.
+
+
+```r
+pca <- prcomp(log(expr_matrix+1)/log(2)); # PCA is typically performed on log-transformed expression data
+
+plot(pca$rotation[,1], pca$rotation[,2], pch=16, col=cell_colors[as.factor(celltype_labs)]) # plot projection
+```
+
+
+
 \begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-11-1} \end{center}
 
 ```r
-length(Brennecke_HVG)
+score <- rowSums(abs(pca$x[,c(1,2)])) # calculate loadings for components 1 and 2
+names(score) <- rownames(expr_matrix)
+score <- score[order(-score)]
+PCA_genes = names(score[1:1500])
 ```
+__Exercise 4__
+Consider the top 5 principal components. Which appear to be most biologically relevant? How does the top 1,500
+features change if you consider the loadings for those components?
 
-```
-## [1] 1595
-```
+### Comparing Methods ####
 
-__Exercise 3__: Plot a heatmap of the expression of the HVGs and DESeq DE genes. Do they look differentially expressed?
-
-__Exercise 4__: How many of the known markers are identified by Brennecke & DESeq?
-
-Finally, we can compare the overlaps between these three dataset.
+We can check whether the identified features really do represent genes differentially expressed between
+cell-types in this dataset.
 
 
 ```r
-all.genes <- unique(
-    c(
-        as.character(DESeq_table$Gene),
-        Brennecke_HVG,
-        as.character(DE_genes$Gene)
-    )
-)
-venn.diag <- vennCounts(
-    cbind(
-        all.genes %in% as.character(DESeq_table$Gene),
-        all.genes %in% Brennecke_HVG,
-        all.genes %in% as.character(DE_genes$Gene)
-    )
-)
-limma::vennDiagram(
-    venn.diag,
-    names = c("DESeq", "HVG", "M3Drop"),
-    circle.col = c("magenta", "blue", "green")
+M3Drop::M3DropExpressionHeatmap(
+    M3Drop_genes,
+    uso_list$data,
+    cell_labels = uso_list$labels,
 )
 ```
 
 
 
 \begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-12-1} \end{center}
+
+For a quantitative estimate you have been provided with differentially expressed genes for this dataset as calculated by DESeq:
+
+
+```r
+# Load DE genes
+DESeq_table <- readRDS("usoskin/DESeq_table.rds")
+DE_genes = unique(DESeq_table$Gene)
+
+# Calculate precision
+sum(M3Drop_genes %in% DE_genes)/length(M3Drop_genes)
+```
+
+```
+## [1] 0.6478343
+```
+
+__Exercise 5__
+Plot the expression of the features for each of the other methods. Which appear to be differentially expressed?
+Which method is the most precise?

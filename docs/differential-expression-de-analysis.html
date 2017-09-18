@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Analysis of single cell RNA-seq data</title>
   <meta name="description" content="Analysis of single cell RNA-seq data">
-  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Analysis of single cell RNA-seq data" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-07-26">
+<meta name="date" content="2017-09-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -298,12 +298,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>19.6</b> SINCERA</a></li>
 <li class="chapter" data-level="19.7" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>19.7</b> SEURAT</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html"><i class="fa fa-check"></i><b>20</b> Identification of important genes</a><ul>
-<li class="chapter" data-level="20.1" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#fitting-the-models"><i class="fa fa-check"></i><b>20.1</b> Fitting the models</a></li>
-<li class="chapter" data-level="20.2" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#the-michaelis-menten-equation"><i class="fa fa-check"></i><b>20.2</b> The Michaelis-Menten Equation</a></li>
-<li class="chapter" data-level="20.3" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#right-outliers"><i class="fa fa-check"></i><b>20.3</b> Right outliers</a></li>
-<li class="chapter" data-level="20.4" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#validation-of-de-results"><i class="fa fa-check"></i><b>20.4</b> Validation of DE results</a></li>
-<li class="chapter" data-level="20.5" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#comparing-m3drop-to-other-methods"><i class="fa fa-check"></i><b>20.5</b> Comparing M3Drop to other methods</a></li>
+<li class="chapter" data-level="20" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>20</b> Feature Selection</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>20.0.1</b> Highly Variable Genes</a></li>
+<li class="chapter" data-level="20.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>20.0.2</b> High Dropout Genes</a></li>
+<li class="chapter" data-level="20.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>20.1</b> Correlated Expression</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>20.1.1</b> Comparing Methods</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>21</b> Pseudotime analysis</a><ul>
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
@@ -400,7 +400,7 @@ Figure 22.1: Negative Binomial distribution of read counts for a single gene acr
 <p>However, a raw negative binomial model does not fit full-length transcript data as well due to the high dropout rates relative to the non-zero read counts. For this type of data a variety of zero-inflated negative binomial models have been proposed (e.g. <a href="https://bioconductor.org/packages/release/bioc/html/MAST.html">MAST</a>, <a href="https://bioconductor.org/packages/release/bioc/html/scde.html">SCDE</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d =<span class="st"> </span><span class="fl">0.5</span>;
 counts &lt;-<span class="st"> </span><span class="kw">rnbinom</span>(<span class="dv">1000</span>, <span class="dt">mu=</span><span class="dv">10</span>, <span class="dt">size=</span><span class="dv">100</span>);
-counts[<span class="kw">runif</span>(<span class="dv">1000</span>) &lt;<span class="st"> </span>d] =<span class="st"> </span><span class="dv">0</span>;
+counts[<span class="kw">runif</span>(<span class="dv">1000</span>) <span class="op">&lt;</span><span class="st"> </span>d] =<span class="st"> </span><span class="dv">0</span>;
 <span class="kw">hist</span>(counts, <span class="dt">col=</span><span class="st">&quot;grey50&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Read Counts&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Zero-inflated NB&quot;</span>);</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:zero-inflation-plot"></span>
 <img src="21-de-intro_files/figure-html/zero-inflation-plot-1.png" alt="Zero-inflated Negative Binomial distribution" width="672" />
@@ -416,7 +416,7 @@ Figure 22.2: Zero-inflated Negative Binomial distribution
 b =<span class="st"> </span><span class="fl">0.1</span>
 g =<span class="st"> </span><span class="dv">100</span>
 lambdas =<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, a, b)
-counts =<span class="st"> </span><span class="kw">sapply</span>(g*lambdas, function(l) {<span class="kw">rpois</span>(<span class="dv">1</span>, <span class="dt">lambda=</span>l)})
+counts =<span class="st"> </span><span class="kw">sapply</span>(g<span class="op">*</span>lambdas, <span class="cf">function</span>(l) {<span class="kw">rpois</span>(<span class="dv">1</span>, <span class="dt">lambda=</span>l)})
 <span class="kw">hist</span>(counts, <span class="dt">col=</span><span class="st">&quot;grey50&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Read Counts&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Poisson-Beta&quot;</span>)</code></pre></div>
 <p><img src="21-de-intro_files/figure-html/pois-beta-plot-1.png" width="672" style="display: block; margin: auto;" /> Mean: <span class="math inline">\(\mu = g \cdot a / (a + b)\)</span></p>
 <p>Variance: <span class="math inline">\(\sigma^2 = g^2 \cdot a \cdot b/((a + b + 1) \cdot (a + b)^2)\)</span></p>
@@ -443,7 +443,7 @@ counts =<span class="st"> </span><span class="kw">sapply</span>(g*lambdas, funct
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,

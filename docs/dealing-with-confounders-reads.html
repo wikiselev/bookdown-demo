@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Analysis of single cell RNA-seq data</title>
   <meta name="description" content="Analysis of single cell RNA-seq data">
-  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Analysis of single cell RNA-seq data" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-07-26">
+<meta name="date" content="2017-09-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -298,12 +298,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>19.6</b> SINCERA</a></li>
 <li class="chapter" data-level="19.7" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>19.7</b> SEURAT</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html"><i class="fa fa-check"></i><b>20</b> Identification of important genes</a><ul>
-<li class="chapter" data-level="20.1" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#fitting-the-models"><i class="fa fa-check"></i><b>20.1</b> Fitting the models</a></li>
-<li class="chapter" data-level="20.2" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#the-michaelis-menten-equation"><i class="fa fa-check"></i><b>20.2</b> The Michaelis-Menten Equation</a></li>
-<li class="chapter" data-level="20.3" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#right-outliers"><i class="fa fa-check"></i><b>20.3</b> Right outliers</a></li>
-<li class="chapter" data-level="20.4" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#validation-of-de-results"><i class="fa fa-check"></i><b>20.4</b> Validation of DE results</a></li>
-<li class="chapter" data-level="20.5" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#comparing-m3drop-to-other-methods"><i class="fa fa-check"></i><b>20.5</b> Comparing M3Drop to other methods</a></li>
+<li class="chapter" data-level="20" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>20</b> Feature Selection</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>20.0.1</b> Highly Variable Genes</a></li>
+<li class="chapter" data-level="20.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>20.0.2</b> High Dropout Genes</a></li>
+<li class="chapter" data-level="20.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>20.1</b> Correlated Expression</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>20.1.1</b> Comparing Methods</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>21</b> Pseudotime analysis</a><ul>
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
@@ -376,36 +376,36 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">set.seed</span>(<span class="dv">1234567</span>)
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 reads &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;tung/reads.rds&quot;</span>)
-reads.qc &lt;-<span class="st"> </span>reads[<span class="kw">fData</span>(reads)$use, <span class="kw">pData</span>(reads)$use]
-endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(reads.qc)$is_feature_control
-erccs &lt;-<span class="st"> </span><span class="kw">fData</span>(reads.qc)$is_feature_control</code></pre></div>
+reads.qc &lt;-<span class="st"> </span>reads[<span class="kw">fData</span>(reads)<span class="op">$</span>use, <span class="kw">pData</span>(reads)<span class="op">$</span>use]
+endog_genes &lt;-<span class="st"> </span><span class="op">!</span><span class="kw">fData</span>(reads.qc)<span class="op">$</span>is_feature_control
+erccs &lt;-<span class="st"> </span><span class="kw">fData</span>(reads.qc)<span class="op">$</span>is_feature_control</code></pre></div>
 <div id="remove-unwanted-variation-1" class="section level2">
 <h2><span class="header-section-number">17.1</span> Remove Unwanted Variation</h2>
 <div id="ruvg-1" class="section level3">
 <h3><span class="header-section-number">17.1.1</span> RUVg</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ruvg &lt;-<span class="st"> </span><span class="kw">RUVg</span>(<span class="kw">counts</span>(reads.qc), erccs, <span class="dt">k =</span> <span class="dv">1</span>)
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvg1&quot;</span>) &lt;-<span class="st"> </span>ruvg$normalizedCounts
+<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvg1&quot;</span>) &lt;-<span class="st"> </span>ruvg<span class="op">$</span>normalizedCounts
 ruvg &lt;-<span class="st"> </span><span class="kw">RUVg</span>(<span class="kw">counts</span>(reads.qc), erccs, <span class="dt">k =</span> <span class="dv">2</span>)
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvg2&quot;</span>) &lt;-<span class="st"> </span>ruvg$normalizedCounts
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvg2_logcpm&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">t</span>(<span class="kw">t</span>(ruvg$normalizedCounts) /<span class="st"> </span>
-<span class="st">                                           </span><span class="kw">colSums</span>(ruvg$normalizedCounts)) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvg2&quot;</span>) &lt;-<span class="st"> </span>ruvg<span class="op">$</span>normalizedCounts
+<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvg2_logcpm&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">t</span>(<span class="kw">t</span>(ruvg<span class="op">$</span>normalizedCounts) <span class="op">/</span><span class="st"> </span>
+<span class="st">                                           </span><span class="kw">colSums</span>(ruvg<span class="op">$</span>normalizedCounts)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
 </div>
 <div id="ruvs-1" class="section level3">
 <h3><span class="header-section-number">17.1.2</span> RUVs</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scIdx &lt;-<span class="st"> </span><span class="kw">matrix</span>(-<span class="dv">1</span>, <span class="dt">ncol =</span> <span class="kw">max</span>(<span class="kw">table</span>(reads.qc$individual)), <span class="dt">nrow =</span> <span class="dv">3</span>)
-tmp &lt;-<span class="st"> </span><span class="kw">which</span>(reads.qc$individual ==<span class="st"> &quot;NA19098&quot;</span>)
-scIdx[<span class="dv">1</span>, <span class="dv">1</span>:<span class="kw">length</span>(tmp)] &lt;-<span class="st"> </span>tmp
-tmp &lt;-<span class="st"> </span><span class="kw">which</span>(reads.qc$individual ==<span class="st"> &quot;NA19101&quot;</span>)
-scIdx[<span class="dv">2</span>, <span class="dv">1</span>:<span class="kw">length</span>(tmp)] &lt;-<span class="st"> </span>tmp
-tmp &lt;-<span class="st"> </span><span class="kw">which</span>(reads.qc$individual ==<span class="st"> &quot;NA19239&quot;</span>)
-scIdx[<span class="dv">3</span>, <span class="dv">1</span>:<span class="kw">length</span>(tmp)] &lt;-<span class="st"> </span>tmp
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scIdx &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dt">ncol =</span> <span class="kw">max</span>(<span class="kw">table</span>(reads.qc<span class="op">$</span>individual)), <span class="dt">nrow =</span> <span class="dv">3</span>)
+tmp &lt;-<span class="st"> </span><span class="kw">which</span>(reads.qc<span class="op">$</span>individual <span class="op">==</span><span class="st"> &quot;NA19098&quot;</span>)
+scIdx[<span class="dv">1</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(tmp)] &lt;-<span class="st"> </span>tmp
+tmp &lt;-<span class="st"> </span><span class="kw">which</span>(reads.qc<span class="op">$</span>individual <span class="op">==</span><span class="st"> &quot;NA19101&quot;</span>)
+scIdx[<span class="dv">2</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(tmp)] &lt;-<span class="st"> </span>tmp
+tmp &lt;-<span class="st"> </span><span class="kw">which</span>(reads.qc<span class="op">$</span>individual <span class="op">==</span><span class="st"> &quot;NA19239&quot;</span>)
+scIdx[<span class="dv">3</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(tmp)] &lt;-<span class="st"> </span>tmp
 cIdx &lt;-<span class="st"> </span><span class="kw">rownames</span>(reads.qc)
 ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw">counts</span>(reads.qc), cIdx, <span class="dt">k =</span> <span class="dv">1</span>, <span class="dt">scIdx =</span> scIdx, <span class="dt">isLog =</span> <span class="ot">FALSE</span>)
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvs1&quot;</span>) &lt;-<span class="st"> </span>ruvs$normalizedCounts
+<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvs1&quot;</span>) &lt;-<span class="st"> </span>ruvs<span class="op">$</span>normalizedCounts
 ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw">counts</span>(reads.qc), cIdx, <span class="dt">k =</span> <span class="dv">2</span>, <span class="dt">scIdx =</span> scIdx, <span class="dt">isLog =</span> <span class="ot">FALSE</span>)
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvs2&quot;</span>) &lt;-<span class="st"> </span>ruvs$normalizedCounts
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvs2_logcpm&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">t</span>(<span class="kw">t</span>(ruvs$normalizedCounts) /<span class="st"> </span>
-<span class="st">                                           </span><span class="kw">colSums</span>(ruvs$normalizedCounts)) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvs2&quot;</span>) &lt;-<span class="st"> </span>ruvs<span class="op">$</span>normalizedCounts
+<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvs2_logcpm&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">t</span>(<span class="kw">t</span>(ruvs<span class="op">$</span>normalizedCounts) <span class="op">/</span><span class="st"> </span>
+<span class="st">                                           </span><span class="kw">colSums</span>(ruvs<span class="op">$</span>normalizedCounts)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
 </div>
 </div>
 <div id="effectiveness-1-1" class="section level2">
@@ -415,7 +415,7 @@ ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw"
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvg1&quot;</span>) +
+    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvg1&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVg normalisation: k = 1&quot;</span>)</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
@@ -423,7 +423,7 @@ ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw"
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvg2&quot;</span>) +
+    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvg2&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVg normalisation: k = 2&quot;</span>)</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
@@ -431,7 +431,7 @@ ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw"
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvs1&quot;</span>) +
+    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvs1&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVs normalisation: k = 1&quot;</span>)</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-3.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
@@ -439,7 +439,7 @@ ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw"
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvs2&quot;</span>) +
+    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvs2&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVs normalisation: k = 2&quot;</span>)</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-4.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
@@ -447,7 +447,7 @@ ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw"
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvs2_logcpm&quot;</span>) +
+    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvs2_logcpm&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVs normalisation log2-cpm: k = 2&quot;</span>)</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-5.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
@@ -456,10 +456,10 @@ ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw"
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(
     <span class="kw">list</span>(
         <span class="st">&quot;Raw counts&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">counts</span>(reads.qc), erccs),
-        <span class="st">&quot;RUVg (k = 1)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)$ruvg1, erccs),
-        <span class="st">&quot;RUVg (k = 2)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)$ruvg2, erccs),
-        <span class="st">&quot;RUVs (k = 1)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)$ruvs1, erccs),
-        <span class="st">&quot;RUVs (k = 2)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)$ruvs2, erccs)
+        <span class="st">&quot;RUVg (k = 1)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)<span class="op">$</span>ruvg1, erccs),
+        <span class="st">&quot;RUVg (k = 2)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)<span class="op">$</span>ruvg2, erccs),
+        <span class="st">&quot;RUVs (k = 1)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)<span class="op">$</span>ruvs1, erccs),
+        <span class="st">&quot;RUVs (k = 2)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)<span class="op">$</span>ruvs2, erccs)
     )
 )</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -467,17 +467,17 @@ ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw"
 <div id="effectiveness-3-1" class="section level2">
 <h2><span class="header-section-number">17.4</span> Effectiveness 3</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keep &lt;-<span class="st"> </span><span class="kw">c</span>(
-    <span class="kw">sample</span>(<span class="kw">which</span>(reads.qc$batch ==<span class="st"> &quot;NA19101.r1&quot;</span>), <span class="dv">20</span>), 
-    <span class="kw">sample</span>(<span class="kw">which</span>(reads.qc$batch ==<span class="st"> &quot;NA19101.r2&quot;</span>), <span class="dv">20</span>),
-    <span class="kw">sample</span>(<span class="kw">which</span>(reads.qc$batch ==<span class="st"> &quot;NA19101.r3&quot;</span>), <span class="dv">20</span>)
+    <span class="kw">sample</span>(<span class="kw">which</span>(reads.qc<span class="op">$</span>batch <span class="op">==</span><span class="st"> &quot;NA19101.r1&quot;</span>), <span class="dv">20</span>), 
+    <span class="kw">sample</span>(<span class="kw">which</span>(reads.qc<span class="op">$</span>batch <span class="op">==</span><span class="st"> &quot;NA19101.r2&quot;</span>), <span class="dv">20</span>),
+    <span class="kw">sample</span>(<span class="kw">which</span>(reads.qc<span class="op">$</span>batch <span class="op">==</span><span class="st"> &quot;NA19101.r3&quot;</span>), <span class="dv">20</span>)
 )
-design &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~reads.qc[, keep]$batch)</code></pre></div>
+design &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>reads.qc[, keep]<span class="op">$</span>batch)</code></pre></div>
 <div id="de-raw-counts-1" class="section level3">
 <h3><span class="header-section-number">17.4.1</span> DE (raw counts)</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dge1 &lt;-<span class="st"> </span><span class="kw">DGEList</span>(
     <span class="dt">counts =</span> <span class="kw">counts</span>(reads.qc[, keep]), 
     <span class="dt">norm.factors =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(keep)),
-    <span class="dt">group =</span> reads.qc[, keep]$batch
+    <span class="dt">group =</span> reads.qc[, keep]<span class="op">$</span>batch
 )
 dge1 &lt;-<span class="st"> </span><span class="kw">estimateDisp</span>(dge1, <span class="dt">design =</span> design, <span class="dt">trend.method =</span> <span class="st">&quot;none&quot;</span>)
 <span class="kw">plotBCV</span>(dge1)</code></pre></div>
@@ -504,13 +504,13 @@ res1 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit1)
 ## 1                               746</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res1, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
-    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res1, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res1))))$table)
+    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res1, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res1))))<span class="op">$</span>table)
 )</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="de-ruvg-k-2-1" class="section level3">
 <h3><span class="header-section-number">17.4.2</span> DE (RUVg, k = 2)</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_ruvg &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~ruvg$W[keep,] +<span class="st"> </span>reads.qc[, keep]$batch)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_ruvg &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>ruvg<span class="op">$</span>W[keep,] <span class="op">+</span><span class="st"> </span>reads.qc[, keep]<span class="op">$</span>batch)
 <span class="kw">head</span>(design_ruvg)</code></pre></div>
 <pre><code>##   (Intercept) ruvg$W[keep, ]W_1 ruvg$W[keep, ]W_2
 ## 1           1       0.018190004        0.04764997
@@ -551,13 +551,13 @@ res2 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit2)
 ## 1                               325</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res2, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
-    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res2, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res2))))$table)
+    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res2, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res2))))<span class="op">$</span>table)
 )</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="de-ruvs-k-2-1" class="section level3">
 <h3><span class="header-section-number">17.4.3</span> DE (RUVs, k = 2)</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_ruvs &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~ruvs$W[keep,] +<span class="st"> </span>reads.qc[, keep]$batch)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_ruvs &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>ruvs<span class="op">$</span>W[keep,] <span class="op">+</span><span class="st"> </span>reads.qc[, keep]<span class="op">$</span>batch)
 <span class="kw">head</span>(design_ruvs)</code></pre></div>
 <pre><code>##   (Intercept) ruvs$W[keep, ]W_1 ruvs$W[keep, ]W_2
 ## 1           1         0.3772545         0.1683790
@@ -598,11 +598,11 @@ res3 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit3)
 ## 1                               539</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res3, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
-    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res3, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res3))))$table)
+    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res3, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res3))))<span class="op">$</span>table)
 )</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads.qc &lt;-<span class="st"> </span>scran::<span class="kw">computeSumFactors</span>(reads.qc, <span class="dt">sizes =</span> <span class="dv">15</span>)
-dge_ruvs$samples$norm.factors &lt;-<span class="st"> </span><span class="kw">sizeFactors</span>(reads.qc)[keep]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads.qc &lt;-<span class="st"> </span>scran<span class="op">::</span><span class="kw">computeSumFactors</span>(reads.qc, <span class="dt">sizes =</span> <span class="dv">15</span>)
+dge_ruvs<span class="op">$</span>samples<span class="op">$</span>norm.factors &lt;-<span class="st"> </span><span class="kw">sizeFactors</span>(reads.qc)[keep]
 dge_ruvs_sf &lt;-<span class="st"> </span><span class="kw">estimateDisp</span>(dge_ruvs, <span class="dt">design =</span> design_ruvs, <span class="dt">trend.method =</span> <span class="st">&quot;none&quot;</span>)
 <span class="kw">plotBCV</span>(dge_ruvs_sf)</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -628,7 +628,7 @@ res4 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit4)
 ## 1                               522</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res4, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
-    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res4, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res4))))$table)
+    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res4, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res4))))<span class="op">$</span>table)
 )</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
 
@@ -652,7 +652,7 @@ res4 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit4)
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,

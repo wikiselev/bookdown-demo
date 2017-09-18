@@ -128,11 +128,10 @@ devtools::install_github('satijalab/seurat')
 
 ### Dropouts
 
-[M3Drop](http://bioconductor.org/packages/M3Drop)
+[M3Drop](https://github.com/tallulandrews/M3Drop)
 
 ```r
-source("https://bioconductor.org/biocLite.R")
-biocLite("M3Drop")
+devtools::install_github('tallulandrews/M3Drop')
 ```
 
 ### Pseudotime

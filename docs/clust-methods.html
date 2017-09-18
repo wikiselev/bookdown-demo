@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Analysis of single cell RNA-seq data</title>
   <meta name="description" content="Analysis of single cell RNA-seq data">
-  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Analysis of single cell RNA-seq data" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-07-26">
+<meta name="date" content="2017-09-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="clustering-introduction.html">
-<link rel="next" href="identification-of-important-genes.html">
+<link rel="next" href="feature-selection.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -298,12 +298,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="19.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>19.6</b> SINCERA</a></li>
 <li class="chapter" data-level="19.7" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>19.7</b> SEURAT</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html"><i class="fa fa-check"></i><b>20</b> Identification of important genes</a><ul>
-<li class="chapter" data-level="20.1" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#fitting-the-models"><i class="fa fa-check"></i><b>20.1</b> Fitting the models</a></li>
-<li class="chapter" data-level="20.2" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#the-michaelis-menten-equation"><i class="fa fa-check"></i><b>20.2</b> The Michaelis-Menten Equation</a></li>
-<li class="chapter" data-level="20.3" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#right-outliers"><i class="fa fa-check"></i><b>20.3</b> Right outliers</a></li>
-<li class="chapter" data-level="20.4" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#validation-of-de-results"><i class="fa fa-check"></i><b>20.4</b> Validation of DE results</a></li>
-<li class="chapter" data-level="20.5" data-path="identification-of-important-genes.html"><a href="identification-of-important-genes.html#comparing-m3drop-to-other-methods"><i class="fa fa-check"></i><b>20.5</b> Comparing M3Drop to other methods</a></li>
+<li class="chapter" data-level="20" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>20</b> Feature Selection</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>20.0.1</b> Highly Variable Genes</a></li>
+<li class="chapter" data-level="20.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>20.0.2</b> High Dropout Genes</a></li>
+<li class="chapter" data-level="20.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>20.1</b> Correlated Expression</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>20.1.1</b> Comparing Methods</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>21</b> Pseudotime analysis</a><ul>
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
@@ -395,7 +395,7 @@ pollen</code></pre></div>
 ## experimentData: use &#39;experimentData(object)&#39;
 ## Annotation:</code></pre>
 <p>Let’s look at the cell type annotation:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">pData</span>(pollen)$cell_type1)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">pData</span>(pollen)<span class="op">$</span>cell_type1)</code></pre></div>
 <pre><code>## 
 ##   2338   2339     BJ   GW16   GW21 GW21+3  hiPSC   HL60   K562   Kera 
 ##     22     17     37     26      7     17     24     54     42     40 
@@ -409,12 +409,12 @@ pollen</code></pre></div>
 <h2><span class="header-section-number">19.2</span> SC3</h2>
 <p>Let’s run <code>SC3</code> clustering on the Pollen data. The advantage of the <code>SC3</code> is that it can directly take a <a href="http://bioconductor.org/packages/scater/">scater</a> object (see previous chapters) as an input.</p>
 <p>Now let’s image we do not know the number of clusters <em>k</em> (cell types). <code>SC3</code> can estimate a number of clusters for you:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen &lt;-<span class="st"> </span><span class="kw">sc3_prepare</span>(pollen, <span class="dt">ks =</span> <span class="dv">2</span>:<span class="dv">5</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen &lt;-<span class="st"> </span><span class="kw">sc3_prepare</span>(pollen, <span class="dt">ks =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">5</span>)</code></pre></div>
 <pre><code>## Setting SC3 parameters...</code></pre>
 <pre><code>## Setting a range of k...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen &lt;-<span class="st"> </span><span class="kw">sc3_estimate_k</span>(pollen)</code></pre></div>
 <pre><code>## Estimating k...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen@sc3$k_estimation</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen<span class="op">@</span>sc3<span class="op">$</span>k_estimation</code></pre></div>
 <pre><code>## [1] 11</code></pre>
 <p>Interestingly, the number of cell types predicted by <code>SC3</code> is the same as the number of cell types in the Pollen data annotation.</p>
 <p>Now we are ready to run <code>SC3</code> (we also ask it to calculate biological properties of the clusters):</p>
@@ -456,12 +456,12 @@ pollen</code></pre></div>
 <h2><span class="header-section-number">19.3</span> pcaReduce</h2>
 <p><code>pcaReduce</code> operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running <code>pcaReduce</code>. We will use the default <code>SC3</code> gene filter (note that the <code>exprs</code> slot of a <code>scater</code> object is log-transformed by default).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use the same gene filter as in SC3</span>
-input &lt;-<span class="st"> </span><span class="kw">exprs</span>(pollen[<span class="kw">fData</span>(pollen)$sc3_gene_filter, ])</code></pre></div>
+input &lt;-<span class="st"> </span><span class="kw">exprs</span>(pollen[<span class="kw">fData</span>(pollen)<span class="op">$</span>sc3_gene_filter, ])</code></pre></div>
 <p>There are several parameters used by <code>pcaReduce</code>: * <code>nbt</code> defines a number of <code>pcaReduce</code> runs (it is stochastic and may have different solutions after different runs) * <code>q</code> defines number of dimensions to start clustering with. The output will contain partitions for all <span class="math inline">\(k\)</span> from 2 to q+1. * <code>method</code> defines a method used for clustering. <code>S</code> - to perform sampling based merging, <code>M</code> - to perform merging based on largest probability.</p>
 <p>We will run <code>pcaReduce</code> 1 time:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run pcaReduce 1 time creating hierarchies from 1 to 30 clusters</span>
 pca.red &lt;-<span class="st"> </span><span class="kw">PCAreduce</span>(<span class="kw">t</span>(input), <span class="dt">nbt =</span> <span class="dv">1</span>, <span class="dt">q =</span> <span class="dv">30</span>, <span class="dt">method =</span> <span class="st">&#39;S&#39;</span>)[[<span class="dv">1</span>]]</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pData</span>(pollen)$pcaReduce &lt;-<span class="st"> </span><span class="kw">as.character</span>(pca.red[,<span class="dv">32</span> -<span class="st"> </span><span class="dv">11</span>])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pData</span>(pollen)<span class="op">$</span>pcaReduce &lt;-<span class="st"> </span><span class="kw">as.character</span>(pca.red[,<span class="dv">32</span> <span class="op">-</span><span class="st"> </span><span class="dv">11</span>])
 <span class="kw">plotPCA</span>(pollen, <span class="dt">colour_by =</span> <span class="st">&quot;pcaReduce&quot;</span>)</code></pre></div>
 <p><img src="18-clustering_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><strong>Exercise 5</strong>: Run pcaReduce for <span class="math inline">\(k=2\)</span> and plot a similar PCA plot. Does it look good?</p>
@@ -489,7 +489,7 @@ Figure 19.2: tSNE map of the patient data
 <p>Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.</p>
 <p>Now we are going to apply <em>k</em>-means clustering algorithm to the cloud of points on the tSNE map. How many groups do you see in the cloud?</p>
 <p>We will start with <span class="math inline">\(k=8\)</span>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pData</span>(pollen)$tSNE_kmeans &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">kmeans</span>(pollen@reducedDimension, <span class="dt">centers =</span> <span class="dv">8</span>)$clust)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pData</span>(pollen)<span class="op">$</span>tSNE_kmeans &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">kmeans</span>(pollen<span class="op">@</span>reducedDimension, <span class="dt">centers =</span> <span class="dv">8</span>)<span class="op">$</span>clust)
 <span class="kw">plotTSNE</span>(pollen, <span class="dt">rand_seed =</span> <span class="dv">1</span>, <span class="dt">colour_by =</span> <span class="st">&quot;tSNE_kmeans&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:clust-tsne-kmeans2"></span>
 <img src="18-clustering_files/figure-html/clust-tsne-kmeans2-1.png" alt="tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm" width="672" />
@@ -510,7 +510,7 @@ par.k &lt;-<span class="st"> </span><span class="dv">3</span>
 par.r &lt;-<span class="st"> </span><span class="fl">0.7</span>
 par.m &lt;-<span class="st"> </span><span class="fl">0.5</span>
 <span class="co"># construct a graph</span>
-scRNA.seq.funcs::<span class="kw">SNN</span>(
+scRNA.seq.funcs<span class="op">::</span><span class="kw">SNN</span>(
     <span class="dt">data =</span> <span class="kw">t</span>(input),
     <span class="dt">outfile =</span> <span class="st">&quot;snn-cliq.txt&quot;</span>,
     <span class="dt">k =</span> par.k,
@@ -537,7 +537,7 @@ snn.res &lt;-<span class="st"> </span>
 <span class="co"># remove files that were created during the analysis</span>
 <span class="kw">system</span>(<span class="st">&quot;rm snn-cliq.txt res-snn-cliq.txt&quot;</span>)
 
-<span class="kw">pData</span>(pollen)$SNNCliq &lt;-<span class="st"> </span><span class="kw">as.character</span>(snn.res[,<span class="dv">1</span>])
+<span class="kw">pData</span>(pollen)<span class="op">$</span>SNNCliq &lt;-<span class="st"> </span><span class="kw">as.character</span>(snn.res[,<span class="dv">1</span>])
 <span class="kw">plotPCA</span>(pollen, <span class="dt">colour_by =</span> <span class="st">&quot;SNNCliq&quot;</span>)</code></pre></div>
 <p><img src="18-clustering_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><strong>Exercise 9</strong>: Compare the results between <code>SC3</code> and <code>SNN-Cliq</code>.</p>
@@ -547,21 +547,21 @@ snn.res &lt;-<span class="st"> </span>
 <h2><span class="header-section-number">19.6</span> SINCERA</h2>
 <p>As mentioned in the previous chapter <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a> is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># perform gene-by-gene per-sample z-score transformation</span>
-dat &lt;-<span class="st"> </span><span class="kw">apply</span>(input, <span class="dv">1</span>, function(y) scRNA.seq.funcs::<span class="kw">z.transform.helper</span>(y))
+dat &lt;-<span class="st"> </span><span class="kw">apply</span>(input, <span class="dv">1</span>, <span class="cf">function</span>(y) scRNA.seq.funcs<span class="op">::</span><span class="kw">z.transform.helper</span>(y))
 <span class="co"># hierarchical clustering</span>
-dd &lt;-<span class="st"> </span><span class="kw">as.dist</span>((<span class="dv">1</span> -<span class="st"> </span><span class="kw">cor</span>(<span class="kw">t</span>(dat), <span class="dt">method =</span> <span class="st">&quot;pearson&quot;</span>))/<span class="dv">2</span>)
+dd &lt;-<span class="st"> </span><span class="kw">as.dist</span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(<span class="kw">t</span>(dat), <span class="dt">method =</span> <span class="st">&quot;pearson&quot;</span>))<span class="op">/</span><span class="dv">2</span>)
 hc &lt;-<span class="st"> </span><span class="kw">hclust</span>(dd, <span class="dt">method =</span> <span class="st">&quot;average&quot;</span>)</code></pre></div>
 <p>If the number of cluster is not known <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a> can identify <strong>k</strong> as the minimum height of the hierarchical tree that generates no more than a specified number of singleton clusters (clusters containing only 1 cell)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">num.singleton &lt;-<span class="st"> </span><span class="dv">0</span>
 kk &lt;-<span class="st"> </span><span class="dv">1</span>
-for (i in <span class="dv">2</span>:<span class="kw">dim</span>(dat)[<span class="dv">2</span>]) {
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="kw">dim</span>(dat)[<span class="dv">2</span>]) {
     clusters &lt;-<span class="st"> </span><span class="kw">cutree</span>(hc, <span class="dt">k =</span> i)
     clustersizes &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">table</span>(clusters))
-    singleton.clusters &lt;-<span class="st"> </span><span class="kw">which</span>(clustersizes$Freq &lt;<span class="st"> </span><span class="dv">2</span>)
-    if (<span class="kw">length</span>(singleton.clusters) &lt;=<span class="st"> </span>num.singleton) {
+    singleton.clusters &lt;-<span class="st"> </span><span class="kw">which</span>(clustersizes<span class="op">$</span>Freq <span class="op">&lt;</span><span class="st"> </span><span class="dv">2</span>)
+    <span class="cf">if</span> (<span class="kw">length</span>(singleton.clusters) <span class="op">&lt;=</span><span class="st"> </span>num.singleton) {
         kk &lt;-<span class="st"> </span>i
-    } else {
-        break;
+    } <span class="cf">else</span> {
+        <span class="cf">break</span>;
     }
 }
 <span class="kw">cat</span>(kk)</code></pre></div>
@@ -588,108 +588,25 @@ Figure 19.4: Clustering solutions of SINCERA method using <span class="math inli
 <h2><span class="header-section-number">19.7</span> SEURAT</h2>
 <p>Here we follow an <a href="http://satijalab.org/seurat/get_started.html">example</a> created by the authors of <code>SEURAT</code> (8,500 Pancreas cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Seurat)
-<span class="kw">library</span>(Matrix)
 pollen_seurat &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;seurat&quot;</span>, <span class="dt">raw.data =</span> <span class="kw">get_exprs</span>(pollen, <span class="dt">exprs_values =</span> <span class="st">&quot;tpm&quot;</span>))
 pollen_seurat &lt;-<span class="st"> </span><span class="kw">Setup</span>(pollen_seurat, <span class="dt">project =</span> <span class="st">&quot;Pollen&quot;</span>)
-pollen_seurat &lt;-<span class="st"> </span><span class="kw">MeanVarPlot</span>(pollen_seurat)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen_seurat &lt;-<span class="st"> </span><span class="kw">RegressOut</span>(pollen_seurat, <span class="dt">latent.vars =</span> <span class="kw">c</span>(<span class="st">&quot;nUMI&quot;</span>), 
-                            <span class="dt">genes.regress =</span> pollen_seurat@var.genes)</code></pre></div>
-<pre><code>## [1] &quot;Regressing out nUMI&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen_seurat &lt;-<span class="st"> </span><span class="kw">PCAFast</span>(pollen_seurat)</code></pre></div>
-<pre><code>## [1] &quot;PC1&quot;
-##  [1] &quot;MAP1B&quot;     &quot;TUBA1A&quot;    &quot;SOX11&quot;     &quot;DPYSL2&quot;    &quot;DCX&quot;      
-##  [6] &quot;STMN2&quot;     &quot;RTN1&quot;      &quot;GPM6A&quot;     &quot;DPYSL3&quot;    &quot;MLLT11&quot;   
-## [11] &quot;SOX4&quot;      &quot;MAP2&quot;      &quot;CRMP1&quot;     &quot;LOC150568&quot; &quot;NREP&quot;     
-## [16] &quot;CALM1&quot;     &quot;FAM110B&quot;   &quot;NFIB&quot;      &quot;MAPT&quot;      &quot;TUBB2B&quot;   
-## [21] &quot;RUFY3&quot;     &quot;NNAT&quot;      &quot;CXADR&quot;     &quot;FXYD6&quot;     &quot;MIR100HG&quot; 
-## [26] &quot;FOXG1&quot;     &quot;POU3F2&quot;    &quot;KIF5C&quot;     &quot;MN1&quot;       &quot;NCAM1&quot;    
-## [1] &quot;&quot;
-##  [1] &quot;MYL12A&quot;    &quot;ARHGDIB&quot;   &quot;S100A11&quot;   &quot;IFITM1&quot;    &quot;CKS2&quot;     
-##  [6] &quot;SRGN&quot;      &quot;IFITM3&quot;    &quot;ANXA1&quot;     &quot;IFI30&quot;     &quot;GTSF1&quot;    
-## [11] &quot;MT2A&quot;      &quot;ISG15&quot;     &quot;KRT8&quot;      &quot;CD53&quot;      &quot;ANXA2&quot;    
-## [16] &quot;HIST1H1C&quot;  &quot;HIST1H2BK&quot; &quot;LAPTM5&quot;    &quot;LGALS1&quot;    &quot;NOB1&quot;     
-## [21] &quot;MPO&quot;       &quot;PRG2&quot;      &quot;KRT18&quot;     &quot;AIF1&quot;      &quot;NUCB2&quot;    
-## [26] &quot;PRAME&quot;     &quot;PSMB9&quot;     &quot;SFXN4&quot;     &quot;TRAP1&quot;     &quot;RNF114&quot;   
-## [31] &quot;CD52&quot;     
-## [1] &quot;&quot;
-## [1] &quot;&quot;
-## [1] &quot;PC2&quot;
-##  [1] &quot;S100A6&quot;   &quot;CD44&quot;     &quot;TPM1&quot;     &quot;ANXA2&quot;    &quot;IFITM3&quot;   &quot;ANXA1&quot;   
-##  [7] &quot;S100A11&quot;  &quot;RND3&quot;     &quot;LGALS1&quot;   &quot;IGFBP3&quot;   &quot;DKK1&quot;     &quot;MT2A&quot;    
-## [13] &quot;THBS1&quot;    &quot;TGFBI&quot;    &quot;PLS3&quot;     &quot;TMSB10&quot;   &quot;SERPINE1&quot; &quot;KRT7&quot;    
-## [19] &quot;FN1&quot;      &quot;S100A10&quot;  &quot;TIMP1&quot;    &quot;CTGF&quot;     &quot;SAT1&quot;     &quot;PLAUR&quot;   
-## [25] &quot;CAV1&quot;     &quot;DDAH1&quot;    &quot;TPM2&quot;     &quot;MYL6&quot;     &quot;EMP1&quot;     &quot;CCND1&quot;   
-## [1] &quot;&quot;
-##  [1] &quot;MPO&quot;          &quot;SRGN&quot;         &quot;PRG2&quot;         &quot;AIF1&quot;        
-##  [5] &quot;MS4A3&quot;        &quot;GTSF1&quot;        &quot;CTSG&quot;         &quot;TESC&quot;        
-##  [9] &quot;MZB1&quot;         &quot;LOC100190986&quot; &quot;CD53&quot;         &quot;LAPTM5&quot;      
-## [13] &quot;ARHGDIB&quot;      &quot;TRAP1&quot;        &quot;SPNS3&quot;        &quot;RNASE2&quot;      
-## [17] &quot;PRTN3&quot;        &quot;BTK&quot;          &quot;APOC2&quot;        &quot;CD33&quot;        
-## [21] &quot;LOC100272216&quot; &quot;HSH2D&quot;        &quot;CLEC5A&quot;       &quot;SLC43A1&quot;     
-## [25] &quot;PRAME&quot;        &quot;DOK3&quot;         &quot;SERPINB10&quot;    &quot;PLEK&quot;        
-## [29] &quot;DOCK2&quot;        &quot;CD52&quot;         &quot;NDUFV1&quot;      
-## [1] &quot;&quot;
-## [1] &quot;&quot;
-## [1] &quot;PC3&quot;
-##  [1] &quot;COL1A2&quot;    &quot;LUM&quot;       &quot;DCN&quot;       &quot;GREM1&quot;     &quot;PSG5&quot;     
-##  [6] &quot;TNFRSF11B&quot; &quot;SERPINE1&quot;  &quot;TPM2&quot;      &quot;COL1A1&quot;    &quot;LOX&quot;      
-## [11] &quot;TIMP3&quot;     &quot;VIM&quot;       &quot;TAGLN&quot;     &quot;CRYAB&quot;     &quot;S100A4&quot;   
-## [16] &quot;SULF1&quot;     &quot;GLIPR1&quot;    &quot;DKK1&quot;      &quot;COX7A1&quot;    &quot;RGS4&quot;     
-## [21] &quot;CCDC80&quot;    &quot;SERPINE2&quot;  &quot;FN1&quot;       &quot;THBS1&quot;     &quot;KRT34&quot;    
-## [26] &quot;ALDH1A1&quot;   &quot;KIAA1199&quot;  &quot;FGF7&quot;      &quot;TIMP1&quot;     &quot;WBP5&quot;     
-## [1] &quot;&quot;
-##  [1] &quot;KRT81&quot;    &quot;STEAP4&quot;   &quot;LCN2&quot;     &quot;S100A9&quot;   &quot;KRT15&quot;    &quot;ELF3&quot;    
-##  [7] &quot;CEACAM6&quot;  &quot;CLDN4&quot;    &quot;RARRES1&quot;  &quot;SLPI&quot;     &quot;KLK5&quot;     &quot;GRB7&quot;    
-## [13] &quot;DHRS3&quot;    &quot;CXorf61&quot;  &quot;RARRES3&quot;  &quot;KLK6&quot;     &quot;IFI27&quot;    &quot;AZGP1&quot;   
-## [19] &quot;S100A8&quot;   &quot;MYEOV&quot;    &quot;CXCL17&quot;   &quot;KLK8&quot;     &quot;PDZK1IP1&quot; &quot;BMP3&quot;    
-## [25] &quot;MUC1&quot;     &quot;FOLR1&quot;    &quot;TNFSF10&quot;  &quot;MIEN1&quot;    &quot;KRT23&quot;    &quot;VGLL1&quot;   
-## [31] &quot;ALDH1A3&quot; 
-## [1] &quot;&quot;
-## [1] &quot;&quot;
-## [1] &quot;PC4&quot;
-##  [1] &quot;PPME1&quot;    &quot;S100A11&quot;  &quot;KIAA1598&quot; &quot;NUCB2&quot;    &quot;SEMA3C&quot;   &quot;MRPS10&quot;  
-##  [7] &quot;MAPT&quot;     &quot;STMN2&quot;    &quot;GTSF1&quot;    &quot;TRIM16&quot;   &quot;DLX6-AS1&quot; &quot;MYT1L&quot;   
-## [13] &quot;KRT18&quot;    &quot;PQBP1&quot;    &quot;MT2A&quot;     &quot;ANXA1&quot;    &quot;CXADR&quot;    &quot;POLR2C&quot;  
-## [19] &quot;CDK5R1&quot;   &quot;MPO&quot;      &quot;DLX5&quot;     &quot;INA&quot;      &quot;BCL11B&quot;   &quot;PRG2&quot;    
-## [25] &quot;KRT8&quot;     &quot;ATAT1&quot;    &quot;PRAME&quot;    &quot;CBWD3&quot;    &quot;S100A10&quot;  &quot;TAF11&quot;   
-## [1] &quot;&quot;
-##  [1] &quot;CD74&quot;     &quot;HLA-DPA1&quot; &quot;HLA-DRA&quot;  &quot;MS4A1&quot;    &quot;HLA-DQA1&quot; &quot;HLA-DRB5&quot;
-##  [7] &quot;HLA-DQB1&quot; &quot;HLA-DQA2&quot; &quot;BLNK&quot;     &quot;HLA-DMA&quot;  &quot;HLA-DRB1&quot; &quot;IRF4&quot;    
-## [13] &quot;HLA-DPB1&quot; &quot;HLA-DMB&quot;  &quot;ELK2AP&quot;   &quot;MIR155HG&quot; &quot;CHI3L2&quot;   &quot;TCL1A&quot;   
-## [19] &quot;CD48&quot;     &quot;LRMP&quot;     &quot;SLAMF1&quot;   &quot;BCL2A1&quot;   &quot;LY86&quot;     &quot;CLECL1&quot;  
-## [25] &quot;HLA-A&quot;    &quot;CRIP1&quot;    &quot;CD27&quot;     &quot;CCL3&quot;     &quot;CYTIP&quot;    &quot;JUN&quot;     
-## [31] &quot;PTN&quot;     
-## [1] &quot;&quot;
-## [1] &quot;&quot;
-## [1] &quot;PC5&quot;
-##  [1] &quot;GLI3&quot;    &quot;PTN&quot;     &quot;SLC1A3&quot;  &quot;PTPRZ1&quot;  &quot;MDK&quot;     &quot;GPX3&quot;    &quot;CDO1&quot;   
-##  [8] &quot;CLU&quot;     &quot;ITGB8&quot;   &quot;JUN&quot;     &quot;AIF1L&quot;   &quot;FAM107A&quot; &quot;ATP1B2&quot;  &quot;FOS&quot;    
-## [15] &quot;TSPAN6&quot;  &quot;HEPN1&quot;   &quot;PAX6&quot;    &quot;HOPX&quot;    &quot;FABP7&quot;   &quot;ID4&quot;     &quot;PON2&quot;   
-## [22] &quot;SHISA2&quot;  &quot;GPM6B&quot;   &quot;PELI2&quot;   &quot;PMP2&quot;    &quot;ABAT&quot;    &quot;FBXO32&quot;  &quot;NFIA&quot;   
-## [29] &quot;C1orf61&quot; &quot;CNN3&quot;   
-## [1] &quot;&quot;
-##  [1] &quot;HLA-DPA1&quot; &quot;CD74&quot;     &quot;HLA-DRA&quot;  &quot;HLA-DQA1&quot; &quot;MS4A1&quot;    &quot;HLA-DRB5&quot;
-##  [7] &quot;HLA-DQB1&quot; &quot;HLA-DQA2&quot; &quot;BLNK&quot;     &quot;HLA-DMA&quot;  &quot;HLA-DRB1&quot; &quot;IRF4&quot;    
-## [13] &quot;LPXN&quot;     &quot;MIR155HG&quot; &quot;ELK2AP&quot;   &quot;HLA-DPB1&quot; &quot;HLA-DMB&quot;  &quot;LRMP&quot;    
-## [19] &quot;CHI3L2&quot;   &quot;CD48&quot;     &quot;BCL2A1&quot;   &quot;TCL1A&quot;    &quot;CLECL1&quot;   &quot;SLAMF1&quot;  
-## [25] &quot;LY86&quot;     &quot;IFI30&quot;    &quot;CRIP1&quot;    &quot;CD27&quot;     &quot;CCL3&quot;     &quot;IGJ&quot;     
-## [31] &quot;LAPTM5&quot;  
-## [1] &quot;&quot;
-## [1] &quot;&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen_seurat &lt;-<span class="st"> </span><span class="kw">RunTSNE</span>(pollen_seurat)
+pollen_seurat &lt;-<span class="st"> </span><span class="kw">MeanVarPlot</span>(pollen_seurat)
+pollen_seurat &lt;-<span class="st"> </span><span class="kw">RegressOut</span>(pollen_seurat, <span class="dt">latent.vars =</span> <span class="kw">c</span>(<span class="st">&quot;nUMI&quot;</span>), 
+                            <span class="dt">genes.regress =</span> pollen_seurat<span class="op">@</span>var.genes)
+pollen_seurat &lt;-<span class="st"> </span><span class="kw">PCAFast</span>(pollen_seurat)
+pollen_seurat &lt;-<span class="st"> </span><span class="kw">RunTSNE</span>(pollen_seurat)
 pollen_seurat &lt;-<span class="st"> </span><span class="kw">FindClusters</span>(pollen_seurat)
 <span class="kw">TSNEPlot</span>(pollen_seurat, <span class="dt">do.label =</span> T)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-24-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p><strong>Exercise 12</strong>: Compare the results between <code>SC3</code> and <code>SEURAT</code>.</p>
-<p><strong>Our solution</strong>: <img src="18-clustering_files/figure-html/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><strong>Our solution</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pData</span>(pollen)<span class="op">$</span>SEURAT &lt;-<span class="st"> </span><span class="kw">as.character</span>(pollen_seurat<span class="op">@</span>ident)
+<span class="kw">sc3_plot_expression</span>(pollen, <span class="dt">k =</span> <span class="dv">11</span>, <span class="dt">show_pdata =</span> <span class="st">&quot;SEURAT&quot;</span>)</code></pre></div>
 <p>Seurat can also find marker genes, e.g. marker genes for cluster 2:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">markers &lt;-<span class="st"> </span><span class="kw">FindMarkers</span>(pollen_seurat, <span class="dv">2</span>)
 <span class="kw">FeaturePlot</span>(pollen_seurat, 
             <span class="kw">head</span>(<span class="kw">rownames</span>(markers)), 
             <span class="dt">cols.use =</span> <span class="kw">c</span>(<span class="st">&quot;lightgrey&quot;</span>, <span class="st">&quot;blue&quot;</span>), 
             <span class="dt">nCol =</span> <span class="dv">3</span>)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><strong>Exercise 13</strong>: Compare marker genes provided by <code>SEURAT</code> and <code>SC3</code>.</p>
 
 </div>
@@ -700,7 +617,7 @@ pollen_seurat &lt;-<span class="st"> </span><span class="kw">FindClusters</span>
 <p>Pollen, Alex A, Tomasz J Nowakowski, Joe Shuga, Xiaohui Wang, Anne A Leyrat, Jan H Lui, Nianzhen Li, et al. 2014. “Low-Coverage Single-Cell mRNA Sequencing Reveals Cellular Heterogeneity and Activated Signaling Pathways in Developing Cerebral Cortex.” <em>Nat. Biotechnol.</em> 32 (10): 1053–8.</p>
 </div>
 <div id="ref-Kiselev2016-bq">
-<p>Kiselev, Vladimir Yu, Kristina Kirschner, Michael T Schaub, Tallulah Andrews, Tamir Chandra, Kedar N Natarajan, Wolf Reik, Mauricio Barahona, Anthony R Green, and Martin Hemberg. 2016. “SC3 - Consensus Clustering of Single-Cell RNA-Seq Data.” <em>BioRxiv</em>.</p>
+<p>Kiselev, Vladimir Yu, Kristina Kirschner, Michael T Schaub, Tallulah Andrews, Tamir Chandra, Kedar N Natarajan, Wolf Reik, Mauricio Barahona, Anthony R Green, and Martin Hemberg. 2016. “SC3 - Consensus Clustering of Single-Cell RNA-Seq Data.” <em>bioRxiv</em>.</p>
 </div>
 </div>
             </section>
@@ -709,7 +626,7 @@ pollen_seurat &lt;-<span class="st"> </span><span class="kw">FindClusters</span>
         </div>
       </div>
 <a href="clustering-introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="identification-of-important-genes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="feature-selection.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -720,7 +637,7 @@ pollen_seurat &lt;-<span class="st"> </span><span class="kw">FindClusters</span>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,
