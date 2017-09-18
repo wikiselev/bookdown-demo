@@ -128,7 +128,7 @@ Unfortunately, Monocle does not work when all the genes are used, so
 we must carry out feature selection. First, we use M3Drop:
 ```{r m3d-select-genes}
 m3dGenes <- as.character(
-    M3Drop::M3DropDifferentialExpression(deng)$Gene
+    M3Drop::M3DropFeatureSelection(deng)$Gene
 )
 d <- deng[which(rownames(deng) %in% m3dGenes), ]
 d <- d[!duplicated(rownames(d)), ]
@@ -148,7 +148,7 @@ dCellData <- newCellDataSet(d, phenoData = pd, featureData = fd, expressionFamil
 dCellData <- setOrderingFilter(dCellData, which(geneNames %in% m3dGenes))
 dCellData <- estimateSizeFactors(dCellData)
 dCellDataSet <- reduceDimension(dCellData, pseudo_expr = 1)
-dCellDataSet <- orderCells(dCellDataSet, reverse = TRUE)
+dCellDataSet <- orderCells(dCellDataSet, reverse = FALSE)
 plot_cell_trajectory(dCellDataSet)
 # Store the ordering
 pseudotime_monocle <-
@@ -239,6 +239,7 @@ most resembles a trajectory. Then we estimate the [locally linear
 embedding](https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction) of the cells.
 
 ```{r slicer-analyis, message=FALSE, warning=FALSE}
+require("lle")
 slicer_genes <- select_genes(t(deng))
 k <- select_k(t(deng[slicer_genes,]), kmin = 30, kmax=60)
 slicer_traj_lle <- lle(t(deng[slicer_genes,]), m = 2, k)$Y
