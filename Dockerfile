@@ -35,7 +35,7 @@ RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('pcaMetho
 RUN Rscript -e "devtools::install_github('JustinaZ/pcaReduce')"
 RUN Rscript -e "install.packages('Seurat')"
   
-RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('M3Drop')"
+RUN Rscript -e "devtools::install_github('tallulandrews/M3Drop')"
 
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('TSCAN')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('monocle')"
