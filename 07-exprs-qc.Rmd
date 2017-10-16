@@ -78,7 +78,7 @@ isSpike(umi, "MT") <- rownames(umi) %in%
 
 Calculate the quality metrics:
 ```{r}
-umi <- scater::calculateQCMetrics(
+umi <- calculateQCMetrics(
     umi,
     feature_controls = list(ERCC = isSpike(umi, "ERCC"), MT = isSpike(umi, "MT"))
 )
@@ -307,7 +307,7 @@ In addition to removing cells with poor quality, it is usually a good idea to ex
 It is often instructive to consider the number of reads consumed by the top 50 expressed genes.
 
 ```{r top50-gene-expr, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
-scater::plotQC(umi, type = "highest-expression")
+plotQC(umi, type = "highest-expression")
 ```
 
 The distributions are relatively flat indicating (but not guaranteeing!) good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
@@ -344,7 +344,7 @@ dim(umi[rowData(umi)$use, colData(umi)$use])
 
 Let's create an additional slot with log-transformed counts (we will need it in the next chapters) and remove saved PCA results from the `reducedDim` slot:
 ```{r}
-logcounts(umi) <- log2(counts(umi) + 1)
+assay(umi, "log2_counts") <- log2(counts(umi) + 1)
 reducedDim(umi) <- NULL
 ```
 
