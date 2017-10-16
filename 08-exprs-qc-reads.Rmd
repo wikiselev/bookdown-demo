@@ -221,7 +221,8 @@ dim(reads[rowData(reads)$use, colData(reads)$use])
 ```
 
 ```{r}
-logcounts(reads) <- log2(counts(reads) + 1)
+assay(reads, "log2_counts") <- log2(counts(reads) + 1)
+reducedDim(reads) <- NULL
 ```
 
 ```{r}
@@ -229,3 +230,9 @@ saveRDS(reads, file = "tung/reads.rds")
 ```
 
 By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-comp-reads), it is clear that the reads based filtering removed 49 more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.
+
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```
