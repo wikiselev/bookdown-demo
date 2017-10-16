@@ -28,7 +28,8 @@ opts_chunk$set(out.width='90%', fig.align = 'center')
 ```
 
 ```{r, message=FALSE, warning=FALSE}
-library(scater, quietly = TRUE)
+library(SingleCellExperiment)
+library(scater)
 library(knitr)
 options(stringsAsFactors = FALSE)
 ```
@@ -55,12 +56,7 @@ The data consists of `r length(unique(anno$individual))` individuals and `r leng
 
 We standardize the analysis by using the scater package. First, create the scater SCESet classes:
 ```{r}
-pheno_data <- new("AnnotatedDataFrame", anno)
-rownames(pheno_data) <- pheno_data$sample_id
-umi <- scater::newSCESet(
-    countData = molecules,
-    phenoData = pheno_data
-)
+umi <- SingleCellExperiment(assays = list(counts = as.matrix(molecules)), colData = anno)
 ```
 
 Remove genes that are not expressed in any cell:
@@ -71,19 +67,20 @@ umi <- umi[keep_feature, ]
 
 Define control features (genes) - ERCC spike-ins and mitochondrial genes ([provided](http://jdblischak.github.io/singleCellSeq/analysis/qc-filter-ipsc.html) by the authors):
 ```{r}
-ercc <- featureNames(umi)[grepl("ERCC-", featureNames(umi))]
-mt <- c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
-        "ENSG00000198886", "ENSG00000212907", "ENSG00000198786",
-        "ENSG00000198695", "ENSG00000198712", "ENSG00000198804",
-        "ENSG00000198763", "ENSG00000228253", "ENSG00000198938",
-        "ENSG00000198840")
+isSpike(umi, "ERCC") <- grepl("^ERCC-", rownames(umi))
+isSpike(umi, "MT") <- rownames(umi) %in% 
+    c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
+    "ENSG00000198886", "ENSG00000212907", "ENSG00000198786",
+    "ENSG00000198695", "ENSG00000198712", "ENSG00000198804",
+    "ENSG00000198763", "ENSG00000228253", "ENSG00000198938",
+    "ENSG00000198840")
 ```
 
 Calculate the quality metrics:
 ```{r}
 umi <- scater::calculateQCMetrics(
     umi,
-    feature_controls = list(ERCC = ercc, MT = mt)
+    feature_controls = list(ERCC = isSpike(umi, "ERCC"), MT = isSpike(umi, "MT"))
 )
 ```
 
@@ -169,19 +166,19 @@ had low starting amounts of RNA, likely due to the cell being
 dead or stressed which may result in the RNA being degraded.
 
 ```{r mt-vs-counts, fig.cap = "Percentage of counts in MT genes"}
-scater::plotPhenoData(
+plotPhenoData(
     umi,
     aes_string(x = "total_features",
-               y = "pct_counts_feature_controls_MT",
+               y = "pct_counts_MT",
                colour = "batch")
 )
 ```
 
 ```{r ercc-vs-counts, fig.cap = "Percentage of counts in ERCCs"}
-scater::plotPhenoData(
+plotPhenoData(
     umi,
     aes_string(x = "total_features",
-               y = "pct_counts_feature_controls_ERCC",
+               y = "pct_counts_ERCC",
                colour = "batch")
 )
 ```
@@ -202,7 +199,7 @@ knitr::kable(
   row.names = FALSE,
   caption = 'The number of cells removed by ERCC filter (FALSE)'
 )
-filter_by_MT <- umi$pct_counts_feature_controls_MT < 10
+filter_by_MT <- umi$pct_counts_MT < 10
 knitr::kable(
   as.data.frame(table(filter_by_MT)),
   booktabs = TRUE,
@@ -247,34 +244,6 @@ knitr::kable(
 )
 ```
 
-### Default Thresholds
-
-Results from the biological analysis of single-cell RNA-seq data are often strongly influenced by outliers. Thus, it is important to include multiple filters. A robust way of detecting outliers is through the median absolute difference which is defined as $d_i = |r_i - m|$, where $r_i$ is the number of reads in cell $i$ and $m$ is the median number of reads across the all cells in the sample. By default, scater removes all cells where $d_i>5*$median($d_i$). A similar filter is used for the number of detected genes. Furthermore, scater removes all cells where >80% of counts were assigned to control genes and any cells that have been marked as controls.
-
-```{r}
-umi$use_default <- (
-    # remove cells with unusual numbers of genes
-    !umi$filter_on_total_features &
-    # remove cells with unusual numbers molecules counted
-    !umi$filter_on_total_counts &
-    # < 80% ERCC spike-in
-    !umi$filter_on_pct_counts_feature_controls_ERCC &
-    # < 80% mitochondrial
-    !umi$filter_on_pct_counts_feature_controls_MT &
-    # controls shouldn't be used in downstream analysis
-    !umi$is_cell_control
-)
-```
-
-```{r}
-knitr::kable(
-  as.data.frame(table(umi$use_default)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by default filter (FALSE)'
-)
-```
-
 ### Automatic
 
 Another option available in __scater__ is to conduct PCA on a set of QC metrics and then use automatic outlier detection to identify potentially problematic cells. 
@@ -292,12 +261,12 @@ scater first creates a matrix where the rows represent cells and the columns rep
 
 ```{r auto-cell-filt, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
 umi <-
-scater::plotPCA(umi,
-                size_by = "total_features", 
-                shape_by = "use",
-                pca_data_input = "pdata",
-                detect_outliers = TRUE,
-                return_SCESet = TRUE)
+plotPCA(umi,
+        size_by = "total_features", 
+        shape_by = "use",
+        pca_data_input = "pdata",
+        detect_outliers = TRUE,
+        return_SCE = TRUE)
 ```
 
 ```{r}
@@ -320,15 +289,13 @@ __Hint__: Use `limma::vennCounts` and `limma::vennDiagram` functions from the [l
 __Answer__
 
 ```{r cell-filt-comp, fig.cap = "Comparison of the default, automatic and manual cell filters", echo=FALSE}
-def <- colnames(umi)[!umi$use_default]
 auto <- colnames(umi)[umi$outlier]
 man <- colnames(umi)[!umi$use]
-venn.diag <- limma::vennCounts(cbind(colnames(umi) %in% def,
-                                     colnames(umi) %in% auto,
+venn.diag <- limma::vennCounts(cbind(colnames(umi) %in% auto,
                                      colnames(umi) %in% man))
 limma::vennDiagram(venn.diag,
-                   names = c("Default", "Automatic", "Manual"),
-                   circle.col = c("magenta", "blue", "green"))
+                   names = c("Automatic", "Manual"),
+                   circle.col = c("blue", "green"))
 ```
 
 ## Gene analysis
@@ -348,12 +315,12 @@ The distributions are relatively flat indicating (but not guaranteeing!) good co
 
 ### Gene filtering
 
-It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells (__note__ `pData(umi)$use` filter applied to the `umi` dataset).
+It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells (__note__ `colData(umi)$use` filter applied to the `umi` dataset).
 
 ```{r}
-filter_genes <- apply(counts(umi[ , pData(umi)$use]), 1, 
+filter_genes <- apply(counts(umi[ , colData(umi)$use]), 1, 
                       function(x) length(x[x > 1]) >= 2)
-fData(umi)$use <- filter_genes
+rowData(umi)$use <- filter_genes
 ```
 
 ```{r}
@@ -372,12 +339,12 @@ Depending on the cell-type, protocol and sequencing depth, other cut-offs may be
 
 Dimensions of the QCed dataset (do not forget about the gene filter we defined above):
 ```{r}
-dim(umi[fData(umi)$use, pData(umi)$use])
+dim(umi[rowData(umi)$use, colData(umi)$use])
 ```
 
 Let's create an additional slot with log-transformed counts (we will need it in the next chapters):
 ```{r}
-set_exprs(umi, "log2_counts") <- log2(counts(umi) + 1)
+logcounts(umi) <- log2(counts(umi) + 1)
 ```
 
 Save the data:

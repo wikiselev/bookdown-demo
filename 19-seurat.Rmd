@@ -1,0 +1,54 @@
+---
+output: html_document
+---
+
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(fig.align = "center")
+```
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(1234567)
+```
+
+## SEURAT
+
+Let's load the data and look at it:
+```{r}
+pollen <- readRDS("pollen/pollen.rds")
+```
+
+Here we follow an [example](http://satijalab.org/seurat/get_started.html) created by the authors of `SEURAT` (8,500 Pancreas cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors:
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+library(Seurat)
+pollen_seurat <- new("seurat", raw.data = get_exprs(pollen, exprs_values = "tpm"))
+pollen_seurat <- Setup(pollen_seurat, project = "Pollen")
+pollen_seurat <- MeanVarPlot(pollen_seurat)
+pollen_seurat <- RegressOut(pollen_seurat, latent.vars = c("nUMI"), 
+                            genes.regress = pollen_seurat@var.genes)
+pollen_seurat <- PCAFast(pollen_seurat)
+pollen_seurat <- RunTSNE(pollen_seurat)
+pollen_seurat <- FindClusters(pollen_seurat)
+TSNEPlot(pollen_seurat, do.label = T)
+```
+
+__Exercise 12__: Compare the results between `SC3` and `SEURAT`.
+
+__Our solution__:
+```{r, echo=TRUE, eval=FALSE}
+pData(pollen)$SEURAT <- as.character(pollen_seurat@ident)
+sc3_plot_expression(pollen, k = 11, show_pdata = "SEURAT")
+```
+
+
+Seurat can also find marker genes, e.g. marker genes for cluster 2:
+```{r, eval=FALSE}
+markers <- FindMarkers(pollen_seurat, 2)
+FeaturePlot(pollen_seurat, 
+            head(rownames(markers)), 
+            cols.use = c("lightgrey", "blue"), 
+            nCol = 3)
+```
+
+__Exercise 13__: Compare marker genes provided by `SEURAT` and `SC3`.

@@ -1,0 +1,60 @@
+---
+output: html_document
+---
+
+# Imputation
+
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(fig.align="center", echo=FALSE)
+```
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+library(scImpute)
+library(SC3)
+library(scater)
+library(SingleCellExperiment)
+set.seed(1234567)
+```
+
+
+As discussed previously, one of the main challenges when analyzing scRNA-seq data is the presence of zeros, or dropouts. The dropouts are assumed to have arisen for three possible reasons:
+
+*The gene was not expressed in the cell and hence there are no transcripts to sequence
+*The gene was expressed, but for some reason the transcripts were lost somewhere prior to sequencing
+*The gene was expressed and transcripts were captured and turned into cDNA, but the sequencing depth was not sufficient to produce any reads.
+
+Thus, dropouts could be result of experimental shortcomings, and if this is the case then we would like to provide computational corrections. One possible solution is to impute the dropouts in the expression matrix. To be able to impute gene expression values, one must have an underlying model. However, since we do not know which dropout events are technical artefacts and which correspond to the transcript being truly absent, imputation is a difficult challenges.
+
+To the best of our knowledge, there are currently two different imputation methods available: MAGIC [@vanDijk2017] and scImpute [@Li2017]. Since [MAGIC](https://github.com/pkathail/magic) is only available for Python or Matlab, we will only cover [scImpute](https://github.com/Vivianstats/scImpute) in this chapter.
+
+To test scImpute, we use the default parameters and we apply it to the Pollen dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:
+
+```{r}
+scimpute(count_path="pollen.csv", infile="csv", outfile="txt", out_dir="scImputeResults/", ncores=2)
+```
+
+Now we can compare the results with original data by considering a PCA plot
+
+```{r}
+pollen <- readRDS("pollen/pollen.rds")
+pollen.impute <- read.table("scImputeResults/scimpute.txt", header=F)
+colnames(pollen.impute) <- NULL
+pollen.impute.sce <- SingleCellExperiment(assays = list(normcounts=as.matrix(pollen.impute)), colData=colData(pollen))
+logcounts(pollen.impute.sce) <- log2(1+normcounts(pollen.impute.sce))
+plotPCA(pollen.impute.sce, colour_by="cell_type1")
+```
+
+Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
+
+To evaluate the impact of the imputation, we use SC3 to cluster the imputed matrix
+```{r}
+pollen.impute.sce <- newSC3(pollen.impute.sce, ks = 2:5)
+pollen.impute.sce <- sc3_estimate(pollen.impute.sce)
+pollen.impute.sce@sc3$k_estimation
+pollen.impute.sce <- sc3(pollen.impute.sce, ks=11, biology=FALSE)
+sc3_plot_consensus(pollen.impute.sce, k = 11, show_pdata = "cell_type1")
+plotPCA(pollen.impute.sce, colour_by = "sc3_11_clusters")
+```
+
+Based on the PCA and the clustering results, do you think that imputation is a good idea for the Pollen dataset?
+
