@@ -24,6 +24,7 @@ RUN Rscript -e "install.packages('pheatmap')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('limma')"
 
 RUN Rscript -e "devtools::install_github('drisso/SingleCellExperiment')"
+RUN Rscript -e "devtools::install_github('grimbough/Rhdf5lib')"
 # RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('scater')"
 RUN Rscript -e "devtools::install_github('davismcc/scater')"
 RUN Rscript -e "install.packages('statmod')"
