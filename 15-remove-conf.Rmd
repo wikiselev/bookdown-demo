@@ -89,7 +89,7 @@ ruvs <- RUVs(counts(umi.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
 set_exprs(umi.qc, "ruvs1") <- ruvs$normalizedCounts
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 2, scIdx = scIdx, isLog = FALSE)
 set_exprs(umi.qc, "ruvs2") <- ruvs$normalizedCounts
-set_exprs(umi.qc, "ruvs2_logcpm") <- log2(mt(t(ruvs$normalizedCounts) / 
+set_exprs(umi.qc, "ruvs2_logcpm") <- log2(t(t(ruvs$normalizedCounts) / 
                                            colSums(ruvs$normalizedCounts) * 1e6) + 1)
 ```
 ## Combat

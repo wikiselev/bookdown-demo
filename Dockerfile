@@ -23,11 +23,19 @@ RUN Rscript -e "devtools::install_github('hemberg-lab/scRNA.seq.funcs')"
 RUN Rscript -e "install.packages('pheatmap')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('limma')"
 
-RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('scater')"
+RUN Rscript -e "devtools::install_github('drisso/SingleCellExperiment')"
+# RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('scater')"
+RUN Rscript -e "devtools::install_github('davismcc/scater')"
 RUN Rscript -e "install.packages('statmod')"
 RUN Rscript -e "install.packages('mvoutlier')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('scran')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')"
+
+RUN Rscript -e "devtools::install_github('Vivianstats/scImpute')"
+
+RUN Rscript -e "devtools::install_github('theislab/kBET')"
+RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('sva')"
+
 
 # RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('SC3')"
 RUN Rscript -e "devtools::install_github('hemberg-lab/SC3')"

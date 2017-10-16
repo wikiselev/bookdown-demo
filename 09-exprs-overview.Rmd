@@ -16,11 +16,12 @@ opts_chunk$set(out.width='90%', fig.align = 'center')
 ```
 
 ```{r, message=FALSE, warning=FALSE}
-library(scater, quietly = TRUE)
+library(SingleCellExperiment)
+library(scater)
 options(stringsAsFactors = FALSE)
 umi <- readRDS("tung/umi.rds")
-umi.qc <- umi[fData(umi)$use, pData(umi)$use]
-endog_genes <- !fData(umi.qc)$is_feature_control
+umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
+endog_genes <- !rowData(umi.qc)$is_feature_control
 ```
 
 ## PCA plot {#visual-pca}
@@ -39,12 +40,12 @@ knitr::include_graphics("figures/pca.png")
 
 Without log-transformation:
 ```{r expr-overview-pca-before-qc1, fig.cap = "PCA plot of the tung data"}
-scater::plotPCA(umi[endog_genes, ],
-                ntop = 500,
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "counts")
+plotPCA(umi[endog_genes, ],
+    ntop = 500,
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "counts")
 ```
 
 With log-transformation:
