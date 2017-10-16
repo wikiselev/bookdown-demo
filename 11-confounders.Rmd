@@ -17,8 +17,8 @@ opts_chunk$set(out.width='90%', fig.align = 'center')
 library(scater, quietly = TRUE)
 options(stringsAsFactors = FALSE)
 umi <- readRDS("tung/umi.rds")
-umi.qc <- umi[fData(umi)$use, pData(umi)$use]
-endog_genes <- !fData(umi.qc)$is_feature_control
+umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
+endog_genes <- !rowData(umi.qc)$is_feature_control
 ```
 
 The `umi.qc` dataset contains filtered cells and genes. Our next step is to explore technical drivers of variability in the data to inform data normalisation before downstream analysis.
@@ -27,41 +27,49 @@ The `umi.qc` dataset contains filtered cells and genes. Our next step is to expl
 
 Let's first look again at the PCA plot of the QCed dataset:
 ```{r confound-pca, fig.cap = "PCA plot of the tung data"}
-scater::plotPCA(umi.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                exprs_values = "log2_counts")
+plotPCA(
+    umi.qc[endog_genes, ],
+    exprs_values = "log2_counts",
+    colour_by = "batch",
+    size_by = "total_features"
+)
 ```
 
-scater allows one to identify principal components that correlate with experimental and QC variables of interest (it ranks principle components by $R^2$ from a linear model regressing PC value against the variable of interest).
+`scater` allows one to identify principal components that correlate with experimental and QC variables of interest (it ranks principle components by $R^2$ from a linear model regressing PC value against the variable of interest).
 
 Let's test whether some of the variables correlate with any of the PCs.
 
 ### Detected genes
 
 ```{r confound-find-pcs-total-features, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
-scater::plotQC(umi.qc[endog_genes, ],
-               type = "find-pcs",
-               variable = "total_features",
-               exprs_values = "log2_counts")
+plotQC(
+    umi.qc[endog_genes, ],
+    type = "find-pcs",
+    exprs_values = "log2_counts",
+    variable = "total_features"
+)
 ```
 
-Indeed, we can see that PC1 can be almost completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
+Indeed, we can see that `PC1` can be almost completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
 
 ## Explanatory variables
 
 scater can also compute the marginal $R^2$ for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal $R^2$ values for the variables.
 
 ```{r confound-find-expl-vars, fig.cap = "Explanatory variables"}
-scater::plotQC(umi.qc[endog_genes, ],
-               type = "expl",
-               exprs_values = "log2_counts",
-               variables = c("total_features",
-                             "total_counts",
-                             "batch",
-                             "individual",
-                             "pct_counts_feature_controls_ERCC",
-                             "pct_counts_feature_controls_MT"))
+plotQC(
+    umi.qc[endog_genes, ],
+    type = "expl",
+    exprs_values = "log2_counts",
+    variables = c(
+        "total_features",
+        "total_counts",
+        "batch",
+        "individual",
+        "pct_counts_ERCC",
+        "pct_counts_MT"
+    )
+)
 ```
 
 This analysis indicates that the number of detected genes (again) and also the sequencing depth (number of counts) have substantial explanatory power for many genes, so these variables are good candidates for conditioning out in a normalisation step, or including in downstream statistical models. Expression of ERCCs also appears to be an important explanatory variable. One notable feature of the above plot is that batch explains more than individual, what does that tell us about the technical and biological variability of the data?
@@ -82,3 +90,9 @@ Ideally, we would like to compensate for all of these differences and biases.
 ## Exercise
 
 Perform the same analysis with read counts of the Blischak data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
+
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```

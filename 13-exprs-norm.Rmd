@@ -88,36 +88,37 @@ library(scran)
 options(stringsAsFactors = FALSE)
 set.seed(1234567)
 umi <- readRDS("tung/umi.rds")
-umi.qc <- umi[fData(umi)$use, pData(umi)$use]
-endog_genes <- !fData(umi.qc)$is_feature_control
+umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
+endog_genes <- !rowData(umi.qc)$is_feature_control
 ```
 
 ### Raw
 ```{r norm-pca-raw, fig.cap = "PCA plot of the tung data"}
 plotPCA(
     umi.qc[endog_genes, ],
+    exprs_values = "log2_counts",
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "log2_counts"
+    shape_by = "individual"
 )
 ```
 
 ### CPM
-scater performs this normalisation by default, you can control it by changing `exprs_values` parameter to `"exprs"`.
+`calculateCPM` from `scater` package can be used to perform this normalisation. We will save the results to the `norm_counts` assay:
 ```{r norm-pca-cpm, fig.cap = "PCA plot of the tung data after CPM normalisation"}
+assay(umi.qc, "norm_counts") <- log2(calculateCPM(umi.qc, use.size.factors = FALSE) + 1)
 plotPCA(
     umi.qc[endog_genes, ],
+    exprs_values = "norm_counts",
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "exprs"
+    shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-cpm, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", CPM = "exprs"),
+    exprs_mats = list(Raw = "log2_counts", CPM = "norm_counts"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -133,16 +134,16 @@ umi.qc <- normaliseExprs(
 )
 plotPCA(
     umi.qc[endog_genes, ],
+    exprs_values = "norm_cpm",
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "norm_exprs"
+    shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-tmm, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", TMM = "norm_exprs"),
+    exprs_mats = list(Raw = "log2_counts", TMM = "norm_cpm"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -157,14 +158,13 @@ plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "exprs"
+    shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-scran, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", scran = "exprs"),
+    exprs_mats = list(Raw = "log2_counts", scran = "logcounts"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -179,16 +179,16 @@ umi.qc <- normaliseExprs(
 )
 plotPCA(
     umi.qc[endog_genes, ],
+    exprs_values = "norm_cpm",
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "norm_exprs"
+    shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-rle, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", RLE = "norm_exprs"),
+    exprs_mats = list(Raw = "log2_counts", RLE = "norm_cpm"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -205,16 +205,16 @@ umi.qc <- normaliseExprs(
 )
 plotPCA(
     umi.qc[endog_genes, ],
+    exprs_values = "norm_cpm",
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "norm_exprs"
+    shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-uq, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", UQ = "norm_exprs"),
+    exprs_mats = list(Raw = "log2_counts", UQ = "norm_cpm"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -228,13 +228,13 @@ A final way to correct for library size is to downsample the expression matrix s
 ```
 
 ```{r norm-pca-downsample, fig.cap = "PCA plot of the tung data after downsampling"}
-norm_counts(umi.qc) <- log2(Down_Sample_Matrix(counts(umi.qc)) + 1)
+assay(umi.qc, "norm_counts") <- log2(Down_Sample_Matrix(counts(umi.qc)) + 1)
 plotPCA(
     umi.qc[endog_genes, ],
+    exprs_values = "norm_counts",
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "norm_counts"
+    shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-downsample, fig.cap = "Cell-wise RLE of the tung data"}
@@ -305,13 +305,13 @@ umi.qc <- getBMFeatureAnnos(
 
 Some of the genes were not annotated, therefore we filter them out:
 ```{r}
-umi.qc.ann <- umi.qc[!is.na(fData(umi.qc)$ensembl_gene_id), ]
+umi.qc.ann <- umi.qc[!is.na(rowData(umi.qc)$ensembl_gene_id), ]
 ```
 
 Now we compute the total gene length in Kilobases by using the `end_position` and `start_position` fields:
 ```{r}
 eff_length <- 
-    abs(fData(umi.qc.ann)$end_position - fData(umi.qc.ann)$start_position) / 1000
+    abs(rowData(umi.qc.ann)$end_position - rowData(umi.qc.ann)$start_position) / 1000
 ```
 
 ```{r length-vs-mean, fig.cap = "Gene length vs Mean Expression for the raw data"}
@@ -330,20 +330,24 @@ Plot the results as a PCA plot:
 ```{r norm-pca-fpkm, fig.cap = "PCA plot of the tung data after FPKM normalisation"}
 plotPCA(
     umi.qc.ann,
+    exprs_values = "tpm",
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "fpkm"
+    shape_by = "individual"
 )
+```
+
+```{r}
+tpm(umi.qc.ann) <- log2(calculateFPKM(umi.qc.ann, eff_length) + 1)
 ```
 
 ```{r norm-pca-tpm, fig.cap = "PCA plot of the tung data after TPM normalisation"}
 plotPCA(
     umi.qc.ann,
+    exprs_values = "tpm",
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "tpm"
+    shape_by = "individual"
 )
 ```
 
@@ -352,3 +356,9 @@ __Note:__ The PCA looks for differences between cells. Gene length is the same a
 ## Exercise
 
 Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
+
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```
