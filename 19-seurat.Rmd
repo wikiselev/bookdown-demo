@@ -20,17 +20,89 @@ pollen <- readRDS("pollen/pollen.rds")
 
 Here we follow an [example](http://satijalab.org/seurat/get_started.html) created by the authors of `SEURAT` (8,500 Pancreas cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors:
 
+
+
+
+
+Initialize the Seurat object with the raw (non-normalized data).  Keep all genes expressed in >= 3 cells. Keep all cells with at least 200 detected genes:
 ```{r, message=FALSE, warning=FALSE, eval=FALSE}
 library(Seurat)
-pollen_seurat <- new("seurat", raw.data = get_exprs(pollen, exprs_values = "tpm"))
-pollen_seurat <- Setup(pollen_seurat, project = "Pollen")
-pollen_seurat <- MeanVarPlot(pollen_seurat)
-pollen_seurat <- RegressOut(pollen_seurat, latent.vars = c("nUMI"), 
-                            genes.regress = pollen_seurat@var.genes)
-pollen_seurat <- PCAFast(pollen_seurat)
-pollen_seurat <- RunTSNE(pollen_seurat)
-pollen_seurat <- FindClusters(pollen_seurat)
-TSNEPlot(pollen_seurat, do.label = T)
+seuset <- CreateSeuratObject(
+    raw.data = logcounts(pollen), 
+    min.cells = 3, 
+    min.genes = 200
+)
+
+VlnPlot(object = seuset, features.plot = c("nGene", "nUMI"), nCol = 3)
+
+GenePlot(object = seuset, gene1 = "nUMI", gene2 = "nGene")
+
+seuset <- FindVariableGenes(
+    object = seuset, 
+    mean.function = ExpMean, 
+    dispersion.function = LogVMR, 
+    x.low.cutoff = 0.0125, 
+    x.high.cutoff = 3, 
+    y.cutoff = 0.5
+)
+
+length(x = seuset@var.genes)
+
+seuset <- ScaleData(object = seuset, vars.to.regress = c("nUMI"))
+
+seuset <- RunPCA(
+    object = seuset, 
+    pc.genes = seuset@var.genes, 
+    do.print = TRUE, 
+    pcs.print = 1:5, 
+    genes.print = 5
+)
+
+VizPCA(object = seuset, pcs.use = 1:2)
+
+PCAPlot(object = seuset, dim.1 = 1, dim.2 = 2)
+
+seuset <- ProjectPCA(object = seuset, do.print = FALSE)
+
+PCHeatmap(
+    object = seuset, 
+    pc.use = 1:6, 
+    cells.use = 500, 
+    do.balanced = TRUE, 
+    label.columns = FALSE,
+    use.full = FALSE
+)
+
+seuset <- JackStraw(
+    object = seuset, 
+    num.replicate = 100, 
+    do.print = FALSE
+)
+
+JackStrawPlot(object = seuset, PCs = 1:6)
+
+PCElbowPlot(object = seuset)
+
+seuset <- FindClusters(
+    object = seuset, 
+    reduction.type = "pca", 
+    dims.use = 1:5, 
+    resolution = 0.6, 
+    print.output = 0, 
+    save.SNN = TRUE
+)
+
+table(seuset@ident)
+
+mclust::adjustedRandIndex(colData(pollen)$cell_type1, seuset@ident)
+
+# this did not work!
+# Error in La.svd(x, nu, nv) : LAPACK routines cannot be loaded
+# seuset <- RunTSNE(
+#     object = seuset, 
+#     dims.use = 1:5, 
+#     do.fast = TRUE
+# )
 ```
 
 __Exercise 12__: Compare the results between `SC3` and `SEURAT`.
