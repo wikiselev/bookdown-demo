@@ -18,11 +18,6 @@ Given the issues with using spike-ins, better results can often be obtained by u
 
 We explore both general approaches below.
 
-### How to evaluate and compare confounder removal strategies
-
-A key question when considering the different methods for removing confounders is how to quantitatively determine which one is the most effective. The main reason why comparisons are challenging is because it is often difficult to know what corresponds to technical counfounders and what is interesting biological variability. Here, we consider three different metrics which are all reasonable based on our knowledge of the experimental design. Depending on the biological question that you wish to address, it is important to choose a metric that allows you to remove the confounders that are likely to be the biggest concern for the given situation.
-
-
 ```{r, echo=FALSE}
 library(knitr)
 opts_chunk$set(fig.align = 'center')
@@ -69,9 +64,12 @@ We will concentrate on the first two approaches.
 ```{r, message=FALSE, warning=FALSE}
 ruvg <- RUVg(counts(umi.qc), erccs, k = 1)
 assay(umi.qc, "ruvg1") <- ruvg$normalizedCounts
-ruvg <- RUVg(counts(umi.qc), erccs, k = 2)
-assay(umi.qc, "ruvg2") <- ruvg$normalizedCounts
-assay(umi.qc, "ruvg2_logcpm") <- log2(
+assay(umi.qc, "ruvg1_logcpm") <- log2(
+    t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
+)
+ruvg <- RUVg(counts(umi.qc), erccs, k = 10)
+assay(umi.qc, "ruvg10") <- ruvg$normalizedCounts
+assay(umi.qc, "ruvg10_logcpm") <- log2(
     t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
 )
 ```
@@ -89,52 +87,116 @@ scIdx[3, 1:length(tmp)] <- tmp
 cIdx <- rownames(umi.qc)
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
 assay(umi.qc, "ruvs1") <- ruvs$normalizedCounts
-ruvs <- RUVs(counts(umi.qc), cIdx, k = 2, scIdx = scIdx, isLog = FALSE)
-assay(umi.qc, "ruvs2") <- ruvs$normalizedCounts
-assay(umi.qc, "ruvs2_logcpm") <- log2(
+assay(umi.qc, "ruvs1_logcpm") <- log2(
+    t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
+)
+ruvs <- RUVs(counts(umi.qc), cIdx, k = 10, scIdx = scIdx, isLog = FALSE)
+assay(umi.qc, "ruvs10") <- ruvs$normalizedCounts
+assay(umi.qc, "ruvs10_logcpm") <- log2(
     t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
 )
 ```
 
 ## Combat
+If you have an experiment with a balanced design you Combat can be used to eliminate batch effects while preserving biological effects by specifying the biological effects using the "mod" parameter. However the Tung data contains multiple experimental replicates rather than a balanced design so using "mod1" to preserve biological variability will result in an error. 
 ```{r}
-mod0 = model.matrix(~ 1, data = logcounts(umi.qc))
-mod1 = model.matrix(~ umi.qc$individual, data = logcounts(umi.qc))
+# Basic batch removal
+mod0 = model.matrix(~ 1, data = as.data.frame(t(counts(umi.qc)))) 
+# Preserve biological variability
+mod1 = model.matrix(~ umi.qc$individual, data = as.data.frame(t(counts(umi.qc)))) 
+# adjust for total genes detected
+mod2 = model.matrix(~ umi.qc$total_features, data = as.data.fram(t(counts(umi.qc))) 
 assay(umi.qc, "combat") <- ComBat(
-    dat = logcounts(umi.qc), 
+    dat = exprs(umi.qc), 
     batch = factor(umi.qc$batch), 
     mod = mod0,
-    par.prior = TRUE,
-    prior.plots = TRUE
+    par.prior = FALSE,
+    prior.plots = FALSE
 )
 ```
+__Exercise 1__
+Perform ComBat correction accounting for total features as a co-variate. Store the corrected matrix in the "combat_tf" slot.
 
 ## mnnCorrect 
-`mnnCorrect` assumes that each batch shares at least one biological condition with each other batch. Thus we merge a replicate from each individual to form three batches. 
+`mnnCorrect` assumes that each batch shares at least one biological condition with each other batch. Thus it works well for a variety of balanced experimental designs. However, the Tung data contains multiple replicates for each invidividual rather than balanced batches, thus we will normalized each individual separately. Note that this will remove batch effects between batches within the same individual but not the batch effects between batches in different individuals, due to the confounded experimental design. 
+
+Thus we will merge a replicate from each individual to form three batches. 
 ```{r}
-batch1 <- umi.qc[, umi.qc$replicate == "r1"]
-batch2 <- umi.qc[, umi.qc$replicate == "r2"]
-batch3 <- umi.qc[, umi.qc$replicate == "r3"]
-assay(umi.qc, "mnn") <- mnnCorrect(
-    list(B1 = exprs(batch1), B2 = exprs(batch2), B3 = exprs(batch3)),  
-    k = 20,
-    sigma = 0.1,
-    cos.norm = TRUE,
-    svd.dim = 2
-)
+
+do_mnn <- function(data.qc) {
+    batch1 <- data.qc[, data.qc$replicate == "r1"]
+    batch2 <- data.qc[, data.qc$replicate == "r2"]
+    batch3 <- data.qc[, data.qc$replicate == "r3"]
+    
+    if (dim(batch2)[2] > 0) {
+    x = mnnCorrect(
+      exprs(batch1), exprs(batch2), exprs(batch3),  
+      k = 20,
+      sigma = 0.1,
+      cos.norm = TRUE,
+      svd.dim = 2
+    )
+    return(cbind(x$corrected[[1]], x$corrected[[2]], x$corrected[[3]]))
+    } else {
+    x = mnnCorrect(
+      exprs(batch1), exprs(batch3),  
+      k = 20,
+      sigma = 0.1,
+      cos.norm = TRUE,
+      svd.dim = 2
+    )
+    return(cbind(x$corrected[[1]], x$corrected[[2]]))
+    }
+}
+
+indi1 <- do_mnn(umi.qc[, umi.qc$individual == "NA19098"])
+indi2 <- do_mnn(umi.qc[, umi.qc$individual == "NA19101"])
+indi3 <- do_mnn(umi.qc[, umi.qc$individual == "NA19239"])
+
+assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3);
+
+# For a balanced design: 
+#assay(umi.qc, "mnn") <- mnnCorrect(
+#    list(B1 = exprs(batch1), B2 = exprs(batch2), B3 = exprs(batch3)),  
+#    k = 20,
+#    sigma = 0.1,
+#    cos.norm = TRUE,
+#    svd.dim = 2
+#)
 ```
 
 ## GLM
+A general linear model is a simpler version of Combat. It can correct for batches while preserving biological effects if you have a balanced design. In a confounded/replicate design biological effects will not be fit/preserved. Similar to mnnCorrect we could remove batch effects from each individual separately in order to preserve biological (and technical) variance between individuals. For demonstation purposes we will naively correct all cofounded batch effects: 
 ```{r}
 glm_fun <- function(g, batch, indi) {
   model <- glm(g ~ batch + indi)
-  model$coef[1] <- 0
+  model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
   return(model$coef)
 }
-effects <- apply(exprs(umi.qc), 1, glm_fun, batch = umi.qc$batch, indi = ui.qc$individual)
+effects <- apply(exprs(umi.qc), 1, glm_fun, batch = umi.qc$batch, indi = umi.qc$individual)
 corrected <- exprs(umi.qc) - t(effects[as.numeric(factor(umi.qc$batch)), ])
 assay(umi.qc, "glm") <- corrected
 ```
+
+__Exercise 2__
+Perform GLM correction for each individual separately. Store the final corrected matrix in the "glm_indi" slot.
+
+```{r, echo=FALSE}
+do_glm <- function(data.qc) {
+   effects <- apply(exprs(data.qc), 1, glm_fun, batch = data.qc$batch)
+   corrected <- exprs(umi.qc) - t(effects[as.numeric(factor(umi.qc$batch)), ])
+   return(corrected);
+}
+indi1 <- do_glm(umi.qc[, umi.qc$individual == "NA19098"])
+indi2 <- do_glm(umi.qc[, umi.qc$individual == "NA19101"])
+indi3 <- do_glm(umi.qc[, umi.qc$individual == "NA19239"])
+
+assay(umi.qc, "glm_indi") <- cbind(indi1, indi2, indi3);
+```
+
+### How to evaluate and compare confounder removal strategies
+
+A key question when considering the different methods for removing confounders is how to quantitatively determine which one is the most effective. The main reason why comparisons are challenging is because it is often difficult to know what corresponds to technical counfounders and what is interesting biological variability. Here, we consider three different metrics which are all reasonable based on our knowledge of the experimental design. Depending on the biological question that you wish to address, it is important to choose a metric that allows you to evaluate the confounders that are likely to be the biggest concern for the given situation.
 
 ## Effectiveness 1
 
@@ -142,7 +204,7 @@ We evaluate the effectiveness of the normalization by inspecting the
 PCA plot where colour corresponds the technical replicates and shape
 corresponds to different biological samples (individuals). Separation of biological samples and
 interspersed batches indicates that technical variation has been
-removed. 
+removed. We always use log2-cpm normalized data to match the assumptions of PCA.
 
 ```{r}
 plotPCA(
@@ -150,64 +212,105 @@ plotPCA(
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual",
-    exprs_values = "ruvg1") +
+    exprs_values = "ruvg1_logcpm") +
     ggtitle("PCA - RUVg normalisation: k = 1")
 plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual",
-    exprs_values = "ruvg2") +
-    ggtitle("PCA - RUVg normalisation: k = 2")
+    exprs_values = "ruvg10_logcpm") +
+    ggtitle("PCA - RUVg normalisation: k = 10")
 plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual",
-    exprs_values = "ruvs1") +
+    exprs_values = "ruvs1_logcpm") +
     ggtitle("PCA - RUVs normalisation: k = 1")
 plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual",
-    exprs_values = "ruvs2") +
-    ggtitle("PCA - RUVs normalisation: k = 2")
+    exprs_values = "ruvs10_logcpm") +
+    ggtitle("PCA - RUVs normalisation: k = 10")
 plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual",
-    exprs_values = "ruvs2_logcpm") +
-    ggtitle("PCA - RUVs normalisation log2-cpm: k = 2")
+    exprs_values = "combat") +
+    ggtitle("PCA - ComBat batch correction")
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "mnn") +
+    ggtitle("PCA - mnnCorrect batch correction")
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "glm") +
+    ggtitle("PCA - glm batch correction")
 ```
-
-Plotting log2-normalized CPM from RUVs with k = 2 looks to give the best separation of cells by individual.
+__Exercise 3__
+Consider different ks for RUV normalizations. Which gives the best results?
 
 ## Effectiveness 2
 
-We can also examine the effectiveness of correction using the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset.
+We can also examine the effectiveness of correction using the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset. Note RLE only evaluates whether the number of genes higher and lower than average are equal for each cell - i.e. systemic technical effects. Random technical noise between batches may not be detected by RLE.
 
 ```{r}
 boxplot(
     list(
         "Raw counts" = calc_cell_RLE(counts(umi.qc), erccs),
-        "RUVg (k = 1)" = calc_cell_RLE(assayData(umi.qc)$ruvg1, erccs),
-        "RUVg (k = 2)" = calc_cell_RLE(assayData(umi.qc)$ruvg2, erccs),
-        "RUVs (k = 1)" = calc_cell_RLE(assayData(umi.qc)$ruvs1, erccs),
-        "RUVs (k = 2)" = calc_cell_RLE(assayData(umi.qc)$ruvs2, erccs)
+        "Log2CPM" = calc_cell_RLE(exprs(umi.qc), erccs)
+        "RUVg (k = 1)" = calc_cell_RLE(assayData(umi.qc)$ruvg1_logcpm, erccs),
+        "RUVg (k = 2)" = calc_cell_RLE(assayData(umi.qc)$ruvg10_logcpm, erccs),
+        "RUVs (k = 1)" = calc_cell_RLE(assayData(umi.qc)$ruvs1_logcpm, erccs),
+        "RUVs (k = 2)" = calc_cell_RLE(assayData(umi.qc)$ruvs10_logcpm, erccs),
+        "ComBat" = calc_cell_RLE(assayData(umi.qc)$combat, erccs),
+        "mnnCorrect" = calc_cell_RLE(assayData(umi.qc)$mnn, erccs),
+        "glm" = calc_cell_RLE(assayData(umi.qc)$glm, erccs),
     )
 )
 ```
 
 ## Effectiveness 3
+We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.
+```{r confound-cpm, fig.cap = "Explanatory variables (log2CPM)"}
+scater::plotQC(
+    umi.qc[endog_genes, ],
+    type = "expl",
+    exprs_values = "exprs",
+    variables = c(
+        "total_features",
+        "total_counts",
+        "batch",
+        "individual",
+        "pct_counts_ERCC",
+        "pct_counts_MT"
+    )
+)
+```
+__Exercise 4__
+Perform the above analysis for each normalization/batch correction method. Which method(s) are most/least effective? Why is the variance accounted for by batch never lower than the variance accounted for by individual?
+
+## Effectiveness 4
+Another method to check the efficacy of batch-effect correction is to consider the intermingling of points from different batches in local subsamples of the data. If there are no batch-effects then proportion of cells from each batch in any local region should be equal to the global proportion of cells in each batch. 
+
+kBET takes kNN networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). kBET assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, kBET can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply kBET to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, kBET does not determine if biological signal has been preserved. 
 
 ```{r}
 compare_kBET_results <- function(sce){
     indiv <- unique(sce$individual)
-    norms <- names(assayData(sce))
+    norms <- names(assayData(sce)) # Get all normalizations
     results <- list()
-    for (i in indiv){
+    for (i in indiv){ 
         for (j in norms){
             tmp <- kBET(
                 df = t(get_exprs(sce[,sce$individual== i], exprs_values = j)), 
@@ -226,6 +329,8 @@ eff_debatching <- compare_kBET_results(umi.qc)
 ```
 
 ```{r}
+require("reshape2")
+require("RColorBrewer")
 # Plot results
 dod <- melt(as.matrix(eff_debatching),  value.name = "kBET")
 colnames(dod)[1:2] <- c("Normalisation", "Individual")
@@ -252,8 +357,10 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
     ) + 
     ggtitle("Effect of batch regression methods per individual")
 ```
+__Exercise 5__
+Why do the raw counts appear to have the least batch effects?
 
-## Effectiveness 4
+## Effectiveness 5
 
 Another way of evaluating the effectiveness of correction is to look at the differentially expressed (DE) genes among the batches of the same individual Theoretically, these batches should not differ from each other. Let's take the most promising individual (__NA19101__, whose batches are the closest to each other) and check whether it is true.
 
