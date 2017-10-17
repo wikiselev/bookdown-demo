@@ -31,7 +31,8 @@ opts_chunk$set(fig.align = 'center')
 ```{r, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
 library(RUVSeq)
-library(scater, quietly = TRUE)
+library(scater)
+library(SingleCellExperiment)
 library(scran)
 library(kBET)
 library(sva) # Combat
@@ -39,9 +40,9 @@ library(edgeR)
 set.seed(1234567)
 options(stringsAsFactors = FALSE)
 umi <- readRDS("tung/umi.rds")
-umi.qc <- umi[fData(umi)$use, pData(umi)$use]
-endog_genes <- !fData(umi.qc)$is_feature_control
-erccs <- fData(umi.qc)$is_feature_control
+umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
+endog_genes <- !rowData(umi.qc)$is_feature_control
+erccs <- rowData(umi.qc)$is_feature_control
 ```
 
 ## Remove Unwanted Variation
@@ -67,11 +68,12 @@ We will concentrate on the first two approaches.
 
 ```{r, message=FALSE, warning=FALSE}
 ruvg <- RUVg(counts(umi.qc), erccs, k = 1)
-set_exprs(umi.qc, "ruvg1") <- ruvg$normalizedCounts
+assay(umi.qc, "ruvg1") <- ruvg$normalizedCounts
 ruvg <- RUVg(counts(umi.qc), erccs, k = 2)
-set_exprs(umi.qc, "ruvg2") <- ruvg$normalizedCounts
-set_exprs(umi.qc, "ruvg2_logcpm") <- log2(t(t(ruvg$normalizedCounts) / 
-                                           colSums(ruvg$normalizedCounts) * 1e6) + 1)
+assay(umi.qc, "ruvg2") <- ruvg$normalizedCounts
+assay(umi.qc, "ruvg2_logcpm") <- log2(
+    t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
+)
 ```
 
 ### RUVs
@@ -86,29 +88,42 @@ tmp <- which(umi.qc$individual == "NA19239")
 scIdx[3, 1:length(tmp)] <- tmp
 cIdx <- rownames(umi.qc)
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
-set_exprs(umi.qc, "ruvs1") <- ruvs$normalizedCounts
+assay(umi.qc, "ruvs1") <- ruvs$normalizedCounts
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 2, scIdx = scIdx, isLog = FALSE)
-set_exprs(umi.qc, "ruvs2") <- ruvs$normalizedCounts
-set_exprs(umi.qc, "ruvs2_logcpm") <- log2(t(t(ruvs$normalizedCounts) / 
-                                           colSums(ruvs$normalizedCounts) * 1e6) + 1)
+assay(umi.qc, "ruvs2") <- ruvs$normalizedCounts
+assay(umi.qc, "ruvs2_logcpm") <- log2(
+    t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
+)
 ```
+
 ## Combat
 ```{r}
-mod0 = model.matrix(~1, data=exprs(umi.qc))
-mod1 = model.matrix(~umi.qc$individual, data=exprs(umi.qc))
-set_exprs(umi.qc, "combat") <- ComBat(dat=exprs(umi.qc), batch=factor(umi.qc$batch), 
-                               mod=mod0, par.prior=TRUE, prior.plots=TRUE)
+mod0 = model.matrix(~ 1, data = logcounts(umi.qc))
+mod1 = model.matrix(~ umi.qc$individual, data = logcounts(umi.qc))
+assay(umi.qc, "combat") <- ComBat(
+    dat = logcounts(umi.qc), 
+    batch = factor(umi.qc$batch), 
+    mod = mod0,
+    par.prior = TRUE,
+    prior.plots = TRUE
+)
 ```
+
 ## mnnCorrect 
-mnnCorrect assumes that each batch shares at least one biological condition with each other batch.
-Thus we merge a replicate from each individual to form three batches. 
+`mnnCorrect` assumes that each batch shares at least one biological condition with each other batch. Thus we merge a replicate from each individual to form three batches. 
 ```{r}
-batch1 <- umi.qc[,umi.qc$replicate == "r1"]
-batch2 <- umi.qc[,umi.qc$replicate == "r2"]
-batch3 <- umi.qc[,umi.qc$replicate == "r3"]
-set_exprs(umi.qc, "mnn") <- mnnCorrect(list(B1=exprs(batch1), B2=exprs(batch2), B3=exprs(batch3)),  
-                              k=20, sigma=0.1, cos.norm=TRUE, svd.dim=2)
+batch1 <- umi.qc[, umi.qc$replicate == "r1"]
+batch2 <- umi.qc[, umi.qc$replicate == "r2"]
+batch3 <- umi.qc[, umi.qc$replicate == "r3"]
+assay(umi.qc, "mnn") <- mnnCorrect(
+    list(B1 = exprs(batch1), B2 = exprs(batch2), B3 = exprs(batch3)),  
+    k = 20,
+    sigma = 0.1,
+    cos.norm = TRUE,
+    svd.dim = 2
+)
 ```
+
 ## GLM
 ```{r}
 glm_fun <- function(g, batch, indi) {
@@ -116,10 +131,11 @@ glm_fun <- function(g, batch, indi) {
   model$coef[1] <- 0
   return(model$coef)
 }
-effects <- apply(exprs(umi.qc), 1, glm_fun, batch=umi.qc$batch, indi=ui.qc$individual)
-corrected <- exprs(umi.qc) - t(effects[as.numeric(factor(umi.qc$batch)),])
-set_exprs(umi.qc, "glm") <- corrected
+effects <- apply(exprs(umi.qc), 1, glm_fun, batch = umi.qc$batch, indi = ui.qc$individual)
+corrected <- exprs(umi.qc) - t(effects[as.numeric(factor(umi.qc$batch)), ])
+assay(umi.qc, "glm") <- corrected
 ```
+
 ## Effectiveness 1
 
 We evaluate the effectiveness of the normalization by inspecting the
@@ -183,20 +199,27 @@ boxplot(
     )
 )
 ```
+
 ## Effectiveness 3
+
 ```{r}
 compare_kBET_results <- function(sce){
-  indiv <- unique(sce$individual)
-  norms <- names(assayData(sce))
-  results <- list()
-  for (i in indiv){
-    for (j in norms){
-      tmp <- kBET(df = t(get_exprs(sce[,sce$individual== i], exprs_values = j)), batch = sce$batch[sce$individual==i], 
-                  heuristic = TRUE, verbose = FALSE, addTest = FALSE, plot = FALSE)
-      results[[i]][[j]] <- tmp$summary$kBET.observed[1]
+    indiv <- unique(sce$individual)
+    norms <- names(assayData(sce))
+    results <- list()
+    for (i in indiv){
+        for (j in norms){
+            tmp <- kBET(
+                df = t(get_exprs(sce[,sce$individual== i], exprs_values = j)), 
+                batch = sce$batch[sce$individual==i], 
+                heuristic = TRUE, 
+                verbose = FALSE, 
+                addTest = FALSE, 
+                plot = FALSE)
+            results[[i]][[j]] <- tmp$summary$kBET.observed[1]
+        }
     }
-  }
-  return(as.data.frame(results))
+    return(as.data.frame(results))
 }
 
 eff_debatching <- compare_kBET_results(umi.qc)
@@ -204,21 +227,31 @@ eff_debatching <- compare_kBET_results(umi.qc)
 
 ```{r}
 # Plot results
-dod <- melt(as.matrix(eff_debatching),  value.name="kBET")
-colnames(dod)[1:2] <- c("Normalisation","Individual")
+dod <- melt(as.matrix(eff_debatching),  value.name = "kBET")
+colnames(dod)[1:2] <- c("Normalisation", "Individual")
 
 colorset <- c('gray', brewer.pal(n = 9, "RdYlBu"))
 
-ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +  geom_tile() +
-  scale_fill_gradient2(na.value = "gray",  low = colorset[2], mid=colorset[6], high = colorset[10],
-                       midpoint = 0.5, limit = c(0,1)) +
-  scale_x_discrete(expand = c(0, 0)) +
-  scale_y_discrete(expand = c(0, 0)) + 
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, 
-                                   size = 12, hjust = 1)) + 
-ggtitle("Effect of batch regression methods per individual")
+ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +  
+    geom_tile() +
+    scale_fill_gradient2(
+        na.value = "gray",
+        low = colorset[2],
+        mid=colorset[6],
+        high = colorset[10],
+        midpoint = 0.5, limit = c(0,1)) +
+    scale_x_discrete(expand = c(0, 0)) +
+    scale_y_discrete(expand = c(0, 0)) + 
+    theme(
+        axis.text.x = element_text(
+            angle = 45, 
+            vjust = 1, 
+            size = 12, 
+            hjust = 1
+        )
+    ) + 
+    ggtitle("Effect of batch regression methods per individual")
 ```
-
 
 ## Effectiveness 4
 

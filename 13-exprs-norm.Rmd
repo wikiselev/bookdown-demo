@@ -323,11 +323,10 @@ But we will demonstrate them anyway.
 Now we are ready to perform the normalisations:
 ```{r}
 tpm(umi.qc.ann) <- log2(calculateTPM(umi.qc.ann, eff_length) + 1)
-fpkm(umi.qc.ann) <- log2(calculateFPKM(umi.qc.ann, eff_length) + 1)
 ```
 
 Plot the results as a PCA plot:
-```{r norm-pca-fpkm, fig.cap = "PCA plot of the tung data after FPKM normalisation"}
+```{r norm-pca-fpkm, fig.cap = "PCA plot of the tung data after TPM normalisation"}
 plotPCA(
     umi.qc.ann,
     exprs_values = "tpm",
@@ -341,7 +340,7 @@ plotPCA(
 tpm(umi.qc.ann) <- log2(calculateFPKM(umi.qc.ann, eff_length) + 1)
 ```
 
-```{r norm-pca-tpm, fig.cap = "PCA plot of the tung data after TPM normalisation"}
+```{r norm-pca-tpm, fig.cap = "PCA plot of the tung data after FPKM normalisation"}
 plotPCA(
     umi.qc.ann,
     exprs_values = "tpm",
