@@ -69,6 +69,9 @@ We will concentrate on the first two approaches.
 ```{r, message=FALSE, warning=FALSE}
 ruvg <- RUVg(counts(umi.qc), erccs, k = 1)
 assay(umi.qc, "ruvg1") <- ruvg$normalizedCounts
+assay(umi.qc, "ruvg1_logcpm") <- log2(
+    t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
+)
 ruvg <- RUVg(counts(umi.qc), erccs, k = 2)
 assay(umi.qc, "ruvg2") <- ruvg$normalizedCounts
 assay(umi.qc, "ruvg2_logcpm") <- log2(
@@ -89,6 +92,9 @@ scIdx[3, 1:length(tmp)] <- tmp
 cIdx <- rownames(umi.qc)
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
 assay(umi.qc, "ruvs1") <- ruvs$normalizedCounts
+assay(umi.qc, "ruvs1_logcpm") <- log2(
+    t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
+)
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 2, scIdx = scIdx, isLog = FALSE)
 assay(umi.qc, "ruvs2") <- ruvs$normalizedCounts
 assay(umi.qc, "ruvs2_logcpm") <- log2(
@@ -97,31 +103,66 @@ assay(umi.qc, "ruvs2_logcpm") <- log2(
 ```
 
 ## Combat
+If you have an experiment with a balanced design you Combat can be used to eliminate batch effects while preserving biological effects by specifying the biological effects using the "mod" parameter. However the Tung data contains multiple experimental replicates rather than a balanced design so using "mod1" to preserve biological variability will result in an error. 
 ```{r}
-mod0 = model.matrix(~ 1, data = logcounts(umi.qc))
-mod1 = model.matrix(~ umi.qc$individual, data = logcounts(umi.qc))
+mod0 = model.matrix(~ 1, data = as.data.frame(t(counts(umi.qc)))) # Basic batch removal
+mod1 = model.matrix(~ umi.qc$individual, data = as.data.frame(t(counts(umi.qc)))) # Preserve biological variability
+mod2 = model.matrix(~ umi.qc$total_features, data = as.data.fram(t(counts(umi.qc))) # adjust for total genes detected
 assay(umi.qc, "combat") <- ComBat(
-    dat = logcounts(umi.qc), 
+    dat = exprs(umi.qc), 
     batch = factor(umi.qc$batch), 
     mod = mod0,
-    par.prior = TRUE,
-    prior.plots = TRUE
+    par.prior = FALSE,
+    prior.plots = FALSE
 )
 ```
 
 ## mnnCorrect 
-`mnnCorrect` assumes that each batch shares at least one biological condition with each other batch. Thus we merge a replicate from each individual to form three batches. 
+`mnnCorrect` assumes that each batch shares at least one biological condition with each other batch. Thus it works well for a variety of balanced experimental designs. However, the Tung data contains multiple replicates for each invidividual rather than balanced batches, thus we will normalized each individual separately. Note that this will remove batch effects between batches within the same individual but not the batch effects between batches in different individuals, due to the confounded experimental design. 
+
+Thus we will merge a replicate from each individual to form three batches. 
 ```{r}
-batch1 <- umi.qc[, umi.qc$replicate == "r1"]
-batch2 <- umi.qc[, umi.qc$replicate == "r2"]
-batch3 <- umi.qc[, umi.qc$replicate == "r3"]
-assay(umi.qc, "mnn") <- mnnCorrect(
-    list(B1 = exprs(batch1), B2 = exprs(batch2), B3 = exprs(batch3)),  
-    k = 20,
-    sigma = 0.1,
-    cos.norm = TRUE,
-    svd.dim = 2
-)
+
+do_mnn <- function(data.qc) {
+    batch1 <- data.qc[, data.qc$replicate == "r1"]
+    batch2 <- data.qc[, data.qc$replicate == "r2"]
+    batch3 <- data.qc[, data.qc$replicate == "r3"]
+    
+    if (dim(batch2)[2] > 0) {
+    x = mnnCorrect(
+      exprs(batch1), exprs(batch2), exprs(batch3),  
+      k = 20,
+      sigma = 0.1,
+      cos.norm = TRUE,
+      svd.dim = 2
+    )
+    return(cbind(x$corrected[[1]], x$corrected[[2]], x$corrected[[3]]))
+    } else {
+    x = mnnCorrect(
+      exprs(batch1), exprs(batch3),  
+      k = 20,
+      sigma = 0.1,
+      cos.norm = TRUE,
+      svd.dim = 2
+    )
+    return(cbind(x$corrected[[1]], x$corrected[[2]]))
+    }
+}
+
+indi1 <- do_mnn(umi.qc[, umi.qc$individual == "NA19098"])
+indi2 <- do_mnn(umi.qc[, umi.qc$individual == "NA19101"])
+indi3 <- do_mnn(umi.qc[, umi.qc$individual == "NA19239"])
+
+assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3);
+
+# For a balanced design: 
+#assay(umi.qc, "mnn") <- mnnCorrect(
+#    list(B1 = exprs(batch1), B2 = exprs(batch2), B3 = exprs(batch3)),  
+#    k = 20,
+#    sigma = 0.1,
+#    cos.norm = TRUE,
+#    svd.dim = 2
+#)
 ```
 
 ## GLM
@@ -131,7 +172,7 @@ glm_fun <- function(g, batch, indi) {
   model$coef[1] <- 0
   return(model$coef)
 }
-effects <- apply(exprs(umi.qc), 1, glm_fun, batch = umi.qc$batch, indi = ui.qc$individual)
+effects <- apply(exprs(umi.qc), 1, glm_fun, batch = umi.qc$batch, indi = umi.qc$individual)
 corrected <- exprs(umi.qc) - t(effects[as.numeric(factor(umi.qc$batch)), ])
 assay(umi.qc, "glm") <- corrected
 ```
