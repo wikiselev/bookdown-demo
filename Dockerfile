@@ -31,7 +31,7 @@ RUN Rscript -e "devtools::install_github('davismcc/scater')"
 RUN Rscript -e "install.packages('statmod')"
 RUN Rscript -e "install.packages('mvoutlier')"
 # RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('scran')"
-RUN Rscript -e "devtools::install_github('LTLA/scran')"
+RUN Rscript -e "devtools::install_github('MarioniLab/scran')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')"
 
 RUN Rscript -e "devtools::install_github('Vivianstats/scImpute')"

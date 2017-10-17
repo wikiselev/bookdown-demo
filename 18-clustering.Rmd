@@ -14,6 +14,7 @@ library(pcaMethods)
 library(pcaReduce)
 library(SC3)
 library(scater)
+library(SingleCellExperiment)
 library(pheatmap)
 set.seed(1234567)
 ```
@@ -33,7 +34,7 @@ pollen
 
 Let's look at the cell type annotation:
 ```{r}
-table(pData(pollen)$cell_type1)
+table(colData(pollen)$cell_type1)
 ```
 
 A simple PCA analysis already separates some strong cell types and provides some insights in the data structure:
@@ -47,6 +48,7 @@ Let's run `SC3` clustering on the Pollen data. The advantage of the `SC3` is tha
 
 Now let's image we do not know the number of clusters _k_ (cell types). `SC3` can estimate a number of clusters for you:
 ```{r}
+pollen <- newSC3(pollen)
 pollen <- sc3_prepare(pollen, ks = 2:5)
 pollen <- sc3_estimate_k(pollen)
 pollen@sc3$k_estimation
