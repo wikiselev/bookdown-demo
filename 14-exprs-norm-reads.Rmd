@@ -28,6 +28,7 @@ plotPCA(
 ```
 
 ```{r norm-pca-cpm-reads, fig.cap = "PCA plot of the tung data after CPM normalisation"}
+assay(reads.qc, "norm_counts") <- log2(calculateCPM(reads.qc, use.size.factors = FALSE) + 1)
 plotPCA(
     reads.qc[endog_genes, ],
     exprs_values = "norm_counts",
