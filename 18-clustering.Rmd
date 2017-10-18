@@ -109,7 +109,7 @@ This command will open `SC3` in a web browser.
 
 ```{r}
 # use the same gene filter as in SC3
-input <- exprs(pollen[fData(pollen)$sc3_gene_filter, ])
+input <- logcounts(pollen[rowData(pollen)$sc3_gene_filter, ])
 ```
 
 There are several parameters used by `pcaReduce`:
@@ -124,7 +124,7 @@ pca.red <- PCAreduce(t(input), nbt = 1, q = 30, method = 'S')[[1]]
 ```
 
 ```{r}
-pData(pollen)$pcaReduce <- as.character(pca.red[,32 - 11])
+colData(pollen)$pcaReduce <- as.character(pca.red[,32 - 11])
 plotPCA(pollen, colour_by = "pcaReduce")
 ```
 
@@ -134,7 +134,7 @@ __Hint__: When running pcaReduce for different $k$s you do not need to rerun PCA
 
 __Our solution__:
 ```{r clust-pca-reduce2, fig.cap = "Clustering solutions of pcaReduce method for $k=2$.", echo=FALSE}
-pData(pollen)$pcaReduce <- as.character(pca.red[,32 - 2])
+colData(pollen)$pcaReduce <- as.character(pca.red[,32 - 2])
 plotPCA(pollen, colour_by = "pcaReduce")
 ```
 
@@ -144,7 +144,7 @@ different methods?
 
 __Our solution__:
 ```{r, echo=FALSE}
-pData(pollen)$pcaReduce <- as.character(pca.red[,32 - 11])
+colData(pollen)$pcaReduce <- as.character(pca.red[,32 - 11])
 sc3_plot_expression(pollen, k = 11, show_pdata = "pcaReduce")
 ```
 
@@ -153,7 +153,7 @@ sc3_plot_expression(pollen, k = 11, show_pdata = "pcaReduce")
 
 [tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. Here we will do the same:
 ```{r clust-tsne, fig.cap = "tSNE map of the patient data"}
-pollen <- plotTSNE(pollen, rand_seed = 1, return_SCESet = TRUE)
+pollen <- plotTSNE(pollen, rand_seed = 1, return_SCE = TRUE)
 ```
 
 Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.
@@ -162,7 +162,7 @@ Now we are going to apply _k_-means clustering algorithm to the cloud of points 
 
 We will start with $k=8$:
 ```{r clust-tsne-kmeans2, fig.cap = "tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm"}
-pData(pollen)$tSNE_kmeans <- as.character(kmeans(pollen@reducedDimension, centers = 8)$clust)
+colData(pollen)$tSNE_kmeans <- as.character(kmeans(pollen@reducedDims$TSNE, centers = 8)$clust)
 plotTSNE(pollen, rand_seed = 1, colour_by = "tSNE_kmeans")
 ```
 
@@ -173,7 +173,7 @@ results be improved by changing the `perplexity` parameter?
 
 __Our solution__:
 ```{r, echo=FALSE}
-pData(pollen)$tSNE_kmeans <- as.character(kmeans(pollen@reducedDimension, centers = 11)$clust)
+colData(pollen)$tSNE_kmeans <- as.character(kmeans(pollen@reducedDims$TSNE, centers = 11)$clust)
 sc3_plot_expression(pollen, k = 11, show_pdata = "tSNE_kmeans")
 ```
 
@@ -214,7 +214,7 @@ snn.res <- read.table("res-snn-cliq.txt")
 # remove files that were created during the analysis
 system("rm snn-cliq.txt res-snn-cliq.txt")
 
-pData(pollen)$SNNCliq <- as.character(snn.res[,1])
+colData(pollen)$SNNCliq <- as.character(snn.res[,1])
 plotPCA(pollen, colour_by = "SNNCliq")
 ```
 
@@ -269,7 +269,7 @@ __Exercise 10__: Compare the results between `SC3` and `SNN-Cliq`.
 
 __Our solution__:
 ```{r, echo=FALSE}
-pData(pollen)$SINCERA <- as.character(cutree(hc, k = i))
+colData(pollen)$SINCERA <- as.character(cutree(hc, k = i))
 sc3_plot_expression(pollen, k = 11, show_pdata = "SINCERA")
 ```
 

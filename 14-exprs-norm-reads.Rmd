@@ -23,7 +23,7 @@ plotPCA(
     exprs_values = "log2_counts",
     colour_by = "batch",
     size_by = "total_features",
-    shape_by = "individual",
+    shape_by = "individual"
 )
 ```
 
