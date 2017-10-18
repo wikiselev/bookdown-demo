@@ -105,7 +105,7 @@ mod0 = model.matrix(~ 1, data = as.data.frame(t(counts(umi.qc))))
 # Preserve biological variability
 mod1 = model.matrix(~ umi.qc$individual, data = as.data.frame(t(counts(umi.qc)))) 
 # adjust for total genes detected
-mod2 = model.matrix(~ umi.qc$total_features, data = as.data.fram(t(counts(umi.qc))) 
+mod2 = model.matrix(~ umi.qc$total_features, data = as.data.frame(t(counts(umi.qc))) 
 assay(umi.qc, "combat") <- ComBat(
     dat = exprs(umi.qc), 
     batch = factor(umi.qc$batch), 
@@ -114,6 +114,7 @@ assay(umi.qc, "combat") <- ComBat(
     prior.plots = FALSE
 )
 ```
+
 __Exercise 1__
 Perform ComBat correction accounting for total features as a co-variate. Store the corrected matrix in the "combat_tf" slot.
 
@@ -283,7 +284,7 @@ boxplot(
 ## Effectiveness 3
 We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.
 ```{r confound-cpm, fig.cap = "Explanatory variables (log2CPM)"}
-scater::plotQC(
+plotQC(
     umi.qc[endog_genes, ],
     type = "expl",
     exprs_values = "exprs",
