@@ -195,13 +195,25 @@ assay(umi.qc, "glm") <- corrected
 ```
 
 __Exercise 2__
+
 Perform GLM correction for each individual separately. Store the final corrected matrix in the `glm_indi` slot.
 
 ```{r, echo=FALSE}
+glm_fun1 <- function(g, batch) {
+  model <- glm(g ~ batch)
+  model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
+  return(model$coef)
+}
+
 do_glm <- function(data.qc) {
-   effects <- apply(exprs(data.qc), 1, glm_fun, batch = data.qc$batch)
-   corrected <- exprs(umi.qc) - t(effects[as.numeric(factor(umi.qc$batch)), ])
-   return(corrected);
+    effects <- apply(
+        logcounts(data.qc), 
+        1, 
+        glm_fun1, 
+        batch = data.qc$batch
+    )
+    corrected <- logcounts(data.qc) - t(effects[as.numeric(factor(data.qc$batch)), ])
+    return(corrected)
 }
 indi1 <- do_glm(umi.qc[, umi.qc$individual == "NA19098"])
 indi2 <- do_glm(umi.qc[, umi.qc$individual == "NA19101"])
@@ -301,11 +313,11 @@ boxplot(
 ## Effectiveness 3
 
 We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.
-```{r confound-cpm, fig.cap = "Explanatory variables (log2CPM)"}
+```{r confound-cpm, fig.cap = "Explanatory variables (mnn)"}
 plotQC(
     umi.qc[endog_genes, ],
     type = "expl",
-    exprs_values = "exprs",
+    exprs_values = "mnn",
     variables = c(
         "total_features",
         "total_counts",
