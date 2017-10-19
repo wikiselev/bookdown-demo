@@ -274,3 +274,9 @@ sc3_plot_expression(pollen, k = 11, show_pdata = "SINCERA")
 ```
 
 __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a good idea?
+
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```

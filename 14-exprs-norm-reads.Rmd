@@ -213,3 +213,9 @@ plotPCA(
 )
 ```
 
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
