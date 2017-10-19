@@ -38,6 +38,10 @@ umi <- readRDS("tung/umi.rds")
 umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
 endog_genes <- !rowData(umi.qc)$is_feature_control
 erccs <- rowData(umi.qc)$is_feature_control
+
+qclust <- quickCluster(umi.qc, min.size = 30)
+umi.qc <- computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
+umi.qc <- normalize(umi.qc)
 ```
 
 ## Remove Unwanted Variation
@@ -98,17 +102,22 @@ assay(umi.qc, "ruvs10_logcpm") <- log2(
 ```
 
 ## Combat
-If you have an experiment with a balanced design you Combat can be used to eliminate batch effects while preserving biological effects by specifying the biological effects using the "mod" parameter. However the Tung data contains multiple experimental replicates rather than a balanced design so using "mod1" to preserve biological variability will result in an error. 
-```{r}
+
+If you have an experiment with a balanced design, Combat can be used to eliminate batch effects while preserving biological effects by specifying the biological effects using the `mod` parameter. However the `Tung` data contains multiple experimental replicates rather than a balanced design so using `mod1` to preserve biological variability will result in an error. 
+```{r, eval = FALSE}
+# sample 100 cells
+inds <- sample(100)
+combat_data <- logcounts(umi.qc)[, inds]
+mod_data <- as.data.frame(t(combat_data))
 # Basic batch removal
-mod0 = model.matrix(~ 1, data = as.data.frame(t(counts(umi.qc)))) 
+mod0 = model.matrix(~ 1, data = mod_data) 
 # Preserve biological variability
-mod1 = model.matrix(~ umi.qc$individual, data = as.data.frame(t(counts(umi.qc)))) 
+mod1 = model.matrix(~ umi.qc$individual, data = mod_data) 
 # adjust for total genes detected
-mod2 = model.matrix(~ umi.qc$total_features, data = as.data.frame(t(counts(umi.qc))) 
+mod2 = model.matrix(~ umi.qc$total_features, data = mod_data)
 assay(umi.qc, "combat") <- ComBat(
-    dat = exprs(umi.qc), 
-    batch = factor(umi.qc$batch), 
+    dat = combat_data, 
+    batch = factor(umi.qc$batch[inds]), 
     mod = mod0,
     par.prior = FALSE,
     prior.plots = FALSE
@@ -116,37 +125,36 @@ assay(umi.qc, "combat") <- ComBat(
 ```
 
 __Exercise 1__
-Perform ComBat correction accounting for total features as a co-variate. Store the corrected matrix in the "combat_tf" slot.
+Perform `ComBat` correction accounting for total features as a co-variate. Store the corrected matrix in the `combat_tf` slot.
 
 ## mnnCorrect 
 `mnnCorrect` assumes that each batch shares at least one biological condition with each other batch. Thus it works well for a variety of balanced experimental designs. However, the Tung data contains multiple replicates for each invidividual rather than balanced batches, thus we will normalized each individual separately. Note that this will remove batch effects between batches within the same individual but not the batch effects between batches in different individuals, due to the confounded experimental design. 
 
 Thus we will merge a replicate from each individual to form three batches. 
 ```{r}
-
 do_mnn <- function(data.qc) {
     batch1 <- data.qc[, data.qc$replicate == "r1"]
     batch2 <- data.qc[, data.qc$replicate == "r2"]
     batch3 <- data.qc[, data.qc$replicate == "r3"]
     
-    if (dim(batch2)[2] > 0) {
-    x = mnnCorrect(
-      exprs(batch1), exprs(batch2), exprs(batch3),  
-      k = 20,
-      sigma = 0.1,
-      cos.norm = TRUE,
-      svd.dim = 2
-    )
-    return(cbind(x$corrected[[1]], x$corrected[[2]], x$corrected[[3]]))
+    if (ncol(batch2) > 0) {
+        x = mnnCorrect(
+          logcounts(batch1), logcounts(batch2), logcounts(batch3),  
+          k = 20,
+          sigma = 0.1,
+          cos.norm = TRUE,
+          svd.dim = 2
+        )
+        return(cbind(x$corrected[[1]], x$corrected[[2]], x$corrected[[3]]))
     } else {
-    x = mnnCorrect(
-      exprs(batch1), exprs(batch3),  
-      k = 20,
-      sigma = 0.1,
-      cos.norm = TRUE,
-      svd.dim = 2
-    )
-    return(cbind(x$corrected[[1]], x$corrected[[2]]))
+        x = mnnCorrect(
+          logcounts(batch1), logcounts(batch3),  
+          k = 20,
+          sigma = 0.1,
+          cos.norm = TRUE,
+          svd.dim = 2
+        )
+        return(cbind(x$corrected[[1]], x$corrected[[2]]))
     }
 }
 
@@ -167,20 +175,27 @@ assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3);
 ```
 
 ## GLM
-A general linear model is a simpler version of Combat. It can correct for batches while preserving biological effects if you have a balanced design. In a confounded/replicate design biological effects will not be fit/preserved. Similar to mnnCorrect we could remove batch effects from each individual separately in order to preserve biological (and technical) variance between individuals. For demonstation purposes we will naively correct all cofounded batch effects: 
+A general linear model is a simpler version of `Combat`. It can correct for batches while preserving biological effects if you have a balanced design. In a confounded/replicate design biological effects will not be fit/preserved. Similar to `mnnCorrect` we could remove batch effects from each individual separately in order to preserve biological (and technical) variance between individuals. For demonstation purposes we will naively correct all cofounded batch effects: 
+
 ```{r}
 glm_fun <- function(g, batch, indi) {
   model <- glm(g ~ batch + indi)
   model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
   return(model$coef)
 }
-effects <- apply(exprs(umi.qc), 1, glm_fun, batch = umi.qc$batch, indi = umi.qc$individual)
-corrected <- exprs(umi.qc) - t(effects[as.numeric(factor(umi.qc$batch)), ])
+effects <- apply(
+    logcounts(umi.qc), 
+    1, 
+    glm_fun, 
+    batch = umi.qc$batch, 
+    indi = umi.qc$individual
+)
+corrected <- logcounts(umi.qc) - t(effects[as.numeric(factor(umi.qc$batch)), ])
 assay(umi.qc, "glm") <- corrected
 ```
 
 __Exercise 2__
-Perform GLM correction for each individual separately. Store the final corrected matrix in the "glm_indi" slot.
+Perform GLM correction for each individual separately. Store the final corrected matrix in the `glm_indi` slot.
 
 ```{r, echo=FALSE}
 do_glm <- function(data.qc) {
@@ -258,8 +273,10 @@ plotPCA(
     exprs_values = "glm") +
     ggtitle("PCA - glm batch correction")
 ```
+
 __Exercise 3__
-Consider different ks for RUV normalizations. Which gives the best results?
+
+Consider different `ks` for RUV normalizations. Which gives the best results?
 
 ## Effectiveness 2
 
@@ -282,6 +299,7 @@ boxplot(
 ```
 
 ## Effectiveness 3
+
 We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.
 ```{r confound-cpm, fig.cap = "Explanatory variables (log2CPM)"}
 plotQC(
@@ -298,23 +316,26 @@ plotQC(
     )
 )
 ```
+
 __Exercise 4__
+
 Perform the above analysis for each normalization/batch correction method. Which method(s) are most/least effective? Why is the variance accounted for by batch never lower than the variance accounted for by individual?
 
 ## Effectiveness 4
+
 Another method to check the efficacy of batch-effect correction is to consider the intermingling of points from different batches in local subsamples of the data. If there are no batch-effects then proportion of cells from each batch in any local region should be equal to the global proportion of cells in each batch. 
 
-kBET takes kNN networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). kBET assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, kBET can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply kBET to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, kBET does not determine if biological signal has been preserved. 
+`kBET` takes `kNN` networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). `kBET` assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, `kBET` can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply `kBET` to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, `kBET` does not determine if biological signal has been preserved. 
 
 ```{r}
 compare_kBET_results <- function(sce){
     indiv <- unique(sce$individual)
-    norms <- names(assayData(sce)) # Get all normalizations
+    norms <- assayNames(sce) # Get all normalizations
     results <- list()
     for (i in indiv){ 
         for (j in norms){
             tmp <- kBET(
-                df = t(get_exprs(sce[,sce$individual== i], exprs_values = j)), 
+                df = t(assay(sce[,sce$individual== i], j)), 
                 batch = sce$batch[sce$individual==i], 
                 heuristic = TRUE, 
                 verbose = FALSE, 
@@ -358,98 +379,18 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
     ) + 
     ggtitle("Effect of batch regression methods per individual")
 ```
+
 __Exercise 5__
+
 Why do the raw counts appear to have the least batch effects?
-
-## Effectiveness 5
-
-Another way of evaluating the effectiveness of correction is to look at the differentially expressed (DE) genes among the batches of the same individual Theoretically, these batches should not differ from each other. Let's take the most promising individual (__NA19101__, whose batches are the closest to each other) and check whether it is true.
-
-For demonstration purposes we will only use a subset of cells. You should not do that with your real dataset, though.
-```{r}
-keep <- c(
-    sample(which(umi.qc$batch == "NA19101.r1"), 20), 
-    sample(which(umi.qc$batch == "NA19101.r2"), 20),
-    sample(which(umi.qc$batch == "NA19101.r3"), 20)
-)
-design <- model.matrix(~umi.qc[, keep]$batch)
-```
-
-We will use the [edgeR](http://bioconductor.org/packages/edgeR) package to calculate DE genes between plates for this particular individual. Recall that the input data for edgeR (and similar methods like DESeq2) must always be raw counts.
-
-The particular coefficient that we test for DE in each case below tests to for genes that show a difference in expression between replicate plate 3 and replicate plate 1.
-
-### DE (raw counts)
-```{r}
-dge1 <- DGEList(
-    counts = counts(umi.qc[, keep]), 
-    norm.factors = rep(1, length(keep)),
-    group = umi.qc[, keep]$batch
-)
-dge1 <- estimateDisp(dge1, design = design, trend.method = "none")
-plotBCV(dge1)
-fit1 <- glmFit(dge1, design)
-res1 <- glmLRT(fit1)
-topTags(res1)
-summary(decideTestsDGE(res1))
-plotSmear(
-    res1, lowess = TRUE,
-    de.tags = rownames(topTags(res1, n = sum(abs(decideTestsDGE(res1))))$table)
-)
-
-```
-
-### DE (RUVg, k = 2)
-```{r}
-design_ruvg <- model.matrix(~ruvg$W[keep,] + umi.qc[, keep]$batch)
-head(design_ruvg)
-dge_ruvg <- estimateDisp(dge1, design = design_ruvg, trend.method = "none")
-plotBCV(dge_ruvg)
-fit2 <- glmFit(dge_ruvg, design_ruvg)
-res2 <- glmLRT(fit2)
-topTags(res2)
-summary(decideTestsDGE(res2))
-plotSmear(
-    res2, lowess = TRUE,
-    de.tags = rownames(topTags(res2, n = sum(abs(decideTestsDGE(res2))))$table)
-)
-```
-
-### DE (RUVs, k = 2)
-```{r}
-design_ruvs <- model.matrix(~ruvs$W[keep,] + umi.qc[, keep]$batch)
-head(design_ruvs)
-dge_ruvs <- estimateDisp(dge1, design = design_ruvs, trend.method = "none")
-plotBCV(dge_ruvs)
-fit3 <- glmFit(dge_ruvs, design_ruvs)
-res3 <- glmLRT(fit3)
-topTags(res3)
-summary(decideTestsDGE(res3))
-plotSmear(
-    res3, lowess = TRUE,
-    de.tags = rownames(topTags(res3, n = sum(abs(decideTestsDGE(res3))))$table)
-)
-```
-
-In the above analyses, we have ignored size factors between cells. A typical edgeR analysis would always include these.
-
-```{r}
-umi.qc <- scran::computeSumFactors(umi.qc, sizes = 15)
-dge_ruvs$samples$norm.factors <- sizeFactors(umi.qc)[keep]
-dge_ruvs_sf <- estimateDisp(dge_ruvs, design = design_ruvs, trend.method = "none")
-plotBCV(dge_ruvs_sf)
-fit4 <- glmFit(dge_ruvs_sf, design_ruvs)
-res4 <- glmLRT(fit4)
-topTags(res4)
-summary(decideTestsDGE(res4))
-plotSmear(
-    res4, lowess = TRUE,
-    de.tags = rownames(topTags(res4, n = sum(abs(decideTestsDGE(res4))))$table)
-)
-
-```
-
 
 ## Exercise
 
 Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.
+
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```
+

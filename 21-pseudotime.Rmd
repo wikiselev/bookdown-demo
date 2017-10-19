@@ -367,3 +367,9 @@ and pseudotime. This would be particularly useful for the SLICER
 results, as SLICER does not provide plotting functions.
 
 __Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes
+
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```

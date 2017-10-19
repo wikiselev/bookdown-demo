@@ -124,3 +124,9 @@ FeaturePlot(pollen_seurat,
 ```
 
 __Exercise 13__: Compare marker genes provided by `SEURAT` and `SC3`.
+
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```

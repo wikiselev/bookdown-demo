@@ -239,7 +239,7 @@ cell-types in this dataset.
 M3Drop::M3DropExpressionHeatmap(
     M3Drop_genes,
     uso_list$data,
-    cell_labels = uso_list$labels,
+    cell_labels = uso_list$labels
 )
 ```
 
@@ -257,3 +257,9 @@ sum(M3Drop_genes %in% DE_genes)/length(M3Drop_genes)
 __Exercise 5__
 Plot the expression of the features for each of the other methods. Which appear to be differentially expressed?
 Which method is the most precise?
+
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```

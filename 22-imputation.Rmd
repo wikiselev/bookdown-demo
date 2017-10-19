@@ -58,3 +58,8 @@ plotPCA(pollen.impute.sce, colour_by = "sc3_11_clusters")
 
 Based on the PCA and the clustering results, do you think that imputation is a good idea for the Pollen dataset?
 
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```
