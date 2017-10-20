@@ -8,7 +8,8 @@ This chapter contains the summary plots and tables for the QC exercise based on 
 
 
 ```r
-library(scater, quietly = TRUE)
+library(SingleCellExperiment)
+library(scater)
 library(knitr)
 options(stringsAsFactors = FALSE)
 ```
@@ -29,23 +30,18 @@ knitr::kable(
 )
 ```
 
-\begin{table}
 
-\caption{(\#tab:unnamed-chunk-4)A table of the first 6 rows and 3 columns of the molecules table.}
-\centering
-\begin{tabular}[t]{lrrr}
-\toprule
-  & NA19098.r1.A01 & NA19098.r1.A02 & NA19098.r1.A03\\
-\midrule
-ENSG00000237683 & 0 & 0 & 0\\
-ENSG00000187634 & 0 & 0 & 0\\
-ENSG00000188976 & 57 & 140 & 1\\
-ENSG00000187961 & 0 & 0 & 0\\
-ENSG00000187583 & 0 & 0 & 0\\
-ENSG00000187642 & 0 & 0 & 0\\
-\bottomrule
-\end{tabular}
-\end{table}
+
+Table: (\#tab:unnamed-chunk-4)A table of the first 6 rows and 3 columns of the molecules table.
+
+                   NA19098.r1.A01   NA19098.r1.A02   NA19098.r1.A03
+----------------  ---------------  ---------------  ---------------
+ENSG00000237683                 0                0                0
+ENSG00000187634                 0                0                0
+ENSG00000188976                57              140                1
+ENSG00000187961                 0                0                0
+ENSG00000187583                 0                0                0
+ENSG00000187642                 0                0                0
 
 ```r
 knitr::kable(
@@ -54,32 +50,22 @@ knitr::kable(
 )
 ```
 
-\begin{table}
 
-\caption{(\#tab:unnamed-chunk-4)A table of the first 6 rows of the anno table.}
-\centering
-\begin{tabular}[t]{lllll}
-\toprule
-individual & replicate & well & batch & sample\_id\\
-\midrule
-NA19098 & r1 & A01 & NA19098.r1 & NA19098.r1.A01\\
-NA19098 & r1 & A02 & NA19098.r1 & NA19098.r1.A02\\
-NA19098 & r1 & A03 & NA19098.r1 & NA19098.r1.A03\\
-NA19098 & r1 & A04 & NA19098.r1 & NA19098.r1.A04\\
-NA19098 & r1 & A05 & NA19098.r1 & NA19098.r1.A05\\
-NA19098 & r1 & A06 & NA19098.r1 & NA19098.r1.A06\\
-\bottomrule
-\end{tabular}
-\end{table}
+
+Table: (\#tab:unnamed-chunk-4)A table of the first 6 rows of the anno table.
+
+individual   replicate   well   batch        sample_id      
+-----------  ----------  -----  -----------  ---------------
+NA19098      r1          A01    NA19098.r1   NA19098.r1.A01 
+NA19098      r1          A02    NA19098.r1   NA19098.r1.A02 
+NA19098      r1          A03    NA19098.r1   NA19098.r1.A03 
+NA19098      r1          A04    NA19098.r1   NA19098.r1.A04 
+NA19098      r1          A05    NA19098.r1   NA19098.r1.A05 
+NA19098      r1          A06    NA19098.r1   NA19098.r1.A06 
 
 
 ```r
-pheno_data <- new("AnnotatedDataFrame", anno)
-rownames(pheno_data) <- pheno_data$sample_id
-reads <- scater::newSCESet(
-    countData = reads,
-    phenoData = pheno_data
-)
+reads <- SingleCellExperiment(assays = list(counts = as.matrix(reads)), colData = anno)
 ```
 
 
@@ -90,19 +76,20 @@ reads <- reads[keep_feature, ]
 
 
 ```r
-ercc <- featureNames(reads)[grepl("ERCC-", featureNames(reads))]
-mt <- c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
-        "ENSG00000198886", "ENSG00000212907", "ENSG00000198786",
-        "ENSG00000198695", "ENSG00000198712", "ENSG00000198804",
-        "ENSG00000198763", "ENSG00000228253", "ENSG00000198938",
-        "ENSG00000198840")
+isSpike(reads, "ERCC") <- grepl("^ERCC-", rownames(reads))
+isSpike(reads, "MT") <- rownames(reads) %in% 
+    c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
+    "ENSG00000198886", "ENSG00000212907", "ENSG00000198786",
+    "ENSG00000198695", "ENSG00000198712", "ENSG00000198804",
+    "ENSG00000198763", "ENSG00000228253", "ENSG00000198938",
+    "ENSG00000198840")
 ```
 
 
 ```r
-reads <- scater::calculateQCMetrics(
+reads <- calculateQCMetrics(
     reads,
-    feature_controls = list(ERCC = ercc, MT = mt)
+    feature_controls = list(ERCC = isSpike(reads, "ERCC"), MT = isSpike(reads, "MT"))
 )
 ```
 
@@ -115,14 +102,10 @@ hist(
 abline(v = 1.3e6, col = "red")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/total-counts-hist-reads-1} 
-
-}
-
-\caption{Histogram of library sizes for all cells}(\#fig:total-counts-hist-reads)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="08-exprs-qc-reads_files/figure-html/total-counts-hist-reads-1.png" alt="Histogram of library sizes for all cells" width="90%" />
+<p class="caption">(\#fig:total-counts-hist-reads)Histogram of library sizes for all cells</p>
+</div>
 
 
 ```r
@@ -139,19 +122,14 @@ knitr::kable(
 )
 ```
 
-\begin{table}
 
-\caption{(\#tab:unnamed-chunk-10)The number of cells removed by total counts filter (FALSE)}
-\centering
-\begin{tabular}[t]{lr}
-\toprule
-filter\_by\_total\_counts & Freq\\
-\midrule
-FALSE & 180\\
-TRUE & 684\\
-\bottomrule
-\end{tabular}
-\end{table}
+
+Table: (\#tab:unnamed-chunk-10)The number of cells removed by total counts filter (FALSE)
+
+filter_by_total_counts    Freq
+-----------------------  -----
+FALSE                      180
+TRUE                       684
 
 
 ```r
@@ -162,14 +140,10 @@ hist(
 abline(v = 7000, col = "red")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/total-features-hist-reads-1} 
-
-}
-
-\caption{Histogram of the number of detected genes in all cells}(\#fig:total-features-hist-reads)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="08-exprs-qc-reads_files/figure-html/total-features-hist-reads-1.png" alt="Histogram of the number of detected genes in all cells" width="90%" />
+<p class="caption">(\#fig:total-features-hist-reads)Histogram of the number of detected genes in all cells</p>
+</div>
 
 
 ```r
@@ -186,62 +160,49 @@ knitr::kable(
 )
 ```
 
-\begin{table}
 
-\caption{(\#tab:unnamed-chunk-12)The number of cells removed by total features filter (FALSE)}
-\centering
-\begin{tabular}[t]{lr}
-\toprule
-filter\_by\_expr\_features & Freq\\
-\midrule
-FALSE & 120\\
-TRUE & 744\\
-\bottomrule
-\end{tabular}
-\end{table}
+
+Table: (\#tab:unnamed-chunk-12)The number of cells removed by total features filter (FALSE)
+
+filter_by_expr_features    Freq
+------------------------  -----
+FALSE                       116
+TRUE                        748
 
 
 ```r
-scater::plotPhenoData(
+plotPhenoData(
     reads,
     aes_string(x = "total_features",
-               y = "pct_counts_feature_controls_MT",
+               y = "pct_counts_MT",
                colour = "batch")
 )
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/mt-vs-counts-reads-1} 
-
-}
-
-\caption{Percentage of counts in MT genes}(\#fig:mt-vs-counts-reads)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="08-exprs-qc-reads_files/figure-html/mt-vs-counts-reads-1.png" alt="Percentage of counts in MT genes" width="90%" />
+<p class="caption">(\#fig:mt-vs-counts-reads)Percentage of counts in MT genes</p>
+</div>
 
 
 ```r
-scater::plotPhenoData(
+plotPhenoData(
     reads,
     aes_string(x = "total_features",
-               y = "pct_counts_feature_controls_ERCC",
+               y = "pct_counts_ERCC",
                colour = "batch")
 )
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/ercc-vs-counts-reads-1} 
-
-}
-
-\caption{Percentage of counts in ERCCs}(\#fig:ercc-vs-counts-reads)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="08-exprs-qc-reads_files/figure-html/ercc-vs-counts-reads-1.png" alt="Percentage of counts in ERCCs" width="90%" />
+<p class="caption">(\#fig:ercc-vs-counts-reads)Percentage of counts in ERCCs</p>
+</div>
 
 
 ```r
 filter_by_ERCC <- reads$batch != "NA19098.r2" &
-    reads$pct_counts_feature_controls_ERCC < 25
+    reads$pct_counts_ERCC < 25
 ```
 
 
@@ -254,23 +215,18 @@ knitr::kable(
 )
 ```
 
-\begin{table}
 
-\caption{(\#tab:unnamed-chunk-14)The number of cells removed by ERCC filter (FALSE)}
-\centering
-\begin{tabular}[t]{lr}
-\toprule
-filter\_by\_ERCC & Freq\\
-\midrule
-FALSE & 103\\
-TRUE & 761\\
-\bottomrule
-\end{tabular}
-\end{table}
+
+Table: (\#tab:unnamed-chunk-14)The number of cells removed by ERCC filter (FALSE)
+
+filter_by_ERCC    Freq
+---------------  -----
+FALSE              103
+TRUE               761
 
 
 ```r
-filter_by_MT <- reads$pct_counts_feature_controls_MT < 30
+filter_by_MT <- reads$pct_counts_MT < 30
 ```
 
 
@@ -283,19 +239,14 @@ knitr::kable(
 )
 ```
 
-\begin{table}
 
-\caption{(\#tab:unnamed-chunk-16)The number of cells removed by MT filter (FALSE)}
-\centering
-\begin{tabular}[t]{lr}
-\toprule
-filter\_by\_MT & Freq\\
-\midrule
-FALSE & 18\\
-TRUE & 846\\
-\bottomrule
-\end{tabular}
-\end{table}
+
+Table: (\#tab:unnamed-chunk-16)The number of cells removed by MT filter (FALSE)
+
+filter_by_MT    Freq
+-------------  -----
+FALSE             18
+TRUE             846
 
 
 ```r
@@ -321,212 +272,30 @@ knitr::kable(
 )
 ```
 
-\begin{table}
-
-\caption{(\#tab:unnamed-chunk-18)The number of cells removed by manual filter (FALSE)}
-\centering
-\begin{tabular}[t]{lr}
-\toprule
-Var1 & Freq\\
-\midrule
-FALSE & 259\\
-TRUE & 605\\
-\bottomrule
-\end{tabular}
-\end{table}
 
 
-```r
-reads$use_default <- (
-    # remove cells with unusual numbers of genes
-    !reads$filter_on_total_features &
-    # sufficient molecules counted
-    !reads$filter_on_total_counts &
-    # sufficient endogenous RNA
-    !reads$filter_on_pct_counts_feature_controls_ERCC &
-    # remove cells with unusual number of reads in MT genes
-    !reads$filter_on_pct_counts_feature_controls_MT &
-    # controls shouldn't be used in downstream analysis
-    !reads$is_cell_control
-)
-```
+Table: (\#tab:unnamed-chunk-18)The number of cells removed by manual filter (FALSE)
 
-
-```r
-knitr::kable(
-  as.data.frame(table(reads$use_default)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by default filter (FALSE)'
-)
-```
-
-\begin{table}
-
-\caption{(\#tab:unnamed-chunk-20)The number of cells removed by default filter (FALSE)}
-\centering
-\begin{tabular}[t]{lr}
-\toprule
-Var1 & Freq\\
-\midrule
-FALSE & 37\\
-TRUE & 827\\
-\bottomrule
-\end{tabular}
-\end{table}
+Var1     Freq
+------  -----
+FALSE     258
+TRUE      606
 
 
 ```r
 reads <-
-scater::plotPCA(reads,
-                size_by = "total_features", 
-                shape_by = "use",
-                pca_data_input = "pdata",
-                detect_outliers = TRUE,
-                return_SCESet = TRUE)
+plotPCA(reads,
+    size_by = "total_features", 
+    shape_by = "use",
+    pca_data_input = "pdata",
+    detect_outliers = TRUE,
+    return_SCE = TRUE)
 ```
 
-```
-## The following cells/samples are detected as outliers:
-## NA19098.r1.B10
-## NA19098.r1.D07
-## NA19098.r1.E04
-## NA19098.r1.F06
-## NA19098.r1.H08
-## NA19098.r1.H09
-## NA19098.r2.A01
-## NA19098.r2.A06
-## NA19098.r2.A09
-## NA19098.r2.A12
-## NA19098.r2.B01
-## NA19098.r2.B11
-## NA19098.r2.B12
-## NA19098.r2.C04
-## NA19098.r2.C09
-## NA19098.r2.D02
-## NA19098.r2.D03
-## NA19098.r2.D09
-## NA19098.r2.E04
-## NA19098.r2.E07
-## NA19098.r2.F01
-## NA19098.r2.F11
-## NA19098.r2.G01
-## NA19098.r2.G05
-## NA19098.r2.G10
-## NA19098.r2.H01
-## NA19098.r2.H07
-## NA19098.r2.H08
-## NA19098.r2.H12
-## NA19098.r3.A05
-## NA19098.r3.A07
-## NA19098.r3.B02
-## NA19098.r3.C07
-## NA19098.r3.E05
-## NA19098.r3.E08
-## NA19098.r3.E09
-## NA19098.r3.F11
-## NA19098.r3.F12
-## NA19098.r3.G02
-## NA19098.r3.G03
-## NA19098.r3.G04
-## NA19098.r3.G11
-## NA19098.r3.G12
-## NA19098.r3.H08
-## NA19101.r1.A01
-## NA19101.r1.A12
-## NA19101.r1.B01
-## NA19101.r1.B06
-## NA19101.r1.E09
-## NA19101.r1.E11
-## NA19101.r1.F05
-## NA19101.r1.F10
-## NA19101.r1.G01
-## NA19101.r1.G06
-## NA19101.r1.H04
-## NA19101.r1.H09
-## NA19101.r2.A03
-## NA19101.r2.C10
-## NA19101.r2.E05
-## NA19101.r2.F02
-## NA19101.r2.H04
-## NA19101.r2.H10
-## NA19101.r3.A02
-## NA19101.r3.A03
-## NA19101.r3.A05
-## NA19101.r3.A09
-## NA19101.r3.B05
-## NA19101.r3.C01
-## NA19101.r3.C09
-## NA19101.r3.C12
-## NA19101.r3.D01
-## NA19101.r3.D04
-## NA19101.r3.D07
-## NA19101.r3.D09
-## NA19101.r3.E08
-## NA19101.r3.F09
-## NA19101.r3.G09
-## NA19101.r3.H01
-## NA19101.r3.H03
-## NA19101.r3.H07
-## NA19101.r3.H09
-## NA19239.r1.F05
-## NA19239.r1.G05
-## NA19239.r2.B01
-## NA19239.r2.B03
-## NA19239.r2.B10
-## NA19239.r2.B11
-## NA19239.r2.C03
-## NA19239.r2.C06
-## NA19239.r2.C08
-## NA19239.r2.D07
-## NA19239.r2.D09
-## NA19239.r2.E09
-## NA19239.r2.F04
-## NA19239.r2.F06
-## NA19239.r2.F07
-## NA19239.r2.F12
-## NA19239.r2.G03
-## NA19239.r2.G08
-## NA19239.r2.H02
-## NA19239.r2.H03
-## NA19239.r2.H07
-## NA19239.r3.A01
-## NA19239.r3.B09
-## NA19239.r3.C04
-## NA19239.r3.C07
-## NA19239.r3.E01
-## NA19239.r3.E03
-## NA19239.r3.E12
-## NA19239.r3.H02
-## NA19239.r3.H10
-## Variables with highest loadings for PC1 and PC2:
-## \begin{tabular}{l|r|r}
-## \hline
-##   & PC1 & PC2\\
-## \hline
-## pct\_counts\_feature\_controls & 0.5057646 & -0.2473134\\
-## \hline
-## pct\_counts\_top\_100\_features & 0.4888852 & -0.2277068\\
-## \hline
-## n\_detected\_feature\_controls & 0.0231277 & -0.6235516\\
-## \hline
-## log10\_counts\_feature\_controls & -0.1226860 & -0.6576822\\
-## \hline
-## total\_features & -0.4655518 & -0.2219694\\
-## \hline
-## log10\_counts\_endogenous\_features & -0.5223679 & -0.1278782\\
-## \hline
-## \end{tabular}
-```
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/auto-cell-filt-reads-1} 
-
-}
-
-\caption{PCA plot used for automatic detection of cell outliers}(\#fig:auto-cell-filt-reads)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="08-exprs-qc-reads_files/figure-html/auto-cell-filt-reads-1.png" alt="PCA plot used for automatic detection of cell outliers" width="90%" />
+<p class="caption">(\#fig:auto-cell-filt-reads)PCA plot used for automatic detection of cell outliers</p>
+</div>
 
 
 ```r
@@ -538,61 +307,46 @@ knitr::kable(
 )
 ```
 
-\begin{table}
 
-\caption{(\#tab:unnamed-chunk-21)The number of cells removed by automatic filter (FALSE)}
-\centering
-\begin{tabular}[t]{lr}
-\toprule
-Var1 & Freq\\
-\midrule
-FALSE & 753\\
-TRUE & 111\\
-\bottomrule
-\end{tabular}
-\end{table}
+
+Table: (\#tab:unnamed-chunk-19)The number of cells removed by automatic filter (FALSE)
+
+Var1     Freq
+------  -----
+FALSE     756
+TRUE      108
 
 
 ```r
-def <- colnames(reads)[!reads$use_default]
 auto <- colnames(reads)[reads$outlier]
 man <- colnames(reads)[!reads$use]
-venn.diag <- limma::vennCounts(cbind(colnames(reads) %in% def,
-                                     colnames(reads) %in% auto,
+venn.diag <- limma::vennCounts(cbind(colnames(reads) %in% auto,
                                      colnames(reads) %in% man))
 limma::vennDiagram(venn.diag,
-                   names = c("Default", "Automatic", "Manual"),
-                   circle.col = c("magenta", "blue", "green"))
+                   names = c("Automatic", "Manual"),
+                   circle.col = c("blue", "green"))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/cell-filt-comp-reads-1} 
-
-}
-
-\caption{Comparison of the default, automatic and manual cell filters}(\#fig:cell-filt-comp-reads)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="08-exprs-qc-reads_files/figure-html/cell-filt-comp-reads-1.png" alt="Comparison of the default, automatic and manual cell filters" width="90%" />
+<p class="caption">(\#fig:cell-filt-comp-reads)Comparison of the default, automatic and manual cell filters</p>
+</div>
 
 
 ```r
 scater::plotQC(reads, type = "highest-expression")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/top50-gene-expr-reads-1} 
-
-}
-
-\caption{Number of total counts consumed by the top 50 expressed genes}(\#fig:top50-gene-expr-reads)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="08-exprs-qc-reads_files/figure-html/top50-gene-expr-reads-1.png" alt="Number of total counts consumed by the top 50 expressed genes" width="90%" />
+<p class="caption">(\#fig:top50-gene-expr-reads)Number of total counts consumed by the top 50 expressed genes</p>
+</div>
 
 
 ```r
-filter_genes <- apply(counts(reads[, pData(reads)$use]), 1, 
+filter_genes <- apply(counts(reads[, colData(reads)$use]), 1, 
                       function(x) length(x[x > 1]) >= 2)
-fData(reads)$use <- filter_genes
+rowData(reads)$use <- filter_genes
 ```
 
 
@@ -605,33 +359,28 @@ knitr::kable(
 )
 ```
 
-\begin{table}
 
-\caption{(\#tab:unnamed-chunk-23)The number of genes removed by gene filter (FALSE)}
-\centering
-\begin{tabular}[t]{lr}
-\toprule
-filter\_genes & Freq\\
-\midrule
-FALSE & 2665\\
-TRUE & 16061\\
-\bottomrule
-\end{tabular}
-\end{table}
+
+Table: (\#tab:unnamed-chunk-21)The number of genes removed by gene filter (FALSE)
+
+filter_genes     Freq
+-------------  ------
+FALSE            2664
+TRUE            16062
 
 
 ```r
-dim(reads[fData(reads)$use, pData(reads)$use])
+dim(reads[rowData(reads)$use, colData(reads)$use])
 ```
 
 ```
-## Features  Samples 
-##    16061      605
+## [1] 16062   606
 ```
 
 
 ```r
-set_exprs(reads, "log2_counts") <- log2(counts(reads) + 1)
+assay(reads, "log2_counts") <- log2(counts(reads) + 1)
+reducedDim(reads) <- NULL
 ```
 
 
@@ -640,3 +389,96 @@ saveRDS(reads, file = "tung/reads.rds")
 ```
 
 By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-comp-reads), it is clear that the reads based filtering removed 49 more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.
+
+## sessionInfo()
+
+
+```
+## R version 3.4.2 (2017-09-28)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Debian GNU/Linux buster/sid
+## 
+## Matrix products: default
+## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] parallel  stats4    methods   stats     graphics  grDevices utils    
+## [8] datasets  base     
+## 
+## other attached packages:
+##  [1] knitr_1.17                  scater_1.5.19              
+##  [3] ggplot2_2.2.1               SingleCellExperiment_0.99.4
+##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
+##  [7] matrixStats_0.52.2          Biobase_2.36.2             
+##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
+## [11] IRanges_2.10.5              S4Vectors_0.14.7           
+## [13] BiocGenerics_0.22.1        
+## 
+## loaded via a namespace (and not attached):
+##   [1] ggbeeswarm_0.6.0        minqa_1.2.4            
+##   [3] colorspace_1.3-2        mvoutlier_2.0.8        
+##   [5] rjson_0.2.15            modeltools_0.2-21      
+##   [7] class_7.3-14            mclust_5.3             
+##   [9] rprojroot_1.2           XVector_0.16.0         
+##  [11] pls_2.6-0               cvTools_0.3.2          
+##  [13] MatrixModels_0.4-1      flexmix_2.3-14         
+##  [15] bit64_0.9-7             AnnotationDbi_1.38.2   
+##  [17] mvtnorm_1.0-6           sROC_0.1-2             
+##  [19] splines_3.4.2           tximport_1.4.0         
+##  [21] robustbase_0.92-7       nloptr_1.0.4           
+##  [23] robCompositions_2.0.6   pbkrtest_0.4-7         
+##  [25] kernlab_0.9-25          cluster_2.0.6          
+##  [27] shinydashboard_0.6.1    shiny_1.0.5            
+##  [29] rrcov_1.4-3             compiler_3.4.2         
+##  [31] backports_1.1.1         assertthat_0.2.0       
+##  [33] Matrix_1.2-11           lazyeval_0.2.0         
+##  [35] limma_3.32.10           htmltools_0.3.6        
+##  [37] quantreg_5.33           tools_3.4.2            
+##  [39] bindrcpp_0.2            gtable_0.2.0           
+##  [41] glue_1.1.1              GenomeInfoDbData_0.99.0
+##  [43] reshape2_1.4.2          dplyr_0.7.4            
+##  [45] Rcpp_0.12.13            trimcluster_0.1-2      
+##  [47] sgeostat_1.0-27         nlme_3.1-131           
+##  [49] fpc_2.1-10              lmtest_0.9-35          
+##  [51] laeken_0.4.6            stringr_1.2.0          
+##  [53] lme4_1.1-14             mime_0.5               
+##  [55] XML_3.98-1.9            edgeR_3.18.1           
+##  [57] DEoptimR_1.0-8          zoo_1.8-0              
+##  [59] zlibbioc_1.22.0         MASS_7.3-47            
+##  [61] scales_0.5.0            VIM_4.7.0              
+##  [63] rhdf5_2.20.0            SparseM_1.77           
+##  [65] RColorBrewer_1.1-2      yaml_2.1.14            
+##  [67] memoise_1.1.0           gridExtra_2.3          
+##  [69] biomaRt_2.32.1          reshape_0.8.7          
+##  [71] stringi_1.1.5           RSQLite_2.0            
+##  [73] highr_0.6               pcaPP_1.9-72           
+##  [75] e1071_1.6-8             boot_1.3-20            
+##  [77] prabclus_2.2-6          rlang_0.1.2            
+##  [79] pkgconfig_2.0.1         bitops_1.0-6           
+##  [81] evaluate_0.10.1         lattice_0.20-35        
+##  [83] bindr_0.1               labeling_0.3           
+##  [85] cowplot_0.8.0           bit_1.1-12             
+##  [87] GGally_1.3.2            plyr_1.8.4             
+##  [89] magrittr_1.5            bookdown_0.5           
+##  [91] R6_2.2.2                DBI_0.7                
+##  [93] mgcv_1.8-22             RCurl_1.95-4.8         
+##  [95] sp_1.2-5                nnet_7.3-12            
+##  [97] tibble_1.3.4            car_2.1-5              
+##  [99] rmarkdown_1.6           viridis_0.4.0          
+## [101] locfit_1.5-9.1          grid_3.4.2             
+## [103] data.table_1.10.4-2     blob_1.1.0             
+## [105] diptest_0.75-7          vcd_1.4-3              
+## [107] digest_0.6.12           xtable_1.8-2           
+## [109] httpuv_1.3.5            munsell_0.4.3          
+## [111] beeswarm_0.2.3          viridisLite_0.2.0      
+## [113] vipor_0.4.5
+```

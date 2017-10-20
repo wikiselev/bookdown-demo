@@ -29,14 +29,10 @@ output: html_document
 
 ## Workflow
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{figures/RNA-Seq_workflow-5.pdf} 
-
-}
-
-\caption{Single cell sequencing (taken from Wikipedia)}(\#fig:intro-rna-seq-workflow)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/RNA-Seq_workflow-5.pdf.jpg" alt="Single cell sequencing (taken from Wikipedia)" width="90%" />
+<p class="caption">(\#fig:intro-rna-seq-workflow)Single cell sequencing (taken from Wikipedia)</p>
+</div>
 
 Overall, experimental scRNA-seq protocols are similar to the methods used for bulk RNA-seq. We will be discussing some of the most common approaches in the next chapter.
 
@@ -45,14 +41,10 @@ Overall, experimental scRNA-seq protocols are similar to the methods used for bu
 This course is concerned with the computational analysis of the data
 obtained from scRNA-seq experiments. The first steps (yellow) are general for any highthroughput sequencing data. Later steps (orange) require a mix of existing RNASeq analysis methods and novel methods to address the technical difference of scRNASeq. Finally the biological interpretation __should__ be analyzed with methods specifically developed for scRNASeq.
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.65\linewidth]{figures/flowchart} 
-
-}
-
-\caption{Flowchart of the scRNA-seq analysis}(\#fig:intro-flowchart)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/flowchart.png" alt="Flowchart of the scRNA-seq analysis" width="65%" />
+<p class="caption">(\#fig:intro-flowchart)Flowchart of the scRNA-seq analysis</p>
+</div>
 
 There are several reviews of the scRNA-seq analysis available including [@Stegle2015-uv].
 

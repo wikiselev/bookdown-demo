@@ -12,14 +12,10 @@ Thanks to Andreas Buness from EMBL Monterotondo for collaboration on this sectio
 
 Unique Molecular Identifiers are short (4-10bp) random barcodes added to transcripts during reverse-transcription. They enable sequencing reads to be assigned to individual transcript molecules and thus the removal of amplification noise and biases from scRNASeq data. 
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{figures/UMI-Seq-protocol} 
-
-}
-
-\caption{UMI sequencing protocol}(\#fig:intro-umi-protocol)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/UMI-Seq-protocol.png" alt="UMI sequencing protocol" width="90%" />
+<p class="caption">(\#fig:intro-umi-protocol)UMI sequencing protocol</p>
+</div>
 
 When sequencing UMI containing data, techniques are used to specifically sequence only the end of the transcript containing the UMI (usually the 3' end).
 
@@ -36,14 +32,10 @@ After processing the reads from a UMI experiment, the following conventions are 
 2. Reads are sorted into separate files by cell barcode
 	+ For extremely large, shallow datasets, the cell barcode may be added to the read name as well to reduce the number of files.
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{figures/UMI-Seq-reads} 
-
-}
-
-\caption{UMI sequencing reads, red lightning bolts represent different fragmentation locations}(\#fig:intro-umi-reads)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/UMI-Seq-reads.png" alt="UMI sequencing reads, red lightning bolts represent different fragmentation locations" width="90%" />
+<p class="caption">(\#fig:intro-umi-reads)UMI sequencing reads, red lightning bolts represent different fragmentation locations</p>
+</div>
 
 ## Counting Barcodes
 
@@ -58,14 +50,10 @@ In theory, every unique UMI-transcript pair should represent all reads originati
 3. __Same UMI doesn't necessarily mean same molecule__
 	+ Biases in UMI frequency and short UMIs can result in the same UMI being attached to different mRNA molecules from the same gene. Thus, the number of transcripts may be underestimated.
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{figures/UMI-Seq-errors} 
-
-}
-
-\caption{Potential Errors in UMIs}(\#fig:intro-umi-errors)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/UMI-Seq-errors.png" alt="Potential Errors in UMIs" width="90%" />
+<p class="caption">(\#fig:intro-umi-errors)Potential Errors in UMIs</p>
+</div>
 
 ## Correcting for Errors
 
@@ -82,27 +70,19 @@ where N = total number of unique UMI barcodes and n = number of observed barcode
  
 An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content. 
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.6\linewidth]{figures/UMI-Seq-amp} 
-
-}
-
-\caption{Per gene amplification rate}(\#fig:intro-umi-amp)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/UMI-Seq-amp.png" alt="Per gene amplification rate" width="60%" />
+<p class="caption">(\#fig:intro-umi-amp)Per gene amplification rate</p>
+</div>
 
 ## Downstream Analysis
 
 Current UMI platforms (DropSeq, InDrop, ICell8) exhibit low and highly variable capture efficiency as shown in the figure below. 
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\linewidth]{figures/UMI-Seq-capture} 
-
-}
-
-\caption{Variability in Capture Efficiency}(\#fig:intro-umi-capture)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/UMI-Seq-capture.png" alt="Variability in Capture Efficiency" width="70%" />
+<p class="caption">(\#fig:intro-umi-capture)Variability in Capture Efficiency</p>
+</div>
 
 This variability can introduce strong biases and it needs to be considered in downstream analysis. Recent analyses often pool cells/genes together based on cell-type or biological pathway to increase the power. Robust statistical analyses of this data is still an open research question and it remains to be determined how to best adjust for biases.
 
