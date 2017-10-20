@@ -31,7 +31,10 @@ To test scImpute, we use the default parameters and we apply it to the Pollen da
 
 ```{r}
 pollen <- readRDS("pollen/pollen.rds")
-write.csv(counts(pollen), "pollen.csv")
+
+# this has to be changed to counts (scimpute requirement)! 
+# but we don't have counts for pollen...
+write.csv(normcounts(pollen), "pollen.csv")
 scimpute(
     count_path = "pollen.csv",
     infile = "csv",
