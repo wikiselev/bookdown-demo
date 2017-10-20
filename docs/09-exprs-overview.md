@@ -14,11 +14,12 @@ One important aspect of single-cell RNA-seq is to control for batch effects. Bat
 
 
 ```r
-library(scater, quietly = TRUE)
+library(SingleCellExperiment)
+library(scater)
 options(stringsAsFactors = FALSE)
 umi <- readRDS("tung/umi.rds")
-umi.qc <- umi[fData(umi)$use, pData(umi)$use]
-endog_genes <- !fData(umi.qc)$is_feature_control
+umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
+endog_genes <- !rowData(umi.qc)$is_feature_control
 ```
 
 ## PCA plot {#visual-pca}
@@ -29,56 +30,46 @@ The easiest way to overview the data is by transforming it using the principal c
 
 Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. The eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html)).
 
-\begin{figure}
-
-{\centering \includegraphics[width=1\linewidth]{figures/pca} 
-
-}
-
-\caption{Schematic representation of PCA dimensionality reduction}(\#fig:clust-pca)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/pca.png" alt="Schematic representation of PCA dimensionality reduction" width="100%" />
+<p class="caption">(\#fig:clust-pca)Schematic representation of PCA dimensionality reduction</p>
+</div>
 
 ### Before QC
 
 Without log-transformation:
 
 ```r
-scater::plotPCA(umi[endog_genes, ],
-                ntop = 500,
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "counts")
+plotPCA(
+    umi[endog_genes, ],
+    exprs_values = "counts",
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual"
+)
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-before-qc1-1} 
-
-}
-
-\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc1)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="09-exprs-overview_files/figure-html/expr-overview-pca-before-qc1-1.png" alt="PCA plot of the tung data" width="90%" />
+<p class="caption">(\#fig:expr-overview-pca-before-qc1)PCA plot of the tung data</p>
+</div>
 
 With log-transformation:
 
 ```r
-scater::plotPCA(umi[endog_genes, ],
-                ntop = 500,
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "log2_counts")
+plotPCA(
+    umi[endog_genes, ],
+    exprs_values = "log2_counts",
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual"
+)
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-before-qc2-1} 
-
-}
-
-\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc2)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="09-exprs-overview_files/figure-html/expr-overview-pca-before-qc2-1.png" alt="PCA plot of the tung data" width="90%" />
+<p class="caption">(\#fig:expr-overview-pca-before-qc2)PCA plot of the tung data</p>
+</div>
 
 Clearly log-transformation is benefitial for our data - it reduces the variance on the first principal component and already separates some biological effects. Moreover, it makes the distribution of the expression values more normal. In the following analysis and chapters we will be using log-transformed raw counts by default.
 
@@ -88,22 +79,19 @@ __However, note that just a log-transformation is not enough to account for diff
 
 
 ```r
-scater::plotPCA(umi.qc[endog_genes, ],
-                ntop = 500,
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "log2_counts")
+plotPCA(
+    umi.qc[endog_genes, ],
+    exprs_values = "log2_counts",
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual"
+)
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-after-qc-1} 
-
-}
-
-\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-after-qc)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-1.png" alt="PCA plot of the tung data" width="90%" />
+<p class="caption">(\#fig:expr-overview-pca-after-qc)PCA plot of the tung data</p>
+</div>
 
 Comparing Figure \@ref(fig:expr-overview-pca-before-qc2) and Figure \@ref(fig:expr-overview-pca-after-qc), it is clear that after quality control the NA19098.r2 cells no longer form a group of outliers.
 
@@ -112,25 +100,19 @@ By default only the top 500 most variable genes are used by scater to calculate 
 __Exercise 1__
 How do the PCA plots change if when all 14,214 genes are used? Or when only top 50 genes are used? Why does the fraction of variance accounted for by the first PC change so dramatically?
 
+__Hint__ Use `ntop` argument of the `plotPCA` function.
+
 __Our answer__
 
-\begin{figure}
+<div class="figure" style="text-align: center">
+<img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-exercise1-1-1.png" alt="PCA plot of the tung data (14214 genes)" width="90%" />
+<p class="caption">(\#fig:expr-overview-pca-after-qc-exercise1-1)PCA plot of the tung data (14214 genes)</p>
+</div>
 
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-after-qc-exercise1-1-1} 
-
-}
-
-\caption{PCA plot of the tung data (14214 genes)}(\#fig:expr-overview-pca-after-qc-exercise1-1)
-\end{figure}
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-after-qc-exercise1-2-1} 
-
-}
-
-\caption{PCA plot of the tung data (50 genes)}(\#fig:expr-overview-pca-after-qc-exercise1-2)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-exercise1-2-1.png" alt="PCA plot of the tung data (50 genes)" width="90%" />
+<p class="caption">(\#fig:expr-overview-pca-after-qc-exercise1-2)PCA plot of the tung data (50 genes)</p>
+</div>
 
 If your answers are different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/07-exprs-overview.Rmd) (you need to search for this exercise in the opened file).
 
@@ -143,47 +125,41 @@ An alternative to PCA for visualizing scRNASeq data is a tSNE plot. [tSNE](https
 
 
 ```r
-scater::plotTSNE(umi[endog_genes, ],
-                 ntop = 500,
-                 perplexity = 130,
-                 colour_by = "batch",
-                 size_by = "total_features",
-                 shape_by = "individual",
-                 exprs_values = "log2_counts",
-                 rand_seed = 123456)
+plotTSNE(
+    umi[endog_genes, ],
+    exprs_values = "log2_counts",
+    perplexity = 130,
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    rand_seed = 123456
+)
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-before-qc-1} 
-
-}
-
-\caption{tSNE map of the tung data}(\#fig:expr-overview-tsne-before-qc)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-before-qc-1.png" alt="tSNE map of the tung data" width="90%" />
+<p class="caption">(\#fig:expr-overview-tsne-before-qc)tSNE map of the tung data</p>
+</div>
 
 ### After QC
 
 
 ```r
-scater::plotTSNE(umi.qc[endog_genes, ],
-                 ntop = 500,
-                 perplexity = 130,
-                 colour_by = "batch",
-                 size_by = "total_features",
-                 shape_by = "individual",
-                 exprs_values = "log2_counts",
-                 rand_seed = 123456)
+plotTSNE(
+    umi.qc[endog_genes, ],
+    exprs_values = "log2_counts",
+    perplexity = 130,
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    rand_seed = 123456
+)
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-after-qc-1} 
-
-}
-
-\caption{tSNE map of the tung data}(\#fig:expr-overview-tsne-after-qc)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-1.png" alt="tSNE map of the tung data" width="90%" />
+<p class="caption">(\#fig:expr-overview-tsne-after-qc)tSNE map of the tung data</p>
+</div>
 
 Interpreting PCA and tSNE plots is often challenging and due to their stochastic and non-linear nature, they are less intuitive. However, in this case it is clear that they provide a similar picture of the data. Comparing Figure \@ref(fig:expr-overview-tsne-before-qc) and \@ref(fig:expr-overview-tsne-after-qc), it is again clear that the samples from NA19098.r2 are no longer outliers after the QC filtering.
 
@@ -196,24 +172,87 @@ How do the tSNE plots change when a perplexity of 10 or 200 is used? How does th
 
 __Our answer__
 
-\begin{figure}
+<div class="figure" style="text-align: center">
+<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-exercise2-1-1.png" alt="tSNE map of the tung data (perplexity = 10)" width="90%" />
+<p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-1)tSNE map of the tung data (perplexity = 10)</p>
+</div>
 
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-after-qc-exercise2-1-1} 
-
-}
-
-\caption{tSNE map of the tung data (perplexity = 10)}(\#fig:expr-overview-tsne-after-qc-exercise2-1)
-\end{figure}
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-after-qc-exercise2-2-1} 
-
-}
-
-\caption{tSNE map of the tung data (perplexity = 200)}(\#fig:expr-overview-tsne-after-qc-exercise2-2)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-exercise2-2-1.png" alt="tSNE map of the tung data (perplexity = 200)" width="90%" />
+<p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-2)tSNE map of the tung data (perplexity = 200)</p>
+</div>
 
 ## Big Exercise
 
 Perform the same analysis with read counts of the Blischak data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
+
+## sessionInfo()
+
+
+```
+## R version 3.4.2 (2017-09-28)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Debian GNU/Linux buster/sid
+## 
+## Matrix products: default
+## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] parallel  stats4    methods   stats     graphics  grDevices utils    
+## [8] datasets  base     
+## 
+## other attached packages:
+##  [1] scater_1.5.19               ggplot2_2.2.1              
+##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
+##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
+##  [7] Biobase_2.36.2              GenomicRanges_1.28.6       
+##  [9] GenomeInfoDb_1.12.3         IRanges_2.10.5             
+## [11] S4Vectors_0.14.7            BiocGenerics_0.22.1        
+## [13] knitr_1.17                 
+## 
+## loaded via a namespace (and not attached):
+##  [1] viridis_0.4.0           edgeR_3.18.1           
+##  [3] bit64_0.9-7             viridisLite_0.2.0      
+##  [5] shiny_1.0.5             assertthat_0.2.0       
+##  [7] highr_0.6               blob_1.1.0             
+##  [9] GenomeInfoDbData_0.99.0 vipor_0.4.5            
+## [11] yaml_2.1.14             RSQLite_2.0            
+## [13] backports_1.1.1         lattice_0.20-35        
+## [15] glue_1.1.1              limma_3.32.10          
+## [17] digest_0.6.12           XVector_0.16.0         
+## [19] colorspace_1.3-2        cowplot_0.8.0          
+## [21] htmltools_0.3.6         httpuv_1.3.5           
+## [23] Matrix_1.2-11           plyr_1.8.4             
+## [25] XML_3.98-1.9            pkgconfig_2.0.1        
+## [27] biomaRt_2.32.1          bookdown_0.5           
+## [29] zlibbioc_1.22.0         xtable_1.8-2           
+## [31] scales_0.5.0            Rtsne_0.13             
+## [33] tibble_1.3.4            lazyeval_0.2.0         
+## [35] magrittr_1.5            mime_0.5               
+## [37] memoise_1.1.0           evaluate_0.10.1        
+## [39] beeswarm_0.2.3          shinydashboard_0.6.1   
+## [41] tools_3.4.2             data.table_1.10.4-2    
+## [43] stringr_1.2.0           munsell_0.4.3          
+## [45] locfit_1.5-9.1          AnnotationDbi_1.38.2   
+## [47] bindrcpp_0.2            compiler_3.4.2         
+## [49] rlang_0.1.2             rhdf5_2.20.0           
+## [51] grid_3.4.2              RCurl_1.95-4.8         
+## [53] tximport_1.4.0          rjson_0.2.15           
+## [55] labeling_0.3            bitops_1.0-6           
+## [57] rmarkdown_1.6           gtable_0.2.0           
+## [59] DBI_0.7                 reshape2_1.4.2         
+## [61] R6_2.2.2                gridExtra_2.3          
+## [63] dplyr_0.7.4             bit_1.1-12             
+## [65] bindr_0.1               rprojroot_1.2          
+## [67] stringi_1.1.5           ggbeeswarm_0.6.0       
+## [69] Rcpp_0.12.13
+```

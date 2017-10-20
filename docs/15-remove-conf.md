@@ -18,26 +18,28 @@ Given the issues with using spike-ins, better results can often be obtained by u
 
 We explore both general approaches below.
 
-### How to evaluate and compare confounder removal strategies
-
-A key question when considering the different methods for removing confounders is how to quantitatively determine which one is the most effective. The main reason why comparisons are challenging is because it is often difficult to know what corresponds to technical counfounders and what is interesting biological variability. Here, we consider three different metrics which are all reasonable based on our knowledge of the experimental design. Depending on the biological question that you wish to address, it is important to choose a metric that allows you to remove the confounders that are likely to be the biggest concern for the given situation.
-
-
 
 
 
 ```r
 library(scRNA.seq.funcs)
 library(RUVSeq)
-library(scater, quietly = TRUE)
+library(scater)
+library(SingleCellExperiment)
 library(scran)
+library(kBET)
+library(sva) # Combat
 library(edgeR)
 set.seed(1234567)
 options(stringsAsFactors = FALSE)
 umi <- readRDS("tung/umi.rds")
-umi.qc <- umi[fData(umi)$use, pData(umi)$use]
-endog_genes <- !fData(umi.qc)$is_feature_control
-erccs <- fData(umi.qc)$is_feature_control
+umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
+endog_genes <- !rowData(umi.qc)$is_feature_control
+erccs <- rowData(umi.qc)$is_feature_control
+
+qclust <- quickCluster(umi.qc, min.size = 30)
+umi.qc <- computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
+umi.qc <- normalize(umi.qc)
 ```
 
 ## Remove Unwanted Variation
@@ -64,11 +66,13 @@ We will concentrate on the first two approaches.
 
 ```r
 ruvg <- RUVg(counts(umi.qc), erccs, k = 1)
-set_exprs(umi.qc, "ruvg1") <- ruvg$normalizedCounts
-ruvg <- RUVg(counts(umi.qc), erccs, k = 2)
-set_exprs(umi.qc, "ruvg2") <- ruvg$normalizedCounts
-set_exprs(umi.qc, "ruvg2_logcpm") <- log2(t(t(ruvg$normalizedCounts) / 
-                                           colSums(ruvg$normalizedCounts) * 1e6) + 1)
+assay(umi.qc, "ruvg1") <- log2(
+    t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
+)
+ruvg <- RUVg(counts(umi.qc), erccs, k = 10)
+assay(umi.qc, "ruvg10") <- log2(
+    t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
+)
 ```
 
 ### RUVs
@@ -84,12 +88,120 @@ tmp <- which(umi.qc$individual == "NA19239")
 scIdx[3, 1:length(tmp)] <- tmp
 cIdx <- rownames(umi.qc)
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
-set_exprs(umi.qc, "ruvs1") <- ruvs$normalizedCounts
-ruvs <- RUVs(counts(umi.qc), cIdx, k = 2, scIdx = scIdx, isLog = FALSE)
-set_exprs(umi.qc, "ruvs2") <- ruvs$normalizedCounts
-set_exprs(umi.qc, "ruvs2_logcpm") <- log2(t(t(ruvs$normalizedCounts) / 
-                                           colSums(ruvs$normalizedCounts) * 1e6) + 1)
+assay(umi.qc, "ruvs1") <- log2(
+    t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
+)
+ruvs <- RUVs(counts(umi.qc), cIdx, k = 10, scIdx = scIdx, isLog = FALSE)
+assay(umi.qc, "ruvs10") <- log2(
+    t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
+)
 ```
+
+## Combat
+
+If you have an experiment with a balanced design, Combat can be used to eliminate batch effects while preserving biological effects by specifying the biological effects using the `mod` parameter. However the `Tung` data contains multiple experimental replicates rather than a balanced design so using `mod1` to preserve biological variability will result in an error. 
+
+```r
+# sample 100 cells
+inds <- sample(100)
+combat_data <- logcounts(umi.qc)[, inds]
+mod_data <- as.data.frame(t(combat_data))
+# Basic batch removal
+mod0 = model.matrix(~ 1, data = mod_data) 
+# Preserve biological variability
+mod1 = model.matrix(~ umi.qc$individual, data = mod_data) 
+# adjust for total genes detected
+mod2 = model.matrix(~ umi.qc$total_features, data = mod_data)
+assay(umi.qc, "combat") <- ComBat(
+    dat = combat_data, 
+    batch = factor(umi.qc$batch[inds]), 
+    mod = mod0,
+    par.prior = FALSE,
+    prior.plots = FALSE
+)
+```
+
+__Exercise 1__
+Perform `ComBat` correction accounting for total features as a co-variate. Store the corrected matrix in the `combat_tf` slot.
+
+## mnnCorrect 
+`mnnCorrect` assumes that each batch shares at least one biological condition with each other batch. Thus it works well for a variety of balanced experimental designs. However, the Tung data contains multiple replicates for each invidividual rather than balanced batches, thus we will normalized each individual separately. Note that this will remove batch effects between batches within the same individual but not the batch effects between batches in different individuals, due to the confounded experimental design. 
+
+Thus we will merge a replicate from each individual to form three batches. 
+
+```r
+do_mnn <- function(data.qc) {
+    batch1 <- data.qc[, data.qc$replicate == "r1"]
+    batch2 <- data.qc[, data.qc$replicate == "r2"]
+    batch3 <- data.qc[, data.qc$replicate == "r3"]
+    
+    if (ncol(batch2) > 0) {
+        x = mnnCorrect(
+          logcounts(batch1), logcounts(batch2), logcounts(batch3),  
+          k = 20,
+          sigma = 0.1,
+          cos.norm = TRUE,
+          svd.dim = 2
+        )
+        return(cbind(x$corrected[[1]], x$corrected[[2]], x$corrected[[3]]))
+    } else {
+        x = mnnCorrect(
+          logcounts(batch1), logcounts(batch3),  
+          k = 20,
+          sigma = 0.1,
+          cos.norm = TRUE,
+          svd.dim = 2
+        )
+        return(cbind(x$corrected[[1]], x$corrected[[2]]))
+    }
+}
+
+indi1 <- do_mnn(umi.qc[, umi.qc$individual == "NA19098"])
+indi2 <- do_mnn(umi.qc[, umi.qc$individual == "NA19101"])
+indi3 <- do_mnn(umi.qc[, umi.qc$individual == "NA19239"])
+
+assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3);
+
+# For a balanced design: 
+#assay(umi.qc, "mnn") <- mnnCorrect(
+#    list(B1 = exprs(batch1), B2 = exprs(batch2), B3 = exprs(batch3)),  
+#    k = 20,
+#    sigma = 0.1,
+#    cos.norm = TRUE,
+#    svd.dim = 2
+#)
+```
+
+## GLM
+A general linear model is a simpler version of `Combat`. It can correct for batches while preserving biological effects if you have a balanced design. In a confounded/replicate design biological effects will not be fit/preserved. Similar to `mnnCorrect` we could remove batch effects from each individual separately in order to preserve biological (and technical) variance between individuals. For demonstation purposes we will naively correct all cofounded batch effects: 
+
+
+```r
+glm_fun <- function(g, batch, indi) {
+  model <- glm(g ~ batch + indi)
+  model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
+  return(model$coef)
+}
+effects <- apply(
+    logcounts(umi.qc), 
+    1, 
+    glm_fun, 
+    batch = umi.qc$batch, 
+    indi = umi.qc$individual
+)
+corrected <- logcounts(umi.qc) - t(effects[as.numeric(factor(umi.qc$batch)), ])
+assay(umi.qc, "glm") <- corrected
+```
+
+__Exercise 2__
+
+Perform GLM correction for each individual separately. Store the final corrected matrix in the `glm_indi` slot.
+
+
+
+### How to evaluate and compare confounder removal strategies
+
+A key question when considering the different methods for removing confounders is how to quantitatively determine which one is the most effective. The main reason why comparisons are challenging is because it is often difficult to know what corresponds to technical counfounders and what is interesting biological variability. Here, we consider three different metrics which are all reasonable based on our knowledge of the experimental design. Depending on the biological question that you wish to address, it is important to choose a metric that allows you to evaluate the confounders that are likely to be the biggest concern for the given situation.
 
 ## Effectiveness 1
 
@@ -97,390 +209,434 @@ We evaluate the effectiveness of the normalization by inspecting the
 PCA plot where colour corresponds the technical replicates and shape
 corresponds to different biological samples (individuals). Separation of biological samples and
 interspersed batches indicates that technical variation has been
-removed. 
+removed. We always use log2-cpm normalized data to match the assumptions of PCA.
 
 
 ```r
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "ruvg1") +
-    ggtitle("PCA - RUVg normalisation: k = 1")
+for(n in assayNames(umi.qc)) {
+    plotPCA(
+        umi.qc[endog_genes, ],
+        colour_by = "batch",
+        size_by = "total_features",
+        shape_by = "individual",
+        exprs_values = n
+    ) +
+    ggtitle(n)
+}
 ```
 
+__Exercise 3__
 
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-1} \end{center}
-
-```r
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "ruvg2") +
-    ggtitle("PCA - RUVg normalisation: k = 2")
-```
-
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-2} \end{center}
-
-```r
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "ruvs1") +
-    ggtitle("PCA - RUVs normalisation: k = 1")
-```
-
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-3} \end{center}
-
-```r
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "ruvs2") +
-    ggtitle("PCA - RUVs normalisation: k = 2")
-```
-
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-4} \end{center}
-
-```r
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "ruvs2_logcpm") +
-    ggtitle("PCA - RUVs normalisation log2-cpm: k = 2")
-```
-
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-5} \end{center}
-
-Plotting log2-normalized CPM from RUVs with k = 2 looks to give the best separation of cells by individual.
+Consider different `ks` for RUV normalizations. Which gives the best results?
 
 ## Effectiveness 2
 
-We can also examine the effectiveness of correction using the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset.
+We can also examine the effectiveness of correction using the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset. Note RLE only evaluates whether the number of genes higher and lower than average are equal for each cell - i.e. systemic technical effects. Random technical noise between batches may not be detected by RLE.
 
 
 ```r
-boxplot(
-    list(
-        "Raw counts" = calc_cell_RLE(counts(umi.qc), erccs),
-        "RUVg (k = 1)" = calc_cell_RLE(assayData(umi.qc)$ruvg1, erccs),
-        "RUVg (k = 2)" = calc_cell_RLE(assayData(umi.qc)$ruvg2, erccs),
-        "RUVs (k = 1)" = calc_cell_RLE(assayData(umi.qc)$ruvs1, erccs),
-        "RUVs (k = 2)" = calc_cell_RLE(assayData(umi.qc)$ruvs2, erccs)
-    )
-)
+res <- list()
+for(n in assayNames(umi.qc)) {
+	res[[n]] <- calc_cell_RLE(assay(umi.qc, n), erccs)
+}
 ```
 
+```
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
 
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
 
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-6-1} \end{center}
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+```
+
+```r
+boxplot(res)
+```
+
+<img src="15-remove-conf_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" />
 
 ## Effectiveness 3
 
-Another way of evaluating the effectiveness of correction is to look at the differentially expressed (DE) genes among the batches of the same individual Theoretically, these batches should not differ from each other. Let's take the most promising individual (__NA19101__, whose batches are the closest to each other) and check whether it is true.
-
-For demonstration purposes we will only use a subset of cells. You should not do that with your real dataset, though.
+We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.
 
 ```r
-keep <- c(
-    sample(which(umi.qc$batch == "NA19101.r1"), 20), 
-    sample(which(umi.qc$batch == "NA19101.r2"), 20),
-    sample(which(umi.qc$batch == "NA19101.r3"), 20)
-)
-design <- model.matrix(~umi.qc[, keep]$batch)
+for(n in assayNames(umi.qc)) {
+    plotQC(
+        umi.qc[endog_genes, ],
+        type = "expl",
+        exprs_values = n,
+        variables = c(
+            "total_features",
+            "total_counts",
+            "batch",
+            "individual",
+            "pct_counts_ERCC",
+            "pct_counts_MT"
+        )
+    ) +
+    ggtitle(n)
+}
 ```
 
-We will use the [edgeR](http://bioconductor.org/packages/edgeR) package to calculate DE genes between plates for this particular individual. Recall that the input data for edgeR (and similar methods like DESeq2) must always be raw counts.
+__Exercise 4__
 
-The particular coefficient that we test for DE in each case below tests to for genes that show a difference in expression between replicate plate 3 and replicate plate 1.
+Perform the above analysis for each normalization/batch correction method. Which method(s) are most/least effective? Why is the variance accounted for by batch never lower than the variance accounted for by individual?
 
-### DE (raw counts)
+## Effectiveness 4
 
-```r
-dge1 <- DGEList(
-    counts = counts(umi.qc[, keep]), 
-    norm.factors = rep(1, length(keep)),
-    group = umi.qc[, keep]$batch
-)
-dge1 <- estimateDisp(dge1, design = design, trend.method = "none")
-plotBCV(dge1)
-```
+Another method to check the efficacy of batch-effect correction is to consider the intermingling of points from different batches in local subsamples of the data. If there are no batch-effects then proportion of cells from each batch in any local region should be equal to the global proportion of cells in each batch. 
 
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-8-1} \end{center}
-
-```r
-fit1 <- glmFit(dge1, design)
-res1 <- glmLRT(fit1)
-topTags(res1)
-```
-
-```
-## Coefficient:  umi.qc[, keep]$batchNA19101.r3 
-##                      logFC   logCPM       LR       PValue          FDR
-## ENSG00000187193 -1.8179825 7.436706 75.64199 3.400520e-18 4.782151e-14
-## ENSG00000185885 -1.1909683 8.812688 62.22578 3.062525e-15 2.153414e-11
-## ENSG00000125144 -3.3823146 5.590605 58.16741 2.407340e-14 1.128481e-10
-## ENSG00000150459  0.7135016 8.414351 40.20293 2.289043e-10 6.467710e-07
-## ENSG00000182463 -3.6331080 5.160311 40.19399 2.299548e-10 6.467710e-07
-## ENSG00000008311 -1.1891979 7.398917 37.66873 8.383786e-10 1.965020e-06
-## ENSG00000164265 -2.1530458 5.547251 37.26738 1.029932e-09 2.069134e-06
-## ENSG00000186439 -3.1023383 5.209191 36.68009 1.391937e-09 2.371266e-06
-## ENSG00000134369  1.2492359 7.112593 36.51166 1.517556e-09 2.371266e-06
-## ENSG00000198417 -2.6086556 5.456231 34.46438 4.341236e-09 6.105081e-06
-```
-
-```r
-summary(decideTestsDGE(res1))
-```
-
-```
-##    umi.qc[, keep]$batchNA19101.r3
-## -1                            125
-## 0                           13875
-## 1                              63
-```
-
-```r
-plotSmear(
-    res1, lowess = TRUE,
-    de.tags = rownames(topTags(res1, n = sum(abs(decideTestsDGE(res1))))$table)
-)
-```
-
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-8-2} \end{center}
-
-### DE (RUVg, k = 2)
-
-```r
-design_ruvg <- model.matrix(~ruvg$W[keep,] + umi.qc[, keep]$batch)
-head(design_ruvg)
-```
-
-```
-##   (Intercept) ruvg$W[keep, ]W_1 ruvg$W[keep, ]W_2
-## 1           1       0.031566414       0.028446254
-## 2           1       0.008323015       0.031336158
-## 3           1       0.010699708      -0.011631828
-## 4           1       0.019683744       0.006157921
-## 5           1       0.033731033       0.020439301
-## 6           1       0.031992504       0.057216310
-##   umi.qc[, keep]$batchNA19101.r2 umi.qc[, keep]$batchNA19101.r3
-## 1                              0                              0
-## 2                              0                              0
-## 3                              0                              0
-## 4                              0                              0
-## 5                              0                              0
-## 6                              0                              0
-```
-
-```r
-dge_ruvg <- estimateDisp(dge1, design = design_ruvg, trend.method = "none")
-plotBCV(dge_ruvg)
-```
-
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-9-1} \end{center}
-
-```r
-fit2 <- glmFit(dge_ruvg, design_ruvg)
-res2 <- glmLRT(fit2)
-topTags(res2)
-```
-
-```
-## Coefficient:  umi.qc[, keep]$batchNA19101.r3 
-##                      logFC   logCPM       LR       PValue          FDR
-## ENSG00000187193 -1.6237017 7.434075 66.71822 3.132259e-16 4.404895e-12
-## ENSG00000185885 -1.1420992 8.811712 50.87408 9.848549e-13 6.925008e-09
-## ENSG00000125144 -3.3692260 5.589868 49.87533 1.638318e-12 7.679889e-09
-## ENSG00000186439 -3.4569861 5.208899 35.54571 2.491356e-09 8.758984e-06
-## ENSG00000134369  1.2360744 7.112423 32.43121 1.234871e-08 3.473198e-05
-## ENSG00000196683 -0.4292702 9.485778 30.67591 3.049281e-08 7.147005e-05
-## ENSG00000198417 -2.6320892 5.455931 29.86782 4.625256e-08 9.292139e-05
-## ENSG00000196591 -0.5111855 8.779698 29.39948 5.889344e-08 1.035273e-04
-## ENSG00000143570 -0.7983990 7.670748 28.97874 7.317717e-08 1.143434e-04
-## ENSG00000150459  0.5770140 8.417628 28.77421 8.132704e-08 1.143702e-04
-```
-
-```r
-summary(decideTestsDGE(res2))
-```
-
-```
-##    umi.qc[, keep]$batchNA19101.r3
-## -1                             94
-## 0                           13920
-## 1                              49
-```
-
-```r
-plotSmear(
-    res2, lowess = TRUE,
-    de.tags = rownames(topTags(res2, n = sum(abs(decideTestsDGE(res2))))$table)
-)
-```
-
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-9-2} \end{center}
-
-### DE (RUVs, k = 2)
-
-```r
-design_ruvs <- model.matrix(~ruvs$W[keep,] + umi.qc[, keep]$batch)
-head(design_ruvs)
-```
-
-```
-##   (Intercept) ruvs$W[keep, ]W_1 ruvs$W[keep, ]W_2
-## 1           1         0.2786262       -0.07496082
-## 2           1         0.2825106       -0.09287973
-## 3           1         0.2688981       -0.08130043
-## 4           1         0.2152265       -0.09724690
-## 5           1         0.2727856       -0.08117065
-## 6           1         0.2351730       -0.07046587
-##   umi.qc[, keep]$batchNA19101.r2 umi.qc[, keep]$batchNA19101.r3
-## 1                              0                              0
-## 2                              0                              0
-## 3                              0                              0
-## 4                              0                              0
-## 5                              0                              0
-## 6                              0                              0
-```
-
-```r
-dge_ruvs <- estimateDisp(dge1, design = design_ruvs, trend.method = "none")
-plotBCV(dge_ruvs)
-```
-
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-10-1} \end{center}
-
-```r
-fit3 <- glmFit(dge_ruvs, design_ruvs)
-res3 <- glmLRT(fit3)
-topTags(res3)
-```
-
-```
-## Coefficient:  umi.qc[, keep]$batchNA19101.r3 
-##                      logFC    logCPM       LR       PValue          FDR
-## ENSG00000137818  0.3806669 11.625728 45.53881 1.496440e-11 1.554820e-07
-## ENSG00000144713  0.5006206 10.588483 44.77416 2.211221e-11 1.554820e-07
-## ENSG00000105372  0.3973437 11.574721 37.81839 7.764625e-10 3.639797e-06
-## ENSG00000197958  0.3942581 10.207469 33.58036 6.837956e-09 2.404054e-05
-## ENSG00000137154  0.3291951 11.209969 31.28073 2.232847e-08 5.913156e-05
-## ENSG00000187193 -1.3710013  7.429212 31.04369 2.522857e-08 5.913156e-05
-## ENSG00000181163  0.3355133 11.486981 28.79788 8.033888e-08 1.614008e-04
-## ENSG00000089157  0.3079715 11.155625 27.89563 1.280385e-07 2.076654e-04
-## ENSG00000150459  0.6754420  8.423888 27.82351 1.329011e-07 2.076654e-04
-## ENSG00000114391  0.5009652 10.200433 27.52536 1.550481e-07 2.180441e-04
-```
-
-```r
-summary(decideTestsDGE(res3))
-```
-
-```
-##    umi.qc[, keep]$batchNA19101.r3
-## -1                             83
-## 0                           13911
-## 1                              69
-```
-
-```r
-plotSmear(
-    res3, lowess = TRUE,
-    de.tags = rownames(topTags(res3, n = sum(abs(decideTestsDGE(res3))))$table)
-)
-```
-
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-10-2} \end{center}
-
-In the above analyses, we have ignored size factors between cells. A typical edgeR analysis would always include these.
+`kBET` takes `kNN` networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). `kBET` assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, `kBET` can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply `kBET` to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, `kBET` does not determine if biological signal has been preserved. 
 
 
 ```r
-umi.qc <- scran::computeSumFactors(umi.qc, sizes = 15)
-dge_ruvs$samples$norm.factors <- sizeFactors(umi.qc)[keep]
-dge_ruvs_sf <- estimateDisp(dge_ruvs, design = design_ruvs, trend.method = "none")
-plotBCV(dge_ruvs_sf)
+compare_kBET_results <- function(sce){
+    indiv <- unique(sce$individual)
+    norms <- assayNames(sce) # Get all normalizations
+    results <- list()
+    for (i in indiv){ 
+        for (j in norms){
+            tmp <- kBET(
+                df = t(assay(sce[,sce$individual== i], j)), 
+                batch = sce$batch[sce$individual==i], 
+                heuristic = TRUE, 
+                verbose = FALSE, 
+                addTest = FALSE, 
+                plot = FALSE)
+            results[[i]][[j]] <- tmp$summary$kBET.observed[1]
+        }
+    }
+    return(as.data.frame(results))
+}
+
+eff_debatching <- compare_kBET_results(umi.qc)
 ```
 
-
-
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-11-1} \end{center}
 
 ```r
-fit4 <- glmFit(dge_ruvs_sf, design_ruvs)
-res4 <- glmLRT(fit4)
-topTags(res4)
+require("reshape2")
 ```
 
 ```
-## Coefficient:  umi.qc[, keep]$batchNA19101.r3 
-##                      logFC    logCPM       LR       PValue          FDR
-## ENSG00000187193 -1.3230540  7.418234 31.81968 1.691697e-08 0.0002379033
-## ENSG00000144713  0.5465584 10.690938 27.50251 1.568906e-07 0.0011031766
-## ENSG00000153246  4.1765109  4.644252 23.73794 1.103848e-06 0.0039359534
-## ENSG00000150459  0.6934232  8.365003 23.71081 1.119520e-06 0.0039359534
-## ENSG00000125144 -2.6309945  5.400342 22.94655 1.665689e-06 0.0046849159
-## ENSG00000162244  0.5584180  9.918262 22.01551 2.704563e-06 0.0063390446
-## ENSG00000198918  0.5993234  9.603605 21.15631 4.233047e-06 0.0084570542
-## ENSG00000174748  0.4802203 10.706546 20.52616 5.882171e-06 0.0084570542
-## ENSG00000181163  0.3668285 11.635978 20.39748 6.291268e-06 0.0084570542
-## ENSG00000114391  0.5512702 10.275265 20.07975 7.427918e-06 0.0084570542
-```
-
-```r
-summary(decideTestsDGE(res4))
-```
-
-```
-##    umi.qc[, keep]$batchNA19101.r3
-## -1                             43
-## 0                           13973
-## 1                              47
+## Loading required package: reshape2
 ```
 
 ```r
-plotSmear(
-    res4, lowess = TRUE,
-    de.tags = rownames(topTags(res4, n = sum(abs(decideTestsDGE(res4))))$table)
-)
+require("RColorBrewer")
 ```
 
+```
+## Loading required package: RColorBrewer
+```
 
+```r
+# Plot results
+dod <- melt(as.matrix(eff_debatching),  value.name = "kBET")
+colnames(dod)[1:2] <- c("Normalisation", "Individual")
 
-\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-11-2} \end{center}
+colorset <- c('gray', brewer.pal(n = 9, "RdYlBu"))
 
+ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +  
+    geom_tile() +
+    scale_fill_gradient2(
+        na.value = "gray",
+        low = colorset[2],
+        mid=colorset[6],
+        high = colorset[10],
+        midpoint = 0.5, limit = c(0,1)) +
+    scale_x_discrete(expand = c(0, 0)) +
+    scale_y_discrete(expand = c(0, 0)) + 
+    theme(
+        axis.text.x = element_text(
+            angle = 45, 
+            vjust = 1, 
+            size = 12, 
+            hjust = 1
+        )
+    ) + 
+    ggtitle("Effect of batch regression methods per individual")
+```
+
+<img src="15-remove-conf_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
+
+__Exercise 5__
+
+Why do the raw counts appear to have the least batch effects?
 
 ## Exercise
 
 Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.
+
+## sessionInfo()
+
+
+```
+## R version 3.4.2 (2017-09-28)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Debian GNU/Linux buster/sid
+## 
+## Matrix products: default
+## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats4    parallel  methods   stats     graphics  grDevices utils    
+## [8] datasets  base     
+## 
+## other attached packages:
+##  [1] RColorBrewer_1.1-2          reshape2_1.4.2             
+##  [3] sva_3.24.4                  genefilter_1.58.1          
+##  [5] mgcv_1.8-22                 nlme_3.1-131               
+##  [7] kBET_0.99.0                 scran_1.5.12               
+##  [9] scater_1.5.19               SingleCellExperiment_0.99.4
+## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
+## [13] edgeR_3.18.1                limma_3.32.10              
+## [15] EDASeq_2.10.0               ShortRead_1.34.2           
+## [17] GenomicAlignments_1.12.2    SummarizedExperiment_1.6.5 
+## [19] DelayedArray_0.2.7          matrixStats_0.52.2         
+## [21] Rsamtools_1.28.0            GenomicRanges_1.28.6       
+## [23] GenomeInfoDb_1.12.3         Biostrings_2.44.2          
+## [25] XVector_0.16.0              IRanges_2.10.5             
+## [27] S4Vectors_0.14.7            BiocParallel_1.10.1        
+## [29] Biobase_2.36.2              BiocGenerics_0.22.1        
+## [31] scRNA.seq.funcs_0.1.0       knitr_1.17                 
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rtsne_0.13              ggbeeswarm_0.6.0       
+##  [3] colorspace_1.3-2        rjson_0.2.15           
+##  [5] hwriter_1.3.2           dynamicTreeCut_1.63-1  
+##  [7] rprojroot_1.2           DT_0.2                 
+##  [9] bit64_0.9-7             AnnotationDbi_1.38.2   
+## [11] splines_3.4.2           R.methodsS3_1.7.1      
+## [13] tximport_1.4.0          DESeq_1.28.0           
+## [15] geneplotter_1.54.0      annotate_1.54.0        
+## [17] cluster_2.0.6           R.oo_1.21.0            
+## [19] shinydashboard_0.6.1    shiny_1.0.5            
+## [21] compiler_3.4.2          backports_1.1.1        
+## [23] assertthat_0.2.0        Matrix_1.2-11          
+## [25] lazyeval_0.2.0          htmltools_0.3.6        
+## [27] tools_3.4.2             igraph_1.1.2           
+## [29] bindrcpp_0.2            gtable_0.2.0           
+## [31] glue_1.1.1              GenomeInfoDbData_0.99.0
+## [33] dplyr_0.7.4             Rcpp_0.12.13           
+## [35] rtracklayer_1.36.6      stringr_1.2.0          
+## [37] mime_0.5                hypergeo_1.2-13        
+## [39] statmod_1.4.30          XML_3.98-1.9           
+## [41] zlibbioc_1.22.0         MASS_7.3-47            
+## [43] zoo_1.8-0               scales_0.5.0           
+## [45] aroma.light_3.6.0       rhdf5_2.20.0           
+## [47] yaml_2.1.14             memoise_1.1.0          
+## [49] gridExtra_2.3           biomaRt_2.32.1         
+## [51] latticeExtra_0.6-28     stringi_1.1.5          
+## [53] RSQLite_2.0             orthopolynom_1.0-5     
+## [55] GenomicFeatures_1.28.5  contfrac_1.1-11        
+## [57] rlang_0.1.2             pkgconfig_2.0.1        
+## [59] moments_0.14            bitops_1.0-6           
+## [61] evaluate_0.10.1         lattice_0.20-35        
+## [63] bindr_0.1               labeling_0.3           
+## [65] htmlwidgets_0.9         cowplot_0.8.0          
+## [67] bit_1.1-12              deSolve_1.20           
+## [69] plyr_1.8.4              magrittr_1.5           
+## [71] bookdown_0.5            R6_2.2.2               
+## [73] DBI_0.7                 survival_2.41-3        
+## [75] RCurl_1.95-4.8          tibble_1.3.4           
+## [77] rmarkdown_1.6           viridis_0.4.0          
+## [79] locfit_1.5-9.1          grid_3.4.2             
+## [81] data.table_1.10.4-2     FNN_1.1                
+## [83] blob_1.1.0              digest_0.6.12          
+## [85] xtable_1.8-2            httpuv_1.3.5           
+## [87] elliptic_1.3-7          R.utils_2.5.0          
+## [89] munsell_0.4.3           beeswarm_0.2.3         
+## [91] viridisLite_0.2.0       vipor_0.4.5
+```
+

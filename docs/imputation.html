@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Analysis of single cell RNA-seq data</title>
+  <meta name="description" content="Analysis of single cell RNA-seq data">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Analysis of single cell RNA-seq data" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Analysis of single cell RNA-seq data" />
+  
+  
+  
+
+<meta name="author" content="Vladimir Kiselev ((???)(https://twitter.com/wikiselev)), Tallulah Andrews, Davis McCarthy ((???)(https://twitter.com/davisjmcc)), Maren Büttner ((???)(https://twitter.com/marenbuettner)) and Martin Hemberg ((???)(https://twitter.com/m_hemberg))">
+
+
+<meta name="date" content="2017-10-20">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="pseudotime-analysis.html">
+<link rel="next" href="differential-expression-de-analysis.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<!-- for Facebook -->  
+<meta property="og:url" content="http://hemberg-lab.github.io/scRNA.seq.course/" />
+<meta property="og:description" content="In this course we will be surveying the existing problems as well as the available computational and statistical frameworks available for the analysis of scRNA-seq. The course is taught through the University of Cambridge Bioinformatics training unit, but the material found on these pages is meant to be used for anyone interested in learning about computational analysis of scRNA-seq data." />
+<meta property="og:image" content="http://hemberg-lab.github.io/scRNA.seq.course/figures/RNA-Seq_workflow-5.pdf.jpg" />
+
+<!-- for Twitter -->          
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Analysis of single-cell RNA-seq data" />
+<meta name="twitter:description" content="In this course we will be surveying the existing problems as well as the available computational and statistical frameworks available for the analysis of scRNA-seq. The course is taught through the University of Cambridge Bioinformatics training unit, but the material found on these pages is meant to be used for anyone interested in learning about computational analysis of scRNA-seq data." />
+<meta name="twitter:image" content="http://hemberg-lab.github.io/scRNA.seq.course/figures/RNA-Seq_workflow-5.pdf.jpg" />
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-71525309-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html">Table of Contents</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About the course</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#video"><i class="fa fa-check"></i><b>1.1</b> Video</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#registration"><i class="fa fa-check"></i><b>1.2</b> Registration</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#github"><i class="fa fa-check"></i><b>1.3</b> GitHub</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#docker-image"><i class="fa fa-check"></i><b>1.4</b> Docker image</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i><b>1.5</b> License</a></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.6</b> Prerequisites</a></li>
+<li class="chapter" data-level="1.7" data-path="index.html"><a href="index.html#contact"><i class="fa fa-check"></i><b>1.7</b> Contact</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="technical-requirements.html"><a href="technical-requirements.html"><i class="fa fa-check"></i><b>2</b> Technical requirements</a><ul>
+<li class="chapter" data-level="2.1" data-path="technical-requirements.html"><a href="technical-requirements.html#r-based"><i class="fa fa-check"></i><b>2.1</b> R-based</a></li>
+<li class="chapter" data-level="2.2" data-path="technical-requirements.html"><a href="technical-requirements.html#docker-image-1"><i class="fa fa-check"></i><b>2.2</b> Docker image</a></li>
+<li class="chapter" data-level="2.3" data-path="technical-requirements.html"><a href="technical-requirements.html#manual-installation"><i class="fa fa-check"></i><b>2.3</b> Manual installation</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="technical-requirements.html"><a href="technical-requirements.html#general"><i class="fa fa-check"></i><b>2.3.1</b> General</a></li>
+<li class="chapter" data-level="2.3.2" data-path="technical-requirements.html"><a href="technical-requirements.html#plotting"><i class="fa fa-check"></i><b>2.3.2</b> Plotting</a></li>
+<li class="chapter" data-level="2.3.3" data-path="technical-requirements.html"><a href="technical-requirements.html#qc-and-normalisation"><i class="fa fa-check"></i><b>2.3.3</b> QC and normalisation</a></li>
+<li class="chapter" data-level="2.3.4" data-path="technical-requirements.html"><a href="technical-requirements.html#clustering"><i class="fa fa-check"></i><b>2.3.4</b> Clustering</a></li>
+<li class="chapter" data-level="2.3.5" data-path="technical-requirements.html"><a href="technical-requirements.html#dropouts"><i class="fa fa-check"></i><b>2.3.5</b> Dropouts</a></li>
+<li class="chapter" data-level="2.3.6" data-path="technical-requirements.html"><a href="technical-requirements.html#pseudotime"><i class="fa fa-check"></i><b>2.3.6</b> Pseudotime</a></li>
+<li class="chapter" data-level="2.3.7" data-path="technical-requirements.html"><a href="technical-requirements.html#differential-expression"><i class="fa fa-check"></i><b>2.3.7</b> Differential Expression</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="technical-requirements.html"><a href="technical-requirements.html#extra-tools"><i class="fa fa-check"></i><b>2.4</b> Extra tools</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html"><i class="fa fa-check"></i><b>3</b> Introduction to single-cell RNA-seq</a><ul>
+<li class="chapter" data-level="3.1" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#bulk-rna-seq"><i class="fa fa-check"></i><b>3.1</b> Bulk RNA-seq</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#scrna-seq"><i class="fa fa-check"></i><b>3.2</b> scRNA-seq</a></li>
+<li class="chapter" data-level="3.3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#workflow"><i class="fa fa-check"></i><b>3.3</b> Workflow</a></li>
+<li class="chapter" data-level="3.4" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#computational-analysis"><i class="fa fa-check"></i><b>3.4</b> Computational Analysis</a></li>
+<li class="chapter" data-level="3.5" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#challenges"><i class="fa fa-check"></i><b>3.5</b> Challenges</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="experimental-methods.html"><a href="experimental-methods.html"><i class="fa fa-check"></i><b>4</b> Experimental methods</a><ul>
+<li class="chapter" data-level="4.1" data-path="experimental-methods.html"><a href="experimental-methods.html#overview-of-experimental-methods-for-generating-scrna-seq-data"><i class="fa fa-check"></i><b>4.1</b> Overview of experimental methods for generating scRNA-seq data</a></li>
+<li class="chapter" data-level="4.2" data-path="experimental-methods.html"><a href="experimental-methods.html#what-platform-to-use-for-my-experiment"><i class="fa fa-check"></i><b>4.2</b> What platform to use for my experiment?</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html"><i class="fa fa-check"></i><b>5</b> Construction of expression matrix</a><ul>
+<li class="chapter" data-level="5.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-qc"><i class="fa fa-check"></i><b>5.1</b> Reads QC</a></li>
+<li class="chapter" data-level="5.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-alignment"><i class="fa fa-check"></i><b>5.2</b> Reads alignment</a></li>
+<li class="chapter" data-level="5.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#alignment-example"><i class="fa fa-check"></i><b>5.3</b> Alignment example</a></li>
+<li class="chapter" data-level="5.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-qc"><i class="fa fa-check"></i><b>5.4</b> Mapping QC</a></li>
+<li class="chapter" data-level="5.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-quantification"><i class="fa fa-check"></i><b>5.5</b> Reads quantification</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html"><i class="fa fa-check"></i><b>6</b> Unique Molecular Identifiers (UMIs)</a><ul>
+<li class="chapter" data-level="6.1" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#mapping-barcodes"><i class="fa fa-check"></i><b>6.2</b> Mapping Barcodes</a></li>
+<li class="chapter" data-level="6.3" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#counting-barcodes"><i class="fa fa-check"></i><b>6.3</b> Counting Barcodes</a></li>
+<li class="chapter" data-level="6.4" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#correcting-for-errors"><i class="fa fa-check"></i><b>6.4</b> Correcting for Errors</a></li>
+<li class="chapter" data-level="6.5" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#downstream-analysis"><i class="fa fa-check"></i><b>6.5</b> Downstream Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="scater-package.html"><a href="scater-package.html"><i class="fa fa-check"></i><b>7</b> scater package</a><ul>
+<li class="chapter" data-level="7.1" data-path="scater-package.html"><a href="scater-package.html#introduction-1"><i class="fa fa-check"></i><b>7.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.2" data-path="scater-package.html"><a href="scater-package.html#scater-workflow"><i class="fa fa-check"></i><b>7.2</b> scater workflow</a></li>
+<li class="chapter" data-level="7.3" data-path="scater-package.html"><a href="scater-package.html#terminology"><i class="fa fa-check"></i><b>7.3</b> Terminology</a></li>
+<li class="chapter" data-level="7.4" data-path="scater-package.html"><a href="scater-package.html#sceset-class"><i class="fa fa-check"></i><b>7.4</b> SCESet class</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="exprs-qc.html"><a href="exprs-qc.html"><i class="fa fa-check"></i><b>8</b> Expression QC (UMI)</a><ul>
+<li class="chapter" data-level="8.1" data-path="exprs-qc.html"><a href="exprs-qc.html#introduction-2"><i class="fa fa-check"></i><b>8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.2" data-path="exprs-qc.html"><a href="exprs-qc.html#tung-dataset"><i class="fa fa-check"></i><b>8.2</b> Tung dataset</a></li>
+<li class="chapter" data-level="8.3" data-path="exprs-qc.html"><a href="exprs-qc.html#cell-qc"><i class="fa fa-check"></i><b>8.3</b> Cell QC</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="exprs-qc.html"><a href="exprs-qc.html#library-size"><i class="fa fa-check"></i><b>8.3.1</b> Library size</a></li>
+<li class="chapter" data-level="8.3.2" data-path="exprs-qc.html"><a href="exprs-qc.html#detected-genes-1"><i class="fa fa-check"></i><b>8.3.2</b> Detected genes (1)</a></li>
+<li class="chapter" data-level="8.3.3" data-path="exprs-qc.html"><a href="exprs-qc.html#erccs-and-mts"><i class="fa fa-check"></i><b>8.3.3</b> ERCCs and MTs</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="exprs-qc.html"><a href="exprs-qc.html#cell-filtering"><i class="fa fa-check"></i><b>8.4</b> Cell filtering</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="exprs-qc.html"><a href="exprs-qc.html#manual"><i class="fa fa-check"></i><b>8.4.1</b> Manual</a></li>
+<li class="chapter" data-level="8.4.2" data-path="exprs-qc.html"><a href="exprs-qc.html#automatic"><i class="fa fa-check"></i><b>8.4.2</b> Automatic</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="exprs-qc.html"><a href="exprs-qc.html#compare-filterings"><i class="fa fa-check"></i><b>8.5</b> Compare filterings</a></li>
+<li class="chapter" data-level="8.6" data-path="exprs-qc.html"><a href="exprs-qc.html#gene-analysis"><i class="fa fa-check"></i><b>8.6</b> Gene analysis</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="exprs-qc.html"><a href="exprs-qc.html#gene-expression"><i class="fa fa-check"></i><b>8.6.1</b> Gene expression</a></li>
+<li class="chapter" data-level="8.6.2" data-path="exprs-qc.html"><a href="exprs-qc.html#gene-filtering"><i class="fa fa-check"></i><b>8.6.2</b> Gene filtering</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="exprs-qc.html"><a href="exprs-qc.html#save-the-data"><i class="fa fa-check"></i><b>8.7</b> Save the data</a></li>
+<li class="chapter" data-level="8.8" data-path="exprs-qc.html"><a href="exprs-qc.html#big-exercise"><i class="fa fa-check"></i><b>8.8</b> Big Exercise</a></li>
+<li class="chapter" data-level="8.9" data-path="exprs-qc.html"><a href="exprs-qc.html#sessioninfo"><i class="fa fa-check"></i><b>8.9</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="expression-qc-reads.html"><a href="expression-qc-reads.html"><i class="fa fa-check"></i><b>9</b> Expression QC (Reads)</a><ul>
+<li class="chapter" data-level="9.1" data-path="expression-qc-reads.html"><a href="expression-qc-reads.html#sessioninfo-1"><i class="fa fa-check"></i><b>9.1</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="data-visualization.html"><a href="data-visualization.html"><i class="fa fa-check"></i><b>10</b> Data visualization</a><ul>
+<li class="chapter" data-level="10.1" data-path="data-visualization.html"><a href="data-visualization.html#introduction-3"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="data-visualization.html"><a href="data-visualization.html#visual-pca"><i class="fa fa-check"></i><b>10.2</b> PCA plot</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="data-visualization.html"><a href="data-visualization.html#before-qc"><i class="fa fa-check"></i><b>10.2.1</b> Before QC</a></li>
+<li class="chapter" data-level="10.2.2" data-path="data-visualization.html"><a href="data-visualization.html#after-qc"><i class="fa fa-check"></i><b>10.2.2</b> After QC</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="data-visualization.html"><a href="data-visualization.html#visual-tsne"><i class="fa fa-check"></i><b>10.3</b> tSNE map</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="data-visualization.html"><a href="data-visualization.html#before-qc-1"><i class="fa fa-check"></i><b>10.3.1</b> Before QC</a></li>
+<li class="chapter" data-level="10.3.2" data-path="data-visualization.html"><a href="data-visualization.html#after-qc-1"><i class="fa fa-check"></i><b>10.3.2</b> After QC</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="data-visualization.html"><a href="data-visualization.html#big-exercise-1"><i class="fa fa-check"></i><b>10.4</b> Big Exercise</a></li>
+<li class="chapter" data-level="10.5" data-path="data-visualization.html"><a href="data-visualization.html#sessioninfo-2"><i class="fa fa-check"></i><b>10.5</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="data-visualization-reads.html"><a href="data-visualization-reads.html"><i class="fa fa-check"></i><b>11</b> Data visualization (Reads)</a><ul>
+<li class="chapter" data-level="11.1" data-path="data-visualization-reads.html"><a href="data-visualization-reads.html#sessioninfo-3"><i class="fa fa-check"></i><b>11.1</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html"><i class="fa fa-check"></i><b>12</b> Identifying confounding factors</a><ul>
+<li class="chapter" data-level="12.1" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#introduction-4"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
+<li class="chapter" data-level="12.2" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#correlations-with-pcs"><i class="fa fa-check"></i><b>12.2</b> Correlations with PCs</a><ul>
+<li class="chapter" data-level="12.2.1" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#detected-genes"><i class="fa fa-check"></i><b>12.2.1</b> Detected genes</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#explanatory-variables"><i class="fa fa-check"></i><b>12.3</b> Explanatory variables</a></li>
+<li class="chapter" data-level="12.4" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#other-confounders"><i class="fa fa-check"></i><b>12.4</b> Other confounders</a></li>
+<li class="chapter" data-level="12.5" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#exercise"><i class="fa fa-check"></i><b>12.5</b> Exercise</a></li>
+<li class="chapter" data-level="12.6" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#sessioninfo-4"><i class="fa fa-check"></i><b>12.6</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="identifying-confounding-factors-reads.html"><a href="identifying-confounding-factors-reads.html"><i class="fa fa-check"></i><b>13</b> Identifying confounding factors (Reads)</a><ul>
+<li class="chapter" data-level="13.1" data-path="identifying-confounding-factors-reads.html"><a href="identifying-confounding-factors-reads.html#sessioninfo-5"><i class="fa fa-check"></i><b>13.1</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html"><i class="fa fa-check"></i><b>14</b> Normalization for library size</a><ul>
+<li class="chapter" data-level="14.1" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#introduction-5"><i class="fa fa-check"></i><b>14.1</b> Introduction</a></li>
+<li class="chapter" data-level="14.2" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#library-size-1"><i class="fa fa-check"></i><b>14.2</b> Library size</a></li>
+<li class="chapter" data-level="14.3" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#normalisations"><i class="fa fa-check"></i><b>14.3</b> Normalisations</a><ul>
+<li class="chapter" data-level="14.3.1" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#raw"><i class="fa fa-check"></i><b>14.3.1</b> Raw</a></li>
+<li class="chapter" data-level="14.3.2" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#cpm"><i class="fa fa-check"></i><b>14.3.2</b> CPM</a></li>
+<li class="chapter" data-level="14.3.3" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#tmm"><i class="fa fa-check"></i><b>14.3.3</b> TMM</a></li>
+<li class="chapter" data-level="14.3.4" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#scran"><i class="fa fa-check"></i><b>14.3.4</b> scran</a></li>
+<li class="chapter" data-level="14.3.5" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#size-factor-rle"><i class="fa fa-check"></i><b>14.3.5</b> Size-factor (RLE)</a></li>
+<li class="chapter" data-level="14.3.6" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#upperquantile"><i class="fa fa-check"></i><b>14.3.6</b> Upperquantile</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#downsampling"><i class="fa fa-check"></i><b>14.4</b> Downsampling</a></li>
+<li class="chapter" data-level="14.5" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#normalizing-for-genetranscript-length"><i class="fa fa-check"></i><b>14.5</b> Normalizing for gene/transcript length</a></li>
+<li class="chapter" data-level="14.6" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#exercise-1"><i class="fa fa-check"></i><b>14.6</b> Exercise</a></li>
+<li class="chapter" data-level="14.7" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#sessioninfo-6"><i class="fa fa-check"></i><b>14.7</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="normalization-for-library-size-reads.html"><a href="normalization-for-library-size-reads.html"><i class="fa fa-check"></i><b>15</b> Normalization for library size (Reads)</a><ul>
+<li class="chapter" data-level="15.1" data-path="normalization-for-library-size-reads.html"><a href="normalization-for-library-size-reads.html#sessioninfo-7"><i class="fa fa-check"></i><b>15.1</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html"><i class="fa fa-check"></i><b>16</b> Dealing with confounders</a><ul>
+<li class="chapter" data-level="16.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#introduction-6"><i class="fa fa-check"></i><b>16.1</b> Introduction</a><ul>
+<li class="chapter" data-level="16.1.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#advantages-and-disadvantages-of-using-spike-ins-to-remove-confounders"><i class="fa fa-check"></i><b>16.1.1</b> Advantages and disadvantages of using spike-ins to remove confounders</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#remove-unwanted-variation"><i class="fa fa-check"></i><b>16.2</b> Remove Unwanted Variation</a><ul>
+<li class="chapter" data-level="16.2.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#ruvg"><i class="fa fa-check"></i><b>16.2.1</b> RUVg</a></li>
+<li class="chapter" data-level="16.2.2" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#ruvs"><i class="fa fa-check"></i><b>16.2.2</b> RUVs</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#combat"><i class="fa fa-check"></i><b>16.3</b> Combat</a></li>
+<li class="chapter" data-level="16.4" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#mnncorrect"><i class="fa fa-check"></i><b>16.4</b> mnnCorrect</a></li>
+<li class="chapter" data-level="16.5" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#glm"><i class="fa fa-check"></i><b>16.5</b> GLM</a><ul>
+<li class="chapter" data-level="16.5.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#how-to-evaluate-and-compare-confounder-removal-strategies"><i class="fa fa-check"></i><b>16.5.1</b> How to evaluate and compare confounder removal strategies</a></li>
+</ul></li>
+<li class="chapter" data-level="16.6" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#effectiveness-1"><i class="fa fa-check"></i><b>16.6</b> Effectiveness 1</a></li>
+<li class="chapter" data-level="16.7" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#effectiveness-2"><i class="fa fa-check"></i><b>16.7</b> Effectiveness 2</a></li>
+<li class="chapter" data-level="16.8" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#effectiveness-3"><i class="fa fa-check"></i><b>16.8</b> Effectiveness 3</a></li>
+<li class="chapter" data-level="16.9" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#effectiveness-4"><i class="fa fa-check"></i><b>16.9</b> Effectiveness 4</a></li>
+<li class="chapter" data-level="16.10" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#exercise-2"><i class="fa fa-check"></i><b>16.10</b> Exercise</a></li>
+<li class="chapter" data-level="16.11" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#sessioninfo-8"><i class="fa fa-check"></i><b>16.11</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="clustering-introduction.html"><a href="clustering-introduction.html"><i class="fa fa-check"></i><b>17</b> Clustering Introduction</a><ul>
+<li class="chapter" data-level="17.1" data-path="clustering-introduction.html"><a href="clustering-introduction.html#introduction-7"><i class="fa fa-check"></i><b>17.1</b> Introduction</a></li>
+<li class="chapter" data-level="17.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#dimensionality-reductions"><i class="fa fa-check"></i><b>17.2</b> Dimensionality reductions</a></li>
+<li class="chapter" data-level="17.3" data-path="clustering-introduction.html"><a href="clustering-introduction.html#clustering-methods"><i class="fa fa-check"></i><b>17.3</b> Clustering methods</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="clustering-introduction.html"><a href="clustering-introduction.html#hierarchical-clustering"><i class="fa fa-check"></i><b>17.3.1</b> Hierarchical clustering</a></li>
+<li class="chapter" data-level="17.3.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#k-means"><i class="fa fa-check"></i><b>17.3.2</b> k-means</a></li>
+<li class="chapter" data-level="17.3.3" data-path="clustering-introduction.html"><a href="clustering-introduction.html#graph-based-methods"><i class="fa fa-check"></i><b>17.3.3</b> Graph-based methods</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="clustering-introduction.html"><a href="clustering-introduction.html#challenges-in-clustering"><i class="fa fa-check"></i><b>17.4</b> Challenges in clustering</a></li>
+<li class="chapter" data-level="17.5" data-path="clustering-introduction.html"><a href="clustering-introduction.html#tools-for-scrna-seq-data"><i class="fa fa-check"></i><b>17.5</b> Tools for scRNA-seq data</a><ul>
+<li class="chapter" data-level="17.5.1" data-path="clustering-introduction.html"><a href="clustering-introduction.html#sincera"><i class="fa fa-check"></i><b>17.5.1</b> <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a></a></li>
+<li class="chapter" data-level="17.5.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#pcareduce"><i class="fa fa-check"></i><b>17.5.2</b> <a href="https://github.com/JustinaZ/pcaReduce">pcaReduce</a></a></li>
+<li class="chapter" data-level="17.5.3" data-path="clustering-introduction.html"><a href="clustering-introduction.html#sc3"><i class="fa fa-check"></i><b>17.5.3</b> <a href="http://bioconductor.org/packages/SC3/">SC3</a></a></li>
+<li class="chapter" data-level="17.5.4" data-path="clustering-introduction.html"><a href="clustering-introduction.html#tsne-k-means"><i class="fa fa-check"></i><b>17.5.4</b> tSNE + k-means</a></li>
+<li class="chapter" data-level="17.5.5" data-path="clustering-introduction.html"><a href="clustering-introduction.html#seurat"><i class="fa fa-check"></i><b>17.5.5</b> <a href="https://github.com/satijalab/seurat">SEURAT</a></a></li>
+<li class="chapter" data-level="17.5.6" data-path="clustering-introduction.html"><a href="clustering-introduction.html#snn-cliq"><i class="fa fa-check"></i><b>17.5.6</b> <a href="http://bioinfo.uncc.edu/SNNCliq/">SNN-Cliq</a></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="clust-methods.html"><a href="clust-methods.html"><i class="fa fa-check"></i><b>18</b> Clustering example</a><ul>
+<li class="chapter" data-level="18.1" data-path="clust-methods.html"><a href="clust-methods.html#pollen-dataset"><i class="fa fa-check"></i><b>18.1</b> Pollen dataset</a></li>
+<li class="chapter" data-level="18.2" data-path="clust-methods.html"><a href="clust-methods.html#sc3-1"><i class="fa fa-check"></i><b>18.2</b> SC3</a></li>
+<li class="chapter" data-level="18.3" data-path="clust-methods.html"><a href="clust-methods.html#pcareduce-1"><i class="fa fa-check"></i><b>18.3</b> pcaReduce</a></li>
+<li class="chapter" data-level="18.4" data-path="clust-methods.html"><a href="clust-methods.html#tsne-kmeans"><i class="fa fa-check"></i><b>18.4</b> tSNE + kmeans</a></li>
+<li class="chapter" data-level="18.5" data-path="clust-methods.html"><a href="clust-methods.html#snn-cliq-1"><i class="fa fa-check"></i><b>18.5</b> SNN-Cliq</a></li>
+<li class="chapter" data-level="18.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>18.6</b> SINCERA</a></li>
+<li class="chapter" data-level="18.7" data-path="clust-methods.html"><a href="clust-methods.html#sessioninfo-9"><i class="fa fa-check"></i><b>18.7</b> sessionInfo()</a></li>
+<li class="chapter" data-level="18.8" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>18.8</b> SEURAT</a></li>
+<li class="chapter" data-level="18.9" data-path="clust-methods.html"><a href="clust-methods.html#sessioninfo-10"><i class="fa fa-check"></i><b>18.9</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>19</b> Feature Selection</a><ul>
+<li class="chapter" data-level="19.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>19.0.1</b> Highly Variable Genes</a></li>
+<li class="chapter" data-level="19.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>19.0.2</b> High Dropout Genes</a></li>
+<li class="chapter" data-level="19.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>19.1</b> Correlated Expression</a><ul>
+<li class="chapter" data-level="19.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>19.1.1</b> Comparing Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="19.2" data-path="feature-selection.html"><a href="feature-selection.html#sessioninfo-11"><i class="fa fa-check"></i><b>19.2</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>20</b> Pseudotime analysis</a><ul>
+<li class="chapter" data-level="20.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>20.1</b> TSCAN</a></li>
+<li class="chapter" data-level="20.2" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#monocle"><i class="fa fa-check"></i><b>20.2</b> monocle</a></li>
+<li class="chapter" data-level="20.3" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>20.3</b> Diffusion maps</a></li>
+<li class="chapter" data-level="20.4" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#slicer"><i class="fa fa-check"></i><b>20.4</b> SLICER</a></li>
+<li class="chapter" data-level="20.5" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>20.5</b> Comparison of the methods</a></li>
+<li class="chapter" data-level="20.6" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>20.6</b> Expression of genes through time</a></li>
+<li class="chapter" data-level="20.7" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#sessioninfo-12"><i class="fa fa-check"></i><b>20.7</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="imputation.html"><a href="imputation.html"><i class="fa fa-check"></i><b>21</b> Imputation</a><ul>
+<li class="chapter" data-level="21.1" data-path="imputation.html"><a href="imputation.html#sessioninfo-13"><i class="fa fa-check"></i><b>21.1</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html"><i class="fa fa-check"></i><b>22</b> Differential Expression (DE) analysis</a><ul>
+<li class="chapter" data-level="22.1" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>22.1</b> Bulk RNA-seq</a></li>
+<li class="chapter" data-level="22.2" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>22.2</b> Single cell RNA-seq</a></li>
+<li class="chapter" data-level="22.3" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>22.3</b> Differences in Distribution</a></li>
+<li class="chapter" data-level="22.4" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>22.4</b> Models of single-cell RNASeq data</a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html"><i class="fa fa-check"></i><b>23</b> DE in a real dataset</a><ul>
+<li class="chapter" data-level="23.1" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#introduction-8"><i class="fa fa-check"></i><b>23.1</b> Introduction</a></li>
+<li class="chapter" data-level="23.2" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>23.2</b> Kolmogorov-Smirnov test</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#evaluating-accuracy"><i class="fa fa-check"></i><b>23.2.1</b> Evaluating Accuracy</a></li>
+</ul></li>
+<li class="chapter" data-level="23.3" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>23.3</b> Wilcox/Mann-Whitney-U Test</a></li>
+<li class="chapter" data-level="23.4" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#edger"><i class="fa fa-check"></i><b>23.4</b> edgeR</a></li>
+<li class="chapter" data-level="23.5" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#monocle-1"><i class="fa fa-check"></i><b>23.5</b> Monocle</a></li>
+<li class="chapter" data-level="23.6" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#mast"><i class="fa fa-check"></i><b>23.6</b> MAST</a></li>
+<li class="chapter" data-level="23.7" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>23.7</b> Slow Methods (&gt;1h to run)</a></li>
+<li class="chapter" data-level="23.8" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#bpsc"><i class="fa fa-check"></i><b>23.8</b> BPSC</a></li>
+<li class="chapter" data-level="23.9" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#scde"><i class="fa fa-check"></i><b>23.9</b> SCDE</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><i class="fa fa-check"></i><b>24</b> “Ideal” scRNAseq pipeline (as of Mar 2017)</a><ul>
+<li class="chapter" data-level="24.1" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#experimental-design"><i class="fa fa-check"></i><b>24.1</b> Experimental Design</a></li>
+<li class="chapter" data-level="24.2" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#processing-reads"><i class="fa fa-check"></i><b>24.2</b> Processing Reads</a></li>
+<li class="chapter" data-level="24.3" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>24.3</b> Preparing Expression Matrix</a></li>
+<li class="chapter" data-level="24.4" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#biological-interpretation"><i class="fa fa-check"></i><b>24.4</b> Biological Interpretation</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>25</b> Advanced exercises</a></li>
+<li class="chapter" data-level="26" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>26</b> Resources</a><ul>
+<li class="chapter" data-level="26.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>26.1</b> scRNA-seq protocols</a></li>
+<li class="chapter" data-level="26.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>26.2</b> External RNA Control Consortium (ERCC)</a></li>
+<li class="chapter" data-level="26.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>26.3</b> scRNA-seq analysis tools</a></li>
+<li class="chapter" data-level="26.4" data-path="resources.html"><a href="resources.html#scrna-seq-public-datasets"><i class="fa fa-check"></i><b>26.4</b> scRNA-seq public datasets</a></li>
+</ul></li>
+<li class="chapter" data-level="27" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>27</b> References</a></li>
+<li class="divider"></li>
+<li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2017</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Analysis of single cell RNA-seq data</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="imputation" class="section level1">
+<h1><span class="header-section-number">21</span> Imputation</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scImpute)
+<span class="kw">library</span>(SC3)
+<span class="kw">library</span>(scater)
+<span class="kw">library</span>(SingleCellExperiment)
+<span class="kw">set.seed</span>(<span class="dv">1234567</span>)</code></pre></div>
+<p>As discussed previously, one of the main challenges when analyzing scRNA-seq data is the presence of zeros, or dropouts. The dropouts are assumed to have arisen for three possible reasons:</p>
+<p><em>The gene was not expressed in the cell and hence there are no transcripts to sequence </em>The gene was expressed, but for some reason the transcripts were lost somewhere prior to sequencing *The gene was expressed and transcripts were captured and turned into cDNA, but the sequencing depth was not sufficient to produce any reads.</p>
+<p>Thus, dropouts could be result of experimental shortcomings, and if this is the case then we would like to provide computational corrections. One possible solution is to impute the dropouts in the expression matrix. To be able to impute gene expression values, one must have an underlying model. However, since we do not know which dropout events are technical artefacts and which correspond to the transcript being truly absent, imputation is a difficult challenges.</p>
+<p>To the best of our knowledge, there are currently two different imputation methods available: MAGIC <span class="citation">(<span class="citeproc-not-found" data-reference-id="vanDijk2017"><strong>???</strong></span>)</span> and scImpute <span class="citation">(<span class="citeproc-not-found" data-reference-id="Li2017"><strong>???</strong></span>)</span>. Since <a href="https://github.com/pkathail/magic">MAGIC</a> is only available for Python or Matlab, we will only cover <a href="https://github.com/Vivianstats/scImpute">scImpute</a> in this chapter.</p>
+<p>To test scImpute, we use the default parameters and we apply it to the Pollen dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:</p>
+<pre><code>## [1] &quot;reading in raw count matrix ...&quot;
+## [1] &quot;estimating mixture models ...&quot;
+## [1] &quot;imputing dropout values ...&quot;
+## [1] &quot;writing imputed count matrix ...&quot;</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>Now we can compare the results with original data by considering a PCA plot</p>
+<p><img src="22-imputation_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?</p>
+<p>To evaluate the impact of the imputation, we use <code>SC3</code> to cluster the imputed matrix</p>
+<pre><code>## Estimating k...</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre><code>## Setting SC3 parameters...</code></pre>
+<pre><code>## Setting a range of k...</code></pre>
+<pre><code>## Calculating distances between the cells...</code></pre>
+<pre><code>## Performing transformations and calculating eigenvectors...</code></pre>
+<pre><code>## Performing k-means clustering...</code></pre>
+<pre><code>## Calculating consensus matrix...</code></pre>
+<p><img src="22-imputation_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /><img src="22-imputation_files/figure-html/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Based on the PCA and the clustering results, do you think that imputation is a good idea for the Pollen dataset?</p>
+<div id="sessioninfo-13" class="section level2">
+<h2><span class="header-section-number">21.1</span> sessionInfo()</h2>
+<pre><code>## R version 3.4.2 (2017-09-28)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Debian GNU/Linux buster/sid
+## 
+## Matrix products: default
+## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats4    methods   parallel  stats     graphics  grDevices utils    
+## [8] datasets  base     
+## 
+## other attached packages:
+##  [1] scater_1.5.19               ggplot2_2.2.1              
+##  [3] SC3_1.5.5                   SingleCellExperiment_0.99.4
+##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
+##  [7] matrixStats_0.52.2          Biobase_2.36.2             
+##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
+## [11] IRanges_2.10.5              S4Vectors_0.14.7           
+## [13] BiocGenerics_0.22.1         scImpute_0.0.2             
+## [15] glmnet_2.0-13               foreach_1.4.3              
+## [17] Matrix_1.2-11               knitr_1.17                 
+## 
+## loaded via a namespace (and not attached):
+##  [1] bitops_1.0-6            bit64_0.9-7            
+##  [3] doParallel_1.0.11       RColorBrewer_1.1-2     
+##  [5] rprojroot_1.2           tools_3.4.2            
+##  [7] backports_1.1.1         doRNG_1.6.6            
+##  [9] R6_2.2.2                vipor_0.4.5            
+## [11] KernSmooth_2.23-15      DBI_0.7                
+## [13] lazyeval_0.2.0          colorspace_1.3-2       
+## [15] gridExtra_2.3           bit_1.1-12             
+## [17] compiler_3.4.2          pkgmaker_0.22          
+## [19] labeling_0.3            bookdown_0.5           
+## [21] caTools_1.17.1          scales_0.5.0           
+## [23] DEoptimR_1.0-8          mvtnorm_1.0-6          
+## [25] robustbase_0.92-7       stringr_1.2.0          
+## [27] digest_0.6.12           rmarkdown_1.6          
+## [29] XVector_0.16.0          pkgconfig_2.0.1        
+## [31] rrcov_1.4-3             htmltools_0.3.6        
+## [33] WriteXLS_4.0.0          limma_3.32.10          
+## [35] rlang_0.1.2             RSQLite_2.0            
+## [37] shiny_1.0.5             bindr_0.1              
+## [39] gtools_3.5.0            dplyr_0.7.4            
+## [41] RCurl_1.95-4.8          magrittr_1.5           
+## [43] GenomeInfoDbData_0.99.0 ggbeeswarm_0.6.0       
+## [45] Rcpp_0.12.13            munsell_0.4.3          
+## [47] viridis_0.4.0           edgeR_3.18.1           
+## [49] stringi_1.1.5           yaml_2.1.14            
+## [51] zlibbioc_1.22.0         rhdf5_2.20.0           
+## [53] gplots_3.0.1            plyr_1.8.4             
+## [55] grid_3.4.2              blob_1.1.0             
+## [57] gdata_2.18.0            shinydashboard_0.6.1   
+## [59] lattice_0.20-35         cowplot_0.8.0          
+## [61] locfit_1.5-9.1          rjson_0.2.15           
+## [63] rngtools_1.2.4          reshape2_1.4.2         
+## [65] codetools_0.2-15        biomaRt_2.32.1         
+## [67] glue_1.1.1              XML_3.98-1.9           
+## [69] evaluate_0.10.1         data.table_1.10.4-2    
+## [71] httpuv_1.3.5            gtable_0.2.0           
+## [73] assertthat_0.2.0        mime_0.5               
+## [75] xtable_1.8-2            e1071_1.6-8            
+## [77] class_7.3-14            pcaPP_1.9-72           
+## [79] viridisLite_0.2.0       tibble_1.3.4           
+## [81] pheatmap_1.0.8          iterators_1.0.8        
+## [83] beeswarm_0.2.3          AnnotationDbi_1.38.2   
+## [85] registry_0.3            memoise_1.1.0          
+## [87] tximport_1.4.0          bindrcpp_0.2           
+## [89] cluster_2.0.6           ROCR_1.0-7</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="pseudotime-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="differential-expression-de-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/hemberg-lab/scRNA.seq.course/edit/master/22-imputation.Rmd",
+"text": "Edit"
+},
+"download": ["scRNA-seq-course.pdf"],
+"toc": {
+"collapse": "section"
+},
+"search": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
