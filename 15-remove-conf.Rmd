@@ -100,10 +100,8 @@ assay(umi.qc, "ruvs10") <- log2(
 ## Combat
 
 If you have an experiment with a balanced design, Combat can be used to eliminate batch effects while preserving biological effects by specifying the biological effects using the `mod` parameter. However the `Tung` data contains multiple experimental replicates rather than a balanced design so using `mod1` to preserve biological variability will result in an error. 
-```{r, eval = FALSE}
-# sample 100 cells
-inds <- sample(100)
-combat_data <- logcounts(umi.qc)[, inds]
+```{r, eval = TRUE}
+combat_data <- logcounts(umi.qc)
 mod_data <- as.data.frame(t(combat_data))
 # Basic batch removal
 mod0 = model.matrix(~ 1, data = mod_data) 
@@ -112,10 +110,10 @@ mod1 = model.matrix(~ umi.qc$individual, data = mod_data)
 # adjust for total genes detected
 mod2 = model.matrix(~ umi.qc$total_features, data = mod_data)
 assay(umi.qc, "combat") <- ComBat(
-    dat = combat_data, 
-    batch = factor(umi.qc$batch[inds]), 
+    dat = t(mod_data), 
+    batch = factor(umi.qc$batch), 
     mod = mod0,
-    par.prior = FALSE,
+    par.prior = TRUE,
     prior.plots = FALSE
 )
 ```
@@ -162,7 +160,7 @@ assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3);
 
 # For a balanced design: 
 #assay(umi.qc, "mnn") <- mnnCorrect(
-#    list(B1 = exprs(batch1), B2 = exprs(batch2), B3 = exprs(batch3)),  
+#    list(B1 = logcounts(batch1), B2 = logcounts(batch2), B3 = logcounts(batch3)),  
 #    k = 20,
 #    sigma = 0.1,
 #    cos.norm = TRUE,
