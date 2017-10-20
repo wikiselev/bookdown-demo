@@ -50,7 +50,7 @@ Now let's image we do not know the number of clusters _k_ (cell types). `SC3` ca
 ```{r}
 pollen <- sc3_prepare(pollen, ks = 2:5)
 pollen <- sc3_estimate_k(pollen)
-metadatae(pollen)$sc3$k_estimation
+metadata(pollen)$sc3$k_estimation
 ```
 
 Interestingly, the number of cell types predicted by `SC3` is the same as the number of cell types in the Pollen data annotation.
