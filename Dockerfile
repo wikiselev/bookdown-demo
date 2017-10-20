@@ -9,8 +9,8 @@ RUN apt-get update -y --no-install-recommends \
             pandoc \
             pandoc-citeproc \
             r-cran-rjava \
-            python \
-            texlive-full
+            python
+#            texlive-full
 
 # install R packages
 RUN Rscript -e "install.packages('devtools')"
