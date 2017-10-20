@@ -67,13 +67,11 @@ We will concentrate on the first two approaches.
 
 ```{r, message=FALSE, warning=FALSE}
 ruvg <- RUVg(counts(umi.qc), erccs, k = 1)
-assay(umi.qc, "ruvg1") <- ruvg$normalizedCounts
-assay(umi.qc, "ruvg1_logcpm") <- log2(
+assay(umi.qc, "ruvg1") <- log2(
     t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
 )
 ruvg <- RUVg(counts(umi.qc), erccs, k = 10)
-assay(umi.qc, "ruvg10") <- ruvg$normalizedCounts
-assay(umi.qc, "ruvg10_logcpm") <- log2(
+assay(umi.qc, "ruvg10") <- log2(
     t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
 )
 ```
@@ -90,13 +88,11 @@ tmp <- which(umi.qc$individual == "NA19239")
 scIdx[3, 1:length(tmp)] <- tmp
 cIdx <- rownames(umi.qc)
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
-assay(umi.qc, "ruvs1") <- ruvs$normalizedCounts
-assay(umi.qc, "ruvs1_logcpm") <- log2(
+assay(umi.qc, "ruvs1") <- log2(
     t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
 )
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 10, scIdx = scIdx, isLog = FALSE)
-assay(umi.qc, "ruvs10") <- ruvs$normalizedCounts
-assay(umi.qc, "ruvs10_logcpm") <- log2(
+assay(umi.qc, "ruvs10") <- log2(
     t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
 )
 ```
@@ -235,55 +231,16 @@ interspersed batches indicates that technical variation has been
 removed. We always use log2-cpm normalized data to match the assumptions of PCA.
 
 ```{r}
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "ruvg1_logcpm") +
-    ggtitle("PCA - RUVg normalisation: k = 1")
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "ruvg10_logcpm") +
-    ggtitle("PCA - RUVg normalisation: k = 10")
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "ruvs1_logcpm") +
-    ggtitle("PCA - RUVs normalisation: k = 1")
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "ruvs10_logcpm") +
-    ggtitle("PCA - RUVs normalisation: k = 10")
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "combat") +
-    ggtitle("PCA - ComBat batch correction")
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "mnn") +
-    ggtitle("PCA - mnnCorrect batch correction")
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual",
-    exprs_values = "glm") +
-    ggtitle("PCA - glm batch correction")
+for(n in assayNames(umi.qc)) {
+    plotPCA(
+        umi.qc[endog_genes, ],
+        colour_by = "batch",
+        size_by = "total_features",
+        shape_by = "individual",
+        exprs_values = n
+    ) +
+    ggtitle(n)
+}
 ```
 
 __Exercise 3__
@@ -295,38 +252,33 @@ Consider different `ks` for RUV normalizations. Which gives the best results?
 We can also examine the effectiveness of correction using the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset. Note RLE only evaluates whether the number of genes higher and lower than average are equal for each cell - i.e. systemic technical effects. Random technical noise between batches may not be detected by RLE.
 
 ```{r}
-boxplot(
-    list(
-        "Raw counts" = calc_cell_RLE(counts(umi.qc), erccs),
-        "Log2CPM" = calc_cell_RLE(exprs(umi.qc), erccs)
-        "RUVg (k = 1)" = calc_cell_RLE(assayData(umi.qc)$ruvg1_logcpm, erccs),
-        "RUVg (k = 2)" = calc_cell_RLE(assayData(umi.qc)$ruvg10_logcpm, erccs),
-        "RUVs (k = 1)" = calc_cell_RLE(assayData(umi.qc)$ruvs1_logcpm, erccs),
-        "RUVs (k = 2)" = calc_cell_RLE(assayData(umi.qc)$ruvs10_logcpm, erccs),
-        "ComBat" = calc_cell_RLE(assayData(umi.qc)$combat, erccs),
-        "mnnCorrect" = calc_cell_RLE(assayData(umi.qc)$mnn, erccs),
-        "glm" = calc_cell_RLE(assayData(umi.qc)$glm, erccs),
-    )
-)
+res <- list()
+for(n in assayNames(umi.qc)) {
+	res[[n]] <- calc_cell_RLE(assay(umi.qc, n), erccs)
+}
+boxplot(res)
 ```
 
 ## Effectiveness 3
 
 We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.
 ```{r confound-cpm, fig.cap = "Explanatory variables (mnn)"}
-plotQC(
-    umi.qc[endog_genes, ],
-    type = "expl",
-    exprs_values = "mnn",
-    variables = c(
-        "total_features",
-        "total_counts",
-        "batch",
-        "individual",
-        "pct_counts_ERCC",
-        "pct_counts_MT"
-    )
-)
+for(n in assayNames(umi.qc)) {
+    plotQC(
+        umi.qc[endog_genes, ],
+        type = "expl",
+        exprs_values = n,
+        variables = c(
+            "total_features",
+            "total_counts",
+            "batch",
+            "individual",
+            "pct_counts_ERCC",
+            "pct_counts_MT"
+        )
+    ) +
+    ggtitle(n)
+}
 ```
 
 __Exercise 4__

@@ -30,30 +30,48 @@ To the best of our knowledge, there are currently two different imputation metho
 To test scImpute, we use the default parameters and we apply it to the Pollen dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:
 
 ```{r}
-scimpute(count_path="pollen.csv", infile="csv", outfile="txt", out_dir="scImputeResults/", ncores=2)
+pollen <- readRDS("pollen/pollen.rds")
+write.csv(counts(pollen), "pollen.csv")
+scimpute(
+    count_path = "pollen.csv",
+    infile = "csv",
+    outfile = "txt", 
+    out_dir = "impute/",
+    ncores = 2
+)
 ```
 
 Now we can compare the results with original data by considering a PCA plot
 
 ```{r}
-pollen <- readRDS("pollen/pollen.rds")
-pollen.impute <- read.table("scImputeResults/scimpute.txt", header=F)
-colnames(pollen.impute) <- NULL
-pollen.impute.sce <- SingleCellExperiment(assays = list(normcounts=as.matrix(pollen.impute)), colData=colData(pollen))
-logcounts(pollen.impute.sce) <- log2(1+normcounts(pollen.impute.sce))
-plotPCA(pollen.impute.sce, colour_by="cell_type1")
+pollen_impute <- read.table("scimpute_count.txt")
+colnames(pollen_impute) <- NULL
+pollen_impute <- SingleCellExperiment(
+    assays = list(logcounts = log2(as.matrix(pollen_impute) + 1)), 
+    colData = colData(pollen)
+)
+plotPCA(
+    pollen_impute, 
+    colour_by = "cell_type1"
+)
 ```
 
 Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
 
-To evaluate the impact of the imputation, we use SC3 to cluster the imputed matrix
+To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
 ```{r}
-pollen.impute.sce <- newSC3(pollen.impute.sce, ks = 2:5)
-pollen.impute.sce <- sc3_estimate(pollen.impute.sce)
-pollen.impute.sce@sc3$k_estimation
-pollen.impute.sce <- sc3(pollen.impute.sce, ks=11, biology=FALSE)
-sc3_plot_consensus(pollen.impute.sce, k = 11, show_pdata = "cell_type1")
-plotPCA(pollen.impute.sce, colour_by = "sc3_11_clusters")
+pollen_impute <- sc3_estimate_k(pollen_impute)
+metadata(pollen_impute)$sc3$k_estimation
+pollen_impute <- sc3(pollen_impute, ks = 11)
+sc3_plot_consensus(
+    pollen_impute, 
+    k = 11, 
+    show_pdata = "cell_type1"
+)
+plotPCA(
+    pollen_impute, 
+    colour_by = "sc3_11_clusters"
+)
 ```
 
 Based on the PCA and the clustering results, do you think that imputation is a good idea for the Pollen dataset?
