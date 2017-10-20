@@ -11,7 +11,7 @@ opts_chunk$set(fig.align = "center")
 set.seed(1234567)
 ```
 
-## SEURAT
+# SEURAT
 
 Let's load the data and look at it:
 ```{r}
@@ -25,7 +25,8 @@ Here we follow an [example](http://satijalab.org/seurat/get_started.html) create
 
 
 Initialize the Seurat object with the raw (non-normalized data).  Keep all genes expressed in >= 3 cells. Keep all cells with at least 200 detected genes:
-```{r, message=FALSE, warning=FALSE, eval=FALSE}
+```{r, message=FALSE, warning=FALSE}
+library(SingleCellExperiment)
 library(Seurat)
 seuset <- CreateSeuratObject(
     raw.data = logcounts(pollen), 
