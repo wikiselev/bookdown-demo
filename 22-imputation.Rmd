@@ -39,7 +39,7 @@ scimpute(
     count_path = "pollen.csv",
     infile = "csv",
     outfile = "txt", 
-    out_dir = "impute/",
+    out_dir = "./",
     ncores = 2
 )
 ```
