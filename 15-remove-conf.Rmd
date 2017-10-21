@@ -344,7 +344,7 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
 
 __Exercise 5__
 
-Why do the raw counts appear to have the least batch effects?
+Why do the raw counts appear to have the little batch effects?
 
 ## Exercise
 
