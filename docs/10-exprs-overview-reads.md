@@ -134,7 +134,7 @@ plotTSNE(
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] knitr_1.17                  scater_1.5.19              
+##  [1] knitr_1.17                  scater_1.5.20              
 ##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [7] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        

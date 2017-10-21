@@ -108,7 +108,7 @@ Based on the PCA and the clustering results, do you think that imputation is a g
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.19               ggplot2_2.2.1              
+##  [1] scater_1.5.20               ggplot2_2.2.1              
 ##  [3] SC3_1.5.5                   SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          Biobase_2.36.2             

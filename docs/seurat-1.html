@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="clustering-introduction.html">
-<link rel="next" href="seurat-1.html">
+<link rel="prev" href="clust-methods.html">
+<link rel="next" href="feature-selection.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -374,223 +374,416 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="clust-methods" class="section level1">
-<h1><span class="header-section-number">18</span> Clustering example</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pcaMethods)
-<span class="kw">library</span>(pcaReduce)
-<span class="kw">library</span>(SC3)
-<span class="kw">library</span>(scater)
-<span class="kw">library</span>(SingleCellExperiment)
-<span class="kw">library</span>(pheatmap)
-<span class="kw">set.seed</span>(<span class="dv">1234567</span>)</code></pre></div>
-<p>To illustrate clustering of scRNA-seq data, we consider the <code>Pollen</code> dataset of cells from different human tissues <span class="citation">(Pollen et al. <a href="#ref-Pollen2014-cu">2014</a>)</span>. We have preprocessed the dataset and created a scater object in advance. We have also annotated the cells with the cell type information (it is the <code>cell_type1</code> column in the <code>phenoData</code> slot).</p>
-<div id="pollen-dataset" class="section level2">
-<h2><span class="header-section-number">18.1</span> Pollen dataset</h2>
+<div id="seurat-1" class="section level1">
+<h1><span class="header-section-number">19</span> SEURAT</h1>
 <p>Let’s load the data and look at it:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;pollen/pollen.rds&quot;</span>)
-pollen</code></pre></div>
-<pre><code>## class: SingleCellExperiment 
-## dim: 23730 301 
-## metadata(0):
-## assays(2): normcounts logcounts
-## rownames(23730): A1BG A1BG-AS1 ... ZZEF1 ZZZ3
-## rowData names(1): feature_symbol
-## colnames(301): Hi_2338_1 Hi_2338_2 ... Hi_GW16_25 Hi_GW16_26
-## colData names(2): cell_type1 cell_type2
-## reducedDimNames(0):
-## spikeNames(0):</code></pre>
-<p>Let’s look at the cell type annotation:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">colData</span>(pollen)<span class="op">$</span>cell_type1)</code></pre></div>
-<pre><code>## 
-##   2338   2339     BJ   GW16   GW21 GW21+3  hiPSC   HL60   K562   Kera 
-##     22     17     37     26      7     17     24     54     42     40 
-##    NPC 
-##     15</code></pre>
-<p>A simple PCA analysis already separates some strong cell types and provides some insights in the data structure:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(pollen, <span class="dt">colour_by =</span> <span class="st">&quot;cell_type1&quot;</span>)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="sc3-1" class="section level2">
-<h2><span class="header-section-number">18.2</span> SC3</h2>
-<p>Let’s run <code>SC3</code> clustering on the Pollen data. The advantage of the <code>SC3</code> is that it can directly take a <a href="http://bioconductor.org/packages/scater/">scater</a> object (see previous chapters) as an input.</p>
-<p>Now let’s image we do not know the number of clusters <em>k</em> (cell types). <code>SC3</code> can estimate a number of clusters for you:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen &lt;-<span class="st"> </span><span class="kw">sc3_prepare</span>(pollen, <span class="dt">ks =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">5</span>)</code></pre></div>
-<pre><code>## Setting SC3 parameters...</code></pre>
-<pre><code>## Setting a range of k...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen &lt;-<span class="st"> </span><span class="kw">sc3_estimate_k</span>(pollen)</code></pre></div>
-<pre><code>## Estimating k...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">metadata</span>(pollen)<span class="op">$</span>sc3<span class="op">$</span>k_estimation</code></pre></div>
-<pre><code>## [1] 11</code></pre>
-<p>Interestingly, the number of cell types predicted by <code>SC3</code> is the same as the number of cell types in the Pollen data annotation.</p>
-<p>Now we are ready to run <code>SC3</code> (we also ask it to calculate biological properties of the clusters):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen &lt;-<span class="st"> </span><span class="kw">sc3</span>(pollen, <span class="dt">ks =</span> <span class="dv">11</span>, <span class="dt">biology =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Setting SC3 parameters...</code></pre>
-<pre><code>## Setting a range of k...</code></pre>
-<pre><code>## Calculating distances between the cells...</code></pre>
-<pre><code>## Performing transformations and calculating eigenvectors...</code></pre>
-<pre><code>## Performing k-means clustering...</code></pre>
-<pre><code>## Calculating consensus matrix...</code></pre>
-<pre><code>## Calculating biology...</code></pre>
-<p><code>SC3</code> result consists of several different outputs (please look in <span class="citation">(Kiselev et al. <a href="#ref-Kiselev2016-bq">2016</a>)</span> and <a href="http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html">SC3 vignette</a> for more details). Here we show some of them:</p>
-<p>Consensus matrix:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sc3_plot_consensus</span>(pollen, <span class="dt">k =</span> <span class="dv">11</span>, <span class="dt">show_pdata =</span> <span class="st">&quot;cell_type1&quot;</span>)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Silhouette plot:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sc3_plot_silhouette</span>(pollen, <span class="dt">k =</span> <span class="dv">11</span>)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Heatmap of the expression matrix:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sc3_plot_expression</span>(pollen, <span class="dt">k =</span> <span class="dv">11</span>, <span class="dt">show_pdata =</span> <span class="st">&quot;cell_type1&quot;</span>)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Identified marker genes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sc3_plot_markers</span>(pollen, <span class="dt">k =</span> <span class="dv">11</span>, <span class="dt">show_pdata =</span> <span class="st">&quot;cell_type1&quot;</span>)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>PCA plot with highlighted <code>SC3</code> clusters:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(pollen, <span class="dt">colour_by =</span> <span class="st">&quot;sc3_11_clusters&quot;</span>)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Note, that one can also run <code>SC3</code> in an interactive <code>Shiny</code> session:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sc3_interactive</span>(pollen)</code></pre></div>
-<p>This command will open <code>SC3</code> in a web browser.</p>
-<ul>
-<li><p><strong>Exercise 1</strong>: Run <code>SC3</code> for <span class="math inline">\(k\)</span> from 9 to 13 and explore different clustering solutions in your web browser.</p></li>
-<li><p><strong>Exercise 2</strong>: Which clusters are the most stable when <span class="math inline">\(k\)</span> is changed from 9 to 13? (Look at the “Stability” tab)</p></li>
-<li><p><strong>Exercise 3</strong>: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use <span class="math inline">\(k=11\)</span>.</p></li>
-<li><p><strong>Exercise 4</strong>: Change the marker genes threshold (the default is 0.85). Does <strong>SC3</strong> find more marker genes?</p></li>
-</ul>
-</div>
-<div id="pcareduce-1" class="section level2">
-<h2><span class="header-section-number">18.3</span> pcaReduce</h2>
-<p><code>pcaReduce</code> operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running <code>pcaReduce</code>. We will use the default <code>SC3</code> gene filter (note that the <code>exprs</code> slot of a <code>scater</code> object is log-transformed by default).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use the same gene filter as in SC3</span>
-input &lt;-<span class="st"> </span><span class="kw">logcounts</span>(pollen[<span class="kw">rowData</span>(pollen)<span class="op">$</span>sc3_gene_filter, ])</code></pre></div>
-<p>There are several parameters used by <code>pcaReduce</code>: * <code>nbt</code> defines a number of <code>pcaReduce</code> runs (it is stochastic and may have different solutions after different runs) * <code>q</code> defines number of dimensions to start clustering with. The output will contain partitions for all <span class="math inline">\(k\)</span> from 2 to q+1. * <code>method</code> defines a method used for clustering. <code>S</code> - to perform sampling based merging, <code>M</code> - to perform merging based on largest probability.</p>
-<p>We will run <code>pcaReduce</code> 1 time:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run pcaReduce 1 time creating hierarchies from 1 to 30 clusters</span>
-pca.red &lt;-<span class="st"> </span><span class="kw">PCAreduce</span>(<span class="kw">t</span>(input), <span class="dt">nbt =</span> <span class="dv">1</span>, <span class="dt">q =</span> <span class="dv">30</span>, <span class="dt">method =</span> <span class="st">&#39;S&#39;</span>)[[<span class="dv">1</span>]]</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colData</span>(pollen)<span class="op">$</span>pcaReduce &lt;-<span class="st"> </span><span class="kw">as.character</span>(pca.red[,<span class="dv">32</span> <span class="op">-</span><span class="st"> </span><span class="dv">11</span>])
-<span class="kw">plotPCA</span>(pollen, <span class="dt">colour_by =</span> <span class="st">&quot;pcaReduce&quot;</span>)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><strong>Exercise 5</strong>: Run pcaReduce for <span class="math inline">\(k=2\)</span> and plot a similar PCA plot. Does it look good?</p>
-<p><strong>Hint</strong>: When running pcaReduce for different <span class="math inline">\(k\)</span>s you do not need to rerun PCAreduce function, just use already calculated <code>pca.red</code> object.</p>
-<strong>Our solution</strong>:
-<div class="figure" style="text-align: center"><span id="fig:clust-pca-reduce2"></span>
-<img src="18-clustering_files/figure-html/clust-pca-reduce2-1.png" alt="Clustering solutions of pcaReduce method for $k=2$." width="672" />
-<p class="caption">
-Figure 18.1: Clustering solutions of pcaReduce method for <span class="math inline">\(k=2\)</span>.
-</p>
-</div>
-<p><strong>Exercise 6</strong>: Compare the results between <code>SC3</code> and <code>pcaReduce</code> for <span class="math inline">\(k=11\)</span>. What is the main difference between the solutions provided by the two different methods?</p>
-<p><strong>Our solution</strong>: <img src="18-clustering_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="tsne-kmeans" class="section level2">
-<h2><span class="header-section-number">18.4</span> tSNE + kmeans</h2>
-<p><a href="https://lvdmaaten.github.io/tsne/">tSNE</a> plots that we saw before (<a href="data-visualization.html#visual-tsne">10.3</a>) when used the <strong>scater</strong> package are made by using the <a href="https://cran.r-project.org/web/packages/Rtsne/index.html">Rtsne</a> and <a href="https://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a> packages. Here we will do the same:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen &lt;-<span class="st"> </span><span class="kw">plotTSNE</span>(pollen, <span class="dt">rand_seed =</span> <span class="dv">1</span>, <span class="dt">return_SCE =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:clust-tsne"></span>
-<img src="18-clustering_files/figure-html/clust-tsne-1.png" alt="tSNE map of the patient data" width="672" />
-<p class="caption">
-Figure 18.2: tSNE map of the patient data
-</p>
-</div>
-<p>Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.</p>
-<p>Now we are going to apply <em>k</em>-means clustering algorithm to the cloud of points on the tSNE map. How many groups do you see in the cloud?</p>
-<p>We will start with <span class="math inline">\(k=8\)</span>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colData</span>(pollen)<span class="op">$</span>tSNE_kmeans &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">kmeans</span>(pollen<span class="op">@</span>reducedDims<span class="op">$</span>TSNE, <span class="dt">centers =</span> <span class="dv">8</span>)<span class="op">$</span>clust)
-<span class="kw">plotTSNE</span>(pollen, <span class="dt">rand_seed =</span> <span class="dv">1</span>, <span class="dt">colour_by =</span> <span class="st">&quot;tSNE_kmeans&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:clust-tsne-kmeans2"></span>
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans2-1.png" alt="tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm" width="672" />
-<p class="caption">
-Figure 18.3: tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm
-</p>
-</div>
-<p><strong>Exercise 7</strong>: Make the same plot for <span class="math inline">\(k=11\)</span>.</p>
-<p><strong>Exercise 8</strong>: Compare the results between <code>SC3</code> and <code>tSNE+kmeans</code>. Can the results be improved by changing the <code>perplexity</code> parameter?</p>
-<p><strong>Our solution</strong>: <img src="18-clustering_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>As you may have noticed, both <code>pcaReduce</code> and <code>tSNE+kmeans</code> are stochastic and give different results every time they are run. To get a better overview of the solutions, we need to run the methods multiple times. <code>SC3</code> is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.</p>
-</div>
-<div id="snn-cliq-1" class="section level2">
-<h2><span class="header-section-number">18.5</span> SNN-Cliq</h2>
-<p>Here we run SNN-cliq with te default parameters provided in the author’s example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">distan &lt;-<span class="st"> &quot;euclidean&quot;</span>
-par.k &lt;-<span class="st"> </span><span class="dv">3</span>
-par.r &lt;-<span class="st"> </span><span class="fl">0.7</span>
-par.m &lt;-<span class="st"> </span><span class="fl">0.5</span>
-<span class="co"># construct a graph</span>
-scRNA.seq.funcs<span class="op">::</span><span class="kw">SNN</span>(
-    <span class="dt">data =</span> <span class="kw">t</span>(input),
-    <span class="dt">outfile =</span> <span class="st">&quot;snn-cliq.txt&quot;</span>,
-    <span class="dt">k =</span> par.k,
-    <span class="dt">distance =</span> distan
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pollen &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;pollen/pollen.rds&quot;</span>)</code></pre></div>
+<p>Here we follow an <a href="http://satijalab.org/seurat/get_started.html">example</a> created by the authors of <code>SEURAT</code> (8,500 Pancreas cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors:</p>
+<p>Initialize the Seurat object with the raw (non-normalized data). Keep all genes expressed in &gt;= 3 cells. Keep all cells with at least 200 detected genes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(SingleCellExperiment)
+<span class="kw">library</span>(Seurat)
+seuset &lt;-<span class="st"> </span><span class="kw">CreateSeuratObject</span>(
+    <span class="dt">raw.data =</span> <span class="kw">logcounts</span>(pollen), 
+    <span class="dt">min.cells =</span> <span class="dv">3</span>, 
+    <span class="dt">min.genes =</span> <span class="dv">200</span>
 )
-<span class="co"># find clusters in the graph</span>
-snn.res &lt;-<span class="st"> </span>
-<span class="st">    </span><span class="kw">system</span>(
-        <span class="kw">paste0</span>(
-            <span class="st">&quot;python snn-cliq/Cliq.py &quot;</span>, 
-            <span class="st">&quot;-i snn-cliq.txt &quot;</span>,
-            <span class="st">&quot;-o res-snn-cliq.txt &quot;</span>,
-            <span class="st">&quot;-r &quot;</span>, par.r,
-            <span class="st">&quot; -m &quot;</span>, par.m
-        ),
-        <span class="dt">intern =</span> <span class="ot">TRUE</span>
-    )
-<span class="kw">cat</span>(<span class="kw">paste</span>(snn.res, <span class="dt">collapse =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>))</code></pre></div>
-<pre><code>## input file snn-cliq.txt
-## find 65 quasi-cliques
-## merged into 15 clusters
-## unique assign done</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">snn.res &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;res-snn-cliq.txt&quot;</span>)
-<span class="co"># remove files that were created during the analysis</span>
-<span class="kw">system</span>(<span class="st">&quot;rm snn-cliq.txt res-snn-cliq.txt&quot;</span>)
 
-<span class="kw">colData</span>(pollen)<span class="op">$</span>SNNCliq &lt;-<span class="st"> </span><span class="kw">as.character</span>(snn.res[,<span class="dv">1</span>])
-<span class="kw">plotPCA</span>(pollen, <span class="dt">colour_by =</span> <span class="st">&quot;SNNCliq&quot;</span>)</code></pre></div>
-<p><img src="18-clustering_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><strong>Exercise 9</strong>: Compare the results between <code>SC3</code> and <code>SNN-Cliq</code>.</p>
-<p><strong>Our solution</strong>: <img src="18-clustering_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="sincera-1" class="section level2">
-<h2><span class="header-section-number">18.6</span> SINCERA</h2>
-<p>As mentioned in the previous chapter <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a> is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># perform gene-by-gene per-sample z-score transformation</span>
-dat &lt;-<span class="st"> </span><span class="kw">apply</span>(input, <span class="dv">1</span>, <span class="cf">function</span>(y) scRNA.seq.funcs<span class="op">::</span><span class="kw">z.transform.helper</span>(y))
-<span class="co"># hierarchical clustering</span>
-dd &lt;-<span class="st"> </span><span class="kw">as.dist</span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(<span class="kw">t</span>(dat), <span class="dt">method =</span> <span class="st">&quot;pearson&quot;</span>))<span class="op">/</span><span class="dv">2</span>)
-hc &lt;-<span class="st"> </span><span class="kw">hclust</span>(dd, <span class="dt">method =</span> <span class="st">&quot;average&quot;</span>)</code></pre></div>
-<p>If the number of cluster is not known <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a> can identify <strong>k</strong> as the minimum height of the hierarchical tree that generates no more than a specified number of singleton clusters (clusters containing only 1 cell)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">num.singleton &lt;-<span class="st"> </span><span class="dv">0</span>
-kk &lt;-<span class="st"> </span><span class="dv">1</span>
-<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="kw">dim</span>(dat)[<span class="dv">2</span>]) {
-    clusters &lt;-<span class="st"> </span><span class="kw">cutree</span>(hc, <span class="dt">k =</span> i)
-    clustersizes &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">table</span>(clusters))
-    singleton.clusters &lt;-<span class="st"> </span><span class="kw">which</span>(clustersizes<span class="op">$</span>Freq <span class="op">&lt;</span><span class="st"> </span><span class="dv">2</span>)
-    <span class="cf">if</span> (<span class="kw">length</span>(singleton.clusters) <span class="op">&lt;=</span><span class="st"> </span>num.singleton) {
-        kk &lt;-<span class="st"> </span>i
-    } <span class="cf">else</span> {
-        <span class="cf">break</span>;
-    }
-}
-<span class="kw">cat</span>(kk)</code></pre></div>
-<pre><code>## 14</code></pre>
-<p>Let’s now visualize the SINCERA results as a heatmap:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pheatmap</span>(
-    <span class="kw">t</span>(dat),
-    <span class="dt">cluster_cols =</span> hc,
-    <span class="dt">cutree_cols =</span> <span class="dv">14</span>,
-    <span class="dt">kmeans_k =</span> <span class="dv">100</span>,
-    <span class="dt">show_rownames =</span> <span class="ot">FALSE</span>
+<span class="kw">VlnPlot</span>(<span class="dt">object =</span> seuset, <span class="dt">features.plot =</span> <span class="kw">c</span>(<span class="st">&quot;nGene&quot;</span>, <span class="st">&quot;nUMI&quot;</span>), <span class="dt">nCol =</span> <span class="dv">3</span>)</code></pre></div>
+<p><img src="19-seurat_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">GenePlot</span>(<span class="dt">object =</span> seuset, <span class="dt">gene1 =</span> <span class="st">&quot;nUMI&quot;</span>, <span class="dt">gene2 =</span> <span class="st">&quot;nGene&quot;</span>)</code></pre></div>
+<p><img src="19-seurat_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">FindVariableGenes</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">mean.function =</span> ExpMean, 
+    <span class="dt">dispersion.function =</span> LogVMR, 
+    <span class="dt">x.low.cutoff =</span> <span class="fl">0.0125</span>, 
+    <span class="dt">x.high.cutoff =</span> <span class="dv">3</span>, 
+    <span class="dt">y.cutoff =</span> <span class="fl">0.5</span>
 )</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:clust-sincera"></span>
-<img src="18-clustering_files/figure-html/clust-sincera-1.png" alt="Clustering solutions of SINCERA method using $k=3$" width="672" />
-<p class="caption">
-Figure 18.4: Clustering solutions of SINCERA method using <span class="math inline">\(k=3\)</span>
-</p>
-</div>
-<p><strong>Exercise 10</strong>: Compare the results between <code>SC3</code> and <code>SNN-Cliq</code>.</p>
-<p><strong>Our solution</strong>: <img src="18-clustering_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><strong>Exercise 11</strong>: Is using the singleton cluster criteria for finding <strong>k</strong> a good idea?</p>
-</div>
-<div id="sessioninfo-9" class="section level2">
-<h2><span class="header-section-number">18.7</span> sessionInfo()</h2>
+<p><img src="19-seurat_files/figure-html/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(<span class="dt">x =</span> seuset<span class="op">@</span>var.genes)</code></pre></div>
+<pre><code>## [1] 2942</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">ScaleData</span>(<span class="dt">object =</span> seuset, <span class="dt">vars.to.regress =</span> <span class="kw">c</span>(<span class="st">&quot;nUMI&quot;</span>))</code></pre></div>
+<pre><code>## NormalizeData has not been run, therefore ScaleData is running on non-normalized values. Recommended workflow is to run NormalizeData first.
+## ScaleData is running on non-normalized values. Recommended workflow is to run NormalizeData first.
+## [1] &quot;Regressing out nUMI&quot;
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=                                                                |   1%
+  |                                                                       
+  |=                                                                |   2%
+  |                                                                       
+  |==                                                               |   2%
+  |                                                                       
+  |==                                                               |   3%
+  |                                                                       
+  |===                                                              |   4%
+  |                                                                       
+  |===                                                              |   5%
+  |                                                                       
+  |====                                                             |   5%
+  |                                                                       
+  |====                                                             |   6%
+  |                                                                       
+  |====                                                             |   7%
+  |                                                                       
+  |=====                                                            |   7%
+  |                                                                       
+  |=====                                                            |   8%
+  |                                                                       
+  |======                                                           |   9%
+  |                                                                       
+  |======                                                           |  10%
+  |                                                                       
+  |=======                                                          |  10%
+  |                                                                       
+  |=======                                                          |  11%
+  |                                                                       
+  |========                                                         |  12%
+  |                                                                       
+  |========                                                         |  13%
+  |                                                                       
+  |=========                                                        |  13%
+  |                                                                       
+  |=========                                                        |  14%
+  |                                                                       
+  |==========                                                       |  15%
+  |                                                                       
+  |==========                                                       |  16%
+  |                                                                       
+  |===========                                                      |  16%
+  |                                                                       
+  |===========                                                      |  17%
+  |                                                                       
+  |============                                                     |  18%
+  |                                                                       
+  |============                                                     |  19%
+  |                                                                       
+  |=============                                                    |  20%
+  |                                                                       
+  |=============                                                    |  21%
+  |                                                                       
+  |==============                                                   |  21%
+  |                                                                       
+  |==============                                                   |  22%
+  |                                                                       
+  |===============                                                  |  23%
+  |                                                                       
+  |===============                                                  |  24%
+  |                                                                       
+  |================                                                 |  24%
+  |                                                                       
+  |================                                                 |  25%
+  |                                                                       
+  |=================                                                |  26%
+  |                                                                       
+  |=================                                                |  27%
+  |                                                                       
+  |==================                                               |  27%
+  |                                                                       
+  |==================                                               |  28%
+  |                                                                       
+  |===================                                              |  29%
+  |                                                                       
+  |===================                                              |  30%
+  |                                                                       
+  |====================                                             |  30%
+  |                                                                       
+  |====================                                             |  31%
+  |                                                                       
+  |====================                                             |  32%
+  |                                                                       
+  |=====================                                            |  32%
+  |                                                                       
+  |=====================                                            |  33%
+  |                                                                       
+  |======================                                           |  33%
+  |                                                                       
+  |======================                                           |  34%
+  |                                                                       
+  |=======================                                          |  35%
+  |                                                                       
+  |=======================                                          |  36%
+  |                                                                       
+  |========================                                         |  36%
+  |                                                                       
+  |========================                                         |  37%
+  |                                                                       
+  |=========================                                        |  38%
+  |                                                                       
+  |=========================                                        |  39%
+  |                                                                       
+  |==========================                                       |  39%
+  |                                                                       
+  |==========================                                       |  40%
+  |                                                                       
+  |===========================                                      |  41%
+  |                                                                       
+  |===========================                                      |  42%
+  |                                                                       
+  |============================                                     |  42%
+  |                                                                       
+  |============================                                     |  43%
+  |                                                                       
+  |============================                                     |  44%
+  |                                                                       
+  |=============================                                    |  44%
+  |                                                                       
+  |=============================                                    |  45%
+  |                                                                       
+  |==============================                                   |  46%
+  |                                                                       
+  |==============================                                   |  47%
+  |                                                                       
+  |===============================                                  |  47%
+  |                                                                       
+  |===============================                                  |  48%
+  |                                                                       
+  |================================                                 |  49%
+  |                                                                       
+  |================================                                 |  50%
+  |                                                                       
+  |=================================                                |  50%
+  |                                                                       
+  |=================================                                |  51%
+  |                                                                       
+  |==================================                               |  52%
+  |                                                                       
+  |==================================                               |  53%
+  |                                                                       
+  |===================================                              |  53%
+  |                                                                       
+  |===================================                              |  54%
+  |                                                                       
+  |====================================                             |  55%
+  |                                                                       
+  |====================================                             |  56%
+  |                                                                       
+  |=====================================                            |  56%
+  |                                                                       
+  |=====================================                            |  57%
+  |                                                                       
+  |=====================================                            |  58%
+  |                                                                       
+  |======================================                           |  58%
+  |                                                                       
+  |======================================                           |  59%
+  |                                                                       
+  |=======================================                          |  60%
+  |                                                                       
+  |=======================================                          |  61%
+  |                                                                       
+  |========================================                         |  61%
+  |                                                                       
+  |========================================                         |  62%
+  |                                                                       
+  |=========================================                        |  63%
+  |                                                                       
+  |=========================================                        |  64%
+  |                                                                       
+  |==========================================                       |  64%
+  |                                                                       
+  |==========================================                       |  65%
+  |                                                                       
+  |===========================================                      |  66%
+  |                                                                       
+  |===========================================                      |  67%
+  |                                                                       
+  |============================================                     |  67%
+  |                                                                       
+  |============================================                     |  68%
+  |                                                                       
+  |=============================================                    |  68%
+  |                                                                       
+  |=============================================                    |  69%
+  |                                                                       
+  |=============================================                    |  70%
+  |                                                                       
+  |==============================================                   |  70%
+  |                                                                       
+  |==============================================                   |  71%
+  |                                                                       
+  |===============================================                  |  72%
+  |                                                                       
+  |===============================================                  |  73%
+  |                                                                       
+  |================================================                 |  73%
+  |                                                                       
+  |================================================                 |  74%
+  |                                                                       
+  |=================================================                |  75%
+  |                                                                       
+  |=================================================                |  76%
+  |                                                                       
+  |==================================================               |  76%
+  |                                                                       
+  |==================================================               |  77%
+  |                                                                       
+  |===================================================              |  78%
+  |                                                                       
+  |===================================================              |  79%
+  |                                                                       
+  |====================================================             |  79%
+  |                                                                       
+  |====================================================             |  80%
+  |                                                                       
+  |=====================================================            |  81%
+  |                                                                       
+  |=====================================================            |  82%
+  |                                                                       
+  |======================================================           |  83%
+  |                                                                       
+  |======================================================           |  84%
+  |                                                                       
+  |=======================================================          |  84%
+  |                                                                       
+  |=======================================================          |  85%
+  |                                                                       
+  |========================================================         |  86%
+  |                                                                       
+  |========================================================         |  87%
+  |                                                                       
+  |=========================================================        |  87%
+  |                                                                       
+  |=========================================================        |  88%
+  |                                                                       
+  |==========================================================       |  89%
+  |                                                                       
+  |==========================================================       |  90%
+  |                                                                       
+  |===========================================================      |  90%
+  |                                                                       
+  |===========================================================      |  91%
+  |                                                                       
+  |============================================================     |  92%
+  |                                                                       
+  |============================================================     |  93%
+  |                                                                       
+  |=============================================================    |  93%
+  |                                                                       
+  |=============================================================    |  94%
+  |                                                                       
+  |=============================================================    |  95%
+  |                                                                       
+  |==============================================================   |  95%
+  |                                                                       
+  |==============================================================   |  96%
+  |                                                                       
+  |===============================================================  |  97%
+  |                                                                       
+  |===============================================================  |  98%
+  |                                                                       
+  |================================================================ |  98%
+  |                                                                       
+  |================================================================ |  99%
+  |                                                                       
+  |=================================================================| 100%
+## [1] &quot;Scaling data matrix&quot;
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">RunPCA</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">pc.genes =</span> seuset<span class="op">@</span>var.genes, 
+    <span class="dt">do.print =</span> <span class="ot">TRUE</span>, 
+    <span class="dt">pcs.print =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, 
+    <span class="dt">genes.print =</span> <span class="dv">5</span>
+)</code></pre></div>
+<pre><code>## [1] &quot;PC1&quot;
+## [1] &quot;KCNMA1&quot;   &quot;TNS1&quot;     &quot;HAS2-AS1&quot; &quot;ACTC1&quot;    &quot;GFRA1&quot;   
+## [1] &quot;&quot;
+## [1] &quot;G6PC&quot;         &quot;LOC100131626&quot; &quot;LOC653513&quot;    &quot;FAM138F&quot;     
+## [5] &quot;FAM138A&quot;     
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC2&quot;
+## [1] &quot;IGSF21&quot;      &quot;C21orf88&quot;    &quot;ONECUT1&quot;     &quot;JAKMIP2-AS1&quot; &quot;PIEZO2&quot;     
+## [1] &quot;&quot;
+## [1] &quot;RHOV&quot;    &quot;C5orf38&quot; &quot;SYT12&quot;   &quot;VNN1&quot;    &quot;CYP4F11&quot;
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC3&quot;
+## [1] &quot;IGSF21&quot;  &quot;TNNC2&quot;   &quot;SYNE4&quot;   &quot;ONECUT1&quot; &quot;RIMS3&quot;  
+## [1] &quot;&quot;
+## [1] &quot;KCNMA1&quot;   &quot;HAS2-AS1&quot; &quot;NLRP1&quot;    &quot;TNS1&quot;     &quot;PSG3&quot;    
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC4&quot;
+## [1] &quot;ONECUT1&quot;     &quot;C21orf88&quot;    &quot;TNNC2&quot;       &quot;JAKMIP2-AS1&quot; &quot;SYNE4&quot;      
+## [1] &quot;&quot;
+## [1] &quot;CADM3&quot;       &quot;RAB9B&quot;       &quot;SLC26A4-AS1&quot; &quot;NPTXR&quot;       &quot;CREG2&quot;      
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC5&quot;
+## [1] &quot;CREG2&quot;       &quot;SLC26A4-AS1&quot; &quot;FAM133A&quot;     &quot;SNX32&quot;       &quot;KCNH5&quot;      
+## [1] &quot;&quot;
+## [1] &quot;EMCN&quot;  &quot;ERG&quot;   &quot;IMPG2&quot; &quot;SHE&quot;   &quot;CDH5&quot; 
+## [1] &quot;&quot;
+## [1] &quot;&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">VizPCA</span>(<span class="dt">object =</span> seuset, <span class="dt">pcs.use =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</code></pre></div>
+<p><img src="19-seurat_files/figure-html/unnamed-chunk-4-4.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PCAPlot</span>(<span class="dt">object =</span> seuset, <span class="dt">dim.1 =</span> <span class="dv">1</span>, <span class="dt">dim.2 =</span> <span class="dv">2</span>)</code></pre></div>
+<p><img src="19-seurat_files/figure-html/unnamed-chunk-4-5.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">ProjectPCA</span>(<span class="dt">object =</span> seuset, <span class="dt">do.print =</span> <span class="ot">FALSE</span>)
+
+<span class="kw">PCHeatmap</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">pc.use =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, 
+    <span class="dt">cells.use =</span> <span class="dv">500</span>, 
+    <span class="dt">do.balanced =</span> <span class="ot">TRUE</span>, 
+    <span class="dt">label.columns =</span> <span class="ot">FALSE</span>,
+    <span class="dt">use.full =</span> <span class="ot">FALSE</span>
+)</code></pre></div>
+<p><img src="19-seurat_files/figure-html/unnamed-chunk-4-6.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">JackStraw</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">num.replicate =</span> <span class="dv">100</span>, 
+    <span class="dt">do.print =</span> <span class="ot">FALSE</span>
+)
+
+<span class="kw">JackStrawPlot</span>(<span class="dt">object =</span> seuset, <span class="dt">PCs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>)</code></pre></div>
+<p><img src="19-seurat_files/figure-html/unnamed-chunk-4-7.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PCElbowPlot</span>(<span class="dt">object =</span> seuset)</code></pre></div>
+<p><img src="19-seurat_files/figure-html/unnamed-chunk-4-8.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">FindClusters</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">reduction.type =</span> <span class="st">&quot;pca&quot;</span>, 
+    <span class="dt">dims.use =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, 
+    <span class="dt">resolution =</span> <span class="fl">0.6</span>, 
+    <span class="dt">print.output =</span> <span class="dv">0</span>, 
+    <span class="dt">save.SNN =</span> <span class="ot">TRUE</span>
+)
+
+<span class="kw">table</span>(seuset<span class="op">@</span>ident)</code></pre></div>
+<pre><code>## 
+##  0  1  2  3  4  5 
+## 85 79 43 38 35 21</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mclust<span class="op">::</span><span class="kw">adjustedRandIndex</span>(<span class="kw">colData</span>(pollen)<span class="op">$</span>cell_type1, seuset<span class="op">@</span>ident)</code></pre></div>
+<pre><code>## [1] 0.5147792</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this did not work!</span>
+<span class="co"># Error in La.svd(x, nu, nv) : LAPACK routines cannot be loaded</span>
+<span class="co"># seuset &lt;- RunTSNE(</span>
+<span class="co">#     object = seuset, </span>
+<span class="co">#     dims.use = 1:5, </span>
+<span class="co">#     do.fast = TRUE</span>
+<span class="co"># )</span></code></pre></div>
+<p><strong>Exercise 12</strong>: Compare the results between <code>SC3</code> and <code>SEURAT</code>.</p>
+<p><strong>Our solution</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pData</span>(pollen)<span class="op">$</span>SEURAT &lt;-<span class="st"> </span><span class="kw">as.character</span>(pollen_seurat<span class="op">@</span>ident)
+<span class="kw">sc3_plot_expression</span>(pollen, <span class="dt">k =</span> <span class="dv">11</span>, <span class="dt">show_pdata =</span> <span class="st">&quot;SEURAT&quot;</span>)</code></pre></div>
+<p>Seurat can also find marker genes, e.g. marker genes for cluster 2:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">markers &lt;-<span class="st"> </span><span class="kw">FindMarkers</span>(pollen_seurat, <span class="dv">2</span>)
+<span class="kw">FeaturePlot</span>(pollen_seurat, 
+            <span class="kw">head</span>(<span class="kw">rownames</span>(markers)), 
+            <span class="dt">cols.use =</span> <span class="kw">c</span>(<span class="st">&quot;lightgrey&quot;</span>, <span class="st">&quot;blue&quot;</span>), 
+            <span class="dt">nCol =</span> <span class="dv">3</span>)</code></pre></div>
+<p><strong>Exercise 13</strong>: Compare marker genes provided by <code>SEURAT</code> and <code>SC3</code>.</p>
+<div id="sessioninfo-10" class="section level2">
+<h2><span class="header-section-number">19.1</span> sessionInfo()</h2>
 <pre><code>## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux buster/sid
@@ -608,84 +801,86 @@ Figure 18.4: Clustering solutions of SINCERA method using <span class="math inli
 ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-## [1] stats4    parallel  methods   stats     graphics  grDevices utils    
+## [1] parallel  stats4    methods   stats     graphics  grDevices utils    
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] pheatmap_1.0.8              scater_1.5.20              
-##  [3] ggplot2_2.2.1               SC3_1.5.5                  
+##  [1] Seurat_2.1.0                Matrix_1.2-11              
+##  [3] cowplot_0.8.0               ggplot2_2.2.1              
 ##  [5] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [7] DelayedArray_0.2.7          matrixStats_0.52.2         
-##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
-## [11] IRanges_2.10.5              S4Vectors_0.14.7           
-## [13] pcaReduce_1.0               mclust_5.3                 
-## [15] mnormt_1.5-5                pcaMethods_1.68.0          
-## [17] Biobase_2.36.2              BiocGenerics_0.22.1        
-## [19] knitr_1.17                 
+##  [9] Biobase_2.36.2              GenomicRanges_1.28.6       
+## [11] GenomeInfoDb_1.12.3         IRanges_2.10.5             
+## [13] S4Vectors_0.14.7            BiocGenerics_0.22.1        
+## [15] knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] Rtsne_0.13              ggbeeswarm_0.6.0       
-##   [3] colorspace_1.3-2        rjson_0.2.15           
-##   [5] class_7.3-14            rprojroot_1.2          
-##   [7] XVector_0.16.0          bit64_0.9-7            
-##   [9] AnnotationDbi_1.38.2    mvtnorm_1.0-6          
-##  [11] codetools_0.2-15        scRNA.seq.funcs_0.1.0  
-##  [13] tximport_1.4.0          doParallel_1.0.11      
-##  [15] robustbase_0.92-7       cluster_2.0.6          
-##  [17] shinydashboard_0.6.1    shiny_1.0.5            
-##  [19] rrcov_1.4-3             compiler_3.4.2         
-##  [21] backports_1.1.1         assertthat_0.2.0       
-##  [23] Matrix_1.2-11           lazyeval_0.2.0         
-##  [25] limma_3.32.10           htmltools_0.3.6        
-##  [27] tools_3.4.2             bindrcpp_0.2           
-##  [29] gtable_0.2.0            glue_1.1.1             
-##  [31] GenomeInfoDbData_0.99.0 reshape2_1.4.2         
-##  [33] dplyr_0.7.4             doRNG_1.6.6            
-##  [35] Rcpp_0.12.13            gdata_2.18.0           
-##  [37] iterators_1.0.8         stringr_1.2.0          
-##  [39] mime_0.5                rngtools_1.2.4         
-##  [41] gtools_3.5.0            WriteXLS_4.0.0         
-##  [43] hypergeo_1.2-13         statmod_1.4.30         
-##  [45] XML_3.98-1.9            edgeR_3.18.1           
-##  [47] DEoptimR_1.0-8          MASS_7.3-47            
-##  [49] zlibbioc_1.22.0         scales_0.5.0           
-##  [51] rhdf5_2.20.0            RColorBrewer_1.1-2     
-##  [53] yaml_2.1.14             memoise_1.1.0          
-##  [55] gridExtra_2.3           pkgmaker_0.22          
-##  [57] biomaRt_2.32.1          stringi_1.1.5          
-##  [59] RSQLite_2.0             highr_0.6              
-##  [61] pcaPP_1.9-72            foreach_1.4.3          
-##  [63] orthopolynom_1.0-5      e1071_1.6-8            
-##  [65] contfrac_1.1-11         caTools_1.17.1         
-##  [67] moments_0.14            rlang_0.1.2            
-##  [69] pkgconfig_2.0.1         bitops_1.0-6           
-##  [71] evaluate_0.10.1         lattice_0.20-35        
-##  [73] ROCR_1.0-7              bindr_0.1              
-##  [75] labeling_0.3            cowplot_0.8.0          
-##  [77] bit_1.1-12              deSolve_1.20           
-##  [79] plyr_1.8.4              magrittr_1.5           
-##  [81] bookdown_0.5            R6_2.2.2               
-##  [83] gplots_3.0.1            DBI_0.7                
-##  [85] RCurl_1.95-4.8          tibble_1.3.4           
-##  [87] KernSmooth_2.23-15      rmarkdown_1.6          
-##  [89] viridis_0.4.0           locfit_1.5-9.1         
-##  [91] grid_3.4.2              data.table_1.10.4-2    
-##  [93] blob_1.1.0              digest_0.6.12          
-##  [95] xtable_1.8-2            httpuv_1.3.5           
-##  [97] elliptic_1.3-7          munsell_0.4.3          
-##  [99] registry_0.3            beeswarm_0.2.3         
-## [101] viridisLite_0.2.0       vipor_0.4.5</code></pre>
+##   [1] backports_1.1.1         Hmisc_4.0-3            
+##   [3] VGAM_1.0-4              NMF_0.20.6             
+##   [5] sn_1.5-0                plyr_1.8.4             
+##   [7] igraph_1.1.2            lazyeval_0.2.0         
+##   [9] splines_3.4.2           gridBase_0.4-7         
+##  [11] digest_0.6.12           foreach_1.4.3          
+##  [13] htmltools_0.3.6         lars_1.2               
+##  [15] gdata_2.18.0            magrittr_1.5           
+##  [17] checkmate_1.8.4         cluster_2.0.6          
+##  [19] doParallel_1.0.11       mixtools_1.1.0         
+##  [21] ROCR_1.0-7              sfsmisc_1.1-1          
+##  [23] recipes_0.1.0           gower_0.1.2            
+##  [25] dimRed_0.1.0            R.utils_2.5.0          
+##  [27] colorspace_1.3-2        dplyr_0.7.4            
+##  [29] RCurl_1.95-4.8          bindr_0.1              
+##  [31] survival_2.41-3         iterators_1.0.8        
+##  [33] ape_4.1                 glue_1.1.1             
+##  [35] DRR_0.0.2               registry_0.3           
+##  [37] gtable_0.2.0            ipred_0.9-6            
+##  [39] zlibbioc_1.22.0         XVector_0.16.0         
+##  [41] kernlab_0.9-25          ddalpha_1.3.1          
+##  [43] prabclus_2.2-6          DEoptimR_1.0-8         
+##  [45] scales_0.5.0            mvtnorm_1.0-6          
+##  [47] rngtools_1.2.4          Rcpp_0.12.13           
+##  [49] dtw_1.18-1              xtable_1.8-2           
+##  [51] htmlTable_1.9           tclust_1.3-1           
+##  [53] foreign_0.8-69          proxy_0.4-17           
+##  [55] mclust_5.3              SDMTools_1.1-221       
+##  [57] Formula_1.2-2           tsne_0.1-3             
+##  [59] lava_1.5.1              prodlim_1.6.1          
+##  [61] htmlwidgets_0.9         FNN_1.1                
+##  [63] gplots_3.0.1            RColorBrewer_1.1-2     
+##  [65] fpc_2.1-10              acepack_1.4.1          
+##  [67] modeltools_0.2-21       ica_1.0-1              
+##  [69] pkgconfig_2.0.1         R.methodsS3_1.7.1      
+##  [71] flexmix_2.3-14          nnet_7.3-12            
+##  [73] caret_6.0-77            labeling_0.3           
+##  [75] rlang_0.1.2             reshape2_1.4.2         
+##  [77] munsell_0.4.3           tools_3.4.2            
+##  [79] ranger_0.8.0            ggridges_0.4.1         
+##  [81] evaluate_0.10.1         stringr_1.2.0          
+##  [83] yaml_2.1.14             ModelMetrics_1.1.0     
+##  [85] robustbase_0.92-7       caTools_1.17.1         
+##  [87] purrr_0.2.4             bindrcpp_0.2           
+##  [89] pbapply_1.3-3           nlme_3.1-131           
+##  [91] R.oo_1.21.0             RcppRoll_0.2.2         
+##  [93] compiler_3.4.2          ggjoy_0.4.0            
+##  [95] tibble_1.3.4            stringi_1.1.5          
+##  [97] lattice_0.20-35         trimcluster_0.1-2      
+##  [99] diffusionMap_1.1-0      data.table_1.10.4-2    
+## [101] bitops_1.0-6            irlba_2.3.1            
+## [103] R6_2.2.2                latticeExtra_0.6-28    
+## [105] bookdown_0.5            KernSmooth_2.23-15     
+## [107] gridExtra_2.3           codetools_0.2-15       
+## [109] MASS_7.3-47             gtools_3.5.0           
+## [111] assertthat_0.2.0        CVST_0.2-1             
+## [113] pkgmaker_0.22           rprojroot_1.2          
+## [115] withr_2.0.0             mnormt_1.5-5           
+## [117] GenomeInfoDbData_0.99.0 diptest_0.75-7         
+## [119] grid_3.4.2              rpart_4.1-11           
+## [121] timeDate_3012.100       tidyr_0.7.2            
+## [123] class_7.3-14            rmarkdown_1.6          
+## [125] segmented_0.5-2.2       Rtsne_0.13             
+## [127] numDeriv_2016.8-1       scatterplot3d_0.3-40   
+## [129] lubridate_1.6.0         base64enc_0.1-3</code></pre>
 
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234567</span>)</code></pre></div>
-</div>
-</div>
-<h3> References</h3>
-<div id="refs" class="references">
-<div id="ref-Pollen2014-cu">
-<p>Pollen, Alex A, Tomasz J Nowakowski, Joe Shuga, Xiaohui Wang, Anne A Leyrat, Jan H Lui, Nianzhen Li, et al. 2014. “Low-Coverage Single-Cell mRNA Sequencing Reveals Cellular Heterogeneity and Activated Signaling Pathways in Developing Cerebral Cortex.” <em>Nat. Biotechnol.</em> 32 (10): 1053–8.</p>
-</div>
-<div id="ref-Kiselev2016-bq">
-<p>Kiselev, Vladimir Yu, Kristina Kirschner, Michael T Schaub, Tallulah Andrews, Tamir Chandra, Kedar N Natarajan, Wolf Reik, Mauricio Barahona, Anthony R Green, and Martin Hemberg. 2016. “SC3 - Consensus Clustering of Single-Cell RNA-Seq Data.” <em>bioRxiv</em>.</p>
 </div>
 </div>
             </section>
@@ -693,8 +888,8 @@ Figure 18.4: Clustering solutions of SINCERA method using <span class="math inli
           </div>
         </div>
       </div>
-<a href="clustering-introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="seurat-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="clust-methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="feature-selection.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -723,7 +918,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/hemberg-lab/scRNA.seq.course/edit/master/18-clustering.Rmd",
+"link": "https://github.com/hemberg-lab/scRNA.seq.course/edit/master/19-seurat.Rmd",
 "text": "Edit"
 },
 "download": ["scRNA-seq-course.pdf"],

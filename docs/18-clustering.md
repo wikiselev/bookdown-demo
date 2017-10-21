@@ -422,7 +422,7 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] pheatmap_1.0.8              scater_1.5.19              
+##  [1] pheatmap_1.0.8              scater_1.5.20              
 ##  [3] ggplot2_2.2.1               SC3_1.5.5                  
 ##  [5] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [7] DelayedArray_0.2.7          matrixStats_0.52.2         

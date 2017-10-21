@@ -102,9 +102,7 @@ assay(umi.qc, "ruvs10") <- log2(
 If you have an experiment with a balanced design, Combat can be used to eliminate batch effects while preserving biological effects by specifying the biological effects using the `mod` parameter. However the `Tung` data contains multiple experimental replicates rather than a balanced design so using `mod1` to preserve biological variability will result in an error. 
 
 ```r
-# sample 100 cells
-inds <- sample(100)
-combat_data <- logcounts(umi.qc)[, inds]
+combat_data <- logcounts(umi.qc)
 mod_data <- as.data.frame(t(combat_data))
 # Basic batch removal
 mod0 = model.matrix(~ 1, data = mod_data) 
@@ -113,12 +111,36 @@ mod1 = model.matrix(~ umi.qc$individual, data = mod_data)
 # adjust for total genes detected
 mod2 = model.matrix(~ umi.qc$total_features, data = mod_data)
 assay(umi.qc, "combat") <- ComBat(
-    dat = combat_data, 
-    batch = factor(umi.qc$batch[inds]), 
+    dat = t(mod_data), 
+    batch = factor(umi.qc$batch), 
     mod = mod0,
-    par.prior = FALSE,
+    par.prior = TRUE,
     prior.plots = FALSE
 )
+```
+
+```
+## Found8batches
+```
+
+```
+## Adjusting for0covariate(s) or covariate level(s)
+```
+
+```
+## Standardizing Data across genes
+```
+
+```
+## Fitting L/S model and finding priors
+```
+
+```
+## Finding parametric adjustments
+```
+
+```
+## Adjusting the Data
 ```
 
 __Exercise 1__
@@ -164,7 +186,7 @@ assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3);
 
 # For a balanced design: 
 #assay(umi.qc, "mnn") <- mnnCorrect(
-#    list(B1 = exprs(batch1), B2 = exprs(batch2), B3 = exprs(batch3)),  
+#    list(B1 = logcounts(batch1), B2 = logcounts(batch2), B3 = logcounts(batch3)),  
 #    k = 20,
 #    sigma = 0.1,
 #    cos.norm = TRUE,
@@ -242,6 +264,130 @@ for(n in assayNames(umi.qc)) {
 ```
 
 ```
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
+## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
+
 ## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
 
 ## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
@@ -543,7 +689,7 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
 
 __Exercise 5__
 
-Why do the raw counts appear to have the least batch effects?
+Why do the raw counts appear to have the little batch effects?
 
 ## Exercise
 
@@ -578,7 +724,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ##  [3] sva_3.24.4                  genefilter_1.58.1          
 ##  [5] mgcv_1.8-22                 nlme_3.1-131               
 ##  [7] kBET_0.99.0                 scran_1.5.12               
-##  [9] scater_1.5.19               SingleCellExperiment_0.99.4
+##  [9] scater_1.5.20               SingleCellExperiment_0.99.4
 ## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
 ## [13] edgeR_3.18.1                limma_3.32.10              
 ## [15] EDASeq_2.10.0               ShortRead_1.34.2           

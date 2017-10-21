@@ -415,7 +415,7 @@ By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-com
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] knitr_1.17                  scater_1.5.19              
+##  [1] knitr_1.17                  scater_1.5.20              
 ##  [3] ggplot2_2.2.1               SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          Biobase_2.36.2             
