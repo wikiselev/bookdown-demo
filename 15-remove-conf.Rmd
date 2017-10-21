@@ -239,18 +239,18 @@ interspersed batches indicates that technical variation has been
 removed. We always use log2-cpm normalized data to match the assumptions of PCA.
 
 ```{r}
-correction_methods = assayNames(umi.qc);
-n <- correction_methods[1];
-#for(n in assayNames(umi.qc)) {
-    plotPCA(
-        umi.qc[endog_genes, ],
-        colour_by = "batch",
-        size_by = "total_features",
-        shape_by = "individual",
-        exprs_values = n
-    ) +
-    ggtitle(n)
-#}
+for(n in assayNames(umi.qc)) {
+    print(
+        plotPCA(
+            umi.qc[endog_genes, ],
+            colour_by = "batch",
+            size_by = "total_features",
+            shape_by = "individual",
+            exprs_values = n
+        ) +
+        ggtitle(n)
+    )
+}
 ```
 
 __Exercise 3__
@@ -263,7 +263,7 @@ We can also examine the effectiveness of correction using the relative log expre
 
 ```{r}
 res <- list()
-for(n in correction_methods)) {
+for(n in correction_methods) {
 	res[[n]] <- suppressWarnings(calc_cell_RLE(assay(umi.qc, n), erccs))
 }
 par(mar=c(6,4,1,1))
@@ -274,23 +274,24 @@ boxplot(res, las=2)
 
 We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.
 ```{r confound-cpm, fig.cap = "Explanatory variables (mnn)"}
-n <- correction_methods[1];
-#for(n in assayNames(umi.qc)) {
-    plotQC(
-        umi.qc[endog_genes, ],
-        type = "expl",
-        exprs_values = n,
-        variables = c(
-            "total_features",
-            "total_counts",
-            "batch",
-            "individual",
-            "pct_counts_ERCC",
-            "pct_counts_MT"
-        )
-    ) +
-    ggtitle(n)
-#}
+for(n in assayNames(umi.qc)) {
+    print(
+        plotQC(
+            umi.qc[endog_genes, ],
+            type = "expl",
+            exprs_values = n,
+            variables = c(
+                "total_features",
+                "total_counts",
+                "batch",
+                "individual",
+                "pct_counts_ERCC",
+                "pct_counts_MT"
+            )
+        ) +
+        ggtitle(n)
+    )
+}
 ```
 
 __Exercise 4__
