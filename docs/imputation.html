@@ -382,7 +382,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(SingleCellExperiment)
 <span class="kw">set.seed</span>(<span class="dv">1234567</span>)</code></pre></div>
 <p>As discussed previously, one of the main challenges when analyzing scRNA-seq data is the presence of zeros, or dropouts. The dropouts are assumed to have arisen for three possible reasons:</p>
-<p><em>The gene was not expressed in the cell and hence there are no transcripts to sequence </em>The gene was expressed, but for some reason the transcripts were lost somewhere prior to sequencing *The gene was expressed and transcripts were captured and turned into cDNA, but the sequencing depth was not sufficient to produce any reads.</p>
+<ul>
+<li>The gene was not expressed in the cell and hence there are no transcripts to sequence</li>
+<li>The gene was expressed, but for some reason the transcripts were lost somewhere prior to sequencing</li>
+<li>The gene was expressed and transcripts were captured and turned into cDNA, but the sequencing depth was not sufficient to produce any reads.</li>
+</ul>
 <p>Thus, dropouts could be result of experimental shortcomings, and if this is the case then we would like to provide computational corrections. One possible solution is to impute the dropouts in the expression matrix. To be able to impute gene expression values, one must have an underlying model. However, since we do not know which dropout events are technical artefacts and which correspond to the transcript being truly absent, imputation is a difficult challenges.</p>
 <p>To the best of our knowledge, there are currently two different imputation methods available: MAGIC <span class="citation">(<span class="citeproc-not-found" data-reference-id="vanDijk2017"><strong>???</strong></span>)</span> and scImpute <span class="citation">(<span class="citeproc-not-found" data-reference-id="Li2017"><strong>???</strong></span>)</span>. Since <a href="https://github.com/pkathail/magic">MAGIC</a> is only available for Python or Matlab, we will only cover <a href="https://github.com/Vivianstats/scImpute">scImpute</a> in this chapter.</p>
 <p>To test scImpute, we use the default parameters and we apply it to the Pollen dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:</p>

@@ -17,9 +17,9 @@ set.seed(1234567)
 
 As discussed previously, one of the main challenges when analyzing scRNA-seq data is the presence of zeros, or dropouts. The dropouts are assumed to have arisen for three possible reasons:
 
-*The gene was not expressed in the cell and hence there are no transcripts to sequence
-*The gene was expressed, but for some reason the transcripts were lost somewhere prior to sequencing
-*The gene was expressed and transcripts were captured and turned into cDNA, but the sequencing depth was not sufficient to produce any reads.
+* The gene was not expressed in the cell and hence there are no transcripts to sequence
+* The gene was expressed, but for some reason the transcripts were lost somewhere prior to sequencing
+* The gene was expressed and transcripts were captured and turned into cDNA, but the sequencing depth was not sufficient to produce any reads.
 
 Thus, dropouts could be result of experimental shortcomings, and if this is the case then we would like to provide computational corrections. One possible solution is to impute the dropouts in the expression matrix. To be able to impute gene expression values, one must have an underlying model. However, since we do not know which dropout events are technical artefacts and which correspond to the transcript being truly absent, imputation is a difficult challenges.
 
