@@ -263,7 +263,7 @@ We can also examine the effectiveness of correction using the relative log expre
 
 ```{r}
 res <- list()
-for(n in correction_methods) {
+for(n in assayNames(umi.qc)) {
 	res[[n]] <- suppressWarnings(calc_cell_RLE(assay(umi.qc, n), erccs))
 }
 par(mar=c(6,4,1,1))
