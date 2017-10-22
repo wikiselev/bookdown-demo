@@ -566,7 +566,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scran_1.5.12                BiocParallel_1.10.1        
+##  [1] scran_1.5.13                BiocParallel_1.10.1        
 ##  [3] scater_1.5.20               SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          GenomicRanges_1.28.6       

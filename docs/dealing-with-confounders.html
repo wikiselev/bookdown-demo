@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev (wikiselev), Tallulah Andrews, Davis McCarthy (davisjmcc), Maren Büttner (marenbuettner) and Martin Hemberg (m_hemberg)">
 
 
-<meta name="date" content="2017-10-21">
+<meta name="date" content="2017-10-22">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -463,13 +463,9 @@ mod2 =<span class="st"> </span><span class="kw">model.matrix</span>(<span class=
     <span class="dt">par.prior =</span> <span class="ot">TRUE</span>,
     <span class="dt">prior.plots =</span> <span class="ot">FALSE</span>
 )</code></pre></div>
-<pre><code>## Found8batches</code></pre>
-<pre><code>## Adjusting for0covariate(s) or covariate level(s)</code></pre>
 <pre><code>## Standardizing Data across genes</code></pre>
-<pre><code>## Fitting L/S model and finding priors</code></pre>
-<pre><code>## Finding parametric adjustments</code></pre>
-<pre><code>## Adjusting the Data</code></pre>
 <p><strong>Exercise 1</strong> Perform <code>ComBat</code> correction accounting for total features as a co-variate. Store the corrected matrix in the <code>combat_tf</code> slot.</p>
+<pre><code>## Standardizing Data across genes</code></pre>
 </div>
 <div id="mnncorrect" class="section level2">
 <h2><span class="header-section-number">16.4</span> mnnCorrect</h2>
@@ -544,15 +540,18 @@ corrected &lt;-<span class="st"> </span><span class="kw">logcounts</span>(umi.qc
 <h2><span class="header-section-number">16.6</span> Effectiveness 1</h2>
 <p>We evaluate the effectiveness of the normalization by inspecting the PCA plot where colour corresponds the technical replicates and shape corresponds to different biological samples (individuals). Separation of biological samples and interspersed batches indicates that technical variation has been removed. We always use log2-cpm normalized data to match the assumptions of PCA.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span>(n <span class="cf">in</span> <span class="kw">assayNames</span>(umi.qc)) {
-    <span class="kw">plotPCA</span>(
-        umi.qc[endog_genes, ],
-        <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-        <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-        <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-        <span class="dt">exprs_values =</span> n
-    ) <span class="op">+</span>
-<span class="st">    </span><span class="kw">ggtitle</span>(n)
+    <span class="kw">print</span>(
+        <span class="kw">plotPCA</span>(
+            umi.qc[endog_genes, ],
+            <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+            <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+            <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+            <span class="dt">exprs_values =</span> n
+        ) <span class="op">+</span>
+<span class="st">        </span><span class="kw">ggtitle</span>(n)
+    )
 }</code></pre></div>
+<p><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-5.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-6.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-7.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-8.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-9.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-10.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-11.png" width="672" style="display: block; margin: auto;" /><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-12.png" width="672" style="display: block; margin: auto;" /></p>
 <p><strong>Exercise 3</strong></p>
 <p>Consider different <code>ks</code> for RUV normalizations. Which gives the best results?</p>
 </div>
@@ -561,341 +560,110 @@ corrected &lt;-<span class="st"> </span><span class="kw">logcounts</span>(umi.qc
 <p>We can also examine the effectiveness of correction using the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset. Note RLE only evaluates whether the number of genes higher and lower than average are equal for each cell - i.e. systemic technical effects. Random technical noise between batches may not be detected by RLE.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw">list</span>()
 <span class="cf">for</span>(n <span class="cf">in</span> <span class="kw">assayNames</span>(umi.qc)) {
-    res[[n]] &lt;-<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assay</span>(umi.qc, n), erccs)
-}</code></pre></div>
-<pre><code>## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced
-
-## Warning in log((x + 1)/(median(unlist(x)) + 1)): NaNs produced</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(res)</code></pre></div>
-<p><img src="15-remove-conf_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+    res[[n]] &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">assay</span>(umi.qc, n), erccs))
+}
+<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">1</span>))
+<span class="kw">boxplot</span>(res, <span class="dt">las=</span><span class="dv">2</span>)</code></pre></div>
+<p><img src="15-remove-conf_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="effectiveness-3" class="section level2">
 <h2><span class="header-section-number">16.8</span> Effectiveness 3</h2>
 <p>We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span>(n <span class="cf">in</span> <span class="kw">assayNames</span>(umi.qc)) {
-    <span class="kw">plotQC</span>(
-        umi.qc[endog_genes, ],
-        <span class="dt">type =</span> <span class="st">&quot;expl&quot;</span>,
-        <span class="dt">exprs_values =</span> n,
-        <span class="dt">variables =</span> <span class="kw">c</span>(
-            <span class="st">&quot;total_features&quot;</span>,
-            <span class="st">&quot;total_counts&quot;</span>,
-            <span class="st">&quot;batch&quot;</span>,
-            <span class="st">&quot;individual&quot;</span>,
-            <span class="st">&quot;pct_counts_ERCC&quot;</span>,
-            <span class="st">&quot;pct_counts_MT&quot;</span>
-        )
-    ) <span class="op">+</span>
-<span class="st">    </span><span class="kw">ggtitle</span>(n)
+    <span class="kw">print</span>(
+        <span class="kw">plotQC</span>(
+            umi.qc[endog_genes, ],
+            <span class="dt">type =</span> <span class="st">&quot;expl&quot;</span>,
+            <span class="dt">exprs_values =</span> n,
+            <span class="dt">variables =</span> <span class="kw">c</span>(
+                <span class="st">&quot;total_features&quot;</span>,
+                <span class="st">&quot;total_counts&quot;</span>,
+                <span class="st">&quot;batch&quot;</span>,
+                <span class="st">&quot;individual&quot;</span>,
+                <span class="st">&quot;pct_counts_ERCC&quot;</span>,
+                <span class="st">&quot;pct_counts_MT&quot;</span>
+            )
+        ) <span class="op">+</span>
+<span class="st">        </span><span class="kw">ggtitle</span>(n)
+    )
 }</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-1.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-2.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-3.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-4.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-5.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<pre><code>## Warning: Removed 132 rows containing non-finite values (stat_density).</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-6.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<pre><code>## Warning: Removed 1014 rows containing non-finite values (stat_density).</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-7.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-8.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-9.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-10.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-11.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
+<pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous x-axis</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_density).</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:confound-cpm"></span>
+<img src="15-remove-conf_files/figure-html/confound-cpm-12.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">
+Figure 16.1: Explanatory variables (mnn)
+</p>
+</div>
 <p><strong>Exercise 4</strong></p>
 <p>Perform the above analysis for each normalization/batch correction method. Which method(s) are most/least effective? Why is the variance accounted for by batch never lower than the variance accounted for by individual?</p>
 </div>
@@ -923,11 +691,9 @@ corrected &lt;-<span class="st"> </span><span class="kw">logcounts</span>(umi.qc
 }
 
 eff_debatching &lt;-<span class="st"> </span><span class="kw">compare_kBET_results</span>(umi.qc)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(<span class="st">&quot;reshape2&quot;</span>)</code></pre></div>
-<pre><code>## Loading required package: reshape2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(<span class="st">&quot;RColorBrewer&quot;</span>)</code></pre></div>
-<pre><code>## Loading required package: RColorBrewer</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot results</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(<span class="st">&quot;reshape2&quot;</span>)
+<span class="kw">require</span>(<span class="st">&quot;RColorBrewer&quot;</span>)
+<span class="co"># Plot results</span>
 dod &lt;-<span class="st"> </span><span class="kw">melt</span>(<span class="kw">as.matrix</span>(eff_debatching),  <span class="dt">value.name =</span> <span class="st">&quot;kBET&quot;</span>)
 <span class="kw">colnames</span>(dod)[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Normalisation&quot;</span>, <span class="st">&quot;Individual&quot;</span>)
 
@@ -952,9 +718,9 @@ colorset &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st
         )
     ) <span class="op">+</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Effect of batch regression methods per individual&quot;</span>)</code></pre></div>
-<p><img src="15-remove-conf_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="15-remove-conf_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><strong>Exercise 5</strong></p>
-<p>Why do the raw counts appear to have the little batch effects?</p>
+<p>Why do the raw counts appear to have little batch effects?</p>
 </div>
 <div id="exercise-2" class="section level2">
 <h2><span class="header-section-number">16.10</span> Exercise</h2>
@@ -986,7 +752,7 @@ colorset &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st
 ##  [1] RColorBrewer_1.1-2          reshape2_1.4.2             
 ##  [3] sva_3.24.4                  genefilter_1.58.1          
 ##  [5] mgcv_1.8-22                 nlme_3.1-131               
-##  [7] kBET_0.99.0                 scran_1.5.12               
+##  [7] kBET_0.99.0                 scran_1.5.13               
 ##  [9] scater_1.5.20               SingleCellExperiment_0.99.4
 ## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
 ## [13] edgeR_3.18.1                limma_3.32.10              
@@ -1027,26 +793,27 @@ colorset &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st
 ## [47] yaml_2.1.14             memoise_1.1.0          
 ## [49] gridExtra_2.3           biomaRt_2.32.1         
 ## [51] latticeExtra_0.6-28     stringi_1.1.5          
-## [53] RSQLite_2.0             orthopolynom_1.0-5     
-## [55] GenomicFeatures_1.28.5  contfrac_1.1-11        
-## [57] rlang_0.1.2             pkgconfig_2.0.1        
-## [59] moments_0.14            bitops_1.0-6           
-## [61] evaluate_0.10.1         lattice_0.20-35        
-## [63] bindr_0.1               labeling_0.3           
-## [65] htmlwidgets_0.9         cowplot_0.8.0          
-## [67] bit_1.1-12              deSolve_1.20           
-## [69] plyr_1.8.4              magrittr_1.5           
-## [71] bookdown_0.5            R6_2.2.2               
-## [73] DBI_0.7                 survival_2.41-3        
-## [75] RCurl_1.95-4.8          tibble_1.3.4           
-## [77] rmarkdown_1.6           viridis_0.4.0          
-## [79] locfit_1.5-9.1          grid_3.4.2             
-## [81] data.table_1.10.4-2     FNN_1.1                
-## [83] blob_1.1.0              digest_0.6.12          
-## [85] xtable_1.8-2            httpuv_1.3.5           
-## [87] elliptic_1.3-7          R.utils_2.5.0          
-## [89] munsell_0.4.3           beeswarm_0.2.3         
-## [91] viridisLite_0.2.0       vipor_0.4.5</code></pre>
+## [53] RSQLite_2.0             highr_0.6              
+## [55] orthopolynom_1.0-5      GenomicFeatures_1.28.5 
+## [57] contfrac_1.1-11         rlang_0.1.2            
+## [59] pkgconfig_2.0.1         moments_0.14           
+## [61] bitops_1.0-6            evaluate_0.10.1        
+## [63] lattice_0.20-35         bindr_0.1              
+## [65] labeling_0.3            htmlwidgets_0.9        
+## [67] cowplot_0.8.0           bit_1.1-12             
+## [69] deSolve_1.20            plyr_1.8.4             
+## [71] magrittr_1.5            bookdown_0.5           
+## [73] R6_2.2.2                DBI_0.7                
+## [75] survival_2.41-3         RCurl_1.95-4.8         
+## [77] tibble_1.3.4            rmarkdown_1.6          
+## [79] viridis_0.4.0           locfit_1.5-9.1         
+## [81] grid_3.4.2              data.table_1.10.4-2    
+## [83] FNN_1.1                 blob_1.1.0             
+## [85] digest_0.6.12           xtable_1.8-2           
+## [87] httpuv_1.3.5            elliptic_1.3-7         
+## [89] R.utils_2.5.0           munsell_0.4.3          
+## [91] beeswarm_0.2.3          viridisLite_0.2.0      
+## [93] vipor_0.4.5</code></pre>
 
 </div>
 </div>

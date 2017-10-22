@@ -11,6 +11,8 @@ set.seed(1234567)
 
 # SEURAT
 
+[Seurat](http://satijalab.org/seurat/) is a popular R package that is designed for QC, analysis, and exploration of single cell RNA-seq data, ie many of the tasks covered in this course. Although the authors provide several [tutorials](http://satijalab.org/seurat/get_started.html), here we provide a brief overview.
+
 Let's load the data and look at it:
 
 ```r
