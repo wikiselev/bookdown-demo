@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Data visualization (Reads)
+## Data visualization (Reads)
 
 ```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
@@ -95,7 +95,7 @@ plotTSNE(
 )
 ```
 
-## sessionInfo()
+### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()

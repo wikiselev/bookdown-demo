@@ -2,9 +2,9 @@
 output: html_document
 ---
 
-# Normalization for library size
+## Normalization for library size
 
-## Introduction
+### Introduction
 
 ```{r, echo=FALSE}
 library(scRNA.seq.funcs)
@@ -24,7 +24,7 @@ In the previous chapter we identified important confounding factors and explanat
 
 Instead we will explore how simple size-factor normalisations correcting for library size can remove the effects of some of the confounders and explanatory variables.
 
-## Library size
+### Library size
 
 Library sizes vary because scRNA-seq data is often sequenced on highly multiplexed platforms the total reads which are derived from each cell may differ substantially. Some quantification methods
 (eg. [Cufflinks](http://cole-trapnell-lab.github.io/cufflinks/), [RSEM](http://deweylab.github.io/RSEM/)) incorporated library size when determining gene expression estimates thus do not require this normalization.
@@ -32,7 +32,7 @@ Library sizes vary because scRNA-seq data is often sequenced on highly multiplex
 However, if another quantification method was used then library size must be corrected for by multiplying or dividing each column of the expression matrix by a "normalization factor" which is an estimate of the library size relative to the other cells. Many methods to correct for library size have been developped for bulk RNA-seq and can be equally applied to scRNA-seq (eg. UQ, SF, CPM, RPKM, FPKM, TPM). 
 
 
-## Normalisations
+### Normalisations
 
 The simplest way to normalize this data is to convert it to counts per
 million (__CPM__) by dividing each column by its total then multiplying by
@@ -92,7 +92,7 @@ umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
 endog_genes <- !rowData(umi.qc)$is_feature_control
 ```
 
-### Raw
+#### Raw
 ```{r norm-pca-raw, fig.cap = "PCA plot of the tung data"}
 plotPCA(
     umi.qc[endog_genes, ],
@@ -103,7 +103,7 @@ plotPCA(
 )
 ```
 
-### CPM
+#### CPM
 `calculateCPM` from `scater` package can be used to perform this normalisation. We will save the results to the `norm_counts` assay:
 ```{r norm-pca-cpm, fig.cap = "PCA plot of the tung data after CPM normalisation"}
 assay(umi.qc, "norm_counts") <- log2(calculateCPM(umi.qc, use.size.factors = FALSE) + 1)
@@ -125,7 +125,7 @@ plotRLE(
 ```
 
 
-### TMM
+#### TMM
 ```{r norm-pca-tmm, fig.cap = "PCA plot of the tung data after TMM normalisation"}
 umi.qc <- normaliseExprs(
     umi.qc,
@@ -149,7 +149,7 @@ plotRLE(
 )
 ```
 
-### scran
+#### scran
 ```{r norm-pca-lsf, fig.cap = "PCA plot of the tung data after LSF normalisation"}
 qclust <- quickCluster(umi.qc, min.size = 30)
 umi.qc <- computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
@@ -170,7 +170,7 @@ plotRLE(
 )
 ```
 
-### Size-factor (RLE)
+#### Size-factor (RLE)
 ```{r norm-pca-rle, fig.cap = "PCA plot of the tung data after RLE normalisation"}
 umi.qc <- normaliseExprs(
     umi.qc,
@@ -195,7 +195,7 @@ plotRLE(
 ```
 
 
-### Upperquantile
+#### Upperquantile
 ```{r norm-pca-uq, fig.cap = "PCA plot of the tung data after UQ normalisation"}
 umi.qc <- normaliseExprs(
     umi.qc,
@@ -219,7 +219,7 @@ plotRLE(
     colour_by = "batch"
 )
 ```
-## Downsampling 
+### Downsampling 
 
 A final way to correct for library size is to downsample the expression matrix so that each cell has approximately the same total number of molecules. The benefit of this method is that zero values will be introduced by the down sampling thus eliminating any biases due to differing numbers of detected genes. However, the major drawback is that the process is not deterministic so each time the downsampling is run the resulting expression matrix is slightly different. Thus, often analyses must be run on multiple downsamplings to ensure results are robust.
 
@@ -246,7 +246,7 @@ plotRLE(
 )
 ```
 
-## Normalizing for gene/transcript length
+### Normalizing for gene/transcript length
 
 Some methods combine library size and fragment/gene length normalization such as:
 
@@ -352,11 +352,11 @@ plotPCA(
 
 __Note:__ The PCA looks for differences between cells. Gene length is the same across cells for each gene thus FPKM is almost identical to the CPM plot (it is just rotated) since it performs CPM first then normalizes gene length. Whereas, TPM is different because it weights genes by their length before performing CPM. 
 
-## Exercise
+### Exercise
 
 Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
 
-## sessionInfo()
+### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()

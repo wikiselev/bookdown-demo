@@ -2,7 +2,7 @@
 knit: bookdown::preview_chapter
 ---
 
-# Identifying confounding factors (Reads)
+## Identifying confounding factors (Reads)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
@@ -48,7 +48,7 @@ plotQC(
 )
 ```
 
-## sessionInfo()
+### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()

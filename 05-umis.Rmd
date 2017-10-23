@@ -7,11 +7,11 @@ library(knitr)
 opts_chunk$set(fig.align = "center", echo=FALSE)
 ```
 
-# Unique Molecular Identifiers (UMIs)
+## Unique Molecular Identifiers (UMIs)
 
 Thanks to Andreas Buness from EMBL Monterotondo for collaboration on this section.
 
-## Introduction
+### Introduction
 
 Unique Molecular Identifiers are short (4-10bp) random barcodes added to transcripts during reverse-transcription. They enable sequencing reads to be assigned to individual transcript molecules and thus the removal of amplification noise and biases from scRNASeq data. 
 
@@ -21,7 +21,7 @@ knitr::include_graphics("figures/UMI-Seq-protocol.png")
 
 When sequencing UMI containing data, techniques are used to specifically sequence only the end of the transcript containing the UMI (usually the 3' end).
 
-## Mapping Barcodes
+### Mapping Barcodes
 
 Since the number of unique barcodes ($4^N$, $N$ - length of UMI) is much smaller than the total number of molecules per cell (~$10^6$), each barcode will typically be assigned to multiple transcripts. Hence, to identify unique molecules both barcode and mapping location (transcript) must be used. The first step is to map UMI reads, for which we recommend using STAR since it is fast and outputs good quality BAM-alignments. Moreover, mapping locations can be useful for eg. identifying poorly-annotated 3' UTRs of transcripts.
 
@@ -38,7 +38,7 @@ After processing the reads from a UMI experiment, the following conventions are 
 knitr::include_graphics("figures/UMI-Seq-reads.png")
 ```
 
-## Counting Barcodes
+### Counting Barcodes
 
 In theory, every unique UMI-transcript pair should represent all reads originating from a single RNA molecule. However, in practice this is frequently not the case and the most common reasons are:
 
@@ -55,7 +55,7 @@ In theory, every unique UMI-transcript pair should represent all reads originati
 knitr::include_graphics("figures/UMI-Seq-errors.png")
 ```
 
-## Correcting for Errors
+### Correcting for Errors
 
 How to best account for errors in UMIs remains an active area of research. The best approaches that we are aware of for resolving the issues mentioned above are:
 
@@ -74,7 +74,7 @@ An important caveat of this method is that it assumes that all UMIs are equally 
 knitr::include_graphics("figures/UMI-Seq-amp.png")
 ```
 
-## Downstream Analysis
+### Downstream Analysis
 
 Current UMI platforms (DropSeq, InDrop, ICell8) exhibit low and highly variable capture efficiency as shown in the figure below. 
 

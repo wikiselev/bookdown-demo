@@ -2,9 +2,9 @@
 knit: bookdown::preview_chapter
 ---
 
-# Identifying confounding factors
+## Identifying confounding factors
 
-## Introduction
+### Introduction
 
 There is a large number of potential confounders, artifacts and biases in sc-RNA-seq data. One of the main challenges in analyzing scRNA-seq data stems from the fact that it is difficult to carry out a true technical replicate (why?) to distinguish biological and technical variability. In the previous chapters we considered batch effects and in this chapter we will continue to explore how experimental artifacts can be identified and removed. We will continue using the [scater](https://github.com/davismcc/scater) package since it provides a set of methods specifically for quality control of experimental and explanatory variables. Moreover, we will continue to work with the Blischak data that was used in the previous chapter.
 
@@ -23,7 +23,7 @@ endog_genes <- !rowData(umi.qc)$is_feature_control
 
 The `umi.qc` dataset contains filtered cells and genes. Our next step is to explore technical drivers of variability in the data to inform data normalisation before downstream analysis.
 
-## Correlations with PCs
+### Correlations with PCs
 
 Let's first look again at the PCA plot of the QCed dataset:
 ```{r confound-pca, fig.cap = "PCA plot of the tung data"}
@@ -39,7 +39,7 @@ plotPCA(
 
 Let's test whether some of the variables correlate with any of the PCs.
 
-### Detected genes
+#### Detected genes
 
 ```{r confound-find-pcs-total-features, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
 plotQC(
@@ -52,7 +52,7 @@ plotQC(
 
 Indeed, we can see that `PC1` can be almost completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
 
-## Explanatory variables
+### Explanatory variables
 
 scater can also compute the marginal $R^2$ for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal $R^2$ values for the variables.
 
@@ -74,7 +74,7 @@ plotQC(
 
 This analysis indicates that the number of detected genes (again) and also the sequencing depth (number of counts) have substantial explanatory power for many genes, so these variables are good candidates for conditioning out in a normalisation step, or including in downstream statistical models. Expression of ERCCs also appears to be an important explanatory variable. One notable feature of the above plot is that batch explains more than individual, what does that tell us about the technical and biological variability of the data?
 
-## Other confounders
+### Other confounders
 
 In addition to correcting for batch, there are other factors that one
 may want to compensate for. As with batch correction, these
@@ -87,11 +87,11 @@ In addition, protocols may differ in terms of their coverage of each transcript,
 their bias based on the average content of __A/T__ nucleotides, or their ability to capture short transcripts.
 Ideally, we would like to compensate for all of these differences and biases.
 
-## Exercise
+### Exercise
 
 Perform the same analysis with read counts of the Blischak data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
 
-## sessionInfo()
+### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()

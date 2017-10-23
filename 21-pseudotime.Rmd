@@ -3,7 +3,7 @@
 output: html_document
 ---
 
-# Pseudotime analysis
+## Pseudotime analysis
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -75,7 +75,7 @@ knitr::include_graphics("figures/cannoodt_pseudotime_methods.png")
 ```
 
 
-## TSCAN
+### TSCAN
 
 TSCAN combines clustering with pseudotime analysis. First it clusters the cells using `mclust`,
 which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters. The branch of this tree that connects the largest number of clusters is the main branch which is used to determine pseudotime.
@@ -114,7 +114,7 @@ plot(
 
 __Exercise 1__ Compare results for different numbers of clusters (`clusternum`).
 
-## monocle
+### monocle
 
 Monocle skips the clustering stage of TSCAN and directly builds a
 minimum spanning tree on a reduced dimension representation of the
@@ -180,7 +180,7 @@ plot(
 )
 ```
 
-## Diffusion maps
+### Diffusion maps
 
 [Diffusion maps](https://en.wikipedia.org/wiki/Diffusion_map) were introduced by [Ronald Coifman and Stephane Lafon](http://www.sciencedirect.com/science/article/pii/S1063520306000546), and the underlying idea is to assume that the data are samples from a diffusion process. The method infers the low-dimensional manifold by estimating the eigenvalues and eigenvectors for the diffusion operator related to the data.
 
@@ -219,7 +219,7 @@ __Exercise 2__ Do you get a better resolution between the later time points by c
 __Exercise 3__ How does the ordering change if you only use the genes identified by M3Drop?
 
 
-## SLICER
+### SLICER
 
 The SLICER method is an algorithm for constructing trajectories that
 describe gene expression changes during a sequential biological
@@ -316,7 +316,7 @@ of genes from those chosen by SLICER (e.g. the genes identified by M3Drop)?
 
 
 
-## Comparison of the methods
+### Comparison of the methods
 
 How do the trajectories inferred by TSCAN and Monocle compare?
 ```{r tscan-monocle-compare}
@@ -338,7 +338,7 @@ plot(
 
 __Exercise 6__: Compare destiny and SLICER to TSCAN and Monocle.
 
-## Expression of genes through time
+### Expression of genes through time
 
 Each package also enables the visualization of expression through pseudotime. Following individual genes is very helpful for identifying genes that play an important role in the differentiation process. We illustrate the procedure using the Obox6 gene which is known to be important during early development.
 
@@ -368,7 +368,7 @@ results, as SLICER does not provide plotting functions.
 
 __Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes
 
-## sessionInfo()
+### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()

@@ -2,9 +2,9 @@
 output: html_document
 ---
 
-# Expression QC (UMI) {#exprs-qc}
+## Expression QC (UMI) {#exprs-qc}
 
-## Introduction
+### Introduction
 
 Once gene expression has been quantified it is summarized as an __expression matrix__ where each row corresponds to a gene (or transcript) and each column corresponds to a single cell. This matrix should be examined to remove poor quality cells which were not detected in either read QC or mapping QC steps. Failure to remove low quality cells at this
 stage may add technical noise which has the potential to obscure
@@ -13,7 +13,7 @@ the biological signals of interest in the downstream analysis.
 Since there is currently no standard method for performing scRNASeq the expected values for the various QC measures that will be presented here can vary substantially from experiment to experiment. Thus, to perform QC we will be looking for cells which are outliers with respect to the rest of the dataset rather than comparing to independent quality standards. Consequently, care should be taken when comparing quality metrics across datasets collected using different protocols.
 
 
-## Tung dataset
+### Tung dataset
 
 To illustrate cell QC, we consider a
 [dataset](http://jdblischak.github.io/singleCellSeq/analysis/) of
@@ -85,9 +85,9 @@ umi <- calculateQCMetrics(
 ```
 
 
-## Cell QC
+### Cell QC
 
-### Library size
+#### Library size
 
 Next we consider the total number of RNA molecules detected per
 sample (if we were using read counts rather than UMI counts this would
@@ -121,7 +121,7 @@ knitr::kable(
 )
 ```
 
-### Detected genes (1)
+#### Detected genes (1)
 
 In addition to ensuring sufficient sequencing depth for each sample, we also want to make sure that the reads are distributed across the transcriptome. Thus, we count the total number of unique genes detected in each sample.
 
@@ -157,7 +157,7 @@ knitr::kable(
 )
 ```
 
-### ERCCs and MTs
+#### ERCCs and MTs
 
 Another measure of cell quality is the ratio between ERCC _spike-in_
 RNAs and endogenous RNAs. This ratio can be used to estimate the total amount
@@ -216,9 +216,9 @@ __Answer__
 
 You would expect to see a group corresponding to the smaller cells (normal) with a higher fraction of ERCC reads than a separate group corresponding to the larger cells (senescent).
 
-## Cell filtering
+### Cell filtering
 
-### Manual
+#### Manual
 
 Now we can define a cell filter based on our previous analysis:
 
@@ -244,7 +244,7 @@ knitr::kable(
 )
 ```
 
-### Automatic
+#### Automatic
 
 Another option available in __scater__ is to conduct PCA on a set of QC metrics and then use automatic outlier detection to identify potentially problematic cells. 
 
@@ -278,7 +278,7 @@ knitr::kable(
 )
 ```
 
-## Compare filterings
+### Compare filterings
 
 __Exercise 5__
 
@@ -298,9 +298,9 @@ limma::vennDiagram(venn.diag,
                    circle.col = c("blue", "green"))
 ```
 
-## Gene analysis
+### Gene analysis
 
-### Gene expression
+#### Gene expression
 
 In addition to removing cells with poor quality, it is usually a good idea to exclude genes where we suspect that technical artefacts may have skewed the results. Moreover, inspection of the gene expression profiles may provide insights about how the experimental procedures could be improved.
 
@@ -313,7 +313,7 @@ plotQC(umi, type = "highest-expression")
 The distributions are relatively flat indicating (but not guaranteeing!) good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
 
 
-### Gene filtering
+#### Gene filtering
 
 It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells (__note__ `colData(umi)$use` filter applied to the `umi` dataset).
 
@@ -335,7 +335,7 @@ knitr::kable(
 Depending on the cell-type, protocol and sequencing depth, other cut-offs may be appropriate.
 
 
-## Save the data
+### Save the data
 
 Dimensions of the QCed dataset (do not forget about the gene filter we defined above):
 ```{r}
@@ -353,11 +353,11 @@ Save the data:
 saveRDS(umi, file = "tung/umi.rds")
 ```
 
-## Big Exercise
+### Big Exercise
 
 Perform exactly the same QC analysis with read counts of the same Blischak data. Use `tung/reads.txt` file to load the reads. Once you have finished please compare your results to ours (next chapter).
 
-## sessionInfo()
+### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()

@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Imputation
+## Imputation
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -79,7 +79,7 @@ plotPCA(
 
 Based on the PCA and the clustering results, do you think that imputation is a good idea for the Pollen dataset?
 
-## sessionInfo()
+### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()

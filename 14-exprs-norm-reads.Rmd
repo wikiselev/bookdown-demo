@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Normalization for library size (Reads)
+## Normalization for library size (Reads)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
@@ -213,7 +213,7 @@ plotPCA(
 )
 ```
 
-## sessionInfo()
+### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()
