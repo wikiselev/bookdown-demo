@@ -27,6 +27,8 @@ Thus, dropouts could be result of experimental shortcomings, and if this is the 
 
 To the best of our knowledge, there are currently two different imputation methods available: MAGIC [@vanDijk2017] and scImpute [@Li2017]. Since [MAGIC](https://github.com/pkathail/magic) is only available for Python or Matlab, we will only cover [scImpute](https://github.com/Vivianstats/scImpute) in this chapter.
 
+### scImpute
+
 To test scImpute, we use the default parameters and we apply it to the Pollen dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:
 
 ```{r}
@@ -78,6 +80,38 @@ plotPCA(
 ```
 
 Based on the PCA and the clustering results, do you think that imputation is a good idea for the Pollen dataset?
+
+### MAGIC
+
+```{r}
+pollen_magic <- readRDS("pollen/pollen_MAGIC.rds")
+pollen_magic <- SingleCellExperiment(
+    assays = list(logcounts = as.matrix(pollen_magic)), 
+    colData = colData(pollen)
+)
+plotPCA(
+    pollen_magic, 
+    colour_by = "cell_type1"
+)
+```
+
+Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
+
+To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
+```{r}
+pollen_magic <- sc3_estimate_k(pollen_magic)
+metadata(pollen_magic)$sc3$k_estimation
+pollen_magic <- sc3(pollen_magic, ks = 11, gene_filter = FALSE)
+sc3_plot_consensus(
+    pollen_magic, 
+    k = 11, 
+    show_pdata = "cell_type1"
+)
+plotPCA(
+    pollen_magic, 
+    colour_by = "sc3_11_clusters"
+)
+```
 
 ### sessionInfo()
 
