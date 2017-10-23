@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Clustering example {#clust-methods}
+## Clustering example {#clust-methods}
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -24,7 +24,7 @@ different human tissues [@Pollen2014-cu]. We have preprocessed the dataset and c
 scater object in advance. We have also annotated the cells with the cell type information 
 (it is the `cell_type1` column in the `phenoData` slot).
 
-## Pollen dataset
+### Pollen dataset
 
 Let's load the data and look at it:
 ```{r}
@@ -42,7 +42,7 @@ A simple PCA analysis already separates some strong cell types and provides some
 plotPCA(pollen, colour_by = "cell_type1")
 ```
 
-## SC3
+### SC3
 
 Let's run `SC3` clustering on the Pollen data. The advantage of the `SC3` is that it can directly take a [scater](http://bioconductor.org/packages/scater/) object (see previous chapters) as an input.
 
@@ -102,7 +102,7 @@ This command will open `SC3` in a web browser.
 
 * __Exercise 4__: Change the marker genes threshold (the default is 0.85). Does __SC3__ find more marker genes?
 
-## pcaReduce
+### pcaReduce
 
 `pcaReduce` operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will use the default `SC3` gene filter (note that the `exprs` slot of a `scater` object is log-transformed by default).
 
@@ -148,7 +148,7 @@ sc3_plot_expression(pollen, k = 11, show_pdata = "pcaReduce")
 ```
 
 
-## tSNE + kmeans
+### tSNE + kmeans
 
 [tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. Here we will do the same:
 ```{r clust-tsne, fig.cap = "tSNE map of the patient data"}
@@ -180,7 +180,7 @@ As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
 and give different results every time they are run. To get a better
 overview of the solutions, we need to run the methods multiple times. `SC3` is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.
 
-## SNN-Cliq
+### SNN-Cliq
 
 Here we run SNN-cliq with te default parameters provided in the author's example:
 
@@ -224,7 +224,7 @@ __Our solution__:
 sc3_plot_expression(pollen, k = 11, show_pdata = "SNNCliq")
 ```
 
-## SINCERA
+### SINCERA
 
 As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:
 
@@ -274,7 +274,7 @@ sc3_plot_expression(pollen, k = 11, show_pdata = "SINCERA")
 
 __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a good idea?
 
-## sessionInfo()
+### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()

@@ -2,9 +2,9 @@
 output: html_document
 ---
 
-# scater package
+## scater package
 
-## Introduction
+### Introduction
 
 [scater](http://bioconductor.org/packages/scater/) is a R package single-cell RNA-seq analysis [@McCarthy2017-kb]. The package contains several useful methods for quality control, visualisation and pre-processing of data prior to further downstream analysis.
 
@@ -19,13 +19,13 @@ output: html_document
 
 We highly recommend to use [scater](http://bioconductor.org/packages/scater/) for all single-cell RNA-seq analyses and [scater](http://bioconductor.org/packages/scater/) is the basis of the first part of the course.
 
-## scater workflow
+### scater workflow
 
 As illustrated in the figure below, [scater](http://bioconductor.org/packages/scater/) will help you with quality control, filtering and normalization of your expression matrix following mapping and alignment.
 
 ![](figures/scater_qc_workflow.png)
 
-## Terminology
+### Terminology
 
 (this chapter is taken from the [scater vignette](http://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/vignette.html))
 
@@ -35,7 +35,7 @@ As illustrated in the figure below, [scater](http://bioconductor.org/packages/sc
 * In the following chapters it may be more intuitive to mentally replace __“feature”__ with __“gene”__ or __“transcript”__ (depending on the context of the study) wherever __“feature”__ appears.
 * In the scater context, __“samples”__ refer to individual cells that we have assayed.
 
-## SCESet class
+### SCESet class
 
 (this chapter is taken from the [scater vignette](http://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/vignette.html))
 

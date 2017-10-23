@@ -7,9 +7,9 @@ library(knitr)
 opts_chunk$set(fig.align = "center", echo=FALSE, out.width = '70%')
 ```
 
-# Experimental methods
+## Experimental methods
 
-## Overview of experimental methods for generating scRNA-seq data
+### Overview of experimental methods for generating scRNA-seq data
 
 Development of new methods and protocols for scRNA-seq is currently a very active area of research, and several protocols have been published over the last few years. An non-comprehensive list includes:
 
