@@ -26,7 +26,7 @@ opts_chunk$set(fig.align = "center", echo=FALSE)
 * Allows to study new biological questions in which __cell-specific changes in transcriptome are important__, e.g. cell type identification, heterogeneity of cell responses, stochasticity of gene expression, inference of gene regulatory networks across the cells.
 * Datasets range __from $10^2$ to $10^5$ cells__ and increase in size every year
 * Currently there are several different protocols in use, e.g. SMART-seq2 [@Picelli2013-sb], CELL-seq [@Hashimshony2012-kd] and Drop-seq [@Macosko2015-ix]
-* There are also commercial platforms available, including the [Fluidigm C1](https://www.fluidigm.com/products/c1-system) and the [10X Genomics Chromium](https://www.10xgenomics.com/single-cell/)
+* There are also commercial platforms available, including the [Fluidigm C1](https://www.fluidigm.com/products/c1-system), [Wafergen ICELL8](https://www.wafergen.com/products/icell8-single-cell-system) and the [10X Genomics Chromium](https://www.10xgenomics.com/single-cell/)
 * Several computational analysis methods from bulk RNA-seq __can__ be used
 * __In most cases__ computational analysis requires adaptation of the existing methods or development of new ones
 
@@ -48,6 +48,13 @@ knitr::include_graphics("figures/flowchart.png")
 ```
 
 There are several reviews of the scRNA-seq analysis available including [@Stegle2015-uv].
+
+Today, there are also several different platforms available for carrying out one or more steps in the flowchart above. These include:
+
+* [Falco](https://github.com/VCCRI/Falco/) a single-cell RNA-seq processing framework on the cloud.
+* [SCONE](https://github.com/YosefLab/scone) (Single-Cell Overview of Normalized Expression), a package for single-cell RNA-seq data quality control and normalization.
+* [Seurat](http://satijalab.org/seurat/) is an R package designed for QC, analysis, and exploration of single cell RNA-seq data.
+* [ASAP](https://asap.epfl.ch/) (Automated Single-cell Analysis Pipeline) is an interactive web-based platform for single-cell analysis.
 
 ## Challenges
 
