@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-## Normalization for library size
+## Normalization theory
 
 ### Introduction
 
@@ -79,6 +79,8 @@ The __RLE__, __TMM__, and __UQ__ size-factor methods were developed for bulk RNA
 
 __Note:__ edgeR makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/release/bioc/html/DESeq.html) may give different results to the `estimateSizeFactorsForMatrix` method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
 
+## Normalization practice
+
 We will continue to work with the `tung` data that was used in the previous chapter.
 
 ```{r, message=FALSE, warning=FALSE}
@@ -92,7 +94,7 @@ umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
 endog_genes <- !rowData(umi.qc)$is_feature_control
 ```
 
-#### Raw
+### Raw
 ```{r norm-pca-raw, fig.cap = "PCA plot of the tung data"}
 plotPCA(
     umi.qc[endog_genes, ],
@@ -103,7 +105,7 @@ plotPCA(
 )
 ```
 
-#### CPM
+### CPM
 `calculateCPM` from `scater` package can be used to perform this normalisation. We will save the results to the `norm_counts` assay:
 ```{r norm-pca-cpm, fig.cap = "PCA plot of the tung data after CPM normalisation"}
 assay(umi.qc, "norm_counts") <- log2(calculateCPM(umi.qc, use.size.factors = FALSE) + 1)
@@ -125,7 +127,7 @@ plotRLE(
 ```
 
 
-#### TMM
+### TMM
 ```{r norm-pca-tmm, fig.cap = "PCA plot of the tung data after TMM normalisation"}
 umi.qc <- normaliseExprs(
     umi.qc,
@@ -149,7 +151,7 @@ plotRLE(
 )
 ```
 
-#### scran
+### scran
 ```{r norm-pca-lsf, fig.cap = "PCA plot of the tung data after LSF normalisation"}
 qclust <- quickCluster(umi.qc, min.size = 30)
 umi.qc <- computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
@@ -170,7 +172,7 @@ plotRLE(
 )
 ```
 
-#### Size-factor (RLE)
+### Size-factor (RLE)
 ```{r norm-pca-rle, fig.cap = "PCA plot of the tung data after RLE normalisation"}
 umi.qc <- normaliseExprs(
     umi.qc,
@@ -195,7 +197,7 @@ plotRLE(
 ```
 
 
-#### Upperquantile
+### Upperquantile
 ```{r norm-pca-uq, fig.cap = "PCA plot of the tung data after UQ normalisation"}
 umi.qc <- normaliseExprs(
     umi.qc,
@@ -219,7 +221,7 @@ plotRLE(
     colour_by = "batch"
 )
 ```
-### Downsampling 
+## Downsampling 
 
 A final way to correct for library size is to downsample the expression matrix so that each cell has approximately the same total number of molecules. The benefit of this method is that zero values will be introduced by the down sampling thus eliminating any biases due to differing numbers of detected genes. However, the major drawback is that the process is not deterministic so each time the downsampling is run the resulting expression matrix is slightly different. Thus, often analyses must be run on multiple downsamplings to ensure results are robust.
 
