@@ -11,6 +11,10 @@ opts_chunk$set(fig.align = "center", echo=FALSE, out.width = '70%')
 
 ### Overview of experimental methods for generating scRNA-seq data
 
+```{r, fig.cap="Moore's law in single cell transcriptomics (image taken from Svensson et al)"}
+knitr::include_graphics("figures/moores-law.png")
+```
+
 Development of new methods and protocols for scRNA-seq is currently a very active area of research, and several protocols have been published over the last few years. An non-comprehensive list includes:
 
 * CEL-seq
