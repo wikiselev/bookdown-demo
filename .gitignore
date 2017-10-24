@@ -6,9 +6,10 @@
 */.DS_*
 *.Rproj
 .Rbuildignore
-parslist.rds
-pollen.csv
+pars*.rds
+deng.csv
 scimpute_count.txt
 totalCounts_by_cell.rds
+clust.rds
 tung/reads.rds
 tung/umi.rds

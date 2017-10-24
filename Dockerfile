@@ -34,11 +34,13 @@ RUN Rscript -e "install.packages('mvoutlier')"
 RUN Rscript -e "devtools::install_github('MarioniLab/scran')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')"
 
+RUN Rscript -e "install.packages('irr')"
+
+RUN Rscript -e "install.packages('penalized')"
 RUN Rscript -e "devtools::install_github('Vivianstats/scImpute')"
 
 RUN Rscript -e "devtools::install_github('theislab/kBET')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('sva')"
-
 
 # RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('SC3')"
 RUN Rscript -e "devtools::install_github('hemberg-lab/SC3')"

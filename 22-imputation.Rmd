@@ -29,19 +29,17 @@ To the best of our knowledge, there are currently two different imputation metho
 
 ### scImpute
 
-To test scImpute, we use the default parameters and we apply it to the Pollen dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:
+To test `scImpute`, we use the default parameters and we apply it to the Deng dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:
 
 ```{r}
-pollen <- readRDS("pollen/pollen.rds")
-
-# this has to be changed to counts (scimpute requirement)! 
-# but we don't have counts for pollen...
-write.csv(normcounts(pollen), "pollen.csv")
+deng <- readRDS("deng/deng-reads.rds")
+write.csv(counts(deng), "deng.csv")
 scimpute(
-    count_path = "pollen.csv",
+    count_path = "deng.csv",
     infile = "csv",
     outfile = "txt", 
     out_dir = "./",
+    Kcluster = 10,
     ncores = 2
 )
 ```
@@ -49,15 +47,15 @@ scimpute(
 Now we can compare the results with original data by considering a PCA plot
 
 ```{r}
-pollen_impute <- read.table("scimpute_count.txt")
-colnames(pollen_impute) <- NULL
-pollen_impute <- SingleCellExperiment(
-    assays = list(logcounts = log2(as.matrix(pollen_impute) + 1)), 
-    colData = colData(pollen)
+res <- read.table("scimpute_count.txt")
+colnames(res) <- NULL
+res <- SingleCellExperiment(
+    assays = list(logcounts = log2(as.matrix(res) + 1)), 
+    colData = colData(deng)
 )
 plotPCA(
-    pollen_impute, 
-    colour_by = "cell_type1"
+    res, 
+    colour_by = "cell_type2"
 )
 ```
 
@@ -65,17 +63,17 @@ Compare this result to the original data in Fig. X, Chapter Y. What are the most
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
 ```{r}
-pollen_impute <- sc3_estimate_k(pollen_impute)
-metadata(pollen_impute)$sc3$k_estimation
-pollen_impute <- sc3(pollen_impute, ks = 11)
+res <- sc3_estimate_k(res)
+metadata(res)$sc3$k_estimation
+res <- sc3(res, ks = 10, gene_filter = FALSE)
 sc3_plot_consensus(
-    pollen_impute, 
-    k = 11, 
-    show_pdata = "cell_type1"
+    res, 
+    k = 10, 
+    show_pdata = "cell_type2"
 )
 plotPCA(
-    pollen_impute, 
-    colour_by = "sc3_11_clusters"
+    res, 
+    colour_by = "sc3_10_clusters"
 )
 ```
 
@@ -83,33 +81,33 @@ Based on the PCA and the clustering results, do you think that imputation is a g
 
 ### MAGIC
 
-```{r}
-pollen_magic <- readRDS("pollen/pollen_MAGIC.rds")
-pollen_magic <- SingleCellExperiment(
-    assays = list(logcounts = as.matrix(pollen_magic)), 
-    colData = colData(pollen)
+```{r, eval = FALSE}
+res <- readRDS("deng/deng_MAGIC.rds")
+res <- SingleCellExperiment(
+    assays = list(logcounts = as.matrix(res)), 
+    colData = colData(deng)
 )
 plotPCA(
-    pollen_magic, 
-    colour_by = "cell_type1"
+    res, 
+    colour_by = "cell_type2"
 )
 ```
 
 Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
-```{r}
-pollen_magic <- sc3_estimate_k(pollen_magic)
-metadata(pollen_magic)$sc3$k_estimation
-pollen_magic <- sc3(pollen_magic, ks = 11, gene_filter = FALSE)
+```{r, eval = FALSE}
+res <- sc3_estimate_k(res)
+metadata(res)$sc3$k_estimation
+res <- sc3(res, ks = 10, gene_filter = FALSE)
 sc3_plot_consensus(
-    pollen_magic, 
-    k = 11, 
-    show_pdata = "cell_type1"
+    res, 
+    k = 10, 
+    show_pdata = "cell_type2"
 )
 plotPCA(
-    pollen_magic, 
-    colour_by = "sc3_11_clusters"
+    res, 
+    colour_by = "sc3_10_clusters"
 )
 ```
 
