@@ -85,7 +85,7 @@ First we will try to use all genes to order the cells.
 ```{r tscan-all-genes}
 deng <- readRDS("deng/deng-reads.rds")
 cellLabels <- colData(deng)$cell_type2
-deng <- counts(deng)
+deng <- logcounts(deng)
 colnames(deng) <- cellLabels
 procdeng <- TSCAN::preprocess(deng)
 colnames(procdeng) <- 1:ncol(deng)
