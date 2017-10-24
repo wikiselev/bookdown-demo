@@ -10,6 +10,7 @@ library(knitr)
 opts_chunk$set(fig.align = "center")
 ```
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
+library(SingleCellExperiment)
 library(TSCAN)
 library(M3Drop)
 library(monocle)

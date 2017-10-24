@@ -23,14 +23,19 @@ First, we initialize the Seurat object with the raw (non-normalized data). Keep 
 library(SingleCellExperiment)
 library(Seurat)
 seuset <- CreateSeuratObject(
-    raw.data = counts(deng)
+    raw.data = counts(deng),
+    min.cells = 3, 
+    min.genes = 200
 )
 ```
 
-```{r, eval = FALSE}
+```{r}
 VlnPlot(object = seuset, features.plot = c("nGene", "nUMI"), nCol = 3)
 
 GenePlot(object = seuset, gene1 = "nUMI", gene2 = "nGene")
+
+seuset <- NormalizeData(object = seuset, normalization.method = "LogNormalize", 
+    scale.factor = 10000)
 
 seuset <- FindVariableGenes(
     object = seuset
@@ -86,26 +91,24 @@ table(seuset@ident)
 
 mclust::adjustedRandIndex(colData(deng)$cell_type2, seuset@ident)
 
-# this did not work!
-# Error in La.svd(x, nu, nv) : LAPACK routines cannot be loaded
-# seuset <- RunTSNE(
-#     object = seuset, 
-#     dims.use = 1:5, 
-#     do.fast = TRUE
-# )
+seuset <- RunTSNE(
+    object = seuset,
+    dims.use = 1:5,
+    do.fast = TRUE
+)
 ```
 
 __Exercise 12__: Compare the results between `SC3` and `Seurat`.
 
 __Our solution__:
 ```{r, echo=TRUE, eval=FALSE}
-pData(deng)$Seurat <- as.character(seuset@ident)
+colData(deng)$Seurat <- as.character(seuset@ident)
 sc3_plot_expression(deng, k = 10, show_pdata = "Seurat")
 ```
 
 
 Seurat can also find marker genes, e.g. marker genes for cluster 2:
-```{r, eval=FALSE}
+```{r}
 markers <- FindMarkers(seuset, 2)
 FeaturePlot(seuset, 
             head(rownames(markers)), 
