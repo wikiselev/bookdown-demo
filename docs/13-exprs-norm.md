@@ -2,9 +2,9 @@
 output: html_document
 ---
 
-# Normalization for library size
+## Normalization theory
 
-## Introduction
+### Introduction
 
 
 
@@ -12,7 +12,7 @@ In the previous chapter we identified important confounding factors and explanat
 
 Instead we will explore how simple size-factor normalisations correcting for library size can remove the effects of some of the confounders and explanatory variables.
 
-## Library size
+### Library size
 
 Library sizes vary because scRNA-seq data is often sequenced on highly multiplexed platforms the total reads which are derived from each cell may differ substantially. Some quantification methods
 (eg. [Cufflinks](http://cole-trapnell-lab.github.io/cufflinks/), [RSEM](http://deweylab.github.io/RSEM/)) incorporated library size when determining gene expression estimates thus do not require this normalization.
@@ -20,7 +20,7 @@ Library sizes vary because scRNA-seq data is often sequenced on highly multiplex
 However, if another quantification method was used then library size must be corrected for by multiplying or dividing each column of the expression matrix by a "normalization factor" which is an estimate of the library size relative to the other cells. Many methods to correct for library size have been developped for bulk RNA-seq and can be equally applied to scRNA-seq (eg. UQ, SF, CPM, RPKM, FPKM, TPM). 
 
 
-## Normalisations
+### Normalisations
 
 The simplest way to normalize this data is to convert it to counts per
 million (__CPM__) by dividing each column by its total then multiplying by
@@ -113,6 +113,8 @@ The __RLE__, __TMM__, and __UQ__ size-factor methods were developed for bulk RNA
  __scater__ acts as a wrapper for the `calcNormFactors` function from [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html) which implements several library size normalization methods making it easy to apply any of these methods to our data. The __LSF__ method is implementated in the Bioconductor package [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), which allows seamless integrationinto the `scater` workflow. (The `scran` package itself depends on `scater`).
 
 __Note:__ edgeR makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/release/bioc/html/DESeq.html) may give different results to the `estimateSizeFactorsForMatrix` method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
+
+## Normalization practice
 
 We will continue to work with the `tung` data that was used in the previous chapter.
 
@@ -408,7 +410,7 @@ plotRLE(
 <p class="caption">(\#fig:norm-ours-rle-downsample)Cell-wise RLE of the tung data</p>
 </div>
 
-## Normalizing for gene/transcript length
+### Normalizing for gene/transcript length
 
 Some methods combine library size and fragment/gene length normalization such as:
 
@@ -537,11 +539,11 @@ plotPCA(
 
 __Note:__ The PCA looks for differences between cells. Gene length is the same across cells for each gene thus FPKM is almost identical to the CPM plot (it is just rotated) since it performs CPM first then normalizes gene length. Whereas, TPM is different because it weights genes by their length before performing CPM. 
 
-## Exercise
+### Exercise
 
 Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
 
-## sessionInfo()
+### sessionInfo()
 
 
 ```
@@ -566,7 +568,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scran_1.5.13                BiocParallel_1.10.1        
+##  [1] scran_1.5.14                BiocParallel_1.10.1        
 ##  [3] scater_1.5.20               SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          GenomicRanges_1.28.6       

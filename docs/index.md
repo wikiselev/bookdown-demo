@@ -1,7 +1,7 @@
 --- 
 title: "Analysis of single cell RNA-seq data"
 author: "Vladimir Kiselev (<a href = 'https://twitter.com/wikiselev'>wikiselev</a>), Tallulah Andrews, Davis McCarthy (<a href = 'https://twitter.com/davisjmcc'>davisjmcc</a>), Maren Büttner (<a href = 'https://twitter.com/marenbuettner'>marenbuettner</a>) and Martin Hemberg (<a href = 'https://twitter.com/m_hemberg'>m_hemberg</a>)"
-date: "2017-10-23"
+date: "2017-10-24"
 knit: "bookdown::render_book"
 documentclass: book
 bibliography: [book.bib]
@@ -47,7 +47,7 @@ It will download the course docker image (may take some time) and start a new R 
 Note: It is currently not possible to plot figures interactively from the Docker, however figures can still be written to file for inspection.
 
 ## License
-<b>GPL-3</b>
+All of the course material is licensed under <b>GPL-3</b>. Anyone is welcome to go through the material in order to learn about analysis of scRNA-seq data. If you plan to use the material for your own teaching, we would appreciate if you tell us about it in addition to providing a suitable citation.
 
 ## Prerequisites
 

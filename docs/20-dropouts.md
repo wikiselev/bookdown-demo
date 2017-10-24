@@ -3,7 +3,7 @@
 output: html_document
 ---
 
-# Feature Selection
+## Feature Selection
 
 
 
@@ -81,7 +81,8 @@ celltype_labs <- uso_list$labels # filtered cell-type labels
 cell_colors <- brewer.pal(max(3,length(unique(celltype_labs))), "Set3")
 ```
 __Exercise 1__: How many cells & genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?
-## Identifying Genes vs a Null Model ##
+
+### Identifying Genes vs a Null Model ##
 
 There are two main approaches to unsupervised feature selection. The
 first is to identify genes which behave differently from a null model
@@ -93,7 +94,7 @@ the same technical noise as endogenous transcripts [(Svensson et al., 2017)](htt
 In addition, scRNASeq experiments often contain only a small number of
 spike-ins which reduces our confidence in fitted model parameters.
 
-### Highly Variable Genes ###
+#### Highly Variable Genes ###
 
 The first method proposed to identify features in scRNASeq datasets
 was to identify highly variable genes (HVG). HVG assumes that if genes
@@ -137,7 +138,7 @@ Brennecke_HVG <- M3Drop::BrenneckeGetVariableGenes(
 ```r
 HVG_genes <- Brennecke_HVG$Gene
 ```
-### High Dropout Genes ###
+#### High Dropout Genes
 
 An alternative to finding HVGs is to identify genes with unexpectedly high numbers of zeros.
 The frequency of zeros, know as the "dropout rate", is very closely related to expression level
@@ -212,7 +213,7 @@ DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit)
 DANB_genes <- names(DropFS[1:1500])
 ```
 
-## Correlated Expression ##
+### Correlated Expression
 
 A completely different approach to feature selection is to use gene-gene correlations. This method
 is based on the idea that multiple genes will be differentially expressed between different cell-types
@@ -262,7 +263,7 @@ __Exercise 4__
 Consider the top 5 principal components. Which appear to be most biologically relevant? How does the top 1,500
 features change if you consider the loadings for those components?
 
-### Comparing Methods ####
+### Comparing Methods
 
 We can check whether the identified features really do represent genes differentially expressed between
 cell-types in this dataset.
@@ -298,7 +299,7 @@ __Exercise 5__
 Plot the expression of the features for each of the other methods. Which appear to be differentially expressed?
 Which method is the most precise?
 
-## sessionInfo()
+### sessionInfo()
 
 
 ```

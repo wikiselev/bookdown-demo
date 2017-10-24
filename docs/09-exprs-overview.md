@@ -2,9 +2,9 @@
 output: html_document
 ---
 
-# Data visualization
+## Data visualization
 
-## Introduction
+### Introduction
 
 In this chapter we will continue to work with the filtered `Tung` dataset produced in the previous chapter. We will explore different ways of visualizing the data to allow you to asses what happened to the expression matrix after the quality control step. [scater](https://github.com/davismcc/scater) package provides several very useful functions to simplify visualisation. 
 
@@ -22,7 +22,7 @@ umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
 endog_genes <- !rowData(umi.qc)$is_feature_control
 ```
 
-## PCA plot {#visual-pca}
+### PCA plot {#visual-pca}
 
 The easiest way to overview the data is by transforming it using the principal component analysis and then visualize the first two principal components.
 
@@ -35,7 +35,7 @@ Mathematically, the PCs correspond to the eigenvectors of the covariance matrix.
 <p class="caption">(\#fig:clust-pca)Schematic representation of PCA dimensionality reduction</p>
 </div>
 
-### Before QC
+#### Before QC
 
 Without log-transformation:
 
@@ -75,7 +75,7 @@ Clearly log-transformation is benefitial for our data - it reduces the variance 
 
 __However, note that just a log-transformation is not enough to account for different technical factors between the cells (e.g. sequencing depth). Therefore, please do not use `log2_counts` for your downstream analysis, instead as a minimum suitable data use the `exprs` slot of the scater object, which not just log-transformed, but also normalised by library size (CPM normalisation). In the course we use `log2_counts` only for demonstration purposes!__
 
-### After QC
+#### After QC
 
 
 ```r
@@ -116,12 +116,12 @@ __Our answer__
 
 If your answers are different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/07-exprs-overview.Rmd) (you need to search for this exercise in the opened file).
 
-## tSNE map {#visual-tsne}
+### tSNE map {#visual-tsne}
 
 An alternative to PCA for visualizing scRNASeq data is a tSNE plot. [tSNE](https://lvdmaaten.github.io/tsne/) (t-Distributed Stochastic Neighbor Embedding) combines dimensionality reduction (e.g. PCA) with random walks on the nearest-neighbour network to map high dimensional data (i.e. our 14,214 dimensional expression matrix) to a 2-dimensional space while preserving local distances between cells. In contrast with PCA, tSNE is a stochastic algorithm which means running the method multiple times on the same dataset will result in different plots. Due to the non-linear and stochastic nature of the algorithm, tSNE is more difficult to intuitively interpret tSNE. To ensure reproducibility, we fix the "seed" of the random-number generator in the code below so that we always get the same plot. 
 
 
-### Before QC
+#### Before QC
 
 
 ```r
@@ -141,7 +141,7 @@ plotTSNE(
 <p class="caption">(\#fig:expr-overview-tsne-before-qc)tSNE map of the tung data</p>
 </div>
 
-### After QC
+#### After QC
 
 
 ```r
@@ -182,11 +182,11 @@ __Our answer__
 <p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-2)tSNE map of the tung data (perplexity = 200)</p>
 </div>
 
-## Big Exercise
+### Big Exercise
 
 Perform the same analysis with read counts of the Blischak data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
 
-## sessionInfo()
+### sessionInfo()
 
 
 ```

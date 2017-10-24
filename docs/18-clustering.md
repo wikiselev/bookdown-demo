@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Clustering example {#clust-methods}
+## Clustering example {#clust-methods}
 
 
 
@@ -14,78 +14,68 @@ library(SC3)
 library(scater)
 library(SingleCellExperiment)
 library(pheatmap)
+library(irr)
 set.seed(1234567)
 ```
 
-To illustrate clustering of scRNA-seq data, we consider the `Pollen` dataset of cells from 
-different human tissues [@Pollen2014-cu]. We have preprocessed the dataset and created a 
-scater object in advance. We have also annotated the cells with the cell type information 
-(it is the `cell_type1` column in the `phenoData` slot).
+To illustrate clustering of scRNA-seq data, we consider the `Deng` dataset of cells from 
+developing mouse embryo [@Deng2014-mx]. We have preprocessed the dataset and created a 
+`SingleCellExperiment` object in advance. We have also annotated the cells with the cell type information (it is the `cell_type1` and `cell_type2` columns in the `colData` slot).
 
-## Pollen dataset
+### Deng dataset
 
 Let's load the data and look at it:
 
 ```r
-pollen <- readRDS("pollen/pollen.rds")
-pollen
+deng <- readRDS("deng/deng-reads.rds")
+deng
 ```
 
 ```
 ## class: SingleCellExperiment 
-## dim: 23730 301 
+## dim: 22431 268 
 ## metadata(0):
-## assays(2): normcounts logcounts
-## rownames(23730): A1BG A1BG-AS1 ... ZZEF1 ZZZ3
-## rowData names(1): feature_symbol
-## colnames(301): Hi_2338_1 Hi_2338_2 ... Hi_GW16_25 Hi_GW16_26
-## colData names(2): cell_type1 cell_type2
+## assays(2): counts logcounts
+## rownames(22431): Hvcn1 Gbp7 ... Sox5 Alg11
+## rowData names(10): feature_symbol is_feature_control ...
+##   total_counts log10_total_counts
+## colnames(268): 16cell 16cell.1 ... zy.2 zy.3
+## colData names(30): cell_type2 cell_type1 ... pct_counts_ERCC
+##   is_cell_control
 ## reducedDimNames(0):
-## spikeNames(0):
+## spikeNames(1): ERCC
 ```
 
 Let's look at the cell type annotation:
 
 ```r
-table(colData(pollen)$cell_type1)
+table(colData(deng)$cell_type2)
 ```
 
 ```
 ## 
-##   2338   2339     BJ   GW16   GW21 GW21+3  hiPSC   HL60   K562   Kera 
-##     22     17     37     26      7     17     24     54     42     40 
-##    NPC 
-##     15
+##     16cell      4cell      8cell early2cell earlyblast  late2cell 
+##         50         14         37          8         43         10 
+##  lateblast   mid2cell   midblast         zy 
+##         30         12         60          4
 ```
 
 A simple PCA analysis already separates some strong cell types and provides some insights in the data structure:
 
 ```r
-plotPCA(pollen, colour_by = "cell_type1")
+plotPCA(deng, colour_by = "cell_type2")
 ```
 
 <img src="18-clustering_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
-## SC3
+### SC3
 
-Let's run `SC3` clustering on the Pollen data. The advantage of the `SC3` is that it can directly take a [scater](http://bioconductor.org/packages/scater/) object (see previous chapters) as an input.
+Let's run `SC3` clustering on the Deng data. The advantage of the `SC3` is that it can directly ingest a `SingleCellExperiment` object.
 
 Now let's image we do not know the number of clusters _k_ (cell types). `SC3` can estimate a number of clusters for you:
 
 ```r
-pollen <- sc3_prepare(pollen, ks = 2:5)
-```
-
-```
-## Setting SC3 parameters...
-```
-
-```
-## Setting a range of k...
-```
-
-```r
-pollen <- sc3_estimate_k(pollen)
+deng <- sc3_estimate_k(deng)
 ```
 
 ```
@@ -93,19 +83,25 @@ pollen <- sc3_estimate_k(pollen)
 ```
 
 ```r
-metadata(pollen)$sc3$k_estimation
+metadata(deng)$sc3$k_estimation
 ```
 
 ```
-## [1] 11
+## [1] 6
 ```
 
-Interestingly, the number of cell types predicted by `SC3` is the same as the number of cell types in the Pollen data annotation.
+Interestingly, the number of cell types predicted by `SC3` is smaller than in the original data annotation. However, early, mid and late stages of different cell types together, we will have exactly 6 cell types. We store the merged cell types in `cell_type1` column of the `colData` slot:
+
+```r
+plotPCA(deng, colour_by = "cell_type1")
+```
+
+<img src="18-clustering_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" />
 
 Now we are ready to run `SC3` (we also ask it to calculate biological properties of the clusters): 
 
 ```r
-pollen <- sc3(pollen, ks = 11, biology = TRUE)
+deng <- sc3(deng, ks = 10, biology = TRUE)
 ```
 
 ```
@@ -141,67 +137,75 @@ pollen <- sc3(pollen, ks = 11, biology = TRUE)
 Consensus matrix:
 
 ```r
-sc3_plot_consensus(pollen, k = 11, show_pdata = "cell_type1")
-```
-
-<img src="18-clustering_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
-
-Silhouette plot:
-
-```r
-sc3_plot_silhouette(pollen, k = 11)
+sc3_plot_consensus(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 <img src="18-clustering_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" />
 
-Heatmap of the expression matrix:
+```r
+adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$sc3_10_clusters)
+```
+
+```
+## [1] 0.7705208
+```
+
+Silhouette plot:
 
 ```r
-sc3_plot_expression(pollen, k = 11, show_pdata = "cell_type1")
+sc3_plot_silhouette(deng, k = 10)
 ```
 
 <img src="18-clustering_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" />
 
-Identified marker genes:
+Heatmap of the expression matrix:
 
 ```r
-sc3_plot_markers(pollen, k = 11, show_pdata = "cell_type1")
+sc3_plot_expression(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 <img src="18-clustering_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
 
-PCA plot with highlighted `SC3` clusters:
+Identified marker genes:
 
 ```r
-plotPCA(pollen, colour_by = "sc3_11_clusters")
+sc3_plot_markers(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 <img src="18-clustering_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
 
+PCA plot with highlighted `SC3` clusters:
+
+```r
+plotPCA(deng, colour_by = "sc3_10_clusters")
+```
+
+<img src="18-clustering_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" />
+
 Note, that one can also run `SC3` in an interactive `Shiny` session:
 
 ```r
-sc3_interactive(pollen)
+sc3_interactive(deng)
 ```
 
 This command will open `SC3` in a web browser.
 
-* __Exercise 1__: Run `SC3` for $k$ from 9 to 13 and explore different clustering solutions in your web browser.
+* __Exercise 1__: Run `SC3` for $k$ from 8 to 12 and explore different clustering solutions in your web browser.
 
-* __Exercise 2__: Which clusters are the most stable when $k$ is changed from 9 to 13? (Look at the "Stability" tab)
+* __Exercise 2__: Which clusters are the most stable when $k$ is changed from 8 to 12? (Look at the "Stability" tab)
 
-* __Exercise 3__: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use $k=11$.
+* __Exercise 3__: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use $k=10$.
 
 * __Exercise 4__: Change the marker genes threshold (the default is 0.85). Does __SC3__ find more marker genes?
 
-## pcaReduce
+### pcaReduce
 
 `pcaReduce` operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will use the default `SC3` gene filter (note that the `exprs` slot of a `scater` object is log-transformed by default).
 
 
 ```r
 # use the same gene filter as in SC3
-input <- logcounts(pollen[rowData(pollen)$sc3_gene_filter, ])
+input <- logcounts(deng[rowData(deng)$sc3_gene_filter, ])
 ```
 
 There are several parameters used by `pcaReduce`:
@@ -218,11 +222,11 @@ pca.red <- PCAreduce(t(input), nbt = 1, q = 30, method = 'S')[[1]]
 
 
 ```r
-colData(pollen)$pcaReduce <- as.character(pca.red[,32 - 11])
-plotPCA(pollen, colour_by = "pcaReduce")
+colData(deng)$pcaReduce <- as.character(pca.red[,32 - 10])
+plotPCA(deng, colour_by = "pcaReduce")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" />
+<img src="18-clustering_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise 5__: Run pcaReduce for $k=2$ and plot a similar PCA plot. Does it look good?
 
@@ -234,20 +238,20 @@ __Our solution__:
 <p class="caption">(\#fig:clust-pca-reduce2)Clustering solutions of pcaReduce method for $k=2$.</p>
 </div>
 
-__Exercise 6__: Compare the results between `SC3` and `pcaReduce` for $k=11$. What is
+__Exercise 6__: Compare the results between `SC3` and `pcaReduce` for $k=10$. What is
 the main difference between the solutions provided by the two
 different methods?
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" />
+<img src="18-clustering_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" />
 
 
-## tSNE + kmeans
+### tSNE + kmeans
 
 [tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. Here we will do the same:
 
 ```r
-pollen <- plotTSNE(pollen, rand_seed = 1, return_SCE = TRUE)
+deng <- plotTSNE(deng, rand_seed = 1, return_SCE = TRUE)
 ```
 
 <div class="figure" style="text-align: center">
@@ -262,8 +266,8 @@ Now we are going to apply _k_-means clustering algorithm to the cloud of points 
 We will start with $k=8$:
 
 ```r
-colData(pollen)$tSNE_kmeans <- as.character(kmeans(pollen@reducedDims$TSNE, centers = 8)$clust)
-plotTSNE(pollen, rand_seed = 1, colour_by = "tSNE_kmeans")
+colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 8)$clust)
+plotTSNE(deng, rand_seed = 1, colour_by = "tSNE_kmeans")
 ```
 
 <div class="figure" style="text-align: center">
@@ -271,19 +275,19 @@ plotTSNE(pollen, rand_seed = 1, colour_by = "tSNE_kmeans")
 <p class="caption">(\#fig:clust-tsne-kmeans2)tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm</p>
 </div>
 
-__Exercise 7__: Make the same plot for $k=11$.
+__Exercise 7__: Make the same plot for $k=10$.
 
 __Exercise 8__: Compare the results between `SC3` and `tSNE+kmeans`. Can the
 results be improved by changing the `perplexity` parameter?
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" />
+<img src="18-clustering_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" />
 
 As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
 and give different results every time they are run. To get a better
 overview of the solutions, we need to run the methods multiple times. `SC3` is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.
 
-## SNN-Cliq
+### SNN-Cliq
 
 Here we run SNN-cliq with te default parameters provided in the author's example:
 
@@ -317,8 +321,8 @@ cat(paste(snn.res, collapse = "\n"))
 
 ```
 ## input file snn-cliq.txt
-## find 65 quasi-cliques
-## merged into 15 clusters
+## find 66 quasi-cliques
+## merged into 29 clusters
 ## unique assign done
 ```
 
@@ -327,18 +331,18 @@ snn.res <- read.table("res-snn-cliq.txt")
 # remove files that were created during the analysis
 system("rm snn-cliq.txt res-snn-cliq.txt")
 
-colData(pollen)$SNNCliq <- as.character(snn.res[,1])
-plotPCA(pollen, colour_by = "SNNCliq")
+colData(deng)$SNNCliq <- as.character(snn.res[,1])
+plotPCA(deng, colour_by = "SNNCliq")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" />
+<img src="18-clustering_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise 9__: Compare the results between `SC3` and `SNN-Cliq`.
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" />
+<img src="18-clustering_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" />
 
-## SINCERA
+### SINCERA
 
 As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:
 
@@ -370,7 +374,7 @@ cat(kk)
 ```
 
 ```
-## 14
+## 6
 ```
 
 Let's now visualize the SINCERA results as a heatmap:
@@ -379,25 +383,25 @@ Let's now visualize the SINCERA results as a heatmap:
 pheatmap(
     t(dat),
     cluster_cols = hc,
-    cutree_cols = 14,
+    cutree_cols = kk,
     kmeans_k = 100,
     show_rownames = FALSE
 )
 ```
 
 <div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-sincera-1.png" alt="Clustering solutions of SINCERA method using $k=3$" width="672" />
-<p class="caption">(\#fig:clust-sincera)Clustering solutions of SINCERA method using $k=3$</p>
+<img src="18-clustering_files/figure-html/clust-sincera-1.png" alt="Clustering solutions of SINCERA method using found $k$" width="672" />
+<p class="caption">(\#fig:clust-sincera)Clustering solutions of SINCERA method using found $k$</p>
 </div>
 
 __Exercise 10__: Compare the results between `SC3` and `SNN-Cliq`.
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" />
+<img src="18-clustering_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a good idea?
 
-## sessionInfo()
+### sessionInfo()
 
 
 ```
@@ -422,16 +426,17 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] pheatmap_1.0.8              scater_1.5.20              
-##  [3] ggplot2_2.2.1               SC3_1.5.5                  
-##  [5] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
-##  [7] DelayedArray_0.2.7          matrixStats_0.52.2         
-##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
-## [11] IRanges_2.10.5              S4Vectors_0.14.7           
-## [13] pcaReduce_1.0               mclust_5.3                 
-## [15] mnormt_1.5-5                pcaMethods_1.68.0          
-## [17] Biobase_2.36.2              BiocGenerics_0.22.1        
-## [19] knitr_1.17                 
+##  [1] irr_0.84                    lpSolve_5.6.13             
+##  [3] pheatmap_1.0.8              scater_1.5.20              
+##  [5] ggplot2_2.2.1               SC3_1.5.6                  
+##  [7] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
+##  [9] DelayedArray_0.2.7          matrixStats_0.52.2         
+## [11] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
+## [13] IRanges_2.10.5              S4Vectors_0.14.7           
+## [15] pcaReduce_1.0               mclust_5.3                 
+## [17] mnormt_1.5-5                pcaMethods_1.68.0          
+## [19] Biobase_2.36.2              BiocGenerics_0.22.1        
+## [21] knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] Rtsne_0.13              ggbeeswarm_0.6.0       
@@ -439,7 +444,7 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ##   [5] class_7.3-14            rprojroot_1.2          
 ##   [7] XVector_0.16.0          bit64_0.9-7            
 ##   [9] AnnotationDbi_1.38.2    mvtnorm_1.0-6          
-##  [11] codetools_0.2-15        scRNA.seq.funcs_0.1.0  
+##  [11] scRNA.seq.funcs_0.1.0   codetools_0.2-15       
 ##  [13] tximport_1.4.0          doParallel_1.0.11      
 ##  [15] robustbase_0.92-7       cluster_2.0.6          
 ##  [17] shinydashboard_0.6.1    shiny_1.0.5            
@@ -453,9 +458,9 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ##  [33] dplyr_0.7.4             doRNG_1.6.6            
 ##  [35] Rcpp_0.12.13            gdata_2.18.0           
 ##  [37] iterators_1.0.8         stringr_1.2.0          
-##  [39] mime_0.5                rngtools_1.2.4         
-##  [41] gtools_3.5.0            WriteXLS_4.0.0         
-##  [43] hypergeo_1.2-13         statmod_1.4.30         
+##  [39] mime_0.5                hypergeo_1.2-13        
+##  [41] rngtools_1.2.4          gtools_3.5.0           
+##  [43] WriteXLS_4.0.0          statmod_1.4.30         
 ##  [45] XML_3.98-1.9            edgeR_3.18.1           
 ##  [47] DEoptimR_1.0-8          MASS_7.3-47            
 ##  [49] zlibbioc_1.22.0         scales_0.5.0           

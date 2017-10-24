@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Normalization for library size (Reads)
+## Normalization for library size (Reads)
 
 
 
@@ -114,7 +114,7 @@ output: html_document
 <p class="caption">(\#fig:norm-pca-fpkm-reads)PCA plot of the tung data after FPKM normalisation</p>
 </div>
 
-## sessionInfo()
+### sessionInfo()
 
 
 ```
@@ -139,7 +139,7 @@ output: html_document
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] knitr_1.17                  scran_1.5.13               
+##  [1] knitr_1.17                  scran_1.5.14               
 ##  [3] BiocParallel_1.10.1         scater_1.5.20              
 ##  [5] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [7] DelayedArray_0.2.7          matrixStats_0.52.2         

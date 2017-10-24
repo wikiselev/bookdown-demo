@@ -3,11 +3,12 @@
 output: html_document
 ---
 
-# Pseudotime analysis
+## Pseudotime analysis
 
 
 
 ```r
+library(SingleCellExperiment)
 library(TSCAN)
 library(M3Drop)
 library(monocle)
@@ -75,7 +76,7 @@ the various tools.
 </div>
 
 
-## TSCAN
+### TSCAN
 
 TSCAN combines clustering with pseudotime analysis. First it clusters the cells using `mclust`,
 which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters. The branch of this tree that connects the largest number of clusters is the main branch which is used to determine pseudotime.
@@ -83,8 +84,10 @@ which is based on a mixture of normal distributions. Then it builds a minimum sp
 First we will try to use all genes to order the cells.
 
 ```r
-deng <- readRDS("deng/deng.rds")
-cellLabels <- colnames(deng)
+deng <- readRDS("deng/deng-reads.rds")
+cellLabels <- colData(deng)$cell_type2
+deng <- logcounts(deng)
+colnames(deng) <- cellLabels
 procdeng <- TSCAN::preprocess(deng)
 colnames(procdeng) <- 1:ncol(deng)
 dengclust <- TSCAN::exprmclust(procdeng, clusternum = 10)
@@ -106,11 +109,9 @@ cellLabels[dengclust$clusterid == 10]
 ```
 
 ```
-##  [1] "late2cell" "late2cell" "late2cell" "late2cell" "late2cell"
-##  [6] "late2cell" "late2cell" "late2cell" "late2cell" "late2cell"
-## [11] "mid2cell"  "mid2cell"  "mid2cell"  "mid2cell"  "mid2cell" 
-## [16] "mid2cell"  "mid2cell"  "mid2cell"  "mid2cell"  "mid2cell" 
-## [21] "mid2cell"  "mid2cell"
+##  [1] late2cell mid2cell  mid2cell  mid2cell  mid2cell  mid2cell  mid2cell 
+##  [8] mid2cell  mid2cell  mid2cell  mid2cell  mid2cell  mid2cell 
+## 10 Levels: 16cell 4cell 8cell early2cell earlyblast ... zy
 ```
 
 ```r
@@ -134,7 +135,7 @@ plot(
 
 __Exercise 1__ Compare results for different numbers of clusters (`clusternum`).
 
-## monocle
+### monocle
 
 Monocle skips the clustering stage of TSCAN and directly builds a
 minimum spanning tree on a reduced dimension representation of the
@@ -151,6 +152,11 @@ we must carry out feature selection. First, we use M3Drop:
 m3dGenes <- as.character(
     M3Drop::M3DropFeatureSelection(deng)$Gene
 )
+```
+
+```
+## Warning in bg__calc_variables(expr_mat): Warning: Removing 1134 invariant
+## genes.
 ```
 
 <img src="21-pseudotime_files/figure-html/m3d-select-genes-1.png" width="672" style="display: block; margin: auto;" />
@@ -215,7 +221,7 @@ plot(
 
 <img src="21-pseudotime_files/figure-html/monocle-vs-truth-1.png" width="672" style="display: block; margin: auto;" />
 
-## Diffusion maps
+### Diffusion maps
 
 [Diffusion maps](https://en.wikipedia.org/wiki/Diffusion_map) were introduced by [Ronald Coifman and Stephane Lafon](http://www.sciencedirect.com/science/article/pii/S1063520306000546), and the underlying idea is to assume that the data are samples from a diffusion process. The method infers the low-dimensional manifold by estimating the eigenvalues and eigenvectors for the diffusion operator related to the data.
 
@@ -257,7 +263,7 @@ __Exercise 2__ Do you get a better resolution between the later time points by c
 __Exercise 3__ How does the ordering change if you only use the genes identified by M3Drop?
 
 
-## SLICER
+### SLICER
 
 The SLICER method is an algorithm for constructing trajectories that
 describe gene expression changes during a sequential biological
@@ -406,7 +412,7 @@ of genes from those chosen by SLICER (e.g. the genes identified by M3Drop)?
 
 
 
-## Comparison of the methods
+### Comparison of the methods
 
 How do the trajectories inferred by TSCAN and Monocle compare?
 
@@ -431,7 +437,7 @@ plot(
 
 __Exercise 6__: Compare destiny and SLICER to TSCAN and Monocle.
 
-## Expression of genes through time
+### Expression of genes through time
 
 Each package also enables the visualization of expression through pseudotime. Following individual genes is very helpful for identifying genes that play an important role in the differentiation process. We illustrate the procedure using the Obox6 gene which is known to be important during early development.
 
@@ -467,7 +473,7 @@ results, as SLICER does not provide plotting functions.
 
 __Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes
 
-## sessionInfo()
+### sessionInfo()
 
 
 ```
@@ -488,56 +494,85 @@ __Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of
 ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-##  [1] splines   stats4    parallel  methods   stats     graphics  grDevices
+##  [1] splines   parallel  stats4    methods   stats     graphics  grDevices
 ##  [8] utils     datasets  base     
 ## 
 ## other attached packages:
-##  [1] lle_1.1              snowfall_1.84-6.1    snow_0.4-2          
-##  [4] MASS_7.3-47          scatterplot3d_0.3-40 SLICER_0.2.0        
-##  [7] destiny_2.4.5        monocle_2.4.0        DDRTree_0.1.5       
-## [10] irlba_2.3.1          VGAM_1.0-4           ggplot2_2.2.1       
-## [13] Biobase_2.36.2       BiocGenerics_0.22.1  Matrix_1.2-11       
-## [16] M3Drop_2.02.00       numDeriv_2016.8-1    TSCAN_1.14.0        
-## [19] knitr_1.17          
+##  [1] lle_1.1                     snowfall_1.84-6.1          
+##  [3] snow_0.4-2                  MASS_7.3-47                
+##  [5] scatterplot3d_0.3-40        SLICER_0.2.0               
+##  [7] destiny_2.4.5               monocle_2.4.0              
+##  [9] DDRTree_0.1.5               irlba_2.3.1                
+## [11] VGAM_1.0-4                  ggplot2_2.2.1              
+## [13] Matrix_1.2-11               M3Drop_2.02.00             
+## [15] numDeriv_2016.8-1           TSCAN_1.14.0               
+## [17] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
+## [19] DelayedArray_0.2.7          matrixStats_0.52.2         
+## [21] Biobase_2.36.2              GenomicRanges_1.28.6       
+## [23] GenomeInfoDb_1.12.3         IRanges_2.10.5             
+## [25] S4Vectors_0.14.7            BiocGenerics_0.22.1        
+## [27] knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] backports_1.1.1        Hmisc_4.0-3            RcppEigen_0.3.3.3.0   
-##   [4] plyr_1.8.4             igraph_1.1.2           lazyeval_0.2.0        
-##   [7] sp_1.2-5               densityClust_0.2.1     fastICA_1.2-1         
-##  [10] digest_0.6.12          htmltools_0.3.6        gdata_2.18.0          
-##  [13] magrittr_1.5           checkmate_1.8.4        tensor_1.5            
-##  [16] cluster_2.0.6          limma_3.32.10          tripack_1.3-8         
-##  [19] matrixStats_0.52.2     R.utils_2.5.0          xts_0.10-0            
-##  [22] colorspace_1.3-2       dplyr_0.7.4            lme4_1.1-14           
-##  [25] spatstat_1.53-2        spatstat.data_1.1-1    bindr_0.1             
-##  [28] survival_2.41-3        zoo_1.8-0              glue_1.1.1            
-##  [31] polyclip_1.6-1         gtable_0.2.0           MatrixModels_0.4-1    
-##  [34] car_2.1-5              DEoptimR_1.0-8         abind_1.4-5           
-##  [37] SparseM_1.77           VIM_4.7.0              scales_0.5.0          
-##  [40] sgeostat_1.0-27        pheatmap_1.0.8         Rcpp_0.12.13          
-##  [43] xtable_1.8-2           laeken_0.4.6           htmlTable_1.9         
-##  [46] foreign_0.8-69         proxy_0.4-17           mclust_5.3            
-##  [49] Formula_1.2-2          vcd_1.4-3              htmlwidgets_0.9       
-##  [52] FNN_1.1                gplots_3.0.1           RColorBrewer_1.1-2    
-##  [55] acepack_1.4.1          pkgconfig_2.0.1        R.methodsS3_1.7.1     
-##  [58] nnet_7.3-12            deldir_0.1-14          alphahull_2.1         
-##  [61] labeling_0.3           rlang_0.1.2            reshape2_1.4.2        
-##  [64] munsell_0.4.3          tools_3.4.2            splancs_2.01-40       
-##  [67] evaluate_0.10.1        stringr_1.2.0          yaml_2.1.14           
-##  [70] goftest_1.1-1          robustbase_0.92-7      caTools_1.17.1        
-##  [73] bindrcpp_0.2           nlme_3.1-131           mime_0.5              
-##  [76] quantreg_5.33          slam_0.1-40            R.oo_1.21.0           
-##  [79] compiler_3.4.2         pbkrtest_0.4-7         curl_3.0              
-##  [82] e1071_1.6-8            spatstat.utils_1.7-1   smoother_1.1          
-##  [85] tibble_1.3.4           statmod_1.4.30         stringi_1.1.5         
-##  [88] highr_0.6              lattice_0.20-35        nloptr_1.0.4          
-##  [91] HSMMSingleCell_0.110.0 combinat_0.0-8         lmtest_0.9-35         
-##  [94] data.table_1.10.4-2    bitops_1.0-6           httpuv_1.3.5          
-##  [97] R6_2.2.2               latticeExtra_0.6-28    bookdown_0.5          
-## [100] KernSmooth_2.23-15     gridExtra_2.3          boot_1.3-20           
-## [103] gtools_3.5.0           assertthat_0.2.0       rprojroot_1.2         
-## [106] qlcMatrix_0.9.5        mgcv_1.8-22            grid_3.4.2            
-## [109] rpart_4.1-11           class_7.3-14           minqa_1.2.4           
-## [112] rmarkdown_1.6          Rtsne_0.13             TTR_0.23-2            
-## [115] bbmle_1.0.19           shiny_1.0.5            base64enc_0.1-3
+##   [1] backports_1.1.1         Hmisc_4.0-3            
+##   [3] RcppEigen_0.3.3.3.0     plyr_1.8.4             
+##   [5] igraph_1.1.2            lazyeval_0.2.0         
+##   [7] sp_1.2-5                densityClust_0.3       
+##   [9] fastICA_1.2-1           digest_0.6.12          
+##  [11] htmltools_0.3.6         gdata_2.18.0           
+##  [13] magrittr_1.5            checkmate_1.8.5        
+##  [15] tensor_1.5              cluster_2.0.6          
+##  [17] limma_3.32.10           tripack_1.3-8          
+##  [19] R.utils_2.5.0           xts_0.10-0             
+##  [21] colorspace_1.3-2        ggrepel_0.7.0          
+##  [23] dplyr_0.7.4             RCurl_1.95-4.8         
+##  [25] lme4_1.1-14             spatstat_1.53-2        
+##  [27] spatstat.data_1.1-1     bindr_0.1              
+##  [29] survival_2.41-3         zoo_1.8-0              
+##  [31] glue_1.1.1              polyclip_1.6-1         
+##  [33] gtable_0.2.0            zlibbioc_1.22.0        
+##  [35] XVector_0.16.0          MatrixModels_0.4-1     
+##  [37] car_2.1-5               DEoptimR_1.0-8         
+##  [39] abind_1.4-5             SparseM_1.77           
+##  [41] VIM_4.7.0               scales_0.5.0           
+##  [43] sgeostat_1.0-27         pheatmap_1.0.8         
+##  [45] Rcpp_0.12.13            xtable_1.8-2           
+##  [47] laeken_0.4.6            htmlTable_1.9          
+##  [49] foreign_0.8-69          proxy_0.4-17           
+##  [51] mclust_5.3              Formula_1.2-2          
+##  [53] vcd_1.4-3               htmlwidgets_0.9        
+##  [55] FNN_1.1                 gplots_3.0.1           
+##  [57] RColorBrewer_1.1-2      acepack_1.4.1          
+##  [59] pkgconfig_2.0.1         R.methodsS3_1.7.1      
+##  [61] deldir_0.1-14           nnet_7.3-12            
+##  [63] alphahull_2.1           labeling_0.3           
+##  [65] rlang_0.1.2             reshape2_1.4.2         
+##  [67] munsell_0.4.3           tools_3.4.2            
+##  [69] splancs_2.01-40         evaluate_0.10.1        
+##  [71] stringr_1.2.0           yaml_2.1.14            
+##  [73] goftest_1.1-1           robustbase_0.92-7      
+##  [75] caTools_1.17.1          bindrcpp_0.2           
+##  [77] nlme_3.1-131            mime_0.5               
+##  [79] quantreg_5.33           slam_0.1-40            
+##  [81] R.oo_1.21.0             compiler_3.4.2         
+##  [83] pbkrtest_0.4-7          curl_3.0               
+##  [85] e1071_1.6-8             spatstat.utils_1.7-1   
+##  [87] smoother_1.1            tibble_1.3.4           
+##  [89] statmod_1.4.30          stringi_1.1.5          
+##  [91] highr_0.6               lattice_0.20-35        
+##  [93] nloptr_1.0.4            HSMMSingleCell_0.110.0 
+##  [95] combinat_0.0-8          lmtest_0.9-35          
+##  [97] data.table_1.10.4-2     bitops_1.0-6           
+##  [99] httpuv_1.3.5            R6_2.2.2               
+## [101] latticeExtra_0.6-28     bookdown_0.5           
+## [103] KernSmooth_2.23-15      gridExtra_2.3          
+## [105] boot_1.3-20             gtools_3.5.0           
+## [107] assertthat_0.2.0        rprojroot_1.2          
+## [109] qlcMatrix_0.9.5         GenomeInfoDbData_0.99.0
+## [111] mgcv_1.8-22             grid_3.4.2             
+## [113] rpart_4.1-11            class_7.3-14           
+## [115] minqa_1.2.4             rmarkdown_1.6          
+## [117] Rtsne_0.13              TTR_0.23-2             
+## [119] bbmle_1.0.19            shiny_1.0.5            
+## [121] base64enc_0.1-3
 ```

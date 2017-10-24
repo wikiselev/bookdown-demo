@@ -2,15 +2,15 @@
 output: html_document
 ---
 
-# Dealing with confounders
+## Dealing with confounders
 
-## Introduction
+### Introduction
 
 In the previous chapter we normalized for library size, effectively removing it as a confounder. Now we will consider removing other less well defined confounders from our data. Technical confounders (aka batch effects) can arise from difference in reagents, isolation methods, the lab/experimenter who performed the experiment, even which day/time the experiment was performed. Accounting for technical confounders, and batch effects particularly, is a large topic that also involves principles of experimental design. Here we address approaches that can be taken to account for confounders when the experimental design is appropriate.
 
 Fundamentally, accounting for technical confounders involves identifying and, ideally, removing sources of variation in the expression data that are not related to (i.e. are confounding) the biological signal of interest. Various approaches exist, some of which use spike-in or housekeeping genes, and some of which use endogenous genes.
 
-### Advantages and disadvantages of using spike-ins to remove confounders
+#### Advantages and disadvantages of using spike-ins to remove confounders
 
 The use of spike-ins as control genes is appealing, since the same amount of ERCC (or other) spike-in was added to each cell in our experiment. In principle, all the variablity we observe for these genes is due to technical noise; whereas endogenous genes are affected by both technical noise and biological variability. Technical noise can be removed by fitting a model to the spike-ins and "substracting" this from the endogenous genes. There are several methods available based on this premise (eg. [BASiCS](https://github.com/catavallejos/BASiCS), [scLVM](https://github.com/PMBio/scLVM), [RUVg](http://bioconductor.org/packages/release/bioc/html/RUVSeq.html)); each using different noise models and different fitting procedures. Alternatively, one can identify genes which exhibit significant variation beyond technical noise (eg. Distance to median, [Highly variable genes](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html)). However, there are issues with the use of spike-ins for normalisation (particularly ERCCs, derived from bacterial sequences), including that their variability can, for various reasons, actually be *higher* than that of endogenous genes.
 
@@ -42,7 +42,7 @@ umi.qc <- computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
 umi.qc <- normalize(umi.qc)
 ```
 
-## Remove Unwanted Variation
+### Remove Unwanted Variation
 
 Factors contributing to technical noise frequently appear as "batch
 effects" where cells processed on different days or by different
@@ -61,7 +61,7 @@ constant;
 
 We will concentrate on the first two approaches.
 
-### RUVg
+#### RUVg
 
 
 ```r
@@ -75,7 +75,7 @@ assay(umi.qc, "ruvg10") <- log2(
 )
 ```
 
-### RUVs
+#### RUVs
 
 
 ```r
@@ -97,7 +97,7 @@ assay(umi.qc, "ruvs10") <- log2(
 )
 ```
 
-## Combat
+### Combat
 
 If you have an experiment with a balanced design, Combat can be used to eliminate batch effects while preserving biological effects by specifying the biological effects using the `mod` parameter. However the `Tung` data contains multiple experimental replicates rather than a balanced design so using `mod1` to preserve biological variability will result in an error. 
 
@@ -131,7 +131,7 @@ Perform `ComBat` correction accounting for total features as a co-variate. Store
 ## Standardizing Data across genes
 ```
 
-## mnnCorrect 
+### mnnCorrect 
 `mnnCorrect` assumes that each batch shares at least one biological condition with each other batch. Thus it works well for a variety of balanced experimental designs. However, the Tung data contains multiple replicates for each invidividual rather than balanced batches, thus we will normalized each individual separately. Note that this will remove batch effects between batches within the same individual but not the batch effects between batches in different individuals, due to the confounded experimental design. 
 
 Thus we will merge a replicate from each individual to form three batches. 
@@ -179,7 +179,7 @@ assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3);
 #)
 ```
 
-## GLM
+### GLM
 A general linear model is a simpler version of `Combat`. It can correct for batches while preserving biological effects if you have a balanced design. In a confounded/replicate design biological effects will not be fit/preserved. Similar to `mnnCorrect` we could remove batch effects from each individual separately in order to preserve biological (and technical) variance between individuals. For demonstation purposes we will naively correct all cofounded batch effects: 
 
 
@@ -206,11 +206,11 @@ Perform GLM correction for each individual separately. Store the final corrected
 
 
 
-### How to evaluate and compare confounder removal strategies
+#### How to evaluate and compare confounder removal strategies
 
 A key question when considering the different methods for removing confounders is how to quantitatively determine which one is the most effective. The main reason why comparisons are challenging is because it is often difficult to know what corresponds to technical counfounders and what is interesting biological variability. Here, we consider three different metrics which are all reasonable based on our knowledge of the experimental design. Depending on the biological question that you wish to address, it is important to choose a metric that allows you to evaluate the confounders that are likely to be the biggest concern for the given situation.
 
-## Effectiveness 1
+### Effectiveness 1
 
 We evaluate the effectiveness of the normalization by inspecting the
 PCA plot where colour corresponds the technical replicates and shape
@@ -240,7 +240,7 @@ __Exercise 3__
 
 Consider different `ks` for RUV normalizations. Which gives the best results?
 
-## Effectiveness 2
+### Effectiveness 2
 
 We can also examine the effectiveness of correction using the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset. Note RLE only evaluates whether the number of genes higher and lower than average are equal for each cell - i.e. systemic technical effects. Random technical noise between batches may not be detected by RLE.
 
@@ -256,7 +256,7 @@ boxplot(res, las=2)
 
 <img src="15-remove-conf_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
 
-## Effectiveness 3
+### Effectiveness 3
 
 We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.
 
@@ -349,7 +349,7 @@ __Exercise 4__
 
 Perform the above analysis for each normalization/batch correction method. Which method(s) are most/least effective? Why is the variance accounted for by batch never lower than the variance accounted for by individual?
 
-## Effectiveness 4
+### Effectiveness 4
 
 Another method to check the efficacy of batch-effect correction is to consider the intermingling of points from different batches in local subsamples of the data. If there are no batch-effects then proportion of cells from each batch in any local region should be equal to the global proportion of cells in each batch. 
 
@@ -416,11 +416,11 @@ __Exercise 5__
 
 Why do the raw counts appear to have little batch effects?
 
-## Exercise
+### Exercise
 
 Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.
 
-## sessionInfo()
+### sessionInfo()
 
 
 ```
@@ -448,7 +448,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ##  [1] RColorBrewer_1.1-2          reshape2_1.4.2             
 ##  [3] sva_3.24.4                  genefilter_1.58.1          
 ##  [5] mgcv_1.8-22                 nlme_3.1-131               
-##  [7] kBET_0.99.0                 scran_1.5.13               
+##  [7] kBET_0.99.0                 scran_1.5.14               
 ##  [9] scater_1.5.20               SingleCellExperiment_0.99.4
 ## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
 ## [13] edgeR_3.18.1                limma_3.32.10              

@@ -2,7 +2,7 @@
 knit: bookdown::preview_chapter
 ---
 
-# Identifying confounding factors (Reads)
+## Identifying confounding factors (Reads)
 
 
 
@@ -21,7 +21,7 @@ knit: bookdown::preview_chapter
 <p class="caption">(\#fig:confound-find-expl-vars-reads)Explanatory variables</p>
 </div>
 
-## sessionInfo()
+### sessionInfo()
 
 
 ```
