@@ -82,8 +82,10 @@ which is based on a mixture of normal distributions. Then it builds a minimum sp
 
 First we will try to use all genes to order the cells.
 ```{r tscan-all-genes}
-deng <- readRDS("deng/deng.rds")
-cellLabels <- colnames(deng)
+deng <- readRDS("deng/deng-reads.rds")
+cellLabels <- colData(deng)$cell_type2
+deng <- counts(deng)
+colnames(deng) <- cellLabels
 procdeng <- TSCAN::preprocess(deng)
 colnames(procdeng) <- 1:ncol(deng)
 dengclust <- TSCAN::exprmclust(procdeng, clusternum = 10)

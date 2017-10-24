@@ -11,34 +11,29 @@ opts_chunk$set(fig.align = "center")
 set.seed(1234567)
 ```
 
-## Seurat
+## `Seurat`
 
-[Seurat](http://satijalab.org/seurat/) is a popular R package that is designed for QC, analysis, and exploration of single cell RNA-seq data, ie many of the tasks covered in this course. Although the authors provide several [tutorials](http://satijalab.org/seurat/get_started.html), here we provide a brief overview by following an [example](http://satijalab.org/seurat/get_started.html) created by the authors of `SEURAT` (8,500 Pancreas cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors. We start by loading the Pollen data that we have used before:
+[Seurat](http://satijalab.org/seurat/) is a popular R package that is designed for QC, analysis, and exploration of single cell RNA-seq data, i.e. many of the tasks covered in this course. Although the authors provide several [tutorials](http://satijalab.org/seurat/get_started.html), here we provide a brief overview by following an [example](http://satijalab.org/seurat/pbmc3k_tutorial.html) created by the authors of `Seurat` (2,800 Peripheral Blood Mononuclear Cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors. We start by loading the Deng data that we have used before:
 ```{r}
-pollen <- readRDS("pollen/pollen.rds")
+deng <- readRDS("deng/deng-reads.rds")
 ```
 
-Initialize the Seurat object with the raw (non-normalized data).  Keep all genes expressed in >= 3 cells. Keep all cells with at least 200 detected genes:
+First, we initialize the Seurat object with the raw (non-normalized data). Keep all genes expressed in >= 3 cells. Keep all cells with at least 200 detected genes:
 ```{r, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 library(Seurat)
 seuset <- CreateSeuratObject(
-    raw.data = logcounts(pollen), 
-    min.cells = 3, 
-    min.genes = 200
+    raw.data = counts(deng)
 )
+```
 
+```{r, eval = FALSE}
 VlnPlot(object = seuset, features.plot = c("nGene", "nUMI"), nCol = 3)
 
 GenePlot(object = seuset, gene1 = "nUMI", gene2 = "nGene")
 
 seuset <- FindVariableGenes(
-    object = seuset, 
-    mean.function = ExpMean, 
-    dispersion.function = LogVMR, 
-    x.low.cutoff = 0.0125, 
-    x.high.cutoff = 3, 
-    y.cutoff = 0.5
+    object = seuset
 )
 
 length(x = seuset@var.genes)
@@ -89,7 +84,7 @@ seuset <- FindClusters(
 
 table(seuset@ident)
 
-mclust::adjustedRandIndex(colData(pollen)$cell_type1, seuset@ident)
+mclust::adjustedRandIndex(colData(deng)$cell_type2, seuset@ident)
 
 # this did not work!
 # Error in La.svd(x, nu, nv) : LAPACK routines cannot be loaded
@@ -100,25 +95,25 @@ mclust::adjustedRandIndex(colData(pollen)$cell_type1, seuset@ident)
 # )
 ```
 
-__Exercise 12__: Compare the results between `SC3` and `SEURAT`.
+__Exercise 12__: Compare the results between `SC3` and `Seurat`.
 
 __Our solution__:
 ```{r, echo=TRUE, eval=FALSE}
-pData(pollen)$SEURAT <- as.character(pollen_seurat@ident)
-sc3_plot_expression(pollen, k = 11, show_pdata = "SEURAT")
+pData(deng)$Seurat <- as.character(seuset@ident)
+sc3_plot_expression(deng, k = 10, show_pdata = "Seurat")
 ```
 
 
 Seurat can also find marker genes, e.g. marker genes for cluster 2:
 ```{r, eval=FALSE}
-markers <- FindMarkers(pollen_seurat, 2)
-FeaturePlot(pollen_seurat, 
+markers <- FindMarkers(seuset, 2)
+FeaturePlot(seuset, 
             head(rownames(markers)), 
             cols.use = c("lightgrey", "blue"), 
             nCol = 3)
 ```
 
-__Exercise 13__: Compare marker genes provided by `SEURAT` and `SC3`.
+__Exercise 13__: Compare marker genes provided by `Seurat` and `SC3`.
 
 ### sessionInfo()
 

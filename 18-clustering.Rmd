@@ -16,89 +16,92 @@ library(SC3)
 library(scater)
 library(SingleCellExperiment)
 library(pheatmap)
+library(irr)
 set.seed(1234567)
 ```
 
-To illustrate clustering of scRNA-seq data, we consider the `Pollen` dataset of cells from 
-different human tissues [@Pollen2014-cu]. We have preprocessed the dataset and created a 
-scater object in advance. We have also annotated the cells with the cell type information 
-(it is the `cell_type1` column in the `phenoData` slot).
+To illustrate clustering of scRNA-seq data, we consider the `Deng` dataset of cells from 
+developing mouse embryo [@Deng2014-mx]. We have preprocessed the dataset and created a 
+`SingleCellExperiment` object in advance. We have also annotated the cells with the cell type information (it is the `cell_type1` and `cell_type2` columns in the `colData` slot).
 
-### Pollen dataset
+### Deng dataset
 
 Let's load the data and look at it:
 ```{r}
-pollen <- readRDS("pollen/pollen.rds")
-pollen
+deng <- readRDS("deng/deng-reads.rds")
+deng
 ```
 
 Let's look at the cell type annotation:
 ```{r}
-table(colData(pollen)$cell_type1)
+table(colData(deng)$cell_type2)
 ```
 
 A simple PCA analysis already separates some strong cell types and provides some insights in the data structure:
 ```{r}
-plotPCA(pollen, colour_by = "cell_type1")
+plotPCA(deng, colour_by = "cell_type2")
 ```
 
 ### SC3
 
-Let's run `SC3` clustering on the Pollen data. The advantage of the `SC3` is that it can directly take a [scater](http://bioconductor.org/packages/scater/) object (see previous chapters) as an input.
+Let's run `SC3` clustering on the Deng data. The advantage of the `SC3` is that it can directly ingest a `SingleCellExperiment` object.
 
 Now let's image we do not know the number of clusters _k_ (cell types). `SC3` can estimate a number of clusters for you:
 ```{r}
-pollen <- sc3_prepare(pollen, ks = 2:5)
-pollen <- sc3_estimate_k(pollen)
-metadata(pollen)$sc3$k_estimation
+deng <- sc3_estimate_k(deng)
+metadata(deng)$sc3$k_estimation
 ```
 
-Interestingly, the number of cell types predicted by `SC3` is the same as the number of cell types in the Pollen data annotation.
+Interestingly, the number of cell types predicted by `SC3` is smaller than in the original data annotation. However, early, mid and late stages of different cell types together, we will have exactly 6 cell types. We store the merged cell types in `cell_type1` column of the `colData` slot:
+```{r}
+plotPCA(deng, colour_by = "cell_type1")
+```
 
 Now we are ready to run `SC3` (we also ask it to calculate biological properties of the clusters): 
 ```{r}
-pollen <- sc3(pollen, ks = 11, biology = TRUE)
+deng <- sc3(deng, ks = 10, biology = TRUE)
 ```
 
 `SC3` result consists of several different outputs (please look in [@Kiselev2016-bq] and [SC3 vignette](http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html) for more details). Here we show some of them:
 
 Consensus matrix:
 ```{r, fig.height=6}
-sc3_plot_consensus(pollen, k = 11, show_pdata = "cell_type1")
+sc3_plot_consensus(deng, k = 10, show_pdata = "cell_type2")
+adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$sc3_10_clusters)
 ```
 
 Silhouette plot:
 ```{r, fig.height=9}
-sc3_plot_silhouette(pollen, k = 11)
+sc3_plot_silhouette(deng, k = 10)
 ```
 
 Heatmap of the expression matrix:
 ```{r, fig.height=6}
-sc3_plot_expression(pollen, k = 11, show_pdata = "cell_type1")
+sc3_plot_expression(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 Identified marker genes:
 ```{r, fig.height=17}
-sc3_plot_markers(pollen, k = 11, show_pdata = "cell_type1")
+sc3_plot_markers(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 PCA plot with highlighted `SC3` clusters:
 ```{r}
-plotPCA(pollen, colour_by = "sc3_11_clusters")
+plotPCA(deng, colour_by = "sc3_10_clusters")
 ```
 
 Note, that one can also run `SC3` in an interactive `Shiny` session:
 ```{r, eval=FALSE}
-sc3_interactive(pollen)
+sc3_interactive(deng)
 ```
 
 This command will open `SC3` in a web browser.
 
-* __Exercise 1__: Run `SC3` for $k$ from 9 to 13 and explore different clustering solutions in your web browser.
+* __Exercise 1__: Run `SC3` for $k$ from 8 to 12 and explore different clustering solutions in your web browser.
 
-* __Exercise 2__: Which clusters are the most stable when $k$ is changed from 9 to 13? (Look at the "Stability" tab)
+* __Exercise 2__: Which clusters are the most stable when $k$ is changed from 8 to 12? (Look at the "Stability" tab)
 
-* __Exercise 3__: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use $k=11$.
+* __Exercise 3__: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use $k=10$.
 
 * __Exercise 4__: Change the marker genes threshold (the default is 0.85). Does __SC3__ find more marker genes?
 
@@ -108,7 +111,7 @@ This command will open `SC3` in a web browser.
 
 ```{r}
 # use the same gene filter as in SC3
-input <- logcounts(pollen[rowData(pollen)$sc3_gene_filter, ])
+input <- logcounts(deng[rowData(deng)$sc3_gene_filter, ])
 ```
 
 There are several parameters used by `pcaReduce`:
@@ -123,8 +126,8 @@ pca.red <- PCAreduce(t(input), nbt = 1, q = 30, method = 'S')[[1]]
 ```
 
 ```{r}
-colData(pollen)$pcaReduce <- as.character(pca.red[,32 - 11])
-plotPCA(pollen, colour_by = "pcaReduce")
+colData(deng)$pcaReduce <- as.character(pca.red[,32 - 10])
+plotPCA(deng, colour_by = "pcaReduce")
 ```
 
 __Exercise 5__: Run pcaReduce for $k=2$ and plot a similar PCA plot. Does it look good?
@@ -133,18 +136,18 @@ __Hint__: When running pcaReduce for different $k$s you do not need to rerun PCA
 
 __Our solution__:
 ```{r clust-pca-reduce2, fig.cap = "Clustering solutions of pcaReduce method for $k=2$.", echo=FALSE}
-colData(pollen)$pcaReduce <- as.character(pca.red[,32 - 2])
-plotPCA(pollen, colour_by = "pcaReduce")
+colData(deng)$pcaReduce <- as.character(pca.red[,32 - 2])
+plotPCA(deng, colour_by = "pcaReduce")
 ```
 
-__Exercise 6__: Compare the results between `SC3` and `pcaReduce` for $k=11$. What is
+__Exercise 6__: Compare the results between `SC3` and `pcaReduce` for $k=10$. What is
 the main difference between the solutions provided by the two
 different methods?
 
 __Our solution__:
 ```{r, echo=FALSE}
-colData(pollen)$pcaReduce <- as.character(pca.red[,32 - 11])
-sc3_plot_expression(pollen, k = 11, show_pdata = "pcaReduce")
+colData(deng)$pcaReduce <- as.character(pca.red[,32 - 10])
+sc3_plot_expression(deng, k = 10, show_pdata = "pcaReduce")
 ```
 
 
@@ -152,7 +155,7 @@ sc3_plot_expression(pollen, k = 11, show_pdata = "pcaReduce")
 
 [tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. Here we will do the same:
 ```{r clust-tsne, fig.cap = "tSNE map of the patient data"}
-pollen <- plotTSNE(pollen, rand_seed = 1, return_SCE = TRUE)
+deng <- plotTSNE(deng, rand_seed = 1, return_SCE = TRUE)
 ```
 
 Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.
@@ -161,19 +164,19 @@ Now we are going to apply _k_-means clustering algorithm to the cloud of points 
 
 We will start with $k=8$:
 ```{r clust-tsne-kmeans2, fig.cap = "tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm"}
-colData(pollen)$tSNE_kmeans <- as.character(kmeans(pollen@reducedDims$TSNE, centers = 8)$clust)
-plotTSNE(pollen, rand_seed = 1, colour_by = "tSNE_kmeans")
+colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 8)$clust)
+plotTSNE(deng, rand_seed = 1, colour_by = "tSNE_kmeans")
 ```
 
-__Exercise 7__: Make the same plot for $k=11$.
+__Exercise 7__: Make the same plot for $k=10$.
 
 __Exercise 8__: Compare the results between `SC3` and `tSNE+kmeans`. Can the
 results be improved by changing the `perplexity` parameter?
 
 __Our solution__:
 ```{r, echo=FALSE}
-colData(pollen)$tSNE_kmeans <- as.character(kmeans(pollen@reducedDims$TSNE, centers = 11)$clust)
-sc3_plot_expression(pollen, k = 11, show_pdata = "tSNE_kmeans")
+colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 11)$clust)
+sc3_plot_expression(deng, k = 10, show_pdata = "tSNE_kmeans")
 ```
 
 As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
@@ -213,15 +216,15 @@ snn.res <- read.table("res-snn-cliq.txt")
 # remove files that were created during the analysis
 system("rm snn-cliq.txt res-snn-cliq.txt")
 
-colData(pollen)$SNNCliq <- as.character(snn.res[,1])
-plotPCA(pollen, colour_by = "SNNCliq")
+colData(deng)$SNNCliq <- as.character(snn.res[,1])
+plotPCA(deng, colour_by = "SNNCliq")
 ```
 
 __Exercise 9__: Compare the results between `SC3` and `SNN-Cliq`.
 
 __Our solution__:
 ```{r, echo=FALSE}
-sc3_plot_expression(pollen, k = 11, show_pdata = "SNNCliq")
+sc3_plot_expression(deng, k = 10, show_pdata = "SNNCliq")
 ```
 
 ### SINCERA
@@ -254,11 +257,11 @@ cat(kk)
 ```
 
 Let's now visualize the SINCERA results as a heatmap:
-```{r clust-sincera, fig.cap = "Clustering solutions of SINCERA method using $k=3$"}
+```{r clust-sincera, fig.cap = "Clustering solutions of SINCERA method using found $k$"}
 pheatmap(
     t(dat),
     cluster_cols = hc,
-    cutree_cols = 14,
+    cutree_cols = kk,
     kmeans_k = 100,
     show_rownames = FALSE
 )
@@ -268,8 +271,8 @@ __Exercise 10__: Compare the results between `SC3` and `SNN-Cliq`.
 
 __Our solution__:
 ```{r, echo=FALSE}
-colData(pollen)$SINCERA <- as.character(cutree(hc, k = i))
-sc3_plot_expression(pollen, k = 11, show_pdata = "SINCERA")
+colData(deng)$SINCERA <- as.character(cutree(hc, k = kk))
+sc3_plot_expression(deng, k = 10, show_pdata = "SINCERA")
 ```
 
 __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a good idea?
