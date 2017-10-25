@@ -2,11 +2,11 @@
 knit: bookdown::preview_chapter
 ---
 
-# Differential Expression (DE) analysis
+## Differential Expression (DE) analysis
 
 
 
-## Bulk RNA-seq
+### Bulk RNA-seq
 
 One of the most common types of analyses when analyzing bulk RNA-seq
 data is to identify differentially expressed genes. By comparing the
@@ -23,7 +23,7 @@ extensive
 available where the RNA-seq data has been validated using
 RT-qPCR. These data can be used to benchmark DE finding algorithms.
 
-## Single cell RNA-seq
+### Single cell RNA-seq
 
 In contrast to bulk RNA-seq, in scRNA-seq we usually do not have a defined
 set of experimental conditions. Instead, as was shown in a previous chapter
@@ -31,7 +31,7 @@ set of experimental conditions. Instead, as was shown in a previous chapter
 clustering approach. Once the groups have been identified one can find differentially
 expressed genes either by comparing the differences in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for pairwise comparisons.
 
-## Differences in Distribution
+### Differences in Distribution
 
 Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) for each group we are comparing in single-cell experiments. Thus we can take advantage of the whole distribution of expression values in each group to identify differences between groups rather than only comparing estimates of mean-expression as is standard for bulk RNASeq.
 
@@ -39,7 +39,7 @@ There are two main approaches to comparing distributions. Firstly, we can use ex
 
 Alternatively, we can use a non-parametric test which does not assume expression values follow any particular distribution, e.g. the [Kolmogorov-Smirnov test (KS-test)](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test). Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data. Moreover, if the conditions for a parametric test hold, then it will typically be more powerful than a non-parametric test.
 
-## Models of single-cell RNASeq data
+### Models of single-cell RNASeq data
 
 The most common model of RNASeq data is the negative binomial model:
 

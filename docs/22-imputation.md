@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Imputation
+## Imputation
 
 
 
@@ -25,18 +25,45 @@ Thus, dropouts could be result of experimental shortcomings, and if this is the 
 
 To the best of our knowledge, there are currently two different imputation methods available: MAGIC [@vanDijk2017] and scImpute [@Li2017]. Since [MAGIC](https://github.com/pkathail/magic) is only available for Python or Matlab, we will only cover [scImpute](https://github.com/Vivianstats/scImpute) in this chapter.
 
-To test scImpute, we use the default parameters and we apply it to the Pollen dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:
+### scImpute
+
+To test `scImpute`, we use the default parameters and we apply it to the Deng dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:
 
 
 ```
 ## [1] "reading in raw count matrix ..."
+## [1] "number of genes in raw count matrix 22431"
+## [1] "number of cells in raw count matrix 268"
 ## [1] "estimating mixture models ..."
 ## [1] "imputing dropout values ..."
+## [1] "inferring cell similarities ..."
+## [1] "cluster sizes:"
+##  [1] 12  9 26  5  9 57 58 43 17 22
+## [1] "estimating dropout probability for type 1 ..."
+## [1] "imputing dropout values for type 1 ..."
+## [1] "estimating dropout probability for type 2 ..."
+## [1] "imputing dropout values for type 2 ..."
+## [1] "estimating dropout probability for type 3 ..."
+## [1] "imputing dropout values for type 3 ..."
+## [1] "estimating dropout probability for type 4 ..."
+## [1] "imputing dropout values for type 4 ..."
+## [1] "estimating dropout probability for type 5 ..."
+## [1] "imputing dropout values for type 5 ..."
+## [1] "estimating dropout probability for type 6 ..."
+## [1] "imputing dropout values for type 6 ..."
+## [1] "estimating dropout probability for type 7 ..."
+## [1] "imputing dropout values for type 7 ..."
+## [1] "estimating dropout probability for type 8 ..."
+## [1] "imputing dropout values for type 8 ..."
+## [1] "estimating dropout probability for type 9 ..."
+## [1] "imputing dropout values for type 9 ..."
+## [1] "estimating dropout probability for type 10 ..."
+## [1] "imputing dropout values for type 10 ..."
 ## [1] "writing imputed count matrix ..."
 ```
 
 ```
-## [1] 0
+##  [1]  17  18  88 111 126 177 186 229 244 247
 ```
 
 Now we can compare the results with original data by considering a PCA plot
@@ -52,7 +79,7 @@ To evaluate the impact of the imputation, we use `SC3` to cluster the imputed ma
 ```
 
 ```
-## [1] 8
+## [1] 6
 ```
 
 ```
@@ -83,7 +110,16 @@ To evaluate the impact of the imputation, we use `SC3` to cluster the imputed ma
 
 Based on the PCA and the clustering results, do you think that imputation is a good idea for the Pollen dataset?
 
-## sessionInfo()
+### MAGIC
+
+
+
+Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
+
+To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
+
+
+### sessionInfo()
 
 
 ```
@@ -109,14 +145,14 @@ Based on the PCA and the clustering results, do you think that imputation is a g
 ## 
 ## other attached packages:
 ##  [1] scater_1.5.20               ggplot2_2.2.1              
-##  [3] SC3_1.5.5                   SingleCellExperiment_0.99.4
+##  [3] SC3_1.5.6                   SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          Biobase_2.36.2             
 ##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
 ## [11] IRanges_2.10.5              S4Vectors_0.14.7           
-## [13] BiocGenerics_0.22.1         scImpute_0.0.2             
-## [15] glmnet_2.0-13               foreach_1.4.3              
-## [17] Matrix_1.2-11               knitr_1.17                 
+## [13] BiocGenerics_0.22.1         scImpute_0.0.3             
+## [15] penalized_0.9-50            survival_2.41-3            
+## [17] kernlab_0.9-25              knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] bitops_1.0-6            bit64_0.9-7            
@@ -140,28 +176,30 @@ Based on the PCA and the clustering results, do you think that imputation is a g
 ## [37] shiny_1.0.5             bindr_0.1              
 ## [39] gtools_3.5.0            dplyr_0.7.4            
 ## [41] RCurl_1.95-4.8          magrittr_1.5           
-## [43] GenomeInfoDbData_0.99.0 ggbeeswarm_0.6.0       
-## [45] Rcpp_0.12.13            munsell_0.4.3          
-## [47] viridis_0.4.0           edgeR_3.18.1           
-## [49] stringi_1.1.5           yaml_2.1.14            
-## [51] zlibbioc_1.22.0         rhdf5_2.20.0           
-## [53] gplots_3.0.1            plyr_1.8.4             
-## [55] grid_3.4.2              blob_1.1.0             
-## [57] gdata_2.18.0            shinydashboard_0.6.1   
-## [59] lattice_0.20-35         cowplot_0.8.0          
-## [61] locfit_1.5-9.1          rjson_0.2.15           
-## [63] rngtools_1.2.4          reshape2_1.4.2         
-## [65] codetools_0.2-15        biomaRt_2.32.1         
-## [67] glue_1.1.1              XML_3.98-1.9           
-## [69] evaluate_0.10.1         data.table_1.10.4-2    
-## [71] httpuv_1.3.5            gtable_0.2.0           
-## [73] assertthat_0.2.0        mime_0.5               
-## [75] xtable_1.8-2            e1071_1.6-8            
-## [77] class_7.3-14            pcaPP_1.9-72           
-## [79] viridisLite_0.2.0       tibble_1.3.4           
-## [81] pheatmap_1.0.8          iterators_1.0.8        
-## [83] beeswarm_0.2.3          AnnotationDbi_1.38.2   
-## [85] registry_0.3            memoise_1.1.0          
-## [87] tximport_1.4.0          bindrcpp_0.2           
-## [89] cluster_2.0.6           ROCR_1.0-7
+## [43] GenomeInfoDbData_0.99.0 Matrix_1.2-11          
+## [45] ggbeeswarm_0.6.0        Rcpp_0.12.13           
+## [47] munsell_0.4.3           viridis_0.4.0          
+## [49] edgeR_3.18.1            stringi_1.1.5          
+## [51] yaml_2.1.14             zlibbioc_1.22.0        
+## [53] rhdf5_2.20.0            gplots_3.0.1           
+## [55] plyr_1.8.4              grid_3.4.2             
+## [57] blob_1.1.0              gdata_2.18.0           
+## [59] shinydashboard_0.6.1    lattice_0.20-35        
+## [61] cowplot_0.8.0           splines_3.4.2          
+## [63] locfit_1.5-9.1          rjson_0.2.15           
+## [65] rngtools_1.2.4          reshape2_1.4.2         
+## [67] codetools_0.2-15        biomaRt_2.32.1         
+## [69] glue_1.1.1              XML_3.98-1.9           
+## [71] evaluate_0.10.1         data.table_1.10.4-2    
+## [73] httpuv_1.3.5            foreach_1.4.3          
+## [75] gtable_0.2.0            assertthat_0.2.0       
+## [77] mime_0.5                xtable_1.8-2           
+## [79] e1071_1.6-8             class_7.3-14           
+## [81] pcaPP_1.9-72            viridisLite_0.2.0      
+## [83] tibble_1.3.4            pheatmap_1.0.8         
+## [85] iterators_1.0.8         beeswarm_0.2.3         
+## [87] AnnotationDbi_1.38.2    registry_0.3           
+## [89] memoise_1.1.0           tximport_1.4.0         
+## [91] bindrcpp_0.2            cluster_2.0.6          
+## [93] ROCR_1.0-7
 ```

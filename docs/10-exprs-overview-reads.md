@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Data visualization (Reads)
+## Data visualization (Reads)
 
 
 ```r
@@ -109,7 +109,7 @@ plotTSNE(
 <p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-2)tSNE map of the tung data (perplexity = 200)</p>
 </div>
 
-## sessionInfo()
+### sessionInfo()
 
 
 ```
