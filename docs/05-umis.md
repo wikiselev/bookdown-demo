@@ -4,7 +4,7 @@ output: html_document
 
 
 
-## Unique Molecular Identifiers (UMIs)
+## Unique Molecular Identifiers (UMIs) {#umichapter}
 
 Thanks to Andreas Buness from [EMBL Monterotondo](https://www.embl.it/services/bioinformatics/) for collaboration on this section.
 
