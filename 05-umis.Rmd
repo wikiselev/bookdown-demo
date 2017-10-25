@@ -7,7 +7,7 @@ library(knitr)
 opts_chunk$set(fig.align = "center", echo=FALSE)
 ```
 
-## Unique Molecular Identifiers (UMIs)
+## Unique Molecular Identifiers (UMIs) {#umichapter}
 
 Thanks to Andreas Buness from [EMBL Monterotondo](https://www.embl.it/services/bioinformatics/) for collaboration on this section.
 

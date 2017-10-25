@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-## Normalization for library size (Reads)
+## Normalization practice (Reads)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
