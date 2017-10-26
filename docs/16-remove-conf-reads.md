@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Dealing with confounders (Reads)
+## Dealing with confounders (Reads)
 
 
 
@@ -28,9 +28,9 @@ reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- normalize(reads.qc)
 ```
 
-## Remove Unwanted Variation
+### Remove Unwanted Variation
 
-### RUVg
+#### RUVg
 
 
 ```r
@@ -44,7 +44,7 @@ assay(reads.qc, "ruvg10") <- log2(
 )
 ```
 
-### RUVs
+#### RUVs
 
 
 ```r
@@ -66,7 +66,7 @@ assay(reads.qc, "ruvs10") <- log2(
 )
 ```
 
-### Combat
+#### Combat
 
 
 ```r
@@ -98,7 +98,7 @@ __Exercise 1__
 ## Standardizing Data across genes
 ```
 
-### mnnCorrect 
+#### mnnCorrect 
 
 
 ```r
@@ -144,7 +144,7 @@ assay(reads.qc, "mnn") <- cbind(indi1, indi2, indi3);
 #)
 ```
 
-### GLM
+#### GLM
 
 
 ```r
@@ -168,7 +168,7 @@ __Exercise 2__
 
 
 
-### Effectiveness 1
+#### Effectiveness 1
 
 
 ```r
@@ -188,7 +188,7 @@ for(n in assayNames(reads.qc)) {
 
 <img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-5.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-6.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-7.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-8.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-9.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-10.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-11.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-12.png" width="672" style="display: block; margin: auto;" />
 
-### Effectiveness 2
+#### Effectiveness 2
 
 
 ```r
@@ -202,7 +202,7 @@ boxplot(res, las=2)
 
 <img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
 
-### Effectiveness 3
+#### Effectiveness 3
 
 
 ```r
@@ -254,7 +254,7 @@ for(n in assayNames(reads.qc)) {
 
 <img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-12.png" width="672" style="display: block; margin: auto;" />
 
-### Effectiveness 4
+#### Effectiveness 4
 
 
 ```r
@@ -313,7 +313,7 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
 
 <img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" />
 
-### sessionInfo()
+#### sessionInfo()
 
 
 ```
@@ -341,7 +341,7 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
 ##  [1] RColorBrewer_1.1-2          reshape2_1.4.2             
 ##  [3] sva_3.24.4                  genefilter_1.58.1          
 ##  [5] mgcv_1.8-22                 nlme_3.1-131               
-##  [7] kBET_0.99.0                 scran_1.5.14               
+##  [7] kBET_0.99.0                 scran_1.5.15               
 ##  [9] scater_1.5.21               SingleCellExperiment_0.99.4
 ## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
 ## [13] edgeR_3.18.1                limma_3.32.10              

@@ -23,7 +23,7 @@ As discussed previously, one of the main challenges when analyzing scRNA-seq dat
 
 Thus, dropouts could be result of experimental shortcomings, and if this is the case then we would like to provide computational corrections. One possible solution is to impute the dropouts in the expression matrix. To be able to impute gene expression values, one must have an underlying model. However, since we do not know which dropout events are technical artefacts and which correspond to the transcript being truly absent, imputation is a difficult challenges.
 
-To the best of our knowledge, there are currently two different imputation methods available: MAGIC [@vanDijk2017] and scImpute [@Li2017]. Since [MAGIC](https://github.com/pkathail/magic) is only available for Python or Matlab, we will only cover [scImpute](https://github.com/Vivianstats/scImpute) in this chapter.
+To the best of our knowledge, there are currently two different imputation methods available: MAGIC [@Van_Dijk2017-bh] and scImpute [@Li2017-tz]. Since [MAGIC](https://github.com/pkathail/magic) is only available for Python or Matlab, we will only cover [scImpute](https://github.com/Vivianstats/scImpute) in this chapter.
 
 ### scImpute
 

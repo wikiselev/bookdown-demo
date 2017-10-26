@@ -139,7 +139,7 @@ output: html_document
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] knitr_1.17                  scran_1.5.14               
+##  [1] knitr_1.17                  scran_1.5.15               
 ##  [3] BiocParallel_1.10.1         scater_1.5.21              
 ##  [5] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [7] DelayedArray_0.2.7          matrixStats_0.52.2         

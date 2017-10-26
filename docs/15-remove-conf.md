@@ -448,7 +448,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ##  [1] RColorBrewer_1.1-2          reshape2_1.4.2             
 ##  [3] sva_3.24.4                  genefilter_1.58.1          
 ##  [5] mgcv_1.8-22                 nlme_3.1-131               
-##  [7] kBET_0.99.0                 scran_1.5.14               
+##  [7] kBET_0.99.0                 scran_1.5.15               
 ##  [9] scater_1.5.21               SingleCellExperiment_0.99.4
 ## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
 ## [13] edgeR_3.18.1                limma_3.32.10              
