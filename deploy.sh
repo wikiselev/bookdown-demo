@@ -16,7 +16,7 @@ docker run quay.io/hemberg-group/scrna-seq-course
 
 # copy files from the docker
 alias dl='docker ps -l -q'
-docker cp `dl`:_book $WORKSPACE/tmp1
+docker cp `dl`:/home/rstudio/_book $WORKSPACE/tmp1
 cp -r tmp1/* docs
 # docker cp `dl`:tung $WORKSPACE/tmp2
 # cp -r tmp2/* tung
