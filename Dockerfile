@@ -16,9 +16,9 @@ RUN apt-get update -y --no-install-recommends \
 # install MAGIC
 RUN git clone git://github.com/pkathail/magic.git \
         && cd magic \
-        && sudo -H pip3 install \
+        && pip3 install \
         && pip3 install numpy \
-        && pip install argparse
+        && pip3 install argparse
 
 # install R packages
 RUN Rscript -e "install.packages('devtools')"
