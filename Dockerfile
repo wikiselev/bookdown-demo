@@ -1,4 +1,4 @@
-FROM rocker/r-base
+FROM rocker/rstudio
 
 RUN apt-get update -y --no-install-recommends \ 
         && apt-get -y install -f \
