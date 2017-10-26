@@ -12,6 +12,7 @@ library(scRNA.seq.funcs)
 library(matrixStats)
 library(M3Drop)
 library(RColorBrewer)
+library(SingleCellExperiment)
 set.seed(1)
 ```
 
@@ -38,30 +39,12 @@ can be considered a form of supervised feature selection since it uses the
 known biological label of each sample to identify features (i.e. genes) which
 are expressed at different levels across groups.
 
-For this section we will be working with the [Usoskin et
-al](http://www.nature.com/neuro/journal/v18/n1/full/nn.3881.html)
-data. It contains 4 cell types: NP = non-peptidergic nociceptors, PEP
-= peptidergic nociceptors, NF = neurofilament containing and TH =
-tyrosine hydroxylase containing neurons.
+For this section we will continue working with the Deng data. 
 
 
 ```r
-usoskin1 <- readRDS("usoskin/usoskin1.rds")
-dim(usoskin1)
-```
-
-```
-## [1] 25334   622
-```
-
-```r
-table(colnames(usoskin1))
-```
-
-```
-## 
-##  NF  NP PEP  TH 
-## 139 169  81 233
+deng <- readRDS("deng/deng-reads.rds")
+cellLabels <- colData(deng)$cell_type2
 ```
 
 This data can be QCed and normalized for library size using M3Drop,
@@ -70,17 +53,18 @@ undetected genes, and converts raw counts to CPM.
 
 
 ```r
-uso_list <- M3Drop::M3DropCleanData(
-    usoskin1,
-    labels = colnames(usoskin1),
-    min_detected_genes = 2000,
+deng_list <- M3Drop::M3DropCleanData(
+    counts(deng),
+    labels = cellLabels,
+    min_detected_genes = 100,
     is.counts = TRUE
 )
-expr_matrix <- uso_list$data # Normalized & filtered expression matrix
-celltype_labs <- uso_list$labels # filtered cell-type labels
+expr_matrix <- deng_list$data # Normalized & filtered expression matrix
+celltype_labs <- factor(deng_list$labels) # filtered cell-type labels
 cell_colors <- brewer.pal(max(3,length(unique(celltype_labs))), "Set3")
 ```
-__Exercise 1__: How many cells & genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?
+
+__Exercise 1__: How many cells & genes have been removed by this filtering? 
 
 ### Identifying Genes vs a Null Model ##
 
@@ -184,7 +168,6 @@ M3Drop_genes <- M3Drop::M3DropFeatureSelection(
     mt_method = "fdr",
     mt_threshold = 0.01
 )
-title(main = "Usoskin")
 ```
 
 <img src="20-dropouts_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
@@ -206,8 +189,8 @@ selected by this model, so we will consider the top 1500 genes instead.
 
 
 ```r
-usoskin_int <- NBumiConvertToInteger(usoskin1)
-DANB_fit <- NBumiFitModel(usoskin_int) # DANB is fit to the raw count matrix
+deng_int <- NBumiConvertToInteger(counts(deng))
+DANB_fit <- NBumiFitModel(deng_int) # DANB is fit to the raw count matrix
 # Perform DANB feature selection
 DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit)
 DANB_genes <- names(DropFS[1:1500])
@@ -272,32 +255,21 @@ cell-types in this dataset.
 ```r
 M3Drop::M3DropExpressionHeatmap(
     M3Drop_genes,
-    uso_list$data,
-    cell_labels = uso_list$labels
+    expr_matrix,
+    cell_labels = celltype_labs
 )
 ```
 
 <img src="20-dropouts_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
 
-For a quantitative estimate you have been provided with differentially expressed genes for this dataset as calculated by DESeq:
-
+We can also consider how consistent each feature selection method is with the others using the Jaccard Index:
 
 ```r
-# Load DE genes
-DESeq_table <- readRDS("usoskin/DESeq_table.rds")
-DE_genes = unique(DESeq_table$Gene)
-
-# Calculate precision
-sum(M3Drop_genes %in% DE_genes)/length(M3Drop_genes)
-```
-
-```
-## [1] 0.6478343
+J <- sum(M3Drop_genes %in% HVG_genes)/length(unique(c(M3Drop_genes, HVG_genes)))
 ```
 
 __Exercise 5__
-Plot the expression of the features for each of the other methods. Which appear to be differentially expressed?
-Which method is the most precise?
+Plot the expression of the features for each of the other methods. Which appear to be differentially expressed? How consistent are the different methods for this dataset?
 
 ### sessionInfo()
 
@@ -320,23 +292,37 @@ Which method is the most precise?
 ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  base     
+## [1] parallel  stats4    methods   stats     graphics  grDevices utils    
+## [8] datasets  base     
 ## 
 ## other attached packages:
-## [1] RColorBrewer_1.1-2    M3Drop_2.02.00        numDeriv_2016.8-1    
-## [4] matrixStats_0.52.2    scRNA.seq.funcs_0.1.0 knitr_1.17           
+##  [1] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
+##  [3] DelayedArray_0.2.7          Biobase_2.36.2             
+##  [5] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
+##  [7] IRanges_2.10.5              S4Vectors_0.14.7           
+##  [9] BiocGenerics_0.22.1         RColorBrewer_1.1-2         
+## [11] M3Drop_2.02.00              numDeriv_2016.8-1          
+## [13] matrixStats_0.52.2          scRNA.seq.funcs_0.1.0      
+## [15] knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.13       magrittr_1.5       MASS_7.3-47       
-##  [4] statmod_1.4.30     lattice_0.20-35    orthopolynom_1.0-5
-##  [7] hypergeo_1.2-13    stringr_1.2.0      caTools_1.17.1    
-## [10] tools_3.4.2        elliptic_1.3-7     grid_3.4.2        
-## [13] KernSmooth_2.23-15 gtools_3.5.0       htmltools_0.3.6   
-## [16] contfrac_1.1-11    yaml_2.1.14        rprojroot_1.2     
-## [19] digest_0.6.12      bookdown_0.5       bitops_1.0-6      
-## [22] bbmle_1.0.19       Rtsne_0.13         deSolve_1.20      
-## [25] evaluate_0.10.1    rmarkdown_1.6      gdata_2.18.0      
-## [28] stringi_1.1.5      compiler_3.4.2     gplots_3.0.1      
-## [31] methods_3.4.2      moments_0.14       backports_1.1.1   
-## [34] stats4_3.4.2
+##  [1] Rcpp_0.12.13            XVector_0.16.0         
+##  [3] compiler_3.4.2          zlibbioc_1.22.0        
+##  [5] moments_0.14            bitops_1.0-6           
+##  [7] tools_3.4.2             digest_0.6.12          
+##  [9] statmod_1.4.30          evaluate_0.10.1        
+## [11] Rtsne_0.13              lattice_0.20-35        
+## [13] Matrix_1.2-11           yaml_2.1.14            
+## [15] GenomeInfoDbData_0.99.0 stringr_1.2.0          
+## [17] contfrac_1.1-11         gtools_3.5.0           
+## [19] elliptic_1.3-7          caTools_1.17.1         
+## [21] rprojroot_1.2           grid_3.4.2             
+## [23] deSolve_1.20            orthopolynom_1.0-5     
+## [25] rmarkdown_1.6           bookdown_0.5           
+## [27] gdata_2.18.0            magrittr_1.5           
+## [29] backports_1.1.1         gplots_3.0.1           
+## [31] htmltools_0.3.6         MASS_7.3-47            
+## [33] bbmle_1.0.19            KernSmooth_2.23-15     
+## [35] stringi_1.1.5           RCurl_1.95-4.8         
+## [37] hypergeo_1.2-13
 ```
