@@ -1,0 +1,301 @@
+---
+output: html_document
+---
+
+# Dealing with confounders (Reads)
+
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(fig.align = 'center')
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(scRNA.seq.funcs)
+library(RUVSeq)
+library(scater)
+library(SingleCellExperiment)
+library(scran)
+library(kBET)
+library(sva) # Combat
+library(edgeR)
+set.seed(1234567)
+options(stringsAsFactors = FALSE)
+reads <- readRDS("tung/reads.rds")
+reads.qc <- reads[rowData(reads)$use, colData(reads)$use]
+endog_genes <- !rowData(reads.qc)$is_feature_control
+erccs <- rowData(reads.qc)$is_feature_control
+
+qclust <- quickCluster(reads.qc, min.size = 30)
+reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
+reads.qc <- normalize(reads.qc)
+```
+
+## Remove Unwanted Variation
+
+### RUVg
+
+```{r, message=FALSE, warning=FALSE}
+ruvg <- RUVg(counts(reads.qc), erccs, k = 1)
+assay(reads.qc, "ruvg1") <- log2(
+    t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
+)
+ruvg <- RUVg(counts(reads.qc), erccs, k = 10)
+assay(reads.qc, "ruvg10") <- log2(
+    t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
+)
+```
+
+### RUVs
+
+```{r}
+scIdx <- matrix(-1, ncol = max(table(reads.qc$individual)), nrow = 3)
+tmp <- which(reads.qc$individual == "NA19098")
+scIdx[1, 1:length(tmp)] <- tmp
+tmp <- which(reads.qc$individual == "NA19101")
+scIdx[2, 1:length(tmp)] <- tmp
+tmp <- which(reads.qc$individual == "NA19239")
+scIdx[3, 1:length(tmp)] <- tmp
+cIdx <- rownames(reads.qc)
+ruvs <- RUVs(counts(reads.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
+assay(reads.qc, "ruvs1") <- log2(
+    t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
+)
+ruvs <- RUVs(counts(reads.qc), cIdx, k = 10, scIdx = scIdx, isLog = FALSE)
+assay(reads.qc, "ruvs10") <- log2(
+    t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
+)
+```
+
+### Combat
+
+```{r, eval = TRUE, message = FALSE}
+combat_data <- logcounts(reads.qc)
+mod_data <- as.data.frame(t(combat_data))
+# Basic batch removal
+mod0 = model.matrix(~ 1, data = mod_data) 
+# Preserve biological variability
+mod1 = model.matrix(~ reads.qc$individual, data = mod_data) 
+# adjust for total genes detected
+mod2 = model.matrix(~ reads.qc$total_features, data = mod_data)
+assay(reads.qc, "combat") <- ComBat(
+    dat = t(mod_data), 
+    batch = factor(reads.qc$batch), 
+    mod = mod0,
+    par.prior = TRUE,
+    prior.plots = FALSE
+)
+```
+
+__Exercise 1__
+
+```{r, eval = TRUE, echo = FALSE, message = FALSE}
+assay(reads.qc, "combat_tf") <- ComBat(
+    dat = t(mod_data), 
+    batch = factor(reads.qc$batch), 
+    mod = mod2,
+    par.prior = TRUE,
+    prior.plots = FALSE
+)
+```
+
+### mnnCorrect 
+
+```{r}
+do_mnn <- function(data.qc) {
+    batch1 <- data.qc[, data.qc$replicate == "r1"]
+    batch2 <- data.qc[, data.qc$replicate == "r2"]
+    batch3 <- data.qc[, data.qc$replicate == "r3"]
+    
+    if (ncol(batch2) > 0) {
+        x = mnnCorrect(
+          logcounts(batch1), logcounts(batch2), logcounts(batch3),  
+          k = 20,
+          sigma = 0.1,
+          cos.norm = TRUE,
+          svd.dim = 2
+        )
+        return(cbind(x$corrected[[1]], x$corrected[[2]], x$corrected[[3]]))
+    } else {
+        x = mnnCorrect(
+          logcounts(batch1), logcounts(batch3),  
+          k = 20,
+          sigma = 0.1,
+          cos.norm = TRUE,
+          svd.dim = 2
+        )
+        return(cbind(x$corrected[[1]], x$corrected[[2]]))
+    }
+}
+
+indi1 <- do_mnn(reads.qc[, reads.qc$individual == "NA19098"])
+indi2 <- do_mnn(reads.qc[, reads.qc$individual == "NA19101"])
+indi3 <- do_mnn(reads.qc[, reads.qc$individual == "NA19239"])
+
+assay(reads.qc, "mnn") <- cbind(indi1, indi2, indi3);
+
+# For a balanced design: 
+#assay(reads.qc, "mnn") <- mnnCorrect(
+#    list(B1 = logcounts(batch1), B2 = logcounts(batch2), B3 = logcounts(batch3)),  
+#    k = 20,
+#    sigma = 0.1,
+#    cos.norm = TRUE,
+#    svd.dim = 2
+#)
+```
+
+### GLM
+
+```{r}
+glm_fun <- function(g, batch, indi) {
+  model <- glm(g ~ batch + indi)
+  model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
+  return(model$coef)
+}
+effects <- apply(
+    logcounts(reads.qc), 
+    1, 
+    glm_fun, 
+    batch = reads.qc$batch, 
+    indi = reads.qc$individual
+)
+corrected <- logcounts(reads.qc) - t(effects[as.numeric(factor(reads.qc$batch)), ])
+assay(reads.qc, "glm") <- corrected
+```
+
+__Exercise 2__
+
+```{r, echo=FALSE}
+glm_fun1 <- function(g, batch) {
+  model <- glm(g ~ batch)
+  model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
+  return(model$coef)
+}
+
+do_glm <- function(data.qc) {
+    effects <- apply(
+        logcounts(data.qc), 
+        1, 
+        glm_fun1, 
+        batch = data.qc$batch
+    )
+    corrected <- logcounts(data.qc) - t(effects[as.numeric(factor(data.qc$batch)), ])
+    return(corrected)
+}
+indi1 <- do_glm(reads.qc[, reads.qc$individual == "NA19098"])
+indi2 <- do_glm(reads.qc[, reads.qc$individual == "NA19101"])
+indi3 <- do_glm(reads.qc[, reads.qc$individual == "NA19239"])
+
+assay(reads.qc, "glm_indi") <- cbind(indi1, indi2, indi3);
+```
+
+### Effectiveness 1
+
+```{r}
+for(n in assayNames(reads.qc)) {
+    print(
+        plotPCA(
+            reads.qc[endog_genes, ],
+            colour_by = "batch",
+            size_by = "total_features",
+            shape_by = "individual",
+            exprs_values = n
+        ) +
+        ggtitle(n)
+    )
+}
+```
+
+### Effectiveness 2
+
+```{r}
+res <- list()
+for(n in assayNames(reads.qc)) {
+	res[[n]] <- suppressWarnings(calc_cell_RLE(assay(reads.qc, n), erccs))
+}
+par(mar=c(6,4,1,1))
+boxplot(res, las=2)
+```
+
+### Effectiveness 3
+
+```{r}
+for(n in assayNames(reads.qc)) {
+    print(
+        plotQC(
+            reads.qc[endog_genes, ],
+            type = "expl",
+            exprs_values = n,
+            variables = c(
+                "total_features",
+                "total_counts",
+                "batch",
+                "individual",
+                "pct_counts_ERCC",
+                "pct_counts_MT"
+            )
+        ) +
+        ggtitle(n)
+    )
+}
+```
+
+### Effectiveness 4
+
+```{r, message = FALSE}
+compare_kBET_results <- function(sce){
+    indiv <- unique(sce$individual)
+    norms <- assayNames(sce) # Get all normalizations
+    results <- list()
+    for (i in indiv){ 
+        for (j in norms){
+            tmp <- kBET(
+                df = t(assay(sce[,sce$individual== i], j)), 
+                batch = sce$batch[sce$individual==i], 
+                heuristic = TRUE, 
+                verbose = FALSE, 
+                addTest = FALSE, 
+                plot = FALSE)
+            results[[i]][[j]] <- tmp$summary$kBET.observed[1]
+        }
+    }
+    return(as.data.frame(results))
+}
+
+eff_debatching <- compare_kBET_results(reads.qc)
+```
+
+```{r, message = FALSE}
+require("reshape2")
+require("RColorBrewer")
+# Plot results
+dod <- melt(as.matrix(eff_debatching),  value.name = "kBET")
+colnames(dod)[1:2] <- c("Normalisation", "Individual")
+
+colorset <- c('gray', brewer.pal(n = 9, "RdYlBu"))
+
+ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +  
+    geom_tile() +
+    scale_fill_gradient2(
+        na.value = "gray",
+        low = colorset[2],
+        mid=colorset[6],
+        high = colorset[10],
+        midpoint = 0.5, limit = c(0,1)) +
+    scale_x_discrete(expand = c(0, 0)) +
+    scale_y_discrete(expand = c(0, 0)) + 
+    theme(
+        axis.text.x = element_text(
+            angle = 45, 
+            vjust = 1, 
+            size = 12, 
+            hjust = 1
+        )
+    ) + 
+    ggtitle("Effect of batch regression methods per individual")
+```
+
+### sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```

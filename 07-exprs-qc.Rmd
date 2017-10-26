@@ -54,7 +54,7 @@ knitr::kable(
 
 The data consists of `r length(unique(anno$individual))` individuals and `r length(unique(anno$replicate))` replicates and therefore has `r length(unique(anno$batch))` batches in total.
 
-We standardize the analysis by using the scater package. First, create the scater SCESet classes:
+We standardize the analysis by using both `SingleCellExperiment` (SCE) and `scater` packages. First, create the SCE object:
 ```{r}
 umi <- SingleCellExperiment(assays = list(counts = as.matrix(molecules)), colData = anno)
 ```
@@ -246,7 +246,7 @@ knitr::kable(
 
 #### Automatic
 
-Another option available in __scater__ is to conduct PCA on a set of QC metrics and then use automatic outlier detection to identify potentially problematic cells. 
+Another option available in `scater` is to conduct PCA on a set of QC metrics and then use automatic outlier detection to identify potentially problematic cells. 
 
 By default, the following metrics are used for PCA-based outlier detection:
 
@@ -257,7 +257,7 @@ By default, the following metrics are used for PCA-based outlier detection:
 * __log10_counts_endogenous_features__
 * __log10_counts_feature_controls__
 
-scater first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package. 
+`scater` first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package. 
 
 ```{r auto-cell-filt, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
 umi <-
@@ -344,7 +344,7 @@ dim(umi[rowData(umi)$use, colData(umi)$use])
 
 Let's create an additional slot with log-transformed counts (we will need it in the next chapters) and remove saved PCA results from the `reducedDim` slot:
 ```{r}
-assay(umi, "log2_counts") <- log2(counts(umi) + 1)
+assay(umi, "logcounts_raw") <- log2(counts(umi) + 1)
 reducedDim(umi) <- NULL
 ```
 

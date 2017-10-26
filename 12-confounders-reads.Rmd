@@ -17,7 +17,7 @@ endog_genes <- !rowData(reads.qc)$is_feature_control
 ```{r confound-pca-reads, fig.cap = "PCA plot of the tung data"}
 plotPCA(
     reads.qc[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     colour_by = "batch",
     size_by = "total_features"
 )
@@ -27,7 +27,7 @@ plotPCA(
 plotQC(
     reads.qc[endog_genes, ],
     type = "find-pcs",
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     variable = "total_features"
 )
 ```
@@ -36,7 +36,7 @@ plotQC(
 plotQC(
     reads.qc[endog_genes, ],
     type = "expl",
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     variables = c(
         "total_features",
         "total_counts",
