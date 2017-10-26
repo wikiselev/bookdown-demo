@@ -25,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev (wikiselev), Tallulah Andrews, Davis McCarthy (davisjmcc), Maren Büttner (marenbuettner) and Martin Hemberg (m_hemberg)">
 
 
-<meta name="date" content="2017-10-25">
+<meta name="date" content="2017-10-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="introduction-to-single-cell-rna-seq.html">
-<link rel="next" href="biological-analysis.html">
+<link rel="next" href="dealing-with-confounders-reads.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -237,79 +237,93 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.17.11" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-8"><i class="fa fa-check"></i><b>4.17.11</b> sessionInfo()</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="biological-analysis.html"><a href="biological-analysis.html"><i class="fa fa-check"></i><b>5</b> Biological Analysis</a><ul>
-<li class="chapter" data-level="5.1" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-introduction"><i class="fa fa-check"></i><b>5.1</b> Clustering Introduction</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-6"><i class="fa fa-check"></i><b>5.1.1</b> Introduction</a></li>
-<li class="chapter" data-level="5.1.2" data-path="biological-analysis.html"><a href="biological-analysis.html#dimensionality-reductions"><i class="fa fa-check"></i><b>5.1.2</b> Dimensionality reductions</a></li>
-<li class="chapter" data-level="5.1.3" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-methods"><i class="fa fa-check"></i><b>5.1.3</b> Clustering methods</a></li>
-<li class="chapter" data-level="5.1.4" data-path="biological-analysis.html"><a href="biological-analysis.html#challenges-in-clustering"><i class="fa fa-check"></i><b>5.1.4</b> Challenges in clustering</a></li>
-<li class="chapter" data-level="5.1.5" data-path="biological-analysis.html"><a href="biological-analysis.html#tools-for-scrna-seq-data"><i class="fa fa-check"></i><b>5.1.5</b> Tools for scRNA-seq data</a></li>
-</ul></li>
-<li class="chapter" data-level="5.2" data-path="biological-analysis.html"><a href="biological-analysis.html#clust-methods"><i class="fa fa-check"></i><b>5.2</b> Clustering example</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="biological-analysis.html"><a href="biological-analysis.html#deng-dataset"><i class="fa fa-check"></i><b>5.2.1</b> Deng dataset</a></li>
-<li class="chapter" data-level="5.2.2" data-path="biological-analysis.html"><a href="biological-analysis.html#sc3-1"><i class="fa fa-check"></i><b>5.2.2</b> SC3</a></li>
-<li class="chapter" data-level="5.2.3" data-path="biological-analysis.html"><a href="biological-analysis.html#pcareduce-1"><i class="fa fa-check"></i><b>5.2.3</b> pcaReduce</a></li>
-<li class="chapter" data-level="5.2.4" data-path="biological-analysis.html"><a href="biological-analysis.html#tsne-kmeans"><i class="fa fa-check"></i><b>5.2.4</b> tSNE + kmeans</a></li>
-<li class="chapter" data-level="5.2.5" data-path="biological-analysis.html"><a href="biological-analysis.html#snn-cliq-1"><i class="fa fa-check"></i><b>5.2.5</b> SNN-Cliq</a></li>
-<li class="chapter" data-level="5.2.6" data-path="biological-analysis.html"><a href="biological-analysis.html#sincera-1"><i class="fa fa-check"></i><b>5.2.6</b> SINCERA</a></li>
-<li class="chapter" data-level="5.2.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-9"><i class="fa fa-check"></i><b>5.2.7</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.3" data-path="biological-analysis.html"><a href="biological-analysis.html#seurat-1"><i class="fa fa-check"></i><b>5.3</b> <code>Seurat</code></a><ul>
-<li class="chapter" data-level="5.3.1" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-10"><i class="fa fa-check"></i><b>5.3.1</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.4" data-path="biological-analysis.html"><a href="biological-analysis.html#feature-selection"><i class="fa fa-check"></i><b>5.4</b> Feature Selection</a><ul>
-<li class="chapter" data-level="5.4.1" data-path="biological-analysis.html"><a href="biological-analysis.html#identifying-genes-vs-a-null-model"><i class="fa fa-check"></i><b>5.4.1</b> Identifying Genes vs a Null Model</a></li>
-<li class="chapter" data-level="5.4.2" data-path="biological-analysis.html"><a href="biological-analysis.html#correlated-expression"><i class="fa fa-check"></i><b>5.4.2</b> Correlated Expression</a></li>
-<li class="chapter" data-level="5.4.3" data-path="biological-analysis.html"><a href="biological-analysis.html#comparing-methods"><i class="fa fa-check"></i><b>5.4.3</b> Comparing Methods</a></li>
-<li class="chapter" data-level="5.4.4" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-11"><i class="fa fa-check"></i><b>5.4.4</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.5" data-path="biological-analysis.html"><a href="biological-analysis.html#pseudotime-analysis"><i class="fa fa-check"></i><b>5.5</b> Pseudotime analysis</a><ul>
-<li class="chapter" data-level="5.5.1" data-path="biological-analysis.html"><a href="biological-analysis.html#tscan"><i class="fa fa-check"></i><b>5.5.1</b> TSCAN</a></li>
-<li class="chapter" data-level="5.5.2" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle"><i class="fa fa-check"></i><b>5.5.2</b> monocle</a></li>
-<li class="chapter" data-level="5.5.3" data-path="biological-analysis.html"><a href="biological-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>5.5.3</b> Diffusion maps</a></li>
-<li class="chapter" data-level="5.5.4" data-path="biological-analysis.html"><a href="biological-analysis.html#slicer"><i class="fa fa-check"></i><b>5.5.4</b> SLICER</a></li>
-<li class="chapter" data-level="5.5.5" data-path="biological-analysis.html"><a href="biological-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>5.5.5</b> Comparison of the methods</a></li>
-<li class="chapter" data-level="5.5.6" data-path="biological-analysis.html"><a href="biological-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>5.5.6</b> Expression of genes through time</a></li>
-<li class="chapter" data-level="5.5.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-12"><i class="fa fa-check"></i><b>5.5.7</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.6" data-path="biological-analysis.html"><a href="biological-analysis.html#imputation"><i class="fa fa-check"></i><b>5.6</b> Imputation</a><ul>
-<li class="chapter" data-level="5.6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#scimpute"><i class="fa fa-check"></i><b>5.6.1</b> scImpute</a></li>
-<li class="chapter" data-level="5.6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#magic"><i class="fa fa-check"></i><b>5.6.2</b> MAGIC</a></li>
-<li class="chapter" data-level="5.6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-13"><i class="fa fa-check"></i><b>5.6.3</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.7" data-path="biological-analysis.html"><a href="biological-analysis.html#differential-expression-de-analysis"><i class="fa fa-check"></i><b>5.7</b> Differential Expression (DE) analysis</a><ul>
-<li class="chapter" data-level="5.7.1" data-path="biological-analysis.html"><a href="biological-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>5.7.1</b> Bulk RNA-seq</a></li>
-<li class="chapter" data-level="5.7.2" data-path="biological-analysis.html"><a href="biological-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>5.7.2</b> Single cell RNA-seq</a></li>
-<li class="chapter" data-level="5.7.3" data-path="biological-analysis.html"><a href="biological-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>5.7.3</b> Differences in Distribution</a></li>
-<li class="chapter" data-level="5.7.4" data-path="biological-analysis.html"><a href="biological-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>5.7.4</b> Models of single-cell RNASeq data</a></li>
-</ul></li>
-<li class="chapter" data-level="5.8" data-path="biological-analysis.html"><a href="biological-analysis.html#de-in-a-real-dataset"><i class="fa fa-check"></i><b>5.8</b> DE in a real dataset</a><ul>
-<li class="chapter" data-level="5.8.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-7"><i class="fa fa-check"></i><b>5.8.1</b> Introduction</a></li>
-<li class="chapter" data-level="5.8.2" data-path="biological-analysis.html"><a href="biological-analysis.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.8.2</b> Kolmogorov-Smirnov test</a></li>
-<li class="chapter" data-level="5.8.3" data-path="biological-analysis.html"><a href="biological-analysis.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>5.8.3</b> Wilcox/Mann-Whitney-U Test</a></li>
-<li class="chapter" data-level="5.8.4" data-path="biological-analysis.html"><a href="biological-analysis.html#edger"><i class="fa fa-check"></i><b>5.8.4</b> edgeR</a></li>
-<li class="chapter" data-level="5.8.5" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle-1"><i class="fa fa-check"></i><b>5.8.5</b> Monocle</a></li>
-<li class="chapter" data-level="5.8.6" data-path="biological-analysis.html"><a href="biological-analysis.html#mast"><i class="fa fa-check"></i><b>5.8.6</b> MAST</a></li>
-<li class="chapter" data-level="5.8.7" data-path="biological-analysis.html"><a href="biological-analysis.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>5.8.7</b> Slow Methods (&gt;1h to run)</a></li>
-<li class="chapter" data-level="5.8.8" data-path="biological-analysis.html"><a href="biological-analysis.html#bpsc"><i class="fa fa-check"></i><b>5.8.8</b> BPSC</a></li>
-<li class="chapter" data-level="5.8.9" data-path="biological-analysis.html"><a href="biological-analysis.html#scde"><i class="fa fa-check"></i><b>5.8.9</b> SCDE</a></li>
-<li class="chapter" data-level="5.8.10" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-14"><i class="fa fa-check"></i><b>5.8.10</b> sessionInfo()</a></li>
+<li class="chapter" data-level="5" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html"><i class="fa fa-check"></i><b>5</b> Dealing with confounders (Reads)</a><ul>
+<li class="chapter" data-level="5.1" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#remove-unwanted-variation-1"><i class="fa fa-check"></i><b>5.1</b> Remove Unwanted Variation</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#ruvg-1"><i class="fa fa-check"></i><b>5.1.1</b> RUVg</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#ruvs-1"><i class="fa fa-check"></i><b>5.1.2</b> RUVs</a></li>
+<li class="chapter" data-level="5.1.3" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#combat-1"><i class="fa fa-check"></i><b>5.1.3</b> Combat</a></li>
+<li class="chapter" data-level="5.1.4" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#mnncorrect-1"><i class="fa fa-check"></i><b>5.1.4</b> mnnCorrect</a></li>
+<li class="chapter" data-level="5.1.5" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#glm-1"><i class="fa fa-check"></i><b>5.1.5</b> GLM</a></li>
+<li class="chapter" data-level="5.1.6" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-1-1"><i class="fa fa-check"></i><b>5.1.6</b> Effectiveness 1</a></li>
+<li class="chapter" data-level="5.1.7" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-2-1"><i class="fa fa-check"></i><b>5.1.7</b> Effectiveness 2</a></li>
+<li class="chapter" data-level="5.1.8" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-3-1"><i class="fa fa-check"></i><b>5.1.8</b> Effectiveness 3</a></li>
+<li class="chapter" data-level="5.1.9" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-4-1"><i class="fa fa-check"></i><b>5.1.9</b> Effectiveness 4</a></li>
+<li class="chapter" data-level="5.1.10" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#sessioninfo-9"><i class="fa fa-check"></i><b>5.1.10</b> sessionInfo()</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><i class="fa fa-check"></i><b>6</b> “Ideal” scRNAseq pipeline (as of Mar 2017)</a><ul>
-<li class="chapter" data-level="6.1" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#experimental-design"><i class="fa fa-check"></i><b>6.1</b> Experimental Design</a></li>
-<li class="chapter" data-level="6.2" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#processing-reads"><i class="fa fa-check"></i><b>6.2</b> Processing Reads</a></li>
-<li class="chapter" data-level="6.3" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>6.3</b> Preparing Expression Matrix</a></li>
-<li class="chapter" data-level="6.4" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#biological-interpretation"><i class="fa fa-check"></i><b>6.4</b> Biological Interpretation</a></li>
+<li class="chapter" data-level="6" data-path="biological-analysis.html"><a href="biological-analysis.html"><i class="fa fa-check"></i><b>6</b> Biological Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-introduction"><i class="fa fa-check"></i><b>6.1</b> Clustering Introduction</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-6"><i class="fa fa-check"></i><b>6.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.1.2" data-path="biological-analysis.html"><a href="biological-analysis.html#dimensionality-reductions"><i class="fa fa-check"></i><b>6.1.2</b> Dimensionality reductions</a></li>
+<li class="chapter" data-level="6.1.3" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-methods"><i class="fa fa-check"></i><b>6.1.3</b> Clustering methods</a></li>
+<li class="chapter" data-level="6.1.4" data-path="biological-analysis.html"><a href="biological-analysis.html#challenges-in-clustering"><i class="fa fa-check"></i><b>6.1.4</b> Challenges in clustering</a></li>
+<li class="chapter" data-level="6.1.5" data-path="biological-analysis.html"><a href="biological-analysis.html#tools-for-scrna-seq-data"><i class="fa fa-check"></i><b>6.1.5</b> Tools for scRNA-seq data</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>7</b> Advanced exercises</a></li>
-<li class="chapter" data-level="8" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>8</b> Resources</a><ul>
-<li class="chapter" data-level="8.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>8.1</b> scRNA-seq protocols</a></li>
-<li class="chapter" data-level="8.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>8.2</b> External RNA Control Consortium (ERCC)</a></li>
-<li class="chapter" data-level="8.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>8.3</b> scRNA-seq analysis tools</a></li>
-<li class="chapter" data-level="8.4" data-path="resources.html"><a href="resources.html#scrna-seq-public-datasets"><i class="fa fa-check"></i><b>8.4</b> scRNA-seq public datasets</a></li>
+<li class="chapter" data-level="6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#clust-methods"><i class="fa fa-check"></i><b>6.2</b> Clustering example</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="biological-analysis.html"><a href="biological-analysis.html#deng-dataset"><i class="fa fa-check"></i><b>6.2.1</b> Deng dataset</a></li>
+<li class="chapter" data-level="6.2.2" data-path="biological-analysis.html"><a href="biological-analysis.html#sc3-1"><i class="fa fa-check"></i><b>6.2.2</b> SC3</a></li>
+<li class="chapter" data-level="6.2.3" data-path="biological-analysis.html"><a href="biological-analysis.html#pcareduce-1"><i class="fa fa-check"></i><b>6.2.3</b> pcaReduce</a></li>
+<li class="chapter" data-level="6.2.4" data-path="biological-analysis.html"><a href="biological-analysis.html#tsne-kmeans"><i class="fa fa-check"></i><b>6.2.4</b> tSNE + kmeans</a></li>
+<li class="chapter" data-level="6.2.5" data-path="biological-analysis.html"><a href="biological-analysis.html#snn-cliq-1"><i class="fa fa-check"></i><b>6.2.5</b> SNN-Cliq</a></li>
+<li class="chapter" data-level="6.2.6" data-path="biological-analysis.html"><a href="biological-analysis.html#sincera-1"><i class="fa fa-check"></i><b>6.2.6</b> SINCERA</a></li>
+<li class="chapter" data-level="6.2.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-10"><i class="fa fa-check"></i><b>6.2.7</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>9</b> References</a></li>
+<li class="chapter" data-level="6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#seurat-1"><i class="fa fa-check"></i><b>6.3</b> <code>Seurat</code></a><ul>
+<li class="chapter" data-level="6.3.1" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-11"><i class="fa fa-check"></i><b>6.3.1</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="biological-analysis.html"><a href="biological-analysis.html#feature-selection"><i class="fa fa-check"></i><b>6.4</b> Feature Selection</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="biological-analysis.html"><a href="biological-analysis.html#identifying-genes-vs-a-null-model"><i class="fa fa-check"></i><b>6.4.1</b> Identifying Genes vs a Null Model</a></li>
+<li class="chapter" data-level="6.4.2" data-path="biological-analysis.html"><a href="biological-analysis.html#correlated-expression"><i class="fa fa-check"></i><b>6.4.2</b> Correlated Expression</a></li>
+<li class="chapter" data-level="6.4.3" data-path="biological-analysis.html"><a href="biological-analysis.html#comparing-methods"><i class="fa fa-check"></i><b>6.4.3</b> Comparing Methods</a></li>
+<li class="chapter" data-level="6.4.4" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-12"><i class="fa fa-check"></i><b>6.4.4</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="biological-analysis.html"><a href="biological-analysis.html#pseudotime-analysis"><i class="fa fa-check"></i><b>6.5</b> Pseudotime analysis</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="biological-analysis.html"><a href="biological-analysis.html#tscan"><i class="fa fa-check"></i><b>6.5.1</b> TSCAN</a></li>
+<li class="chapter" data-level="6.5.2" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle"><i class="fa fa-check"></i><b>6.5.2</b> monocle</a></li>
+<li class="chapter" data-level="6.5.3" data-path="biological-analysis.html"><a href="biological-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>6.5.3</b> Diffusion maps</a></li>
+<li class="chapter" data-level="6.5.4" data-path="biological-analysis.html"><a href="biological-analysis.html#slicer"><i class="fa fa-check"></i><b>6.5.4</b> SLICER</a></li>
+<li class="chapter" data-level="6.5.5" data-path="biological-analysis.html"><a href="biological-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>6.5.5</b> Comparison of the methods</a></li>
+<li class="chapter" data-level="6.5.6" data-path="biological-analysis.html"><a href="biological-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>6.5.6</b> Expression of genes through time</a></li>
+<li class="chapter" data-level="6.5.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-13"><i class="fa fa-check"></i><b>6.5.7</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="biological-analysis.html"><a href="biological-analysis.html#imputation"><i class="fa fa-check"></i><b>6.6</b> Imputation</a><ul>
+<li class="chapter" data-level="6.6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#scimpute"><i class="fa fa-check"></i><b>6.6.1</b> scImpute</a></li>
+<li class="chapter" data-level="6.6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#magic"><i class="fa fa-check"></i><b>6.6.2</b> MAGIC</a></li>
+<li class="chapter" data-level="6.6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-14"><i class="fa fa-check"></i><b>6.6.3</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="biological-analysis.html"><a href="biological-analysis.html#differential-expression-de-analysis"><i class="fa fa-check"></i><b>6.7</b> Differential Expression (DE) analysis</a><ul>
+<li class="chapter" data-level="6.7.1" data-path="biological-analysis.html"><a href="biological-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>6.7.1</b> Bulk RNA-seq</a></li>
+<li class="chapter" data-level="6.7.2" data-path="biological-analysis.html"><a href="biological-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>6.7.2</b> Single cell RNA-seq</a></li>
+<li class="chapter" data-level="6.7.3" data-path="biological-analysis.html"><a href="biological-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>6.7.3</b> Differences in Distribution</a></li>
+<li class="chapter" data-level="6.7.4" data-path="biological-analysis.html"><a href="biological-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>6.7.4</b> Models of single-cell RNASeq data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.8" data-path="biological-analysis.html"><a href="biological-analysis.html#de-in-a-real-dataset"><i class="fa fa-check"></i><b>6.8</b> DE in a real dataset</a><ul>
+<li class="chapter" data-level="6.8.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-7"><i class="fa fa-check"></i><b>6.8.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.8.2" data-path="biological-analysis.html"><a href="biological-analysis.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>6.8.2</b> Kolmogorov-Smirnov test</a></li>
+<li class="chapter" data-level="6.8.3" data-path="biological-analysis.html"><a href="biological-analysis.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>6.8.3</b> Wilcox/Mann-Whitney-U Test</a></li>
+<li class="chapter" data-level="6.8.4" data-path="biological-analysis.html"><a href="biological-analysis.html#edger"><i class="fa fa-check"></i><b>6.8.4</b> edgeR</a></li>
+<li class="chapter" data-level="6.8.5" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle-1"><i class="fa fa-check"></i><b>6.8.5</b> Monocle</a></li>
+<li class="chapter" data-level="6.8.6" data-path="biological-analysis.html"><a href="biological-analysis.html#mast"><i class="fa fa-check"></i><b>6.8.6</b> MAST</a></li>
+<li class="chapter" data-level="6.8.7" data-path="biological-analysis.html"><a href="biological-analysis.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>6.8.7</b> Slow Methods (&gt;1h to run)</a></li>
+<li class="chapter" data-level="6.8.8" data-path="biological-analysis.html"><a href="biological-analysis.html#bpsc"><i class="fa fa-check"></i><b>6.8.8</b> BPSC</a></li>
+<li class="chapter" data-level="6.8.9" data-path="biological-analysis.html"><a href="biological-analysis.html#scde"><i class="fa fa-check"></i><b>6.8.9</b> SCDE</a></li>
+<li class="chapter" data-level="6.8.10" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-15"><i class="fa fa-check"></i><b>6.8.10</b> sessionInfo()</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><i class="fa fa-check"></i><b>7</b> “Ideal” scRNAseq pipeline (as of Mar 2017)</a><ul>
+<li class="chapter" data-level="7.1" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#experimental-design"><i class="fa fa-check"></i><b>7.1</b> Experimental Design</a></li>
+<li class="chapter" data-level="7.2" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#processing-reads"><i class="fa fa-check"></i><b>7.2</b> Processing Reads</a></li>
+<li class="chapter" data-level="7.3" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>7.3</b> Preparing Expression Matrix</a></li>
+<li class="chapter" data-level="7.4" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#biological-interpretation"><i class="fa fa-check"></i><b>7.4</b> Biological Interpretation</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>8</b> Advanced exercises</a></li>
+<li class="chapter" data-level="9" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>9</b> Resources</a><ul>
+<li class="chapter" data-level="9.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>9.1</b> scRNA-seq protocols</a></li>
+<li class="chapter" data-level="9.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>9.2</b> External RNA Control Consortium (ERCC)</a></li>
+<li class="chapter" data-level="9.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>9.3</b> scRNA-seq analysis tools</a></li>
+<li class="chapter" data-level="9.4" data-path="resources.html"><a href="resources.html#scrna-seq-public-datasets"><i class="fa fa-check"></i><b>9.4</b> scRNA-seq public datasets</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 <li class="divider"></li>
 <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2017</a></li>
 
@@ -720,7 +734,7 @@ anno &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span clas
 </tbody>
 </table>
 <p>The data consists of 3 individuals and 3 replicates and therefore has 9 batches in total.</p>
-<p>We standardize the analysis by using the scater package. First, create the scater SCESet classes:</p>
+<p>We standardize the analysis by using both <code>SingleCellExperiment</code> (SCE) and <code>scater</code> packages. First, create the SCE object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi &lt;-<span class="st"> </span><span class="kw">SingleCellExperiment</span>(<span class="dt">assays =</span> <span class="kw">list</span>(<span class="dt">counts =</span> <span class="kw">as.matrix</span>(molecules)), <span class="dt">colData =</span> anno)</code></pre></div>
 <p>Remove genes that are not expressed in any cell:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keep_feature &lt;-<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">counts</span>(umi) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>
@@ -937,7 +951,7 @@ Figure 4.12: Percentage of counts in ERCCs
 </div>
 <div id="automatic" class="section level4">
 <h4><span class="header-section-number">4.8.4.2</span> Automatic</h4>
-<p>Another option available in <strong>scater</strong> is to conduct PCA on a set of QC metrics and then use automatic outlier detection to identify potentially problematic cells.</p>
+<p>Another option available in <code>scater</code> is to conduct PCA on a set of QC metrics and then use automatic outlier detection to identify potentially problematic cells.</p>
 <p>By default, the following metrics are used for PCA-based outlier detection:</p>
 <ul>
 <li><strong>pct_counts_top_100_features</strong></li>
@@ -947,7 +961,7 @@ Figure 4.12: Percentage of counts in ERCCs
 <li><strong>log10_counts_endogenous_features</strong></li>
 <li><strong>log10_counts_feature_controls</strong></li>
 </ul>
-<p>scater first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package.</p>
+<p><code>scater</code> first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi &lt;-
 <span class="kw">plotPCA</span>(umi,
         <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>, 
@@ -1056,7 +1070,7 @@ Figure 4.15: Number of total counts consumed by the top 50 expressed genes
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(umi[<span class="kw">rowData</span>(umi)<span class="op">$</span>use, <span class="kw">colData</span>(umi)<span class="op">$</span>use])</code></pre></div>
 <pre><code>## [1] 14066   657</code></pre>
 <p>Let’s create an additional slot with log-transformed counts (we will need it in the next chapters) and remove saved PCA results from the <code>reducedDim</code> slot:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">assay</span>(umi, <span class="st">&quot;log2_counts&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">counts</span>(umi) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">assay</span>(umi, <span class="st">&quot;logcounts_raw&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">counts</span>(umi) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
 <span class="kw">reducedDim</span>(umi) &lt;-<span class="st"> </span><span class="ot">NULL</span></code></pre></div>
 <p>Save the data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saveRDS</span>(umi, <span class="dt">file =</span> <span class="st">&quot;tung/umi.rds&quot;</span>)</code></pre></div>
@@ -1088,7 +1102,7 @@ Figure 4.15: Number of total counts consumed by the top 50 expressed genes
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.20               ggplot2_2.2.1              
+##  [1] scater_1.5.21               ggplot2_2.2.1              
 ##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [7] Biobase_2.36.2              GenomicRanges_1.28.6       
@@ -1115,7 +1129,7 @@ Figure 4.15: Number of total counts consumed by the top 50 expressed genes
 ##  [31] backports_1.1.1         assertthat_0.2.0       
 ##  [33] Matrix_1.2-11           lazyeval_0.2.0         
 ##  [35] limma_3.32.10           htmltools_0.3.6        
-##  [37] quantreg_5.33           tools_3.4.2            
+##  [37] quantreg_5.34           tools_3.4.2            
 ##  [39] bindrcpp_0.2            gtable_0.2.0           
 ##  [41] glue_1.1.1              GenomeInfoDbData_0.99.0
 ##  [43] reshape2_1.4.2          dplyr_0.7.4            
@@ -1530,7 +1544,7 @@ limma<span class="op">::</span><span class="kw">vennDiagram</span>(venn.diag,
 Figure 4.21: Comparison of the default, automatic and manual cell filters
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater<span class="op">::</span><span class="kw">plotQC</span>(reads, <span class="dt">type =</span> <span class="st">&quot;highest-expression&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotQC</span>(reads, <span class="dt">type =</span> <span class="st">&quot;highest-expression&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:top50-gene-expr-reads"></span>
 <img src="08-exprs-qc-reads_files/figure-html/top50-gene-expr-reads-1.png" alt="Number of total counts consumed by the top 50 expressed genes" width="90%" />
 <p class="caption">
@@ -1567,7 +1581,7 @@ Figure 4.22: Number of total counts consumed by the top 50 expressed genes
 </table>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(reads[<span class="kw">rowData</span>(reads)<span class="op">$</span>use, <span class="kw">colData</span>(reads)<span class="op">$</span>use])</code></pre></div>
 <pre><code>## [1] 16062   606</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">assay</span>(reads, <span class="st">&quot;log2_counts&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">counts</span>(reads) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">assay</span>(reads, <span class="st">&quot;logcounts_raw&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">counts</span>(reads) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
 <span class="kw">reducedDim</span>(reads) &lt;-<span class="st"> </span><span class="ot">NULL</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saveRDS</span>(reads, <span class="dt">file =</span> <span class="st">&quot;tung/reads.rds&quot;</span>)</code></pre></div>
 <p>By comparing Figure <a href="construction-of-expression-matrix.html#fig:cell-filt-comp">4.14</a> and Figure <a href="construction-of-expression-matrix.html#fig:cell-filt-comp-reads">4.21</a>, it is clear that the reads based filtering removed 49 more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.</p>
@@ -1594,7 +1608,7 @@ Figure 4.22: Number of total counts consumed by the top 50 expressed genes
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] knitr_1.17                  scater_1.5.20              
+##  [1] knitr_1.17                  scater_1.5.21              
 ##  [3] ggplot2_2.2.1               SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          Biobase_2.36.2             
@@ -1621,7 +1635,7 @@ Figure 4.22: Number of total counts consumed by the top 50 expressed genes
 ##  [31] backports_1.1.1         assertthat_0.2.0       
 ##  [33] Matrix_1.2-11           lazyeval_0.2.0         
 ##  [35] limma_3.32.10           htmltools_0.3.6        
-##  [37] quantreg_5.33           tools_3.4.2            
+##  [37] quantreg_5.34           tools_3.4.2            
 ##  [39] bindrcpp_0.2            gtable_0.2.0           
 ##  [41] glue_1.1.1              GenomeInfoDbData_0.99.0
 ##  [43] reshape2_1.4.2          dplyr_0.7.4            
@@ -1667,7 +1681,7 @@ Figure 4.22: Number of total counts consumed by the top 50 expressed genes
 <h2><span class="header-section-number">4.10</span> Data visualization</h2>
 <div id="introduction-2" class="section level3">
 <h3><span class="header-section-number">4.10.1</span> Introduction</h3>
-<p>In this chapter we will continue to work with the filtered <code>Tung</code> dataset produced in the previous chapter. We will explore different ways of visualizing the data to allow you to asses what happened to the expression matrix after the quality control step. <a href="https://github.com/davismcc/scater">scater</a> package provides several very useful functions to simplify visualisation.</p>
+<p>In this chapter we will continue to work with the filtered <code>Tung</code> dataset produced in the previous chapter. We will explore different ways of visualizing the data to allow you to asses what happened to the expression matrix after the quality control step. <code>scater</code> package provides several very useful functions to simplify visualisation.</p>
 <p>One important aspect of single-cell RNA-seq is to control for batch effects. Batch effects are technical artefacts that are added to the samples during handling. For example, if two sets of samples were prepared in different labs or even on different days in the same lab, then we may observe greater similarities between the samples that were handled together. In the worst case scenario, batch effects may be <a href="http://f1000research.com/articles/4-121/v1">mistaken</a> for true biological variation. The <code>Tung</code> data allows us to explore these issues in a controlled manner since some of the salient aspects of how the samples were handled have been recorded. Ideally, we expect to see batches from the same individual grouping together and distinct groups corresponding to each individual.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(SingleCellExperiment)
 <span class="kw">library</span>(scater)
@@ -1706,7 +1720,7 @@ Figure 4.24: PCA plot of the tung data
 <p>With log-transformation:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     umi[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -1718,13 +1732,13 @@ Figure 4.25: PCA plot of the tung data
 </p>
 </div>
 <p>Clearly log-transformation is benefitial for our data - it reduces the variance on the first principal component and already separates some biological effects. Moreover, it makes the distribution of the expression values more normal. In the following analysis and chapters we will be using log-transformed raw counts by default.</p>
-<p><strong>However, note that just a log-transformation is not enough to account for different technical factors between the cells (e.g. sequencing depth). Therefore, please do not use <code>log2_counts</code> for your downstream analysis, instead as a minimum suitable data use the <code>exprs</code> slot of the scater object, which not just log-transformed, but also normalised by library size (CPM normalisation). In the course we use <code>log2_counts</code> only for demonstration purposes!</strong></p>
+<p><strong>However, note that just a log-transformation is not enough to account for different technical factors between the cells (e.g. sequencing depth). Therefore, please do not use <code>logcounts_raw</code> for your downstream analysis, instead as a minimum suitable data use the <code>logcounts</code> slot of the <code>SingleCellExperiment</code> object, which not just log-transformed, but also normalised by library size (e.g. CPM normalisation). In the course we use <code>logcounts_raw</code> only for demonstration purposes!</strong></p>
 </div>
 <div id="after-qc" class="section level4">
 <h4><span class="header-section-number">4.10.2.2</span> After QC</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     umi.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -1762,7 +1776,7 @@ Figure 4.28: PCA plot of the tung data (50 genes)
 <h4><span class="header-section-number">4.10.3.1</span> Before QC</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotTSNE</span>(
     umi[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">perplexity =</span> <span class="dv">130</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
@@ -1780,7 +1794,7 @@ Figure 4.29: tSNE map of the tung data
 <h4><span class="header-section-number">4.10.3.2</span> After QC</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotTSNE</span>(
     umi.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">perplexity =</span> <span class="dv">130</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
@@ -1794,7 +1808,7 @@ Figure 4.30: tSNE map of the tung data
 </p>
 </div>
 <p>Interpreting PCA and tSNE plots is often challenging and due to their stochastic and non-linear nature, they are less intuitive. However, in this case it is clear that they provide a similar picture of the data. Comparing Figure <a href="construction-of-expression-matrix.html#fig:expr-overview-tsne-before-qc">4.29</a> and <a href="construction-of-expression-matrix.html#fig:expr-overview-tsne-after-qc">4.30</a>, it is again clear that the samples from NA19098.r2 are no longer outliers after the QC filtering.</p>
-<p>Furthermore tSNE requires you to provide a value of “perplexity” which reflects the number of neighbours used to build the nearest-neighbour network; a high value creates a dense network which clumps cells together while a low value makes the network more sparse allowing groups of cells to separate from each other. <strong>scater</strong> uses a default perplexity of the total number of cells divided by five (rounded down).</p>
+<p>Furthermore tSNE requires you to provide a value of <code>perplexity</code> which reflects the number of neighbours used to build the nearest-neighbour network; a high value creates a dense network which clumps cells together while a low value makes the network more sparse allowing groups of cells to separate from each other. <code>scater</code> uses a default perplexity of the total number of cells divided by five (rounded down).</p>
 <p>You can read more about the pitfalls of using tSNE <a href="http://distill.pub/2016/misread-tsne/">here</a>.</p>
 <p><strong>Exercise 2</strong> How do the tSNE plots change when a perplexity of 10 or 200 is used? How does the choice of perplexity affect the interpretation of the results?</p>
 <p><strong>Our answer</strong></p>
@@ -1839,7 +1853,7 @@ Figure 4.32: tSNE map of the tung data (perplexity = 200)
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.20               ggplot2_2.2.1              
+##  [1] scater_1.5.21               ggplot2_2.2.1              
 ##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [7] Biobase_2.36.2              GenomicRanges_1.28.6       
@@ -1908,7 +1922,7 @@ Figure 4.33: PCA plot of the tung data
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     reads[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -1921,7 +1935,7 @@ Figure 4.34: PCA plot of the tung data
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     reads.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -1934,7 +1948,7 @@ Figure 4.35: PCA plot of the tung data
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotTSNE</span>(
     reads[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">perplexity =</span> <span class="dv">130</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
@@ -1949,7 +1963,7 @@ Figure 4.36: tSNE map of the tung data
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotTSNE</span>(
     reads.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">perplexity =</span> <span class="dv">130</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
@@ -1997,7 +2011,7 @@ Figure 4.32: tSNE map of the tung data (perplexity = 200)
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] knitr_1.17                  scater_1.5.20              
+##  [1] knitr_1.17                  scater_1.5.21              
 ##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [7] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
@@ -2048,7 +2062,7 @@ Figure 4.32: tSNE map of the tung data (perplexity = 200)
 <h2><span class="header-section-number">4.12</span> Identifying confounding factors</h2>
 <div id="introduction-3" class="section level3">
 <h3><span class="header-section-number">4.12.1</span> Introduction</h3>
-<p>There is a large number of potential confounders, artifacts and biases in sc-RNA-seq data. One of the main challenges in analyzing scRNA-seq data stems from the fact that it is difficult to carry out a true technical replicate (why?) to distinguish biological and technical variability. In the previous chapters we considered batch effects and in this chapter we will continue to explore how experimental artifacts can be identified and removed. We will continue using the <a href="https://github.com/davismcc/scater">scater</a> package since it provides a set of methods specifically for quality control of experimental and explanatory variables. Moreover, we will continue to work with the Blischak data that was used in the previous chapter.</p>
+<p>There is a large number of potential confounders, artifacts and biases in sc-RNA-seq data. One of the main challenges in analyzing scRNA-seq data stems from the fact that it is difficult to carry out a true technical replicate (why?) to distinguish biological and technical variability. In the previous chapters we considered batch effects and in this chapter we will continue to explore how experimental artifacts can be identified and removed. We will continue using the <code>scater</code> package since it provides a set of methods specifically for quality control of experimental and explanatory variables. Moreover, we will continue to work with the Blischak data that was used in the previous chapter.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scater, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 umi &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;tung/umi.rds&quot;</span>)
@@ -2061,7 +2075,7 @@ endog_genes &lt;-<span class="st"> </span><span class="op">!</span><span class="
 <p>Let’s first look again at the PCA plot of the QCed dataset:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     umi.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>
 )</code></pre></div>
@@ -2078,7 +2092,7 @@ Figure 4.38: PCA plot of the tung data
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotQC</span>(
     umi.qc[endog_genes, ],
     <span class="dt">type =</span> <span class="st">&quot;find-pcs&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">variable =</span> <span class="st">&quot;total_features&quot;</span>
 )</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:confound-find-pcs-total-features"></span>
@@ -2092,11 +2106,11 @@ Figure 4.39: PC correlation with the number of detected genes
 </div>
 <div id="explanatory-variables" class="section level3">
 <h3><span class="header-section-number">4.12.3</span> Explanatory variables</h3>
-<p>scater can also compute the marginal <span class="math inline">\(R^2\)</span> for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal <span class="math inline">\(R^2\)</span> values for the variables.</p>
+<p><code>scater</code> can also compute the marginal <span class="math inline">\(R^2\)</span> for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal <span class="math inline">\(R^2\)</span> values for the variables.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotQC</span>(
     umi.qc[endog_genes, ],
     <span class="dt">type =</span> <span class="st">&quot;expl&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">variables =</span> <span class="kw">c</span>(
         <span class="st">&quot;total_features&quot;</span>,
         <span class="st">&quot;total_counts&quot;</span>,
@@ -2146,7 +2160,7 @@ Figure 4.40: Explanatory variables
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.20               SingleCellExperiment_0.99.4
+##  [1] scater_1.5.21               SingleCellExperiment_0.99.4
 ##  [3] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [5] matrixStats_0.52.2          GenomicRanges_1.28.6       
 ##  [7] GenomeInfoDb_1.12.3         IRanges_2.10.5             
@@ -2235,7 +2249,7 @@ Figure 4.43: Explanatory variables
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] knitr_1.17                  scater_1.5.20              
+##  [1] knitr_1.17                  scater_1.5.21              
 ##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [7] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
@@ -2285,7 +2299,7 @@ Figure 4.43: Explanatory variables
 <h2><span class="header-section-number">4.14</span> Normalization theory</h2>
 <div id="introduction-4" class="section level3">
 <h3><span class="header-section-number">4.14.1</span> Introduction</h3>
-<p>In the previous chapter we identified important confounding factors and explanatory variables. scater allows one to account for these variables in subsequent statistical models or to condition them out using <code>normaliseExprs()</code>, if so desired. This can be done by providing a design matrix to <code>normaliseExprs()</code>. We are not covering this topic here, but you can try to do it yourself as an exercise.</p>
+<p>In the previous chapter we identified important confounding factors and explanatory variables. <code>scater</code> allows one to account for these variables in subsequent statistical models or to condition them out using <code>normaliseExprs()</code>, if so desired. This can be done by providing a design matrix to <code>normaliseExprs()</code>. We are not covering this topic here, but you can try to do it yourself as an exercise.</p>
 <p>Instead we will explore how simple size-factor normalisations correcting for library size can remove the effects of some of the confounders and explanatory variables.</p>
 </div>
 <div id="library-size-1" class="section level3">
@@ -2305,7 +2319,7 @@ Figure 4.43: Explanatory variables
 <p>One potential drawback of <strong>CPM</strong> is if your sample contains genes that are both very highly expressed and differentially expressed across the cells. In this case, the total molecules in the cell may depend of whether such genes are on/off in the cell and normalizing by total molecules may hide the differential expression of those genes and/or falsely create differential expression for the remaining genes.</p>
 <p><strong>Note</strong>: RPKM, FPKM and TPM are variants on CPM which further adjust counts by the length of the respective gene/transcript.</p>
 <p>To deal with this potentiality several other measures were devised:</p>
-<p>The <strong>size factor (SF)</strong> was proposed and popularized by DESeq (<a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106">Anders and Huber (2010)</a>). First the geometric mean of each gene across all cells is calculated. The size factor for each cell is the median across genes of the ratio of the expression to the gene’s geometric mean. A drawback to this method is that since it uses the geometric mean only genes with non-zero expression values across all cells can be used in its calculation, making it unadvisable for large low-depth scRNASeq experiments. edgeR &amp; scater call this method <strong>RLE</strong> for “relative log expression”.</p>
+<p>The <strong>size factor (SF)</strong> was proposed and popularized by DESeq (<a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106">Anders and Huber (2010)</a>). First the geometric mean of each gene across all cells is calculated. The size factor for each cell is the median across genes of the ratio of the expression to the gene’s geometric mean. A drawback to this method is that since it uses the geometric mean only genes with non-zero expression values across all cells can be used in its calculation, making it unadvisable for large low-depth scRNASeq experiments. <code>edgeR</code> &amp; <code>scater</code> call this method <strong>RLE</strong> for “relative log expression”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_sf &lt;-
 <span class="cf">function</span> (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span>) 
 {
@@ -2352,8 +2366,8 @@ Figure 4.43: Explanatory variables
     <span class="kw">return</span>(cell_RLE)
 }</code></pre></div>
 <p>The <strong>RLE</strong>, <strong>TMM</strong>, and <strong>UQ</strong> size-factor methods were developed for bulk RNA-seq data and, depending on the experimental context, may not be appropriate for single-cell RNA-seq data, as their underlying assumptions may be problematically violated. <a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0947-7">Lun et al (2016)</a> recently published a size-factor normalisation method specifically designed for scRNA-seq data and accounting for single-cell biases, which we will call <strong>LSF</strong> (Lun Sum Factors). Briefly, expression values are summed across pools of cells and the summed values are used to compute normalization size-factors per pool. The pool-based size factors can then be deconvolved into cell-specific size factors, which can be used for normalization in the same way as other size factors.</p>
-<p><strong>scater</strong> acts as a wrapper for the <code>calcNormFactors</code> function from <a href="https://bioconductor.org/packages/release/bioc/html/edgeR.html">edgeR</a> which implements several library size normalization methods making it easy to apply any of these methods to our data. The <strong>LSF</strong> method is implementated in the Bioconductor package <a href="https://bioconductor.org/packages/release/bioc/html/scran.html">scran</a>, which allows seamless integrationinto the <code>scater</code> workflow. (The <code>scran</code> package itself depends on <code>scater</code>).</p>
-<p><strong>Note:</strong> edgeR makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR’s and scater’s “RLE” method which is based on the “size factor” used by <a href="http://bioconductor.org/packages/release/bioc/html/DESeq.html">DESeq</a> may give different results to the <code>estimateSizeFactorsForMatrix</code> method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless <code>lib.size</code> is set at 1 for all cells.</p>
+<p><code>scater</code> acts as a wrapper for the <code>calcNormFactors</code> function from <code>edgeR</code> which implements several library size normalization methods making it easy to apply any of these methods to our data. The <strong>LSF</strong> method is implementated in the Bioconductor package <a href="https://bioconductor.org/packages/release/bioc/html/scran.html">scran</a>, which allows seamless integration into the <code>scater</code> workflow. (The <code>scran</code> package itself depends on <code>scater</code>).</p>
+<p><strong>Note:</strong> <code>edgeR</code> makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR’s and scater’s “RLE” method which is based on the “size factor” used by <a href="http://bioconductor.org/packages/release/bioc/html/DESeq.html">DESeq</a> may give different results to the <code>estimateSizeFactorsForMatrix</code> method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless <code>lib.size</code> is set at 1 for all cells.</p>
 </div>
 </div>
 <div id="normalization-practice-umi" class="section level2">
@@ -2371,7 +2385,7 @@ endog_genes &lt;-<span class="st"> </span><span class="op">!</span><span class="
 <h3><span class="header-section-number">4.15.1</span> Raw</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     umi.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;logcounts_raw&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -2385,11 +2399,10 @@ Figure 4.44: PCA plot of the tung data
 </div>
 <div id="cpm" class="section level3">
 <h3><span class="header-section-number">4.15.2</span> CPM</h3>
-<p><code>calculateCPM</code> from <code>scater</code> package can be used to perform this normalisation. We will save the results to the <code>norm_counts</code> assay:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">assay</span>(umi.qc, <span class="st">&quot;norm_counts&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateCPM</span>(umi.qc, <span class="dt">use.size.factors =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
+<p><code>calculateCPM</code> from <code>scater</code> package can be used to perform this normalisation. We will save the results to the <code>logcounts</code> assay:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">logcounts</span>(umi.qc) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateCPM</span>(umi.qc, <span class="dt">use.size.factors =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
 <span class="kw">plotPCA</span>(
     umi.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;norm_counts&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -2402,7 +2415,7 @@ Figure 4.45: PCA plot of the tung data after CPM normalisation
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
     umi.qc[endog_genes, ], 
-    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">CPM =</span> <span class="st">&quot;norm_counts&quot;</span>),
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;logcounts_raw&quot;</span>, <span class="dt">CPM =</span> <span class="st">&quot;logcounts&quot;</span>),
     <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
 )</code></pre></div>
@@ -2418,14 +2431,15 @@ Figure 4.46: Cell-wise RLE of the tung data
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span><span class="kw">normaliseExprs</span>(
     umi.qc,
     <span class="dt">method =</span> <span class="st">&quot;TMM&quot;</span>,
-    <span class="dt">feature_set =</span> endog_genes
+    <span class="dt">feature_set =</span> endog_genes,
+    <span class="dt">return_log =</span> <span class="ot">TRUE</span>,
+    <span class="dt">return_norm_as_exprs =</span> <span class="ot">TRUE</span>
 )</code></pre></div>
-<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## &#39;ERCC&#39; should have their own size factors</code></pre>
+<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in &#39;ERCC&#39; should have their own size
+## factors</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     umi.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;norm_cpm&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -2438,7 +2452,7 @@ Figure 4.47: PCA plot of the tung data after TMM normalisation
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
     umi.qc[endog_genes, ], 
-    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">TMM =</span> <span class="st">&quot;norm_cpm&quot;</span>),
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;logcounts_raw&quot;</span>, <span class="dt">TMM =</span> <span class="st">&quot;logcounts&quot;</span>),
     <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
 )</code></pre></div>
@@ -2470,7 +2484,7 @@ Figure 4.49: PCA plot of the tung data after LSF normalisation
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
     umi.qc[endog_genes, ], 
-    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">scran =</span> <span class="st">&quot;logcounts&quot;</span>),
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;logcounts_raw&quot;</span>, <span class="dt">scran =</span> <span class="st">&quot;logcounts&quot;</span>),
     <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
 )</code></pre></div>
@@ -2486,14 +2500,15 @@ Figure 4.50: Cell-wise RLE of the tung data
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span><span class="kw">normaliseExprs</span>(
     umi.qc,
     <span class="dt">method =</span> <span class="st">&quot;RLE&quot;</span>, 
-    <span class="dt">feature_set =</span> endog_genes
+    <span class="dt">feature_set =</span> endog_genes,
+    <span class="dt">return_log =</span> <span class="ot">TRUE</span>,
+    <span class="dt">return_norm_as_exprs =</span> <span class="ot">TRUE</span>
 )</code></pre></div>
-<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## &#39;ERCC&#39; should have their own size factors</code></pre>
+<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in &#39;ERCC&#39; should have their own size
+## factors</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     umi.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;norm_cpm&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -2506,7 +2521,7 @@ Figure 4.51: PCA plot of the tung data after RLE normalisation
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
     umi.qc[endog_genes, ], 
-    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">RLE =</span> <span class="st">&quot;norm_cpm&quot;</span>),
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;logcounts_raw&quot;</span>, <span class="dt">RLE =</span> <span class="st">&quot;logcounts&quot;</span>),
     <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
 )</code></pre></div>
@@ -2523,14 +2538,15 @@ Figure 4.52: Cell-wise RLE of the tung data
     umi.qc,
     <span class="dt">method =</span> <span class="st">&quot;upperquartile&quot;</span>, 
     <span class="dt">feature_set =</span> endog_genes,
-    <span class="dt">p =</span> <span class="fl">0.99</span>
+    <span class="dt">p =</span> <span class="fl">0.99</span>,
+    <span class="dt">return_log =</span> <span class="ot">TRUE</span>,
+    <span class="dt">return_norm_as_exprs =</span> <span class="ot">TRUE</span>
 )</code></pre></div>
-<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## &#39;ERCC&#39; should have their own size factors</code></pre>
+<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in &#39;ERCC&#39; should have their own size
+## factors</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
     umi.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;norm_cpm&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -2543,7 +2559,7 @@ Figure 4.53: PCA plot of the tung data after UQ normalisation
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
     umi.qc[endog_genes, ], 
-    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">UQ =</span> <span class="st">&quot;norm_cpm&quot;</span>),
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;logcounts_raw&quot;</span>, <span class="dt">UQ =</span> <span class="st">&quot;logcounts&quot;</span>),
     <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
 )</code></pre></div>
@@ -2570,10 +2586,9 @@ Figure 4.54: Cell-wise RLE of the tung data
     down_sampled_mat &lt;-<span class="st"> </span><span class="kw">apply</span>(expr_mat, <span class="dv">2</span>, down_sample)
     <span class="kw">return</span>(down_sampled_mat)
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">assay</span>(umi.qc, <span class="st">&quot;norm_counts&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">Down_Sample_Matrix</span>(<span class="kw">counts</span>(umi.qc)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">logcounts</span>(umi.qc) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">Down_Sample_Matrix</span>(<span class="kw">counts</span>(umi.qc)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
 <span class="kw">plotPCA</span>(
     umi.qc[endog_genes, ],
-    <span class="dt">exprs_values =</span> <span class="st">&quot;norm_counts&quot;</span>,
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
     <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
     <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>
@@ -2586,7 +2601,7 @@ Figure 4.55: PCA plot of the tung data after downsampling
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
     umi.qc[endog_genes, ], 
-    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">DownSample =</span> <span class="st">&quot;norm_counts&quot;</span>),
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;logcounts_raw&quot;</span>, <span class="dt">DownSample =</span> <span class="st">&quot;logcounts&quot;</span>),
     <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
     <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
 )</code></pre></div>
@@ -2606,7 +2621,7 @@ Figure 4.56: Cell-wise RLE of the tung data
 <li><strong>TPM</strong> - Transcripts Per Kilobase Million (same as <strong>RPKM</strong>, but the order of normalizations is reversed - length first and sequencing depth second)</li>
 </ul>
 <p>These methods are not applicable to our dataset since the end of the transcript which contains the UMI was preferentially sequenced. Furthermore in general these should only be calculated using appropriate quantification software from aligned BAM files not from read counts since often only a portion of the entire gene/transcript is sequenced, not the entire length. If in doubt check for a relationship between gene/transcript length and expression level.</p>
-<p>However, here we show how these normalisations can be calculated using scater. First, we need to find the effective transcript length in Kilobases. However, our dataset containes only gene IDs, therefore we will be using the gene lengths instead of transcripts. scater uses the <a href="https://bioconductor.org/packages/release/bioc/html/biomaRt.html">biomaRt</a> package, which allows one to annotate genes by other attributes:</p>
+<p>However, here we show how these normalisations can be calculated using <code>scater</code>. First, we need to find the effective transcript length in Kilobases. However, our dataset containes only gene IDs, therefore we will be using the gene lengths instead of transcripts. scater uses the <a href="https://bioconductor.org/packages/release/bioc/html/biomaRt.html">biomaRt</a> package, which allows one to annotate genes by other attributes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span><span class="kw">getBMFeatureAnnos</span>(
     umi.qc,
     <span class="dt">filters =</span> <span class="st">&quot;ensembl_gene_id&quot;</span>, 
@@ -2717,7 +2732,7 @@ Figure 4.59: PCA plot of the tung data after FPKM normalisation
 ## 
 ## other attached packages:
 ##  [1] scran_1.5.14                BiocParallel_1.10.1        
-##  [3] scater_1.5.20               SingleCellExperiment_0.99.4
+##  [3] scater_1.5.21               SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          GenomicRanges_1.28.6       
 ##  [9] GenomeInfoDb_1.12.3         IRanges_2.10.5             
@@ -2791,9 +2806,9 @@ Figure 4.61: PCA plot of the tung data after CPM normalisation
 Figure 4.62: Cell-wise RLE of the tung data
 </p>
 </div>
-<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## &#39;ERCC&#39; should have their own size factors</code></pre>
+<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in &#39;ERCC&#39; should have their own size
+## factors</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-tmm-reads"></span>
 <img src="14-exprs-norm-reads_files/figure-html/norm-pca-tmm-reads-1.png" alt="PCA plot of the tung data after TMM normalisation" width="90%" />
 <p class="caption">
@@ -2820,9 +2835,9 @@ Figure 4.65: PCA plot of the tung data after LSF normalisation
 Figure 4.66: Cell-wise RLE of the tung data
 </p>
 </div>
-<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## &#39;ERCC&#39; should have their own size factors</code></pre>
+<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in &#39;ERCC&#39; should have their own size
+## factors</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-rle-reads"></span>
 <img src="14-exprs-norm-reads_files/figure-html/norm-pca-rle-reads-1.png" alt="PCA plot of the tung data after RLE normalisation" width="90%" />
 <p class="caption">
@@ -2835,9 +2850,9 @@ Figure 4.67: PCA plot of the tung data after RLE normalisation
 Figure 4.68: Cell-wise RLE of the tung data
 </p>
 </div>
-<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## &#39;ERCC&#39; should have their own size factors</code></pre>
+<pre><code>## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in &#39;ERCC&#39; should have their own size
+## factors</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-uq-reads"></span>
 <img src="14-exprs-norm-reads_files/figure-html/norm-pca-uq-reads-1.png" alt="PCA plot of the tung data after UQ normalisation" width="90%" />
 <p class="caption">
@@ -2898,7 +2913,7 @@ Figure 4.74: PCA plot of the tung data after FPKM normalisation
 ## 
 ## other attached packages:
 ##  [1] knitr_1.17                  scran_1.5.14               
-##  [3] BiocParallel_1.10.1         scater_1.5.20              
+##  [3] BiocParallel_1.10.1         scater_1.5.21              
 ##  [5] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [7] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
@@ -3248,7 +3263,7 @@ Figure 4.75: Explanatory variables (mnn)
 <div id="effectiveness-4" class="section level3">
 <h3><span class="header-section-number">4.17.9</span> Effectiveness 4</h3>
 <p>Another method to check the efficacy of batch-effect correction is to consider the intermingling of points from different batches in local subsamples of the data. If there are no batch-effects then proportion of cells from each batch in any local region should be equal to the global proportion of cells in each batch.</p>
-<p><code>kBET</code> takes <code>kNN</code> networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). <code>kBET</code> assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, <code>kBET</code> can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply <code>kBET</code> to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, <code>kBET</code> does not determine if biological signal has been preserved.</p>
+<p><code>kBET</code> (<span class="citation">(Buttner et al. <a href="#ref-Buttner2017-ds">2017</a>)</span>) takes <code>kNN</code> networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). <code>kBET</code> assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, <code>kBET</code> can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply <code>kBET</code> to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, <code>kBET</code> does not determine if biological signal has been preserved.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compare_kBET_results &lt;-<span class="st"> </span><span class="cf">function</span>(sce){
     indiv &lt;-<span class="st"> </span><span class="kw">unique</span>(sce<span class="op">$</span>individual)
     norms &lt;-<span class="st"> </span><span class="kw">assayNames</span>(sce) <span class="co"># Get all normalizations</span>
@@ -3302,7 +3317,7 @@ colorset &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st
 </div>
 <div id="exercise-2" class="section level3">
 <h3><span class="header-section-number">4.17.10</span> Exercise</h3>
-<p>Perform the same analysis with read counts of the <code>tung</code> data. Use <code>tung/reads.rds</code> file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.</p>
+<p>Perform the same analysis with read counts of the <code>tung</code> data. Use <code>tung/reads.rds</code> file to load the reads <code>SCE</code> object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.</p>
 </div>
 <div id="sessioninfo-8" class="section level3">
 <h3><span class="header-section-number">4.17.11</span> sessionInfo()</h3>
@@ -3331,7 +3346,7 @@ colorset &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st
 ##  [3] sva_3.24.4                  genefilter_1.58.1          
 ##  [5] mgcv_1.8-22                 nlme_3.1-131               
 ##  [7] kBET_0.99.0                 scran_1.5.14               
-##  [9] scater_1.5.20               SingleCellExperiment_0.99.4
+##  [9] scater_1.5.21               SingleCellExperiment_0.99.4
 ## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
 ## [13] edgeR_3.18.1                limma_3.32.10              
 ## [15] EDASeq_2.10.0               ShortRead_1.34.2           
@@ -3404,6 +3419,9 @@ colorset &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st
 <div id="ref-McCarthy2017-kb">
 <p>McCarthy, Davis J, Kieran R Campbell, Aaron T L Lun, and Quin F Wills. 2017. “Scater: Pre-Processing, Quality Control, Normalization and Visualization of Single-Cell RNA-seq Data in R.” <em>Bioinformatics</em>, 14~jan.</p>
 </div>
+<div id="ref-Buttner2017-ds">
+<p>Buttner, Maren, Zhichao Miao, Alexander Wolf, Sarah A Teichmann, and Fabian J Theis. 2017. “Assessment of Batch-Correction Methods for scRNA-seq Data with a New Test Metric.” <em>bioRxiv</em>.</p>
+</div>
 </div>
             </section>
 
@@ -3411,7 +3429,7 @@ colorset &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st
         </div>
       </div>
 <a href="introduction-to-single-cell-rna-seq.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="biological-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="dealing-with-confounders-reads.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

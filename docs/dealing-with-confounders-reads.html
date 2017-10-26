@@ -22,18 +22,18 @@
   
   
 
-<meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
+<meta name="author" content="Vladimir Kiselev (wikiselev), Tallulah Andrews, Davis McCarthy (davisjmcc), Maren Büttner (marenbuettner) and Martin Hemberg (m_hemberg)">
 
 
-<meta name="date" content="2017-10-12">
+<meta name="date" content="2017-10-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="dealing-with-confounders.html">
-<link rel="next" href="clustering-introduction.html">
+<link rel="prev" href="construction-of-expression-matrix.html">
+<link rel="next" href="biological-analysis.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -137,16 +137,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2" data-path="technical-requirements.html"><a href="technical-requirements.html"><i class="fa fa-check"></i><b>2</b> Technical requirements</a><ul>
 <li class="chapter" data-level="2.1" data-path="technical-requirements.html"><a href="technical-requirements.html#r-based"><i class="fa fa-check"></i><b>2.1</b> R-based</a></li>
 <li class="chapter" data-level="2.2" data-path="technical-requirements.html"><a href="technical-requirements.html#docker-image-1"><i class="fa fa-check"></i><b>2.2</b> Docker image</a></li>
-<li class="chapter" data-level="2.3" data-path="technical-requirements.html"><a href="technical-requirements.html#manual-installation"><i class="fa fa-check"></i><b>2.3</b> Manual installation</a><ul>
-<li class="chapter" data-level="2.3.1" data-path="technical-requirements.html"><a href="technical-requirements.html#general"><i class="fa fa-check"></i><b>2.3.1</b> General</a></li>
-<li class="chapter" data-level="2.3.2" data-path="technical-requirements.html"><a href="technical-requirements.html#plotting"><i class="fa fa-check"></i><b>2.3.2</b> Plotting</a></li>
-<li class="chapter" data-level="2.3.3" data-path="technical-requirements.html"><a href="technical-requirements.html#qc-and-normalisation"><i class="fa fa-check"></i><b>2.3.3</b> QC and normalisation</a></li>
-<li class="chapter" data-level="2.3.4" data-path="technical-requirements.html"><a href="technical-requirements.html#clustering"><i class="fa fa-check"></i><b>2.3.4</b> Clustering</a></li>
-<li class="chapter" data-level="2.3.5" data-path="technical-requirements.html"><a href="technical-requirements.html#dropouts"><i class="fa fa-check"></i><b>2.3.5</b> Dropouts</a></li>
-<li class="chapter" data-level="2.3.6" data-path="technical-requirements.html"><a href="technical-requirements.html#pseudotime"><i class="fa fa-check"></i><b>2.3.6</b> Pseudotime</a></li>
-<li class="chapter" data-level="2.3.7" data-path="technical-requirements.html"><a href="technical-requirements.html#differential-expression"><i class="fa fa-check"></i><b>2.3.7</b> Differential Expression</a></li>
-</ul></li>
-<li class="chapter" data-level="2.4" data-path="technical-requirements.html"><a href="technical-requirements.html#extra-tools"><i class="fa fa-check"></i><b>2.4</b> Extra tools</a></li>
+<li class="chapter" data-level="2.3" data-path="technical-requirements.html"><a href="technical-requirements.html#manual-installation"><i class="fa fa-check"></i><b>2.3</b> Manual installation</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html"><i class="fa fa-check"></i><b>3</b> Introduction to single-cell RNA-seq</a><ul>
 <li class="chapter" data-level="3.1" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#bulk-rna-seq"><i class="fa fa-check"></i><b>3.1</b> Bulk RNA-seq</a></li>
@@ -154,198 +145,185 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#workflow"><i class="fa fa-check"></i><b>3.3</b> Workflow</a></li>
 <li class="chapter" data-level="3.4" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#computational-analysis"><i class="fa fa-check"></i><b>3.4</b> Computational Analysis</a></li>
 <li class="chapter" data-level="3.5" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#challenges"><i class="fa fa-check"></i><b>3.5</b> Challenges</a></li>
+<li class="chapter" data-level="3.6" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#experimental-methods"><i class="fa fa-check"></i><b>3.6</b> Experimental methods</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#overview-of-experimental-methods-for-generating-scrna-seq-data"><i class="fa fa-check"></i><b>3.6.1</b> Overview of experimental methods for generating scRNA-seq data</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="experimental-methods.html"><a href="experimental-methods.html"><i class="fa fa-check"></i><b>4</b> Experimental methods</a><ul>
-<li class="chapter" data-level="4.1" data-path="experimental-methods.html"><a href="experimental-methods.html#overview-of-experimental-methods-for-generating-scrna-seq-data"><i class="fa fa-check"></i><b>4.1</b> Overview of experimental methods for generating scRNA-seq data</a></li>
-<li class="chapter" data-level="4.2" data-path="experimental-methods.html"><a href="experimental-methods.html#what-platform-to-use-for-my-experiment"><i class="fa fa-check"></i><b>4.2</b> What platform to use for my experiment?</a></li>
+<li class="chapter" data-level="3.7" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#what-platform-to-use-for-my-experiment"><i class="fa fa-check"></i><b>3.7</b> What platform to use for my experiment?</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html"><i class="fa fa-check"></i><b>5</b> Construction of expression matrix</a><ul>
-<li class="chapter" data-level="5.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-qc"><i class="fa fa-check"></i><b>5.1</b> Reads QC</a></li>
-<li class="chapter" data-level="5.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-alignment"><i class="fa fa-check"></i><b>5.2</b> Reads alignment</a></li>
-<li class="chapter" data-level="5.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#alignment-example"><i class="fa fa-check"></i><b>5.3</b> Alignment example</a></li>
-<li class="chapter" data-level="5.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-qc"><i class="fa fa-check"></i><b>5.4</b> Mapping QC</a></li>
-<li class="chapter" data-level="5.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-quantification"><i class="fa fa-check"></i><b>5.5</b> Reads quantification</a></li>
+<li class="chapter" data-level="4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html"><i class="fa fa-check"></i><b>4</b> Construction of expression matrix</a><ul>
+<li class="chapter" data-level="4.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-qc"><i class="fa fa-check"></i><b>4.1</b> Reads QC</a></li>
+<li class="chapter" data-level="4.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-alignment"><i class="fa fa-check"></i><b>4.2</b> Reads alignment</a></li>
+<li class="chapter" data-level="4.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#alignment-example"><i class="fa fa-check"></i><b>4.3</b> Alignment example</a></li>
+<li class="chapter" data-level="4.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-qc"><i class="fa fa-check"></i><b>4.4</b> Mapping QC</a></li>
+<li class="chapter" data-level="4.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-quantification"><i class="fa fa-check"></i><b>4.5</b> Reads quantification</a></li>
+<li class="chapter" data-level="4.6" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#umichapter"><i class="fa fa-check"></i><b>4.6</b> Unique Molecular Identifiers (UMIs)</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#introduction"><i class="fa fa-check"></i><b>4.6.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.6.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-barcodes"><i class="fa fa-check"></i><b>4.6.2</b> Mapping Barcodes</a></li>
+<li class="chapter" data-level="4.6.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#counting-barcodes"><i class="fa fa-check"></i><b>4.6.3</b> Counting Barcodes</a></li>
+<li class="chapter" data-level="4.6.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#correcting-for-errors"><i class="fa fa-check"></i><b>4.6.4</b> Correcting for Errors</a></li>
+<li class="chapter" data-level="4.6.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#downstream-analysis"><i class="fa fa-check"></i><b>4.6.5</b> Downstream Analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html"><i class="fa fa-check"></i><b>6</b> Unique Molecular Identifiers (UMIs)</a><ul>
-<li class="chapter" data-level="6.1" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
-<li class="chapter" data-level="6.2" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#mapping-barcodes"><i class="fa fa-check"></i><b>6.2</b> Mapping Barcodes</a></li>
-<li class="chapter" data-level="6.3" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#counting-barcodes"><i class="fa fa-check"></i><b>6.3</b> Counting Barcodes</a></li>
-<li class="chapter" data-level="6.4" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#correcting-for-errors"><i class="fa fa-check"></i><b>6.4</b> Correcting for Errors</a></li>
-<li class="chapter" data-level="6.5" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#downstream-analysis"><i class="fa fa-check"></i><b>6.5</b> Downstream Analysis</a></li>
+<li class="chapter" data-level="4.7" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#bioconductor-singlecellexperiment-and-scater"><i class="fa fa-check"></i><b>4.7</b> Bioconductor, <code>SingleCellExperiment</code> and <code>scater</code></a><ul>
+<li class="chapter" data-level="4.7.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#bioconductor"><i class="fa fa-check"></i><b>4.7.1</b> Bioconductor</a></li>
+<li class="chapter" data-level="4.7.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#singlecellexperiment-class"><i class="fa fa-check"></i><b>4.7.2</b> <code>SingleCellExperiment</code> class</a></li>
+<li class="chapter" data-level="4.7.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#scater-package"><i class="fa fa-check"></i><b>4.7.3</b> <code>scater</code> package</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="scater-package.html"><a href="scater-package.html"><i class="fa fa-check"></i><b>7</b> scater package</a><ul>
-<li class="chapter" data-level="7.1" data-path="scater-package.html"><a href="scater-package.html#introduction-1"><i class="fa fa-check"></i><b>7.1</b> Introduction</a></li>
-<li class="chapter" data-level="7.2" data-path="scater-package.html"><a href="scater-package.html#scater-workflow"><i class="fa fa-check"></i><b>7.2</b> scater workflow</a></li>
-<li class="chapter" data-level="7.3" data-path="scater-package.html"><a href="scater-package.html#terminology"><i class="fa fa-check"></i><b>7.3</b> Terminology</a></li>
-<li class="chapter" data-level="7.4" data-path="scater-package.html"><a href="scater-package.html#sceset-class"><i class="fa fa-check"></i><b>7.4</b> SCESet class</a></li>
+<li class="chapter" data-level="4.8" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#exprs-qc"><i class="fa fa-check"></i><b>4.8</b> Expression QC (UMI)</a><ul>
+<li class="chapter" data-level="4.8.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#introduction-1"><i class="fa fa-check"></i><b>4.8.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.8.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#tung-dataset"><i class="fa fa-check"></i><b>4.8.2</b> Tung dataset</a></li>
+<li class="chapter" data-level="4.8.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#cell-qc"><i class="fa fa-check"></i><b>4.8.3</b> Cell QC</a></li>
+<li class="chapter" data-level="4.8.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#cell-filtering"><i class="fa fa-check"></i><b>4.8.4</b> Cell filtering</a></li>
+<li class="chapter" data-level="4.8.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#compare-filterings"><i class="fa fa-check"></i><b>4.8.5</b> Compare filterings</a></li>
+<li class="chapter" data-level="4.8.6" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#gene-analysis"><i class="fa fa-check"></i><b>4.8.6</b> Gene analysis</a></li>
+<li class="chapter" data-level="4.8.7" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#save-the-data"><i class="fa fa-check"></i><b>4.8.7</b> Save the data</a></li>
+<li class="chapter" data-level="4.8.8" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#big-exercise"><i class="fa fa-check"></i><b>4.8.8</b> Big Exercise</a></li>
+<li class="chapter" data-level="4.8.9" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo"><i class="fa fa-check"></i><b>4.8.9</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="exprs-qc.html"><a href="exprs-qc.html"><i class="fa fa-check"></i><b>8</b> Expression QC (UMI)</a><ul>
-<li class="chapter" data-level="8.1" data-path="exprs-qc.html"><a href="exprs-qc.html#introduction-2"><i class="fa fa-check"></i><b>8.1</b> Introduction</a></li>
-<li class="chapter" data-level="8.2" data-path="exprs-qc.html"><a href="exprs-qc.html#tung-dataset"><i class="fa fa-check"></i><b>8.2</b> Tung dataset</a></li>
-<li class="chapter" data-level="8.3" data-path="exprs-qc.html"><a href="exprs-qc.html#cell-qc"><i class="fa fa-check"></i><b>8.3</b> Cell QC</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="exprs-qc.html"><a href="exprs-qc.html#library-size"><i class="fa fa-check"></i><b>8.3.1</b> Library size</a></li>
-<li class="chapter" data-level="8.3.2" data-path="exprs-qc.html"><a href="exprs-qc.html#detected-genes-1"><i class="fa fa-check"></i><b>8.3.2</b> Detected genes (1)</a></li>
-<li class="chapter" data-level="8.3.3" data-path="exprs-qc.html"><a href="exprs-qc.html#erccs-and-mts"><i class="fa fa-check"></i><b>8.3.3</b> ERCCs and MTs</a></li>
+<li class="chapter" data-level="4.9" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#expression-qc-reads"><i class="fa fa-check"></i><b>4.9</b> Expression QC (Reads)</a><ul>
+<li class="chapter" data-level="4.9.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-1"><i class="fa fa-check"></i><b>4.9.1</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="8.4" data-path="exprs-qc.html"><a href="exprs-qc.html#cell-filtering"><i class="fa fa-check"></i><b>8.4</b> Cell filtering</a><ul>
-<li class="chapter" data-level="8.4.1" data-path="exprs-qc.html"><a href="exprs-qc.html#manual"><i class="fa fa-check"></i><b>8.4.1</b> Manual</a></li>
-<li class="chapter" data-level="8.4.2" data-path="exprs-qc.html"><a href="exprs-qc.html#default-thresholds"><i class="fa fa-check"></i><b>8.4.2</b> Default Thresholds</a></li>
-<li class="chapter" data-level="8.4.3" data-path="exprs-qc.html"><a href="exprs-qc.html#automatic"><i class="fa fa-check"></i><b>8.4.3</b> Automatic</a></li>
+<li class="chapter" data-level="4.10" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#data-visualization"><i class="fa fa-check"></i><b>4.10</b> Data visualization</a><ul>
+<li class="chapter" data-level="4.10.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#introduction-2"><i class="fa fa-check"></i><b>4.10.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.10.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#visual-pca"><i class="fa fa-check"></i><b>4.10.2</b> PCA plot</a></li>
+<li class="chapter" data-level="4.10.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#visual-tsne"><i class="fa fa-check"></i><b>4.10.3</b> tSNE map</a></li>
+<li class="chapter" data-level="4.10.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#big-exercise-1"><i class="fa fa-check"></i><b>4.10.4</b> Big Exercise</a></li>
+<li class="chapter" data-level="4.10.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-2"><i class="fa fa-check"></i><b>4.10.5</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="8.5" data-path="exprs-qc.html"><a href="exprs-qc.html#compare-filterings"><i class="fa fa-check"></i><b>8.5</b> Compare filterings</a></li>
-<li class="chapter" data-level="8.6" data-path="exprs-qc.html"><a href="exprs-qc.html#gene-analysis"><i class="fa fa-check"></i><b>8.6</b> Gene analysis</a><ul>
-<li class="chapter" data-level="8.6.1" data-path="exprs-qc.html"><a href="exprs-qc.html#gene-expression"><i class="fa fa-check"></i><b>8.6.1</b> Gene expression</a></li>
-<li class="chapter" data-level="8.6.2" data-path="exprs-qc.html"><a href="exprs-qc.html#gene-filtering"><i class="fa fa-check"></i><b>8.6.2</b> Gene filtering</a></li>
+<li class="chapter" data-level="4.11" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#data-visualization-reads"><i class="fa fa-check"></i><b>4.11</b> Data visualization (Reads)</a><ul>
+<li class="chapter" data-level="4.11.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-3"><i class="fa fa-check"></i><b>4.11.1</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="8.7" data-path="exprs-qc.html"><a href="exprs-qc.html#save-the-data"><i class="fa fa-check"></i><b>8.7</b> Save the data</a></li>
-<li class="chapter" data-level="8.8" data-path="exprs-qc.html"><a href="exprs-qc.html#big-exercise"><i class="fa fa-check"></i><b>8.8</b> Big Exercise</a></li>
+<li class="chapter" data-level="4.12" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#identifying-confounding-factors"><i class="fa fa-check"></i><b>4.12</b> Identifying confounding factors</a><ul>
+<li class="chapter" data-level="4.12.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#introduction-3"><i class="fa fa-check"></i><b>4.12.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.12.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#correlations-with-pcs"><i class="fa fa-check"></i><b>4.12.2</b> Correlations with PCs</a></li>
+<li class="chapter" data-level="4.12.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#explanatory-variables"><i class="fa fa-check"></i><b>4.12.3</b> Explanatory variables</a></li>
+<li class="chapter" data-level="4.12.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#other-confounders"><i class="fa fa-check"></i><b>4.12.4</b> Other confounders</a></li>
+<li class="chapter" data-level="4.12.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#exercise"><i class="fa fa-check"></i><b>4.12.5</b> Exercise</a></li>
+<li class="chapter" data-level="4.12.6" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-4"><i class="fa fa-check"></i><b>4.12.6</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="expression-qc-reads.html"><a href="expression-qc-reads.html"><i class="fa fa-check"></i><b>9</b> Expression QC (Reads)</a></li>
-<li class="chapter" data-level="10" data-path="data-visualization.html"><a href="data-visualization.html"><i class="fa fa-check"></i><b>10</b> Data visualization</a><ul>
-<li class="chapter" data-level="10.1" data-path="data-visualization.html"><a href="data-visualization.html#introduction-3"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
-<li class="chapter" data-level="10.2" data-path="data-visualization.html"><a href="data-visualization.html#visual-pca"><i class="fa fa-check"></i><b>10.2</b> PCA plot</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="data-visualization.html"><a href="data-visualization.html#before-qc"><i class="fa fa-check"></i><b>10.2.1</b> Before QC</a></li>
-<li class="chapter" data-level="10.2.2" data-path="data-visualization.html"><a href="data-visualization.html#after-qc"><i class="fa fa-check"></i><b>10.2.2</b> After QC</a></li>
+<li class="chapter" data-level="4.13" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#identifying-confounding-factors-reads"><i class="fa fa-check"></i><b>4.13</b> Identifying confounding factors (Reads)</a><ul>
+<li class="chapter" data-level="4.13.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-5"><i class="fa fa-check"></i><b>4.13.1</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="data-visualization.html"><a href="data-visualization.html#visual-tsne"><i class="fa fa-check"></i><b>10.3</b> tSNE map</a><ul>
-<li class="chapter" data-level="10.3.1" data-path="data-visualization.html"><a href="data-visualization.html#before-qc-1"><i class="fa fa-check"></i><b>10.3.1</b> Before QC</a></li>
-<li class="chapter" data-level="10.3.2" data-path="data-visualization.html"><a href="data-visualization.html#after-qc-1"><i class="fa fa-check"></i><b>10.3.2</b> After QC</a></li>
+<li class="chapter" data-level="4.14" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#normalization-theory"><i class="fa fa-check"></i><b>4.14</b> Normalization theory</a><ul>
+<li class="chapter" data-level="4.14.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#introduction-4"><i class="fa fa-check"></i><b>4.14.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.14.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#library-size-1"><i class="fa fa-check"></i><b>4.14.2</b> Library size</a></li>
+<li class="chapter" data-level="4.14.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#normalisations"><i class="fa fa-check"></i><b>4.14.3</b> Normalisations</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="data-visualization.html"><a href="data-visualization.html#big-exercise-1"><i class="fa fa-check"></i><b>10.4</b> Big Exercise</a></li>
+<li class="chapter" data-level="4.15" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#normalization-practice-umi"><i class="fa fa-check"></i><b>4.15</b> Normalization practice (UMI)</a><ul>
+<li class="chapter" data-level="4.15.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#raw"><i class="fa fa-check"></i><b>4.15.1</b> Raw</a></li>
+<li class="chapter" data-level="4.15.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#cpm"><i class="fa fa-check"></i><b>4.15.2</b> CPM</a></li>
+<li class="chapter" data-level="4.15.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#tmm"><i class="fa fa-check"></i><b>4.15.3</b> TMM</a></li>
+<li class="chapter" data-level="4.15.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#scran"><i class="fa fa-check"></i><b>4.15.4</b> scran</a></li>
+<li class="chapter" data-level="4.15.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#size-factor-rle"><i class="fa fa-check"></i><b>4.15.5</b> Size-factor (RLE)</a></li>
+<li class="chapter" data-level="4.15.6" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#upperquantile"><i class="fa fa-check"></i><b>4.15.6</b> Upperquantile</a></li>
+<li class="chapter" data-level="4.15.7" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#downsampling"><i class="fa fa-check"></i><b>4.15.7</b> Downsampling</a></li>
+<li class="chapter" data-level="4.15.8" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#normalizing-for-genetranscript-length"><i class="fa fa-check"></i><b>4.15.8</b> Normalizing for gene/transcript length</a></li>
+<li class="chapter" data-level="4.15.9" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#exercise-1"><i class="fa fa-check"></i><b>4.15.9</b> Exercise</a></li>
+<li class="chapter" data-level="4.15.10" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-6"><i class="fa fa-check"></i><b>4.15.10</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="data-visualization-reads.html"><a href="data-visualization-reads.html"><i class="fa fa-check"></i><b>11</b> Data visualization (Reads)</a></li>
-<li class="chapter" data-level="12" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html"><i class="fa fa-check"></i><b>12</b> Identifying confounding factors</a><ul>
-<li class="chapter" data-level="12.1" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#introduction-4"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
-<li class="chapter" data-level="12.2" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#correlations-with-pcs"><i class="fa fa-check"></i><b>12.2</b> Correlations with PCs</a><ul>
-<li class="chapter" data-level="12.2.1" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#detected-genes"><i class="fa fa-check"></i><b>12.2.1</b> Detected genes</a></li>
+<li class="chapter" data-level="4.16" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#normalization-practice-reads"><i class="fa fa-check"></i><b>4.16</b> Normalization practice (Reads)</a><ul>
+<li class="chapter" data-level="4.16.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-7"><i class="fa fa-check"></i><b>4.16.1</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="12.3" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#explanatory-variables"><i class="fa fa-check"></i><b>12.3</b> Explanatory variables</a></li>
-<li class="chapter" data-level="12.4" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#other-confounders"><i class="fa fa-check"></i><b>12.4</b> Other confounders</a></li>
-<li class="chapter" data-level="12.5" data-path="identifying-confounding-factors.html"><a href="identifying-confounding-factors.html#exercise"><i class="fa fa-check"></i><b>12.5</b> Exercise</a></li>
-</ul></li>
-<li class="chapter" data-level="13" data-path="identifying-confounding-factors-reads.html"><a href="identifying-confounding-factors-reads.html"><i class="fa fa-check"></i><b>13</b> Identifying confounding factors (Reads)</a></li>
-<li class="chapter" data-level="14" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html"><i class="fa fa-check"></i><b>14</b> Normalization for library size</a><ul>
-<li class="chapter" data-level="14.1" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#introduction-5"><i class="fa fa-check"></i><b>14.1</b> Introduction</a></li>
-<li class="chapter" data-level="14.2" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#library-size-1"><i class="fa fa-check"></i><b>14.2</b> Library size</a></li>
-<li class="chapter" data-level="14.3" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#normalisations"><i class="fa fa-check"></i><b>14.3</b> Normalisations</a><ul>
-<li class="chapter" data-level="14.3.1" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#raw"><i class="fa fa-check"></i><b>14.3.1</b> Raw</a></li>
-<li class="chapter" data-level="14.3.2" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#cpm"><i class="fa fa-check"></i><b>14.3.2</b> CPM</a></li>
-<li class="chapter" data-level="14.3.3" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#tmm"><i class="fa fa-check"></i><b>14.3.3</b> TMM</a></li>
-<li class="chapter" data-level="14.3.4" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#scran"><i class="fa fa-check"></i><b>14.3.4</b> scran</a></li>
-<li class="chapter" data-level="14.3.5" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#size-factor-rle"><i class="fa fa-check"></i><b>14.3.5</b> Size-factor (RLE)</a></li>
-<li class="chapter" data-level="14.3.6" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#upperquantile"><i class="fa fa-check"></i><b>14.3.6</b> Upperquantile</a></li>
-</ul></li>
-<li class="chapter" data-level="14.4" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#downsampling"><i class="fa fa-check"></i><b>14.4</b> Downsampling</a></li>
-<li class="chapter" data-level="14.5" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#normalizing-for-genetranscript-length"><i class="fa fa-check"></i><b>14.5</b> Normalizing for gene/transcript length</a></li>
-<li class="chapter" data-level="14.6" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#exercise-1"><i class="fa fa-check"></i><b>14.6</b> Exercise</a></li>
-</ul></li>
-<li class="chapter" data-level="15" data-path="normalization-for-library-size-reads.html"><a href="normalization-for-library-size-reads.html"><i class="fa fa-check"></i><b>15</b> Normalization for library size (Reads)</a></li>
-<li class="chapter" data-level="16" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html"><i class="fa fa-check"></i><b>16</b> Dealing with confounders</a><ul>
-<li class="chapter" data-level="16.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#introduction-6"><i class="fa fa-check"></i><b>16.1</b> Introduction</a><ul>
-<li class="chapter" data-level="16.1.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#advantages-and-disadvantages-of-using-spike-ins-to-remove-confounders"><i class="fa fa-check"></i><b>16.1.1</b> Advantages and disadvantages of using spike-ins to remove confounders</a></li>
-<li class="chapter" data-level="16.1.2" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#how-to-evaluate-and-compare-confounder-removal-strategies"><i class="fa fa-check"></i><b>16.1.2</b> How to evaluate and compare confounder removal strategies</a></li>
-</ul></li>
-<li class="chapter" data-level="16.2" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#remove-unwanted-variation"><i class="fa fa-check"></i><b>16.2</b> Remove Unwanted Variation</a><ul>
-<li class="chapter" data-level="16.2.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#ruvg"><i class="fa fa-check"></i><b>16.2.1</b> RUVg</a></li>
-<li class="chapter" data-level="16.2.2" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#ruvs"><i class="fa fa-check"></i><b>16.2.2</b> RUVs</a></li>
-</ul></li>
-<li class="chapter" data-level="16.3" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#effectiveness-1"><i class="fa fa-check"></i><b>16.3</b> Effectiveness 1</a></li>
-<li class="chapter" data-level="16.4" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#effectiveness-2"><i class="fa fa-check"></i><b>16.4</b> Effectiveness 2</a></li>
-<li class="chapter" data-level="16.5" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#effectiveness-3"><i class="fa fa-check"></i><b>16.5</b> Effectiveness 3</a><ul>
-<li class="chapter" data-level="16.5.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#de-raw-counts"><i class="fa fa-check"></i><b>16.5.1</b> DE (raw counts)</a></li>
-<li class="chapter" data-level="16.5.2" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#de-ruvg-k-2"><i class="fa fa-check"></i><b>16.5.2</b> DE (RUVg, k = 2)</a></li>
-<li class="chapter" data-level="16.5.3" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#de-ruvs-k-2"><i class="fa fa-check"></i><b>16.5.3</b> DE (RUVs, k = 2)</a></li>
-</ul></li>
-<li class="chapter" data-level="16.6" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#exercise-2"><i class="fa fa-check"></i><b>16.6</b> Exercise</a></li>
-</ul></li>
-<li class="chapter" data-level="17" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html"><i class="fa fa-check"></i><b>17</b> Dealing with confounders (Reads)</a><ul>
-<li class="chapter" data-level="17.1" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#remove-unwanted-variation-1"><i class="fa fa-check"></i><b>17.1</b> Remove Unwanted Variation</a><ul>
-<li class="chapter" data-level="17.1.1" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#ruvg-1"><i class="fa fa-check"></i><b>17.1.1</b> RUVg</a></li>
-<li class="chapter" data-level="17.1.2" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#ruvs-1"><i class="fa fa-check"></i><b>17.1.2</b> RUVs</a></li>
-</ul></li>
-<li class="chapter" data-level="17.2" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-1-1"><i class="fa fa-check"></i><b>17.2</b> Effectiveness 1</a></li>
-<li class="chapter" data-level="17.3" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-2-1"><i class="fa fa-check"></i><b>17.3</b> Effectiveness 2</a></li>
-<li class="chapter" data-level="17.4" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-3-1"><i class="fa fa-check"></i><b>17.4</b> Effectiveness 3</a><ul>
-<li class="chapter" data-level="17.4.1" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#de-raw-counts-1"><i class="fa fa-check"></i><b>17.4.1</b> DE (raw counts)</a></li>
-<li class="chapter" data-level="17.4.2" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#de-ruvg-k-2-1"><i class="fa fa-check"></i><b>17.4.2</b> DE (RUVg, k = 2)</a></li>
-<li class="chapter" data-level="17.4.3" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#de-ruvs-k-2-1"><i class="fa fa-check"></i><b>17.4.3</b> DE (RUVs, k = 2)</a></li>
+<li class="chapter" data-level="4.17" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#dealing-with-confounders"><i class="fa fa-check"></i><b>4.17</b> Dealing with confounders</a><ul>
+<li class="chapter" data-level="4.17.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#introduction-5"><i class="fa fa-check"></i><b>4.17.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.17.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#remove-unwanted-variation"><i class="fa fa-check"></i><b>4.17.2</b> Remove Unwanted Variation</a></li>
+<li class="chapter" data-level="4.17.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#combat"><i class="fa fa-check"></i><b>4.17.3</b> Combat</a></li>
+<li class="chapter" data-level="4.17.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mnncorrect"><i class="fa fa-check"></i><b>4.17.4</b> mnnCorrect</a></li>
+<li class="chapter" data-level="4.17.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#glm"><i class="fa fa-check"></i><b>4.17.5</b> GLM</a></li>
+<li class="chapter" data-level="4.17.6" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#effectiveness-1"><i class="fa fa-check"></i><b>4.17.6</b> Effectiveness 1</a></li>
+<li class="chapter" data-level="4.17.7" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#effectiveness-2"><i class="fa fa-check"></i><b>4.17.7</b> Effectiveness 2</a></li>
+<li class="chapter" data-level="4.17.8" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#effectiveness-3"><i class="fa fa-check"></i><b>4.17.8</b> Effectiveness 3</a></li>
+<li class="chapter" data-level="4.17.9" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#effectiveness-4"><i class="fa fa-check"></i><b>4.17.9</b> Effectiveness 4</a></li>
+<li class="chapter" data-level="4.17.10" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#exercise-2"><i class="fa fa-check"></i><b>4.17.10</b> Exercise</a></li>
+<li class="chapter" data-level="4.17.11" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-8"><i class="fa fa-check"></i><b>4.17.11</b> sessionInfo()</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="18" data-path="clustering-introduction.html"><a href="clustering-introduction.html"><i class="fa fa-check"></i><b>18</b> Clustering Introduction</a><ul>
-<li class="chapter" data-level="18.1" data-path="clustering-introduction.html"><a href="clustering-introduction.html#introduction-7"><i class="fa fa-check"></i><b>18.1</b> Introduction</a></li>
-<li class="chapter" data-level="18.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#dimensionality-reductions"><i class="fa fa-check"></i><b>18.2</b> Dimensionality reductions</a></li>
-<li class="chapter" data-level="18.3" data-path="clustering-introduction.html"><a href="clustering-introduction.html#clustering-methods"><i class="fa fa-check"></i><b>18.3</b> Clustering methods</a><ul>
-<li class="chapter" data-level="18.3.1" data-path="clustering-introduction.html"><a href="clustering-introduction.html#hierarchical-clustering"><i class="fa fa-check"></i><b>18.3.1</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="18.3.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#k-means"><i class="fa fa-check"></i><b>18.3.2</b> k-means</a></li>
-<li class="chapter" data-level="18.3.3" data-path="clustering-introduction.html"><a href="clustering-introduction.html#graph-based-methods"><i class="fa fa-check"></i><b>18.3.3</b> Graph-based methods</a></li>
-</ul></li>
-<li class="chapter" data-level="18.4" data-path="clustering-introduction.html"><a href="clustering-introduction.html#challenges-in-clustering"><i class="fa fa-check"></i><b>18.4</b> Challenges in clustering</a></li>
-<li class="chapter" data-level="18.5" data-path="clustering-introduction.html"><a href="clustering-introduction.html#tools-for-scrna-seq-data"><i class="fa fa-check"></i><b>18.5</b> Tools for scRNA-seq data</a><ul>
-<li class="chapter" data-level="18.5.1" data-path="clustering-introduction.html"><a href="clustering-introduction.html#sincera"><i class="fa fa-check"></i><b>18.5.1</b> <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a></a></li>
-<li class="chapter" data-level="18.5.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#pcareduce"><i class="fa fa-check"></i><b>18.5.2</b> <a href="https://github.com/JustinaZ/pcaReduce">pcaReduce</a></a></li>
-<li class="chapter" data-level="18.5.3" data-path="clustering-introduction.html"><a href="clustering-introduction.html#sc3"><i class="fa fa-check"></i><b>18.5.3</b> <a href="http://bioconductor.org/packages/SC3/">SC3</a></a></li>
-<li class="chapter" data-level="18.5.4" data-path="clustering-introduction.html"><a href="clustering-introduction.html#tsne-k-means"><i class="fa fa-check"></i><b>18.5.4</b> tSNE + k-means</a></li>
-<li class="chapter" data-level="18.5.5" data-path="clustering-introduction.html"><a href="clustering-introduction.html#seurat"><i class="fa fa-check"></i><b>18.5.5</b> <a href="https://github.com/satijalab/seurat">SEURAT</a></a></li>
-<li class="chapter" data-level="18.5.6" data-path="clustering-introduction.html"><a href="clustering-introduction.html#snn-cliq"><i class="fa fa-check"></i><b>18.5.6</b> <a href="http://bioinfo.uncc.edu/SNNCliq/">SNN-Cliq</a></a></li>
+<li class="chapter" data-level="5" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html"><i class="fa fa-check"></i><b>5</b> Dealing with confounders (Reads)</a><ul>
+<li class="chapter" data-level="5.1" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#remove-unwanted-variation-1"><i class="fa fa-check"></i><b>5.1</b> Remove Unwanted Variation</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#ruvg-1"><i class="fa fa-check"></i><b>5.1.1</b> RUVg</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#ruvs-1"><i class="fa fa-check"></i><b>5.1.2</b> RUVs</a></li>
+<li class="chapter" data-level="5.1.3" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#combat-1"><i class="fa fa-check"></i><b>5.1.3</b> Combat</a></li>
+<li class="chapter" data-level="5.1.4" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#mnncorrect-1"><i class="fa fa-check"></i><b>5.1.4</b> mnnCorrect</a></li>
+<li class="chapter" data-level="5.1.5" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#glm-1"><i class="fa fa-check"></i><b>5.1.5</b> GLM</a></li>
+<li class="chapter" data-level="5.1.6" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-1-1"><i class="fa fa-check"></i><b>5.1.6</b> Effectiveness 1</a></li>
+<li class="chapter" data-level="5.1.7" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-2-1"><i class="fa fa-check"></i><b>5.1.7</b> Effectiveness 2</a></li>
+<li class="chapter" data-level="5.1.8" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-3-1"><i class="fa fa-check"></i><b>5.1.8</b> Effectiveness 3</a></li>
+<li class="chapter" data-level="5.1.9" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-4-1"><i class="fa fa-check"></i><b>5.1.9</b> Effectiveness 4</a></li>
+<li class="chapter" data-level="5.1.10" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#sessioninfo-9"><i class="fa fa-check"></i><b>5.1.10</b> sessionInfo()</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="clust-methods.html"><a href="clust-methods.html"><i class="fa fa-check"></i><b>19</b> Clustering example</a><ul>
-<li class="chapter" data-level="19.1" data-path="clust-methods.html"><a href="clust-methods.html#pollen-dataset"><i class="fa fa-check"></i><b>19.1</b> Pollen dataset</a></li>
-<li class="chapter" data-level="19.2" data-path="clust-methods.html"><a href="clust-methods.html#sc3-1"><i class="fa fa-check"></i><b>19.2</b> SC3</a></li>
-<li class="chapter" data-level="19.3" data-path="clust-methods.html"><a href="clust-methods.html#pcareduce-1"><i class="fa fa-check"></i><b>19.3</b> pcaReduce</a></li>
-<li class="chapter" data-level="19.4" data-path="clust-methods.html"><a href="clust-methods.html#tsne-kmeans"><i class="fa fa-check"></i><b>19.4</b> tSNE + kmeans</a></li>
-<li class="chapter" data-level="19.5" data-path="clust-methods.html"><a href="clust-methods.html#snn-cliq-1"><i class="fa fa-check"></i><b>19.5</b> SNN-Cliq</a></li>
-<li class="chapter" data-level="19.6" data-path="clust-methods.html"><a href="clust-methods.html#sincera-1"><i class="fa fa-check"></i><b>19.6</b> SINCERA</a></li>
-<li class="chapter" data-level="19.7" data-path="clust-methods.html"><a href="clust-methods.html#seurat-1"><i class="fa fa-check"></i><b>19.7</b> SEURAT</a></li>
+<li class="chapter" data-level="6" data-path="biological-analysis.html"><a href="biological-analysis.html"><i class="fa fa-check"></i><b>6</b> Biological Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-introduction"><i class="fa fa-check"></i><b>6.1</b> Clustering Introduction</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-6"><i class="fa fa-check"></i><b>6.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.1.2" data-path="biological-analysis.html"><a href="biological-analysis.html#dimensionality-reductions"><i class="fa fa-check"></i><b>6.1.2</b> Dimensionality reductions</a></li>
+<li class="chapter" data-level="6.1.3" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-methods"><i class="fa fa-check"></i><b>6.1.3</b> Clustering methods</a></li>
+<li class="chapter" data-level="6.1.4" data-path="biological-analysis.html"><a href="biological-analysis.html#challenges-in-clustering"><i class="fa fa-check"></i><b>6.1.4</b> Challenges in clustering</a></li>
+<li class="chapter" data-level="6.1.5" data-path="biological-analysis.html"><a href="biological-analysis.html#tools-for-scrna-seq-data"><i class="fa fa-check"></i><b>6.1.5</b> Tools for scRNA-seq data</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="feature-selection.html"><a href="feature-selection.html"><i class="fa fa-check"></i><b>20</b> Feature Selection</a><ul>
-<li class="chapter" data-level="20.0.1" data-path="feature-selection.html"><a href="feature-selection.html#highly-variable-genes"><i class="fa fa-check"></i><b>20.0.1</b> Highly Variable Genes</a></li>
-<li class="chapter" data-level="20.0.2" data-path="feature-selection.html"><a href="feature-selection.html#high-dropout-genes"><i class="fa fa-check"></i><b>20.0.2</b> High Dropout Genes</a></li>
-<li class="chapter" data-level="20.1" data-path="feature-selection.html"><a href="feature-selection.html#correlated-expression"><i class="fa fa-check"></i><b>20.1</b> Correlated Expression</a><ul>
-<li class="chapter" data-level="20.1.1" data-path="feature-selection.html"><a href="feature-selection.html#comparing-methods"><i class="fa fa-check"></i><b>20.1.1</b> Comparing Methods</a></li>
+<li class="chapter" data-level="6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#clust-methods"><i class="fa fa-check"></i><b>6.2</b> Clustering example</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="biological-analysis.html"><a href="biological-analysis.html#deng-dataset"><i class="fa fa-check"></i><b>6.2.1</b> Deng dataset</a></li>
+<li class="chapter" data-level="6.2.2" data-path="biological-analysis.html"><a href="biological-analysis.html#sc3-1"><i class="fa fa-check"></i><b>6.2.2</b> SC3</a></li>
+<li class="chapter" data-level="6.2.3" data-path="biological-analysis.html"><a href="biological-analysis.html#pcareduce-1"><i class="fa fa-check"></i><b>6.2.3</b> pcaReduce</a></li>
+<li class="chapter" data-level="6.2.4" data-path="biological-analysis.html"><a href="biological-analysis.html#tsne-kmeans"><i class="fa fa-check"></i><b>6.2.4</b> tSNE + kmeans</a></li>
+<li class="chapter" data-level="6.2.5" data-path="biological-analysis.html"><a href="biological-analysis.html#snn-cliq-1"><i class="fa fa-check"></i><b>6.2.5</b> SNN-Cliq</a></li>
+<li class="chapter" data-level="6.2.6" data-path="biological-analysis.html"><a href="biological-analysis.html#sincera-1"><i class="fa fa-check"></i><b>6.2.6</b> SINCERA</a></li>
+<li class="chapter" data-level="6.2.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-10"><i class="fa fa-check"></i><b>6.2.7</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#seurat-1"><i class="fa fa-check"></i><b>6.3</b> <code>Seurat</code></a><ul>
+<li class="chapter" data-level="6.3.1" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-11"><i class="fa fa-check"></i><b>6.3.1</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="biological-analysis.html"><a href="biological-analysis.html#feature-selection"><i class="fa fa-check"></i><b>6.4</b> Feature Selection</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="biological-analysis.html"><a href="biological-analysis.html#identifying-genes-vs-a-null-model"><i class="fa fa-check"></i><b>6.4.1</b> Identifying Genes vs a Null Model</a></li>
+<li class="chapter" data-level="6.4.2" data-path="biological-analysis.html"><a href="biological-analysis.html#correlated-expression"><i class="fa fa-check"></i><b>6.4.2</b> Correlated Expression</a></li>
+<li class="chapter" data-level="6.4.3" data-path="biological-analysis.html"><a href="biological-analysis.html#comparing-methods"><i class="fa fa-check"></i><b>6.4.3</b> Comparing Methods</a></li>
+<li class="chapter" data-level="6.4.4" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-12"><i class="fa fa-check"></i><b>6.4.4</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="biological-analysis.html"><a href="biological-analysis.html#pseudotime-analysis"><i class="fa fa-check"></i><b>6.5</b> Pseudotime analysis</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="biological-analysis.html"><a href="biological-analysis.html#tscan"><i class="fa fa-check"></i><b>6.5.1</b> TSCAN</a></li>
+<li class="chapter" data-level="6.5.2" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle"><i class="fa fa-check"></i><b>6.5.2</b> monocle</a></li>
+<li class="chapter" data-level="6.5.3" data-path="biological-analysis.html"><a href="biological-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>6.5.3</b> Diffusion maps</a></li>
+<li class="chapter" data-level="6.5.4" data-path="biological-analysis.html"><a href="biological-analysis.html#slicer"><i class="fa fa-check"></i><b>6.5.4</b> SLICER</a></li>
+<li class="chapter" data-level="6.5.5" data-path="biological-analysis.html"><a href="biological-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>6.5.5</b> Comparison of the methods</a></li>
+<li class="chapter" data-level="6.5.6" data-path="biological-analysis.html"><a href="biological-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>6.5.6</b> Expression of genes through time</a></li>
+<li class="chapter" data-level="6.5.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-13"><i class="fa fa-check"></i><b>6.5.7</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="biological-analysis.html"><a href="biological-analysis.html#imputation"><i class="fa fa-check"></i><b>6.6</b> Imputation</a><ul>
+<li class="chapter" data-level="6.6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#scimpute"><i class="fa fa-check"></i><b>6.6.1</b> scImpute</a></li>
+<li class="chapter" data-level="6.6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#magic"><i class="fa fa-check"></i><b>6.6.2</b> MAGIC</a></li>
+<li class="chapter" data-level="6.6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-14"><i class="fa fa-check"></i><b>6.6.3</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="biological-analysis.html"><a href="biological-analysis.html#differential-expression-de-analysis"><i class="fa fa-check"></i><b>6.7</b> Differential Expression (DE) analysis</a><ul>
+<li class="chapter" data-level="6.7.1" data-path="biological-analysis.html"><a href="biological-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>6.7.1</b> Bulk RNA-seq</a></li>
+<li class="chapter" data-level="6.7.2" data-path="biological-analysis.html"><a href="biological-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>6.7.2</b> Single cell RNA-seq</a></li>
+<li class="chapter" data-level="6.7.3" data-path="biological-analysis.html"><a href="biological-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>6.7.3</b> Differences in Distribution</a></li>
+<li class="chapter" data-level="6.7.4" data-path="biological-analysis.html"><a href="biological-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>6.7.4</b> Models of single-cell RNASeq data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.8" data-path="biological-analysis.html"><a href="biological-analysis.html#de-in-a-real-dataset"><i class="fa fa-check"></i><b>6.8</b> DE in a real dataset</a><ul>
+<li class="chapter" data-level="6.8.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-7"><i class="fa fa-check"></i><b>6.8.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.8.2" data-path="biological-analysis.html"><a href="biological-analysis.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>6.8.2</b> Kolmogorov-Smirnov test</a></li>
+<li class="chapter" data-level="6.8.3" data-path="biological-analysis.html"><a href="biological-analysis.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>6.8.3</b> Wilcox/Mann-Whitney-U Test</a></li>
+<li class="chapter" data-level="6.8.4" data-path="biological-analysis.html"><a href="biological-analysis.html#edger"><i class="fa fa-check"></i><b>6.8.4</b> edgeR</a></li>
+<li class="chapter" data-level="6.8.5" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle-1"><i class="fa fa-check"></i><b>6.8.5</b> Monocle</a></li>
+<li class="chapter" data-level="6.8.6" data-path="biological-analysis.html"><a href="biological-analysis.html#mast"><i class="fa fa-check"></i><b>6.8.6</b> MAST</a></li>
+<li class="chapter" data-level="6.8.7" data-path="biological-analysis.html"><a href="biological-analysis.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>6.8.7</b> Slow Methods (&gt;1h to run)</a></li>
+<li class="chapter" data-level="6.8.8" data-path="biological-analysis.html"><a href="biological-analysis.html#bpsc"><i class="fa fa-check"></i><b>6.8.8</b> BPSC</a></li>
+<li class="chapter" data-level="6.8.9" data-path="biological-analysis.html"><a href="biological-analysis.html#scde"><i class="fa fa-check"></i><b>6.8.9</b> SCDE</a></li>
+<li class="chapter" data-level="6.8.10" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-15"><i class="fa fa-check"></i><b>6.8.10</b> sessionInfo()</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="21" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html"><i class="fa fa-check"></i><b>21</b> Pseudotime analysis</a><ul>
-<li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
-<li class="chapter" data-level="21.2" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#monocle"><i class="fa fa-check"></i><b>21.2</b> monocle</a></li>
-<li class="chapter" data-level="21.3" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>21.3</b> Diffusion maps</a></li>
-<li class="chapter" data-level="21.4" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#slicer"><i class="fa fa-check"></i><b>21.4</b> SLICER</a></li>
-<li class="chapter" data-level="21.5" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>21.5</b> Comparison of the methods</a></li>
-<li class="chapter" data-level="21.6" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>21.6</b> Expression of genes through time</a></li>
+<li class="chapter" data-level="7" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><i class="fa fa-check"></i><b>7</b> “Ideal” scRNAseq pipeline (as of Mar 2017)</a><ul>
+<li class="chapter" data-level="7.1" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#experimental-design"><i class="fa fa-check"></i><b>7.1</b> Experimental Design</a></li>
+<li class="chapter" data-level="7.2" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#processing-reads"><i class="fa fa-check"></i><b>7.2</b> Processing Reads</a></li>
+<li class="chapter" data-level="7.3" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>7.3</b> Preparing Expression Matrix</a></li>
+<li class="chapter" data-level="7.4" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#biological-interpretation"><i class="fa fa-check"></i><b>7.4</b> Biological Interpretation</a></li>
 </ul></li>
-<li class="chapter" data-level="22" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html"><i class="fa fa-check"></i><b>22</b> Differential Expression (DE) analysis</a><ul>
-<li class="chapter" data-level="22.1" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>22.1</b> Bulk RNA-seq</a></li>
-<li class="chapter" data-level="22.2" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>22.2</b> Single cell RNA-seq</a></li>
-<li class="chapter" data-level="22.3" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>22.3</b> Differences in Distribution</a></li>
-<li class="chapter" data-level="22.4" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>22.4</b> Models of single-cell RNASeq data</a></li>
+<li class="chapter" data-level="8" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>8</b> Advanced exercises</a></li>
+<li class="chapter" data-level="9" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>9</b> Resources</a><ul>
+<li class="chapter" data-level="9.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>9.1</b> scRNA-seq protocols</a></li>
+<li class="chapter" data-level="9.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>9.2</b> External RNA Control Consortium (ERCC)</a></li>
+<li class="chapter" data-level="9.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>9.3</b> scRNA-seq analysis tools</a></li>
+<li class="chapter" data-level="9.4" data-path="resources.html"><a href="resources.html#scrna-seq-public-datasets"><i class="fa fa-check"></i><b>9.4</b> scRNA-seq public datasets</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html"><i class="fa fa-check"></i><b>23</b> DE in a real dataset</a><ul>
-<li class="chapter" data-level="23.1" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#introduction-8"><i class="fa fa-check"></i><b>23.1</b> Introduction</a></li>
-<li class="chapter" data-level="23.2" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>23.2</b> Kolmogorov-Smirnov test</a><ul>
-<li class="chapter" data-level="23.2.1" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#evaluating-accuracy"><i class="fa fa-check"></i><b>23.2.1</b> Evaluating Accuracy</a></li>
-</ul></li>
-<li class="chapter" data-level="23.3" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>23.3</b> Wilcox/Mann-Whitney-U Test</a></li>
-<li class="chapter" data-level="23.4" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#edger"><i class="fa fa-check"></i><b>23.4</b> edgeR</a></li>
-<li class="chapter" data-level="23.5" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#monocle-1"><i class="fa fa-check"></i><b>23.5</b> Monocle</a></li>
-<li class="chapter" data-level="23.6" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#mast"><i class="fa fa-check"></i><b>23.6</b> MAST</a></li>
-<li class="chapter" data-level="23.7" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>23.7</b> Slow Methods (&gt;1h to run)</a></li>
-<li class="chapter" data-level="23.8" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#bpsc"><i class="fa fa-check"></i><b>23.8</b> BPSC</a></li>
-<li class="chapter" data-level="23.9" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#scde"><i class="fa fa-check"></i><b>23.9</b> SCDE</a></li>
-</ul></li>
-<li class="chapter" data-level="24" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><i class="fa fa-check"></i><b>24</b> “Ideal” scRNAseq pipeline (as of Mar 2017)</a><ul>
-<li class="chapter" data-level="24.1" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#experimental-design"><i class="fa fa-check"></i><b>24.1</b> Experimental Design</a></li>
-<li class="chapter" data-level="24.2" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#processing-reads"><i class="fa fa-check"></i><b>24.2</b> Processing Reads</a></li>
-<li class="chapter" data-level="24.3" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>24.3</b> Preparing Expression Matrix</a></li>
-<li class="chapter" data-level="24.4" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#biological-interpretation"><i class="fa fa-check"></i><b>24.4</b> Biological Interpretation</a></li>
-</ul></li>
-<li class="chapter" data-level="25" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>25</b> Advanced exercises</a></li>
-<li class="chapter" data-level="26" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>26</b> Resources</a><ul>
-<li class="chapter" data-level="26.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>26.1</b> scRNA-seq protocols</a></li>
-<li class="chapter" data-level="26.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>26.2</b> External RNA Control Consortium (ERCC)</a></li>
-<li class="chapter" data-level="26.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>26.3</b> scRNA-seq analysis tools</a></li>
-<li class="chapter" data-level="26.4" data-path="resources.html"><a href="resources.html#scrna-seq-public-datasets"><i class="fa fa-check"></i><b>26.4</b> scRNA-seq public datasets</a></li>
-</ul></li>
-<li class="chapter" data-level="27" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>27</b> References</a></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 <li class="divider"></li>
 <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2017</a></li>
 
@@ -367,31 +345,40 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="dealing-with-confounders-reads" class="section level1">
-<h1><span class="header-section-number">17</span> Dealing with confounders (Reads)</h1>
+<h1><span class="header-section-number">5</span> Dealing with confounders (Reads)</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scRNA.seq.funcs)
 <span class="kw">library</span>(RUVSeq)
-<span class="kw">library</span>(scater, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+<span class="kw">library</span>(scater)
+<span class="kw">library</span>(SingleCellExperiment)
 <span class="kw">library</span>(scran)
+<span class="kw">library</span>(kBET)
+<span class="kw">library</span>(sva) <span class="co"># Combat</span>
 <span class="kw">library</span>(edgeR)
 <span class="kw">set.seed</span>(<span class="dv">1234567</span>)
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 reads &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;tung/reads.rds&quot;</span>)
-reads.qc &lt;-<span class="st"> </span>reads[<span class="kw">fData</span>(reads)<span class="op">$</span>use, <span class="kw">pData</span>(reads)<span class="op">$</span>use]
-endog_genes &lt;-<span class="st"> </span><span class="op">!</span><span class="kw">fData</span>(reads.qc)<span class="op">$</span>is_feature_control
-erccs &lt;-<span class="st"> </span><span class="kw">fData</span>(reads.qc)<span class="op">$</span>is_feature_control</code></pre></div>
+reads.qc &lt;-<span class="st"> </span>reads[<span class="kw">rowData</span>(reads)<span class="op">$</span>use, <span class="kw">colData</span>(reads)<span class="op">$</span>use]
+endog_genes &lt;-<span class="st"> </span><span class="op">!</span><span class="kw">rowData</span>(reads.qc)<span class="op">$</span>is_feature_control
+erccs &lt;-<span class="st"> </span><span class="kw">rowData</span>(reads.qc)<span class="op">$</span>is_feature_control
+
+qclust &lt;-<span class="st"> </span><span class="kw">quickCluster</span>(reads.qc, <span class="dt">min.size =</span> <span class="dv">30</span>)
+reads.qc &lt;-<span class="st"> </span><span class="kw">computeSumFactors</span>(reads.qc, <span class="dt">sizes =</span> <span class="dv">15</span>, <span class="dt">clusters =</span> qclust)
+reads.qc &lt;-<span class="st"> </span><span class="kw">normalize</span>(reads.qc)</code></pre></div>
 <div id="remove-unwanted-variation-1" class="section level2">
-<h2><span class="header-section-number">17.1</span> Remove Unwanted Variation</h2>
+<h2><span class="header-section-number">5.1</span> Remove Unwanted Variation</h2>
 <div id="ruvg-1" class="section level3">
-<h3><span class="header-section-number">17.1.1</span> RUVg</h3>
+<h3><span class="header-section-number">5.1.1</span> RUVg</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ruvg &lt;-<span class="st"> </span><span class="kw">RUVg</span>(<span class="kw">counts</span>(reads.qc), erccs, <span class="dt">k =</span> <span class="dv">1</span>)
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvg1&quot;</span>) &lt;-<span class="st"> </span>ruvg<span class="op">$</span>normalizedCounts
-ruvg &lt;-<span class="st"> </span><span class="kw">RUVg</span>(<span class="kw">counts</span>(reads.qc), erccs, <span class="dt">k =</span> <span class="dv">2</span>)
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvg2&quot;</span>) &lt;-<span class="st"> </span>ruvg<span class="op">$</span>normalizedCounts
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvg2_logcpm&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">t</span>(<span class="kw">t</span>(ruvg<span class="op">$</span>normalizedCounts) <span class="op">/</span><span class="st"> </span>
-<span class="st">                                           </span><span class="kw">colSums</span>(ruvg<span class="op">$</span>normalizedCounts)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<span class="kw">assay</span>(reads.qc, <span class="st">&quot;ruvg1&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(
+    <span class="kw">t</span>(<span class="kw">t</span>(ruvg<span class="op">$</span>normalizedCounts) <span class="op">/</span><span class="st"> </span><span class="kw">colSums</span>(ruvg<span class="op">$</span>normalizedCounts) <span class="op">*</span><span class="st"> </span><span class="fl">1e6</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+)
+ruvg &lt;-<span class="st"> </span><span class="kw">RUVg</span>(<span class="kw">counts</span>(reads.qc), erccs, <span class="dt">k =</span> <span class="dv">10</span>)
+<span class="kw">assay</span>(reads.qc, <span class="st">&quot;ruvg10&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(
+    <span class="kw">t</span>(<span class="kw">t</span>(ruvg<span class="op">$</span>normalizedCounts) <span class="op">/</span><span class="st"> </span><span class="kw">colSums</span>(ruvg<span class="op">$</span>normalizedCounts) <span class="op">*</span><span class="st"> </span><span class="fl">1e6</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+)</code></pre></div>
 </div>
 <div id="ruvs-1" class="section level3">
-<h3><span class="header-section-number">17.1.2</span> RUVs</h3>
+<h3><span class="header-section-number">5.1.2</span> RUVs</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scIdx &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dt">ncol =</span> <span class="kw">max</span>(<span class="kw">table</span>(reads.qc<span class="op">$</span>individual)), <span class="dt">nrow =</span> <span class="dv">3</span>)
 tmp &lt;-<span class="st"> </span><span class="kw">which</span>(reads.qc<span class="op">$</span>individual <span class="op">==</span><span class="st"> &quot;NA19098&quot;</span>)
 scIdx[<span class="dv">1</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(tmp)] &lt;-<span class="st"> </span>tmp
@@ -401,236 +388,290 @@ tmp &lt;-<span class="st"> </span><span class="kw">which</span>(reads.qc<span cl
 scIdx[<span class="dv">3</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(tmp)] &lt;-<span class="st"> </span>tmp
 cIdx &lt;-<span class="st"> </span><span class="kw">rownames</span>(reads.qc)
 ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw">counts</span>(reads.qc), cIdx, <span class="dt">k =</span> <span class="dv">1</span>, <span class="dt">scIdx =</span> scIdx, <span class="dt">isLog =</span> <span class="ot">FALSE</span>)
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvs1&quot;</span>) &lt;-<span class="st"> </span>ruvs<span class="op">$</span>normalizedCounts
-ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw">counts</span>(reads.qc), cIdx, <span class="dt">k =</span> <span class="dv">2</span>, <span class="dt">scIdx =</span> scIdx, <span class="dt">isLog =</span> <span class="ot">FALSE</span>)
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvs2&quot;</span>) &lt;-<span class="st"> </span>ruvs<span class="op">$</span>normalizedCounts
-<span class="kw">set_exprs</span>(reads.qc, <span class="st">&quot;ruvs2_logcpm&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">t</span>(<span class="kw">t</span>(ruvs<span class="op">$</span>normalizedCounts) <span class="op">/</span><span class="st"> </span>
-<span class="st">                                           </span><span class="kw">colSums</span>(ruvs<span class="op">$</span>normalizedCounts)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<span class="kw">assay</span>(reads.qc, <span class="st">&quot;ruvs1&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(
+    <span class="kw">t</span>(<span class="kw">t</span>(ruvs<span class="op">$</span>normalizedCounts) <span class="op">/</span><span class="st"> </span><span class="kw">colSums</span>(ruvs<span class="op">$</span>normalizedCounts) <span class="op">*</span><span class="st"> </span><span class="fl">1e6</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+)
+ruvs &lt;-<span class="st"> </span><span class="kw">RUVs</span>(<span class="kw">counts</span>(reads.qc), cIdx, <span class="dt">k =</span> <span class="dv">10</span>, <span class="dt">scIdx =</span> scIdx, <span class="dt">isLog =</span> <span class="ot">FALSE</span>)
+<span class="kw">assay</span>(reads.qc, <span class="st">&quot;ruvs10&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(
+    <span class="kw">t</span>(<span class="kw">t</span>(ruvs<span class="op">$</span>normalizedCounts) <span class="op">/</span><span class="st"> </span><span class="kw">colSums</span>(ruvs<span class="op">$</span>normalizedCounts) <span class="op">*</span><span class="st"> </span><span class="fl">1e6</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+)</code></pre></div>
 </div>
+<div id="combat-1" class="section level3">
+<h3><span class="header-section-number">5.1.3</span> Combat</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">combat_data &lt;-<span class="st"> </span><span class="kw">logcounts</span>(reads.qc)
+mod_data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(combat_data))
+<span class="co"># Basic batch removal</span>
+mod0 =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> mod_data) 
+<span class="co"># Preserve biological variability</span>
+mod1 =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>reads.qc<span class="op">$</span>individual, <span class="dt">data =</span> mod_data) 
+<span class="co"># adjust for total genes detected</span>
+mod2 =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>reads.qc<span class="op">$</span>total_features, <span class="dt">data =</span> mod_data)
+<span class="kw">assay</span>(reads.qc, <span class="st">&quot;combat&quot;</span>) &lt;-<span class="st"> </span><span class="kw">ComBat</span>(
+    <span class="dt">dat =</span> <span class="kw">t</span>(mod_data), 
+    <span class="dt">batch =</span> <span class="kw">factor</span>(reads.qc<span class="op">$</span>batch), 
+    <span class="dt">mod =</span> mod0,
+    <span class="dt">par.prior =</span> <span class="ot">TRUE</span>,
+    <span class="dt">prior.plots =</span> <span class="ot">FALSE</span>
+)</code></pre></div>
+<pre><code>## Standardizing Data across genes</code></pre>
+<p><strong>Exercise 1</strong></p>
+<pre><code>## Standardizing Data across genes</code></pre>
 </div>
-<div id="effectiveness-1-1" class="section level2">
-<h2><span class="header-section-number">17.2</span> Effectiveness 1</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
-    reads.qc[endog_genes, ],
-    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvg1&quot;</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVg normalisation: k = 1&quot;</span>)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
-    reads.qc[endog_genes, ],
-    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvg2&quot;</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVg normalisation: k = 2&quot;</span>)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
-    reads.qc[endog_genes, ],
-    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvs1&quot;</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVs normalisation: k = 1&quot;</span>)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-3.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
-    reads.qc[endog_genes, ],
-    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvs2&quot;</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVs normalisation: k = 2&quot;</span>)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-4.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
-    reads.qc[endog_genes, ],
-    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-    <span class="dt">exprs_values =</span> <span class="st">&quot;ruvs2_logcpm&quot;</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;PCA - RUVs normalisation log2-cpm: k = 2&quot;</span>)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-5-5.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="mnncorrect-1" class="section level3">
+<h3><span class="header-section-number">5.1.4</span> mnnCorrect</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">do_mnn &lt;-<span class="st"> </span><span class="cf">function</span>(data.qc) {
+    batch1 &lt;-<span class="st"> </span>data.qc[, data.qc<span class="op">$</span>replicate <span class="op">==</span><span class="st"> &quot;r1&quot;</span>]
+    batch2 &lt;-<span class="st"> </span>data.qc[, data.qc<span class="op">$</span>replicate <span class="op">==</span><span class="st"> &quot;r2&quot;</span>]
+    batch3 &lt;-<span class="st"> </span>data.qc[, data.qc<span class="op">$</span>replicate <span class="op">==</span><span class="st"> &quot;r3&quot;</span>]
+    
+    <span class="cf">if</span> (<span class="kw">ncol</span>(batch2) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {
+        x =<span class="st"> </span><span class="kw">mnnCorrect</span>(
+          <span class="kw">logcounts</span>(batch1), <span class="kw">logcounts</span>(batch2), <span class="kw">logcounts</span>(batch3),  
+          <span class="dt">k =</span> <span class="dv">20</span>,
+          <span class="dt">sigma =</span> <span class="fl">0.1</span>,
+          <span class="dt">cos.norm =</span> <span class="ot">TRUE</span>,
+          <span class="dt">svd.dim =</span> <span class="dv">2</span>
+        )
+        <span class="kw">return</span>(<span class="kw">cbind</span>(x<span class="op">$</span>corrected[[<span class="dv">1</span>]], x<span class="op">$</span>corrected[[<span class="dv">2</span>]], x<span class="op">$</span>corrected[[<span class="dv">3</span>]]))
+    } <span class="cf">else</span> {
+        x =<span class="st"> </span><span class="kw">mnnCorrect</span>(
+          <span class="kw">logcounts</span>(batch1), <span class="kw">logcounts</span>(batch3),  
+          <span class="dt">k =</span> <span class="dv">20</span>,
+          <span class="dt">sigma =</span> <span class="fl">0.1</span>,
+          <span class="dt">cos.norm =</span> <span class="ot">TRUE</span>,
+          <span class="dt">svd.dim =</span> <span class="dv">2</span>
+        )
+        <span class="kw">return</span>(<span class="kw">cbind</span>(x<span class="op">$</span>corrected[[<span class="dv">1</span>]], x<span class="op">$</span>corrected[[<span class="dv">2</span>]]))
+    }
+}
+
+indi1 &lt;-<span class="st"> </span><span class="kw">do_mnn</span>(reads.qc[, reads.qc<span class="op">$</span>individual <span class="op">==</span><span class="st"> &quot;NA19098&quot;</span>])
+indi2 &lt;-<span class="st"> </span><span class="kw">do_mnn</span>(reads.qc[, reads.qc<span class="op">$</span>individual <span class="op">==</span><span class="st"> &quot;NA19101&quot;</span>])
+indi3 &lt;-<span class="st"> </span><span class="kw">do_mnn</span>(reads.qc[, reads.qc<span class="op">$</span>individual <span class="op">==</span><span class="st"> &quot;NA19239&quot;</span>])
+
+<span class="kw">assay</span>(reads.qc, <span class="st">&quot;mnn&quot;</span>) &lt;-<span class="st"> </span><span class="kw">cbind</span>(indi1, indi2, indi3);
+
+<span class="co"># For a balanced design: </span>
+<span class="co">#assay(reads.qc, &quot;mnn&quot;) &lt;- mnnCorrect(</span>
+<span class="co">#    list(B1 = logcounts(batch1), B2 = logcounts(batch2), B3 = logcounts(batch3)),  </span>
+<span class="co">#    k = 20,</span>
+<span class="co">#    sigma = 0.1,</span>
+<span class="co">#    cos.norm = TRUE,</span>
+<span class="co">#    svd.dim = 2</span>
+<span class="co">#)</span></code></pre></div>
 </div>
-<div id="effectiveness-2-1" class="section level2">
-<h2><span class="header-section-number">17.3</span> Effectiveness 2</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(
-    <span class="kw">list</span>(
-        <span class="st">&quot;Raw counts&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">counts</span>(reads.qc), erccs),
-        <span class="st">&quot;RUVg (k = 1)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)<span class="op">$</span>ruvg1, erccs),
-        <span class="st">&quot;RUVg (k = 2)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)<span class="op">$</span>ruvg2, erccs),
-        <span class="st">&quot;RUVs (k = 1)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)<span class="op">$</span>ruvs1, erccs),
-        <span class="st">&quot;RUVs (k = 2)&quot;</span> =<span class="st"> </span><span class="kw">calc_cell_RLE</span>(<span class="kw">assayData</span>(reads.qc)<span class="op">$</span>ruvs2, erccs)
+<div id="glm-1" class="section level3">
+<h3><span class="header-section-number">5.1.5</span> GLM</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">glm_fun &lt;-<span class="st"> </span><span class="cf">function</span>(g, batch, indi) {
+  model &lt;-<span class="st"> </span><span class="kw">glm</span>(g <span class="op">~</span><span class="st"> </span>batch <span class="op">+</span><span class="st"> </span>indi)
+  model<span class="op">$</span>coef[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">0</span> <span class="co"># replace intercept with 0 to preserve reference batch.</span>
+  <span class="kw">return</span>(model<span class="op">$</span>coef)
+}
+effects &lt;-<span class="st"> </span><span class="kw">apply</span>(
+    <span class="kw">logcounts</span>(reads.qc), 
+    <span class="dv">1</span>, 
+    glm_fun, 
+    <span class="dt">batch =</span> reads.qc<span class="op">$</span>batch, 
+    <span class="dt">indi =</span> reads.qc<span class="op">$</span>individual
+)
+corrected &lt;-<span class="st"> </span><span class="kw">logcounts</span>(reads.qc) <span class="op">-</span><span class="st"> </span><span class="kw">t</span>(effects[<span class="kw">as.numeric</span>(<span class="kw">factor</span>(reads.qc<span class="op">$</span>batch)), ])
+<span class="kw">assay</span>(reads.qc, <span class="st">&quot;glm&quot;</span>) &lt;-<span class="st"> </span>corrected</code></pre></div>
+<p><strong>Exercise 2</strong></p>
+</div>
+<div id="effectiveness-1-1" class="section level3">
+<h3><span class="header-section-number">5.1.6</span> Effectiveness 1</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span>(n <span class="cf">in</span> <span class="kw">assayNames</span>(reads.qc)) {
+    <span class="kw">print</span>(
+        <span class="kw">plotPCA</span>(
+            reads.qc[endog_genes, ],
+            <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+            <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+            <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+            <span class="dt">exprs_values =</span> n
+        ) <span class="op">+</span>
+<span class="st">        </span><span class="kw">ggtitle</span>(n)
     )
-)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+}</code></pre></div>
+<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-5.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-6.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-7.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-8.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-9.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-10.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-11.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-12.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="effectiveness-3-1" class="section level2">
-<h2><span class="header-section-number">17.4</span> Effectiveness 3</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keep &lt;-<span class="st"> </span><span class="kw">c</span>(
-    <span class="kw">sample</span>(<span class="kw">which</span>(reads.qc<span class="op">$</span>batch <span class="op">==</span><span class="st"> &quot;NA19101.r1&quot;</span>), <span class="dv">20</span>), 
-    <span class="kw">sample</span>(<span class="kw">which</span>(reads.qc<span class="op">$</span>batch <span class="op">==</span><span class="st"> &quot;NA19101.r2&quot;</span>), <span class="dv">20</span>),
-    <span class="kw">sample</span>(<span class="kw">which</span>(reads.qc<span class="op">$</span>batch <span class="op">==</span><span class="st"> &quot;NA19101.r3&quot;</span>), <span class="dv">20</span>)
-)
-design &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>reads.qc[, keep]<span class="op">$</span>batch)</code></pre></div>
-<div id="de-raw-counts-1" class="section level3">
-<h3><span class="header-section-number">17.4.1</span> DE (raw counts)</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dge1 &lt;-<span class="st"> </span><span class="kw">DGEList</span>(
-    <span class="dt">counts =</span> <span class="kw">counts</span>(reads.qc[, keep]), 
-    <span class="dt">norm.factors =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(keep)),
-    <span class="dt">group =</span> reads.qc[, keep]<span class="op">$</span>batch
-)
-dge1 &lt;-<span class="st"> </span><span class="kw">estimateDisp</span>(dge1, <span class="dt">design =</span> design, <span class="dt">trend.method =</span> <span class="st">&quot;none&quot;</span>)
-<span class="kw">plotBCV</span>(dge1)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit1 &lt;-<span class="st"> </span><span class="kw">glmFit</span>(dge1, design)
-res1 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit1)
-<span class="kw">topTags</span>(res1)</code></pre></div>
-<pre><code>## Coefficient:  reads.qc[, keep]$batchNA19101.r3 
-##                     logFC    logCPM       LR       PValue          FDR
-## ENSG00000245680  6.769933 2.4140394 29.57165 5.388728e-08 0.0008043469
-## ENSG00000157680  6.929079 1.3773980 28.37086 1.001615e-07 0.0008043469
-## ENSG00000169857  7.241350 3.0968670 27.43852 1.621686e-07 0.0008681968
-## ENSG00000151690  6.362547 1.3564536 26.51047 2.621139e-07 0.0008699941
-## ENSG00000197261  6.156435 3.2574320 26.44720 2.708406e-07 0.0008699941
-## ENSG00000021300  7.140051 1.6568860 25.65818 4.075650e-07 0.0009893710
-## ENSG00000123612 -6.807787 1.3010583 25.54937 4.312059e-07 0.0009893710
-## ENSG00000078579  6.931629 1.3951041 25.10872 5.418732e-07 0.0010878783
-## ENSG00000018869  5.873107 0.7109472 24.74574 6.541323e-07 0.0011090305
-## ENSG00000182575  6.251666 0.9288213 24.64143 6.905115e-07 0.0011090305</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res1))</code></pre></div>
-<pre><code>##    reads.qc[, keep]$batchNA19101.r3
-## -1                              464
-## 0                             14851
-## 1                               746</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
-    res1, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
-    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res1, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res1))))<span class="op">$</span>table)
-)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="de-ruvg-k-2-1" class="section level3">
-<h3><span class="header-section-number">17.4.2</span> DE (RUVg, k = 2)</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_ruvg &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>ruvg<span class="op">$</span>W[keep,] <span class="op">+</span><span class="st"> </span>reads.qc[, keep]<span class="op">$</span>batch)
-<span class="kw">head</span>(design_ruvg)</code></pre></div>
-<pre><code>##   (Intercept) ruvg$W[keep, ]W_1 ruvg$W[keep, ]W_2
-## 1           1       0.018190004        0.04764997
-## 2           1       0.023547154        0.03231790
-## 3           1      -0.043540927        0.03411069
-## 4           1      -0.011047886       -0.05379651
-## 5           1      -0.002009755        0.04140351
-## 6           1       0.055027809        0.05877063
-##   reads.qc[, keep]$batchNA19101.r2 reads.qc[, keep]$batchNA19101.r3
-## 1                                0                                0
-## 2                                0                                0
-## 3                                0                                0
-## 4                                0                                0
-## 5                                0                                0
-## 6                                0                                0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dge_ruvg &lt;-<span class="st"> </span><span class="kw">estimateDisp</span>(dge1, <span class="dt">design =</span> design_ruvg, <span class="dt">trend.method =</span> <span class="st">&quot;none&quot;</span>)
-<span class="kw">plotBCV</span>(dge_ruvg)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">glmFit</span>(dge_ruvg, design_ruvg)
-res2 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit2)
-<span class="kw">topTags</span>(res2)</code></pre></div>
-<pre><code>## Coefficient:  reads.qc[, keep]$batchNA19101.r3 
-##                     logFC    logCPM       LR       PValue          FDR
-## ENSG00000088926 -7.520594 1.8872095 31.75667 1.747483e-08 0.0002806632
-## ENSG00000169857  7.944401 3.0967722 29.69136 5.066020e-08 0.0002887833
-## ENSG00000245680  6.894702 2.4140553 29.56971 5.394121e-08 0.0002887833
-## ENSG00000143127  5.641200 1.0238358 27.99202 1.218168e-07 0.0003519555
-## ENSG00000153233  6.197221 0.8234713 27.75578 1.376366e-07 0.0003519555
-## ENSG00000175318 -6.747507 1.0999870 27.73641 1.390212e-07 0.0003519555
-## ENSG00000144962 -7.747163 1.8142340 27.54608 1.533957e-07 0.0003519555
-## ENSG00000081923 -7.047319 1.1647043 25.76440 3.857376e-07 0.0005768692
-## ENSG00000062282  5.554112 0.8624379 25.73278 3.921092e-07 0.0005768692
-## ENSG00000114737 -7.712987 2.0853276 25.54660 4.318272e-07 0.0005768692</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res2))</code></pre></div>
-<pre><code>##    reads.qc[, keep]$batchNA19101.r3
-## -1                              395
-## 0                             15341
-## 1                               325</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
-    res2, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
-    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res2, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res2))))<span class="op">$</span>table)
-)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="de-ruvs-k-2-1" class="section level3">
-<h3><span class="header-section-number">17.4.3</span> DE (RUVs, k = 2)</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_ruvs &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>ruvs<span class="op">$</span>W[keep,] <span class="op">+</span><span class="st"> </span>reads.qc[, keep]<span class="op">$</span>batch)
-<span class="kw">head</span>(design_ruvs)</code></pre></div>
-<pre><code>##   (Intercept) ruvs$W[keep, ]W_1 ruvs$W[keep, ]W_2
-## 1           1         0.3772545         0.1683790
-## 2           1         0.3470296         0.2160446
-## 3           1         0.3371526         0.1701236
-## 4           1         0.2576765         0.1992972
-## 5           1         0.3527278         0.2031540
-## 6           1         0.3008299         0.1209562
-##   reads.qc[, keep]$batchNA19101.r2 reads.qc[, keep]$batchNA19101.r3
-## 1                                0                                0
-## 2                                0                                0
-## 3                                0                                0
-## 4                                0                                0
-## 5                                0                                0
-## 6                                0                                0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dge_ruvs &lt;-<span class="st"> </span><span class="kw">estimateDisp</span>(dge1, <span class="dt">design =</span> design_ruvs, <span class="dt">trend.method =</span> <span class="st">&quot;none&quot;</span>)
-<span class="kw">plotBCV</span>(dge_ruvs)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit3 &lt;-<span class="st"> </span><span class="kw">glmFit</span>(dge_ruvs, design_ruvs)
-res3 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit3)
-<span class="kw">topTags</span>(res3)</code></pre></div>
-<pre><code>## Coefficient:  reads.qc[, keep]$batchNA19101.r3 
-##                     logFC   logCPM       LR       PValue          FDR
-## ENSG00000175105 -7.881072 3.056358 29.62129 5.252477e-08 0.0003983720
-## ENSG00000245680  6.771561 2.414062 29.20563 6.508967e-08 0.0003983720
-## ENSG00000138650 -8.404976 2.589017 28.94635 7.441105e-08 0.0003983720
-## ENSG00000157680  6.974511 1.377270 28.16394 1.114619e-07 0.0004475476
-## ENSG00000127366 -7.311757 1.919586 26.84980 2.198967e-07 0.0005301343
-## ENSG00000197261  6.276350 3.257436 26.77877 2.281295e-07 0.0005301343
-## ENSG00000151690  6.506839 1.356669 26.75417 2.310529e-07 0.0005301343
-## ENSG00000250506  6.738161 2.079191 26.17409 3.119801e-07 0.0005614098
-## ENSG00000169228  8.240724 2.405449 25.92722 3.545347e-07 0.0005614098
-## ENSG00000143127  5.971608 1.023916 25.47575 4.479788e-07 0.0005614098</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res3))</code></pre></div>
-<pre><code>##    reads.qc[, keep]$batchNA19101.r3
-## -1                              303
-## 0                             15219
-## 1                               539</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
-    res3, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
-    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res3, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res3))))<span class="op">$</span>table)
-)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads.qc &lt;-<span class="st"> </span>scran<span class="op">::</span><span class="kw">computeSumFactors</span>(reads.qc, <span class="dt">sizes =</span> <span class="dv">15</span>)
-dge_ruvs<span class="op">$</span>samples<span class="op">$</span>norm.factors &lt;-<span class="st"> </span><span class="kw">sizeFactors</span>(reads.qc)[keep]
-dge_ruvs_sf &lt;-<span class="st"> </span><span class="kw">estimateDisp</span>(dge_ruvs, <span class="dt">design =</span> design_ruvs, <span class="dt">trend.method =</span> <span class="st">&quot;none&quot;</span>)
-<span class="kw">plotBCV</span>(dge_ruvs_sf)</code></pre></div>
+<div id="effectiveness-2-1" class="section level3">
+<h3><span class="header-section-number">5.1.7</span> Effectiveness 2</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw">list</span>()
+<span class="cf">for</span>(n <span class="cf">in</span> <span class="kw">assayNames</span>(reads.qc)) {
+    res[[n]] &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">assay</span>(reads.qc, n), erccs))
+}
+<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">1</span>))
+<span class="kw">boxplot</span>(res, <span class="dt">las=</span><span class="dv">2</span>)</code></pre></div>
 <p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit4 &lt;-<span class="st"> </span><span class="kw">glmFit</span>(dge_ruvs_sf, design_ruvs)
-res4 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit4)
-<span class="kw">topTags</span>(res4)</code></pre></div>
-<pre><code>## Coefficient:  reads.qc[, keep]$batchNA19101.r3 
-##                     logFC     logCPM       LR       PValue          FDR
-## ENSG00000245680  7.007457 2.42248075 29.46449 5.695077e-08 0.0007083699
-## ENSG00000157680  7.237809 1.36241855 28.17447 1.108570e-07 0.0007083699
-## ENSG00000197261  6.418993 3.15686745 27.50494 1.566940e-07 0.0007083699
-## ENSG00000138650 -8.274919 2.35084765 27.26492 1.774010e-07 0.0007083699
-## ENSG00000151690  6.547575 1.20130072 26.28609 2.944008e-07 0.0007083699
-## ENSG00000185686  5.101937 0.73285441 26.00984 3.396824e-07 0.0007083699
-## ENSG00000244607  4.559426 0.01356324 25.73511 3.916360e-07 0.0007083699
-## ENSG00000175105 -7.497481 2.83568134 25.65137 4.090053e-07 0.0007083699
-## ENSG00000127366 -7.248685 1.81131942 25.42882 4.590090e-07 0.0007083699
-## ENSG00000169228  8.417010 2.31022748 25.39601 4.668829e-07 0.0007083699</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res4))</code></pre></div>
-<pre><code>##    reads.qc[, keep]$batchNA19101.r3
-## -1                              232
-## 0                             15307
-## 1                               522</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
-    res4, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
-    <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res4, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res4))))<span class="op">$</span>table)
-)</code></pre></div>
-<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="effectiveness-3-1" class="section level3">
+<h3><span class="header-section-number">5.1.8</span> Effectiveness 3</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span>(n <span class="cf">in</span> <span class="kw">assayNames</span>(reads.qc)) {
+    <span class="kw">print</span>(
+        <span class="kw">plotQC</span>(
+            reads.qc[endog_genes, ],
+            <span class="dt">type =</span> <span class="st">&quot;expl&quot;</span>,
+            <span class="dt">exprs_values =</span> n,
+            <span class="dt">variables =</span> <span class="kw">c</span>(
+                <span class="st">&quot;total_features&quot;</span>,
+                <span class="st">&quot;total_counts&quot;</span>,
+                <span class="st">&quot;batch&quot;</span>,
+                <span class="st">&quot;individual&quot;</span>,
+                <span class="st">&quot;pct_counts_ERCC&quot;</span>,
+                <span class="st">&quot;pct_counts_MT&quot;</span>
+            )
+        ) <span class="op">+</span>
+<span class="st">        </span><span class="kw">ggtitle</span>(n)
+    )
+}</code></pre></div>
+<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-3.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-4.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-5.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## Warning: Removed 6 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-6.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## Warning: Removed 54 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-7.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-8.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-9.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-10.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-11.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous x-axis</code></pre>
+<pre><code>## Warning: Removed 129 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-12.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="effectiveness-4-1" class="section level3">
+<h3><span class="header-section-number">5.1.9</span> Effectiveness 4</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compare_kBET_results &lt;-<span class="st"> </span><span class="cf">function</span>(sce){
+    indiv &lt;-<span class="st"> </span><span class="kw">unique</span>(sce<span class="op">$</span>individual)
+    norms &lt;-<span class="st"> </span><span class="kw">assayNames</span>(sce) <span class="co"># Get all normalizations</span>
+    results &lt;-<span class="st"> </span><span class="kw">list</span>()
+    <span class="cf">for</span> (i <span class="cf">in</span> indiv){ 
+        <span class="cf">for</span> (j <span class="cf">in</span> norms){
+            tmp &lt;-<span class="st"> </span><span class="kw">kBET</span>(
+                <span class="dt">df =</span> <span class="kw">t</span>(<span class="kw">assay</span>(sce[,sce<span class="op">$</span>individual<span class="op">==</span><span class="st"> </span>i], j)), 
+                <span class="dt">batch =</span> sce<span class="op">$</span>batch[sce<span class="op">$</span>individual<span class="op">==</span>i], 
+                <span class="dt">heuristic =</span> <span class="ot">TRUE</span>, 
+                <span class="dt">verbose =</span> <span class="ot">FALSE</span>, 
+                <span class="dt">addTest =</span> <span class="ot">FALSE</span>, 
+                <span class="dt">plot =</span> <span class="ot">FALSE</span>)
+            results[[i]][[j]] &lt;-<span class="st"> </span>tmp<span class="op">$</span>summary<span class="op">$</span>kBET.observed[<span class="dv">1</span>]
+        }
+    }
+    <span class="kw">return</span>(<span class="kw">as.data.frame</span>(results))
+}
+
+eff_debatching &lt;-<span class="st"> </span><span class="kw">compare_kBET_results</span>(reads.qc)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(<span class="st">&quot;reshape2&quot;</span>)
+<span class="kw">require</span>(<span class="st">&quot;RColorBrewer&quot;</span>)
+<span class="co"># Plot results</span>
+dod &lt;-<span class="st"> </span><span class="kw">melt</span>(<span class="kw">as.matrix</span>(eff_debatching),  <span class="dt">value.name =</span> <span class="st">&quot;kBET&quot;</span>)
+<span class="kw">colnames</span>(dod)[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Normalisation&quot;</span>, <span class="st">&quot;Individual&quot;</span>)
+
+colorset &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;gray&#39;</span>, <span class="kw">brewer.pal</span>(<span class="dt">n =</span> <span class="dv">9</span>, <span class="st">&quot;RdYlBu&quot;</span>))
+
+<span class="kw">ggplot</span>(dod, <span class="kw">aes</span>(Normalisation, Individual, <span class="dt">fill=</span>kBET)) <span class="op">+</span><span class="st">  </span>
+<span class="st">    </span><span class="kw">geom_tile</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_fill_gradient2</span>(
+        <span class="dt">na.value =</span> <span class="st">&quot;gray&quot;</span>,
+        <span class="dt">low =</span> colorset[<span class="dv">2</span>],
+        <span class="dt">mid=</span>colorset[<span class="dv">6</span>],
+        <span class="dt">high =</span> colorset[<span class="dv">10</span>],
+        <span class="dt">midpoint =</span> <span class="fl">0.5</span>, <span class="dt">limit =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_x_discrete</span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">scale_y_discrete</span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">theme</span>(
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(
+            <span class="dt">angle =</span> <span class="dv">45</span>, 
+            <span class="dt">vjust =</span> <span class="dv">1</span>, 
+            <span class="dt">size =</span> <span class="dv">12</span>, 
+            <span class="dt">hjust =</span> <span class="dv">1</span>
+        )
+    ) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Effect of batch regression methods per individual&quot;</span>)</code></pre></div>
+<p><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="sessioninfo-9" class="section level3">
+<h3><span class="header-section-number">5.1.10</span> sessionInfo()</h3>
+<pre><code>## R version 3.4.2 (2017-09-28)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Debian GNU/Linux buster/sid
+## 
+## Matrix products: default
+## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats4    parallel  methods   stats     graphics  grDevices utils    
+## [8] datasets  base     
+## 
+## other attached packages:
+##  [1] RColorBrewer_1.1-2          reshape2_1.4.2             
+##  [3] sva_3.24.4                  genefilter_1.58.1          
+##  [5] mgcv_1.8-22                 nlme_3.1-131               
+##  [7] kBET_0.99.0                 scran_1.5.14               
+##  [9] scater_1.5.21               SingleCellExperiment_0.99.4
+## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
+## [13] edgeR_3.18.1                limma_3.32.10              
+## [15] EDASeq_2.10.0               ShortRead_1.34.2           
+## [17] GenomicAlignments_1.12.2    SummarizedExperiment_1.6.5 
+## [19] DelayedArray_0.2.7          matrixStats_0.52.2         
+## [21] Rsamtools_1.28.0            GenomicRanges_1.28.6       
+## [23] GenomeInfoDb_1.12.3         Biostrings_2.44.2          
+## [25] XVector_0.16.0              IRanges_2.10.5             
+## [27] S4Vectors_0.14.7            BiocParallel_1.10.1        
+## [29] Biobase_2.36.2              BiocGenerics_0.22.1        
+## [31] scRNA.seq.funcs_0.1.0       knitr_1.17                 
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rtsne_0.13              ggbeeswarm_0.6.0       
+##  [3] colorspace_1.3-2        rjson_0.2.15           
+##  [5] hwriter_1.3.2           dynamicTreeCut_1.63-1  
+##  [7] rprojroot_1.2           DT_0.2                 
+##  [9] bit64_0.9-7             AnnotationDbi_1.38.2   
+## [11] splines_3.4.2           R.methodsS3_1.7.1      
+## [13] tximport_1.4.0          DESeq_1.28.0           
+## [15] geneplotter_1.54.0      annotate_1.54.0        
+## [17] cluster_2.0.6           R.oo_1.21.0            
+## [19] shinydashboard_0.6.1    shiny_1.0.5            
+## [21] compiler_3.4.2          backports_1.1.1        
+## [23] assertthat_0.2.0        Matrix_1.2-11          
+## [25] lazyeval_0.2.0          htmltools_0.3.6        
+## [27] tools_3.4.2             igraph_1.1.2           
+## [29] bindrcpp_0.2            gtable_0.2.0           
+## [31] glue_1.1.1              GenomeInfoDbData_0.99.0
+## [33] dplyr_0.7.4             Rcpp_0.12.13           
+## [35] rtracklayer_1.36.6      stringr_1.2.0          
+## [37] mime_0.5                hypergeo_1.2-13        
+## [39] statmod_1.4.30          XML_3.98-1.9           
+## [41] zlibbioc_1.22.0         MASS_7.3-47            
+## [43] zoo_1.8-0               scales_0.5.0           
+## [45] aroma.light_3.6.0       rhdf5_2.20.0           
+## [47] yaml_2.1.14             memoise_1.1.0          
+## [49] gridExtra_2.3           biomaRt_2.32.1         
+## [51] latticeExtra_0.6-28     stringi_1.1.5          
+## [53] RSQLite_2.0             orthopolynom_1.0-5     
+## [55] GenomicFeatures_1.28.5  contfrac_1.1-11        
+## [57] rlang_0.1.2             pkgconfig_2.0.1        
+## [59] moments_0.14            bitops_1.0-6           
+## [61] evaluate_0.10.1         lattice_0.20-35        
+## [63] bindr_0.1               labeling_0.3           
+## [65] htmlwidgets_0.9         cowplot_0.8.0          
+## [67] bit_1.1-12              deSolve_1.20           
+## [69] plyr_1.8.4              magrittr_1.5           
+## [71] bookdown_0.5            R6_2.2.2               
+## [73] DBI_0.7                 survival_2.41-3        
+## [75] RCurl_1.95-4.8          tibble_1.3.4           
+## [77] rmarkdown_1.6           viridis_0.4.0          
+## [79] locfit_1.5-9.1          grid_3.4.2             
+## [81] data.table_1.10.4-2     FNN_1.1                
+## [83] blob_1.1.0              digest_0.6.12          
+## [85] xtable_1.8-2            httpuv_1.3.5           
+## [87] elliptic_1.3-7          R.utils_2.5.0          
+## [89] munsell_0.4.3           beeswarm_0.2.3         
+## [91] viridisLite_0.2.0       vipor_0.4.5</code></pre>
 
 </div>
 </div>
@@ -640,8 +681,8 @@ res4 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit4)
           </div>
         </div>
       </div>
-<a href="dealing-with-confounders.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="clustering-introduction.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="construction-of-expression-matrix.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="biological-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

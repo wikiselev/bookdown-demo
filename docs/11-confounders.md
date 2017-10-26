@@ -6,7 +6,7 @@ knit: bookdown::preview_chapter
 
 ### Introduction
 
-There is a large number of potential confounders, artifacts and biases in sc-RNA-seq data. One of the main challenges in analyzing scRNA-seq data stems from the fact that it is difficult to carry out a true technical replicate (why?) to distinguish biological and technical variability. In the previous chapters we considered batch effects and in this chapter we will continue to explore how experimental artifacts can be identified and removed. We will continue using the [scater](https://github.com/davismcc/scater) package since it provides a set of methods specifically for quality control of experimental and explanatory variables. Moreover, we will continue to work with the Blischak data that was used in the previous chapter.
+There is a large number of potential confounders, artifacts and biases in sc-RNA-seq data. One of the main challenges in analyzing scRNA-seq data stems from the fact that it is difficult to carry out a true technical replicate (why?) to distinguish biological and technical variability. In the previous chapters we considered batch effects and in this chapter we will continue to explore how experimental artifacts can be identified and removed. We will continue using the `scater` package since it provides a set of methods specifically for quality control of experimental and explanatory variables. Moreover, we will continue to work with the Blischak data that was used in the previous chapter.
 
 
 
@@ -28,7 +28,7 @@ Let's first look again at the PCA plot of the QCed dataset:
 ```r
 plotPCA(
     umi.qc[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     colour_by = "batch",
     size_by = "total_features"
 )
@@ -50,7 +50,7 @@ Let's test whether some of the variables correlate with any of the PCs.
 plotQC(
     umi.qc[endog_genes, ],
     type = "find-pcs",
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     variable = "total_features"
 )
 ```
@@ -64,14 +64,14 @@ Indeed, we can see that `PC1` can be almost completely explained by the number o
 
 ### Explanatory variables
 
-scater can also compute the marginal $R^2$ for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal $R^2$ values for the variables.
+`scater` can also compute the marginal $R^2$ for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal $R^2$ values for the variables.
 
 
 ```r
 plotQC(
     umi.qc[endog_genes, ],
     type = "expl",
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     variables = c(
         "total_features",
         "total_counts",
@@ -132,7 +132,7 @@ Perform the same analysis with read counts of the Blischak data. Use `tung/reads
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.20               SingleCellExperiment_0.99.4
+##  [1] scater_1.5.21               SingleCellExperiment_0.99.4
 ##  [3] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [5] matrixStats_0.52.2          GenomicRanges_1.28.6       
 ##  [7] GenomeInfoDb_1.12.3         IRanges_2.10.5             

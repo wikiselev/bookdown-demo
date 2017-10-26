@@ -25,14 +25,14 @@
 <meta name="author" content="Vladimir Kiselev (wikiselev), Tallulah Andrews, Davis McCarthy (davisjmcc), Maren Büttner (marenbuettner) and Martin Hemberg (m_hemberg)">
 
 
-<meta name="date" content="2017-10-25">
+<meta name="date" content="2017-10-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="construction-of-expression-matrix.html">
+<link rel="prev" href="dealing-with-confounders-reads.html">
 <link rel="next" href="ideal-scrnaseq-pipeline-as-of-mar-2017.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -237,79 +237,93 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.17.11" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#sessioninfo-8"><i class="fa fa-check"></i><b>4.17.11</b> sessionInfo()</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="biological-analysis.html"><a href="biological-analysis.html"><i class="fa fa-check"></i><b>5</b> Biological Analysis</a><ul>
-<li class="chapter" data-level="5.1" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-introduction"><i class="fa fa-check"></i><b>5.1</b> Clustering Introduction</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-6"><i class="fa fa-check"></i><b>5.1.1</b> Introduction</a></li>
-<li class="chapter" data-level="5.1.2" data-path="biological-analysis.html"><a href="biological-analysis.html#dimensionality-reductions"><i class="fa fa-check"></i><b>5.1.2</b> Dimensionality reductions</a></li>
-<li class="chapter" data-level="5.1.3" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-methods"><i class="fa fa-check"></i><b>5.1.3</b> Clustering methods</a></li>
-<li class="chapter" data-level="5.1.4" data-path="biological-analysis.html"><a href="biological-analysis.html#challenges-in-clustering"><i class="fa fa-check"></i><b>5.1.4</b> Challenges in clustering</a></li>
-<li class="chapter" data-level="5.1.5" data-path="biological-analysis.html"><a href="biological-analysis.html#tools-for-scrna-seq-data"><i class="fa fa-check"></i><b>5.1.5</b> Tools for scRNA-seq data</a></li>
-</ul></li>
-<li class="chapter" data-level="5.2" data-path="biological-analysis.html"><a href="biological-analysis.html#clust-methods"><i class="fa fa-check"></i><b>5.2</b> Clustering example</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="biological-analysis.html"><a href="biological-analysis.html#deng-dataset"><i class="fa fa-check"></i><b>5.2.1</b> Deng dataset</a></li>
-<li class="chapter" data-level="5.2.2" data-path="biological-analysis.html"><a href="biological-analysis.html#sc3-1"><i class="fa fa-check"></i><b>5.2.2</b> SC3</a></li>
-<li class="chapter" data-level="5.2.3" data-path="biological-analysis.html"><a href="biological-analysis.html#pcareduce-1"><i class="fa fa-check"></i><b>5.2.3</b> pcaReduce</a></li>
-<li class="chapter" data-level="5.2.4" data-path="biological-analysis.html"><a href="biological-analysis.html#tsne-kmeans"><i class="fa fa-check"></i><b>5.2.4</b> tSNE + kmeans</a></li>
-<li class="chapter" data-level="5.2.5" data-path="biological-analysis.html"><a href="biological-analysis.html#snn-cliq-1"><i class="fa fa-check"></i><b>5.2.5</b> SNN-Cliq</a></li>
-<li class="chapter" data-level="5.2.6" data-path="biological-analysis.html"><a href="biological-analysis.html#sincera-1"><i class="fa fa-check"></i><b>5.2.6</b> SINCERA</a></li>
-<li class="chapter" data-level="5.2.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-9"><i class="fa fa-check"></i><b>5.2.7</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.3" data-path="biological-analysis.html"><a href="biological-analysis.html#seurat-1"><i class="fa fa-check"></i><b>5.3</b> <code>Seurat</code></a><ul>
-<li class="chapter" data-level="5.3.1" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-10"><i class="fa fa-check"></i><b>5.3.1</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.4" data-path="biological-analysis.html"><a href="biological-analysis.html#feature-selection"><i class="fa fa-check"></i><b>5.4</b> Feature Selection</a><ul>
-<li class="chapter" data-level="5.4.1" data-path="biological-analysis.html"><a href="biological-analysis.html#identifying-genes-vs-a-null-model"><i class="fa fa-check"></i><b>5.4.1</b> Identifying Genes vs a Null Model</a></li>
-<li class="chapter" data-level="5.4.2" data-path="biological-analysis.html"><a href="biological-analysis.html#correlated-expression"><i class="fa fa-check"></i><b>5.4.2</b> Correlated Expression</a></li>
-<li class="chapter" data-level="5.4.3" data-path="biological-analysis.html"><a href="biological-analysis.html#comparing-methods"><i class="fa fa-check"></i><b>5.4.3</b> Comparing Methods</a></li>
-<li class="chapter" data-level="5.4.4" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-11"><i class="fa fa-check"></i><b>5.4.4</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.5" data-path="biological-analysis.html"><a href="biological-analysis.html#pseudotime-analysis"><i class="fa fa-check"></i><b>5.5</b> Pseudotime analysis</a><ul>
-<li class="chapter" data-level="5.5.1" data-path="biological-analysis.html"><a href="biological-analysis.html#tscan"><i class="fa fa-check"></i><b>5.5.1</b> TSCAN</a></li>
-<li class="chapter" data-level="5.5.2" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle"><i class="fa fa-check"></i><b>5.5.2</b> monocle</a></li>
-<li class="chapter" data-level="5.5.3" data-path="biological-analysis.html"><a href="biological-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>5.5.3</b> Diffusion maps</a></li>
-<li class="chapter" data-level="5.5.4" data-path="biological-analysis.html"><a href="biological-analysis.html#slicer"><i class="fa fa-check"></i><b>5.5.4</b> SLICER</a></li>
-<li class="chapter" data-level="5.5.5" data-path="biological-analysis.html"><a href="biological-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>5.5.5</b> Comparison of the methods</a></li>
-<li class="chapter" data-level="5.5.6" data-path="biological-analysis.html"><a href="biological-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>5.5.6</b> Expression of genes through time</a></li>
-<li class="chapter" data-level="5.5.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-12"><i class="fa fa-check"></i><b>5.5.7</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.6" data-path="biological-analysis.html"><a href="biological-analysis.html#imputation"><i class="fa fa-check"></i><b>5.6</b> Imputation</a><ul>
-<li class="chapter" data-level="5.6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#scimpute"><i class="fa fa-check"></i><b>5.6.1</b> scImpute</a></li>
-<li class="chapter" data-level="5.6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#magic"><i class="fa fa-check"></i><b>5.6.2</b> MAGIC</a></li>
-<li class="chapter" data-level="5.6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-13"><i class="fa fa-check"></i><b>5.6.3</b> sessionInfo()</a></li>
-</ul></li>
-<li class="chapter" data-level="5.7" data-path="biological-analysis.html"><a href="biological-analysis.html#differential-expression-de-analysis"><i class="fa fa-check"></i><b>5.7</b> Differential Expression (DE) analysis</a><ul>
-<li class="chapter" data-level="5.7.1" data-path="biological-analysis.html"><a href="biological-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>5.7.1</b> Bulk RNA-seq</a></li>
-<li class="chapter" data-level="5.7.2" data-path="biological-analysis.html"><a href="biological-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>5.7.2</b> Single cell RNA-seq</a></li>
-<li class="chapter" data-level="5.7.3" data-path="biological-analysis.html"><a href="biological-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>5.7.3</b> Differences in Distribution</a></li>
-<li class="chapter" data-level="5.7.4" data-path="biological-analysis.html"><a href="biological-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>5.7.4</b> Models of single-cell RNASeq data</a></li>
-</ul></li>
-<li class="chapter" data-level="5.8" data-path="biological-analysis.html"><a href="biological-analysis.html#de-in-a-real-dataset"><i class="fa fa-check"></i><b>5.8</b> DE in a real dataset</a><ul>
-<li class="chapter" data-level="5.8.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-7"><i class="fa fa-check"></i><b>5.8.1</b> Introduction</a></li>
-<li class="chapter" data-level="5.8.2" data-path="biological-analysis.html"><a href="biological-analysis.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>5.8.2</b> Kolmogorov-Smirnov test</a></li>
-<li class="chapter" data-level="5.8.3" data-path="biological-analysis.html"><a href="biological-analysis.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>5.8.3</b> Wilcox/Mann-Whitney-U Test</a></li>
-<li class="chapter" data-level="5.8.4" data-path="biological-analysis.html"><a href="biological-analysis.html#edger"><i class="fa fa-check"></i><b>5.8.4</b> edgeR</a></li>
-<li class="chapter" data-level="5.8.5" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle-1"><i class="fa fa-check"></i><b>5.8.5</b> Monocle</a></li>
-<li class="chapter" data-level="5.8.6" data-path="biological-analysis.html"><a href="biological-analysis.html#mast"><i class="fa fa-check"></i><b>5.8.6</b> MAST</a></li>
-<li class="chapter" data-level="5.8.7" data-path="biological-analysis.html"><a href="biological-analysis.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>5.8.7</b> Slow Methods (&gt;1h to run)</a></li>
-<li class="chapter" data-level="5.8.8" data-path="biological-analysis.html"><a href="biological-analysis.html#bpsc"><i class="fa fa-check"></i><b>5.8.8</b> BPSC</a></li>
-<li class="chapter" data-level="5.8.9" data-path="biological-analysis.html"><a href="biological-analysis.html#scde"><i class="fa fa-check"></i><b>5.8.9</b> SCDE</a></li>
-<li class="chapter" data-level="5.8.10" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-14"><i class="fa fa-check"></i><b>5.8.10</b> sessionInfo()</a></li>
+<li class="chapter" data-level="5" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html"><i class="fa fa-check"></i><b>5</b> Dealing with confounders (Reads)</a><ul>
+<li class="chapter" data-level="5.1" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#remove-unwanted-variation-1"><i class="fa fa-check"></i><b>5.1</b> Remove Unwanted Variation</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#ruvg-1"><i class="fa fa-check"></i><b>5.1.1</b> RUVg</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#ruvs-1"><i class="fa fa-check"></i><b>5.1.2</b> RUVs</a></li>
+<li class="chapter" data-level="5.1.3" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#combat-1"><i class="fa fa-check"></i><b>5.1.3</b> Combat</a></li>
+<li class="chapter" data-level="5.1.4" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#mnncorrect-1"><i class="fa fa-check"></i><b>5.1.4</b> mnnCorrect</a></li>
+<li class="chapter" data-level="5.1.5" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#glm-1"><i class="fa fa-check"></i><b>5.1.5</b> GLM</a></li>
+<li class="chapter" data-level="5.1.6" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-1-1"><i class="fa fa-check"></i><b>5.1.6</b> Effectiveness 1</a></li>
+<li class="chapter" data-level="5.1.7" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-2-1"><i class="fa fa-check"></i><b>5.1.7</b> Effectiveness 2</a></li>
+<li class="chapter" data-level="5.1.8" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-3-1"><i class="fa fa-check"></i><b>5.1.8</b> Effectiveness 3</a></li>
+<li class="chapter" data-level="5.1.9" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#effectiveness-4-1"><i class="fa fa-check"></i><b>5.1.9</b> Effectiveness 4</a></li>
+<li class="chapter" data-level="5.1.10" data-path="dealing-with-confounders-reads.html"><a href="dealing-with-confounders-reads.html#sessioninfo-9"><i class="fa fa-check"></i><b>5.1.10</b> sessionInfo()</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><i class="fa fa-check"></i><b>6</b> “Ideal” scRNAseq pipeline (as of Mar 2017)</a><ul>
-<li class="chapter" data-level="6.1" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#experimental-design"><i class="fa fa-check"></i><b>6.1</b> Experimental Design</a></li>
-<li class="chapter" data-level="6.2" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#processing-reads"><i class="fa fa-check"></i><b>6.2</b> Processing Reads</a></li>
-<li class="chapter" data-level="6.3" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>6.3</b> Preparing Expression Matrix</a></li>
-<li class="chapter" data-level="6.4" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#biological-interpretation"><i class="fa fa-check"></i><b>6.4</b> Biological Interpretation</a></li>
+<li class="chapter" data-level="6" data-path="biological-analysis.html"><a href="biological-analysis.html"><i class="fa fa-check"></i><b>6</b> Biological Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-introduction"><i class="fa fa-check"></i><b>6.1</b> Clustering Introduction</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-6"><i class="fa fa-check"></i><b>6.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.1.2" data-path="biological-analysis.html"><a href="biological-analysis.html#dimensionality-reductions"><i class="fa fa-check"></i><b>6.1.2</b> Dimensionality reductions</a></li>
+<li class="chapter" data-level="6.1.3" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-methods"><i class="fa fa-check"></i><b>6.1.3</b> Clustering methods</a></li>
+<li class="chapter" data-level="6.1.4" data-path="biological-analysis.html"><a href="biological-analysis.html#challenges-in-clustering"><i class="fa fa-check"></i><b>6.1.4</b> Challenges in clustering</a></li>
+<li class="chapter" data-level="6.1.5" data-path="biological-analysis.html"><a href="biological-analysis.html#tools-for-scrna-seq-data"><i class="fa fa-check"></i><b>6.1.5</b> Tools for scRNA-seq data</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>7</b> Advanced exercises</a></li>
-<li class="chapter" data-level="8" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>8</b> Resources</a><ul>
-<li class="chapter" data-level="8.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>8.1</b> scRNA-seq protocols</a></li>
-<li class="chapter" data-level="8.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>8.2</b> External RNA Control Consortium (ERCC)</a></li>
-<li class="chapter" data-level="8.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>8.3</b> scRNA-seq analysis tools</a></li>
-<li class="chapter" data-level="8.4" data-path="resources.html"><a href="resources.html#scrna-seq-public-datasets"><i class="fa fa-check"></i><b>8.4</b> scRNA-seq public datasets</a></li>
+<li class="chapter" data-level="6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#clust-methods"><i class="fa fa-check"></i><b>6.2</b> Clustering example</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="biological-analysis.html"><a href="biological-analysis.html#deng-dataset"><i class="fa fa-check"></i><b>6.2.1</b> Deng dataset</a></li>
+<li class="chapter" data-level="6.2.2" data-path="biological-analysis.html"><a href="biological-analysis.html#sc3-1"><i class="fa fa-check"></i><b>6.2.2</b> SC3</a></li>
+<li class="chapter" data-level="6.2.3" data-path="biological-analysis.html"><a href="biological-analysis.html#pcareduce-1"><i class="fa fa-check"></i><b>6.2.3</b> pcaReduce</a></li>
+<li class="chapter" data-level="6.2.4" data-path="biological-analysis.html"><a href="biological-analysis.html#tsne-kmeans"><i class="fa fa-check"></i><b>6.2.4</b> tSNE + kmeans</a></li>
+<li class="chapter" data-level="6.2.5" data-path="biological-analysis.html"><a href="biological-analysis.html#snn-cliq-1"><i class="fa fa-check"></i><b>6.2.5</b> SNN-Cliq</a></li>
+<li class="chapter" data-level="6.2.6" data-path="biological-analysis.html"><a href="biological-analysis.html#sincera-1"><i class="fa fa-check"></i><b>6.2.6</b> SINCERA</a></li>
+<li class="chapter" data-level="6.2.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-10"><i class="fa fa-check"></i><b>6.2.7</b> sessionInfo()</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>9</b> References</a></li>
+<li class="chapter" data-level="6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#seurat-1"><i class="fa fa-check"></i><b>6.3</b> <code>Seurat</code></a><ul>
+<li class="chapter" data-level="6.3.1" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-11"><i class="fa fa-check"></i><b>6.3.1</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="biological-analysis.html"><a href="biological-analysis.html#feature-selection"><i class="fa fa-check"></i><b>6.4</b> Feature Selection</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="biological-analysis.html"><a href="biological-analysis.html#identifying-genes-vs-a-null-model"><i class="fa fa-check"></i><b>6.4.1</b> Identifying Genes vs a Null Model</a></li>
+<li class="chapter" data-level="6.4.2" data-path="biological-analysis.html"><a href="biological-analysis.html#correlated-expression"><i class="fa fa-check"></i><b>6.4.2</b> Correlated Expression</a></li>
+<li class="chapter" data-level="6.4.3" data-path="biological-analysis.html"><a href="biological-analysis.html#comparing-methods"><i class="fa fa-check"></i><b>6.4.3</b> Comparing Methods</a></li>
+<li class="chapter" data-level="6.4.4" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-12"><i class="fa fa-check"></i><b>6.4.4</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="biological-analysis.html"><a href="biological-analysis.html#pseudotime-analysis"><i class="fa fa-check"></i><b>6.5</b> Pseudotime analysis</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="biological-analysis.html"><a href="biological-analysis.html#tscan"><i class="fa fa-check"></i><b>6.5.1</b> TSCAN</a></li>
+<li class="chapter" data-level="6.5.2" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle"><i class="fa fa-check"></i><b>6.5.2</b> monocle</a></li>
+<li class="chapter" data-level="6.5.3" data-path="biological-analysis.html"><a href="biological-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>6.5.3</b> Diffusion maps</a></li>
+<li class="chapter" data-level="6.5.4" data-path="biological-analysis.html"><a href="biological-analysis.html#slicer"><i class="fa fa-check"></i><b>6.5.4</b> SLICER</a></li>
+<li class="chapter" data-level="6.5.5" data-path="biological-analysis.html"><a href="biological-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>6.5.5</b> Comparison of the methods</a></li>
+<li class="chapter" data-level="6.5.6" data-path="biological-analysis.html"><a href="biological-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>6.5.6</b> Expression of genes through time</a></li>
+<li class="chapter" data-level="6.5.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-13"><i class="fa fa-check"></i><b>6.5.7</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="biological-analysis.html"><a href="biological-analysis.html#imputation"><i class="fa fa-check"></i><b>6.6</b> Imputation</a><ul>
+<li class="chapter" data-level="6.6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#scimpute"><i class="fa fa-check"></i><b>6.6.1</b> scImpute</a></li>
+<li class="chapter" data-level="6.6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#magic"><i class="fa fa-check"></i><b>6.6.2</b> MAGIC</a></li>
+<li class="chapter" data-level="6.6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-14"><i class="fa fa-check"></i><b>6.6.3</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="biological-analysis.html"><a href="biological-analysis.html#differential-expression-de-analysis"><i class="fa fa-check"></i><b>6.7</b> Differential Expression (DE) analysis</a><ul>
+<li class="chapter" data-level="6.7.1" data-path="biological-analysis.html"><a href="biological-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>6.7.1</b> Bulk RNA-seq</a></li>
+<li class="chapter" data-level="6.7.2" data-path="biological-analysis.html"><a href="biological-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>6.7.2</b> Single cell RNA-seq</a></li>
+<li class="chapter" data-level="6.7.3" data-path="biological-analysis.html"><a href="biological-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>6.7.3</b> Differences in Distribution</a></li>
+<li class="chapter" data-level="6.7.4" data-path="biological-analysis.html"><a href="biological-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>6.7.4</b> Models of single-cell RNASeq data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.8" data-path="biological-analysis.html"><a href="biological-analysis.html#de-in-a-real-dataset"><i class="fa fa-check"></i><b>6.8</b> DE in a real dataset</a><ul>
+<li class="chapter" data-level="6.8.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-7"><i class="fa fa-check"></i><b>6.8.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.8.2" data-path="biological-analysis.html"><a href="biological-analysis.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>6.8.2</b> Kolmogorov-Smirnov test</a></li>
+<li class="chapter" data-level="6.8.3" data-path="biological-analysis.html"><a href="biological-analysis.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>6.8.3</b> Wilcox/Mann-Whitney-U Test</a></li>
+<li class="chapter" data-level="6.8.4" data-path="biological-analysis.html"><a href="biological-analysis.html#edger"><i class="fa fa-check"></i><b>6.8.4</b> edgeR</a></li>
+<li class="chapter" data-level="6.8.5" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle-1"><i class="fa fa-check"></i><b>6.8.5</b> Monocle</a></li>
+<li class="chapter" data-level="6.8.6" data-path="biological-analysis.html"><a href="biological-analysis.html#mast"><i class="fa fa-check"></i><b>6.8.6</b> MAST</a></li>
+<li class="chapter" data-level="6.8.7" data-path="biological-analysis.html"><a href="biological-analysis.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>6.8.7</b> Slow Methods (&gt;1h to run)</a></li>
+<li class="chapter" data-level="6.8.8" data-path="biological-analysis.html"><a href="biological-analysis.html#bpsc"><i class="fa fa-check"></i><b>6.8.8</b> BPSC</a></li>
+<li class="chapter" data-level="6.8.9" data-path="biological-analysis.html"><a href="biological-analysis.html#scde"><i class="fa fa-check"></i><b>6.8.9</b> SCDE</a></li>
+<li class="chapter" data-level="6.8.10" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-15"><i class="fa fa-check"></i><b>6.8.10</b> sessionInfo()</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><i class="fa fa-check"></i><b>7</b> “Ideal” scRNAseq pipeline (as of Mar 2017)</a><ul>
+<li class="chapter" data-level="7.1" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#experimental-design"><i class="fa fa-check"></i><b>7.1</b> Experimental Design</a></li>
+<li class="chapter" data-level="7.2" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#processing-reads"><i class="fa fa-check"></i><b>7.2</b> Processing Reads</a></li>
+<li class="chapter" data-level="7.3" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>7.3</b> Preparing Expression Matrix</a></li>
+<li class="chapter" data-level="7.4" data-path="ideal-scrnaseq-pipeline-as-of-mar-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#biological-interpretation"><i class="fa fa-check"></i><b>7.4</b> Biological Interpretation</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>8</b> Advanced exercises</a></li>
+<li class="chapter" data-level="9" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>9</b> Resources</a><ul>
+<li class="chapter" data-level="9.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>9.1</b> scRNA-seq protocols</a></li>
+<li class="chapter" data-level="9.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>9.2</b> External RNA Control Consortium (ERCC)</a></li>
+<li class="chapter" data-level="9.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>9.3</b> scRNA-seq analysis tools</a></li>
+<li class="chapter" data-level="9.4" data-path="resources.html"><a href="resources.html#scrna-seq-public-datasets"><i class="fa fa-check"></i><b>9.4</b> scRNA-seq public datasets</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 <li class="divider"></li>
 <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2017</a></li>
 
@@ -331,73 +345,74 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="biological-analysis" class="section level1">
-<h1><span class="header-section-number">5</span> Biological Analysis</h1>
+<h1><span class="header-section-number">6</span> Biological Analysis</h1>
 <div id="clustering-introduction" class="section level2">
-<h2><span class="header-section-number">5.1</span> Clustering Introduction</h2>
+<h2><span class="header-section-number">6.1</span> Clustering Introduction</h2>
 <p>Once we have normalized the data and removed confounders we can carry out analyses that are relevant to the biological questions at hand. The exact nature of the analysis depends on the dataset. Nevertheless, there are a few aspects that are useful in a wide range of contexts and we will be discussing some of them in the next few chapters. We will start with the clustering of scRNA-seq data.</p>
 <div id="introduction-6" class="section level3">
-<h3><span class="header-section-number">5.1.1</span> Introduction</h3>
+<h3><span class="header-section-number">6.1.1</span> Introduction</h3>
 <p>One of the most promising applications of scRNA-seq is <em>de novo</em> discovery and annotation of cell-types based on transcription profiles. Computationally, this is a hard problem as it amounts to <strong>unsupervised clustering</strong>. That is, we need to identify groups of cells based on the similarities of the transcriptomes without any prior knowledge of the labels. Moreover, in most situations we do not even know the number of clusters <em>a priori</em>. The problem is made even more challenging due to the high level of noise (both technical and biological) and the large number of dimensions (i.e. genes).</p>
 </div>
 <div id="dimensionality-reductions" class="section level3">
-<h3><span class="header-section-number">5.1.2</span> Dimensionality reductions</h3>
+<h3><span class="header-section-number">6.1.2</span> Dimensionality reductions</h3>
 <p>When working with large datasets, it can often be beneficial to apply some sort of dimensionality reduction method. By projecting the data onto a lower-dimensional sub-space, one is often able to significantly reduce the amount of noise. An additional benefit is that it is typically much easier to visualize the data in a 2 or 3-dimensional subspace. We have already discussed PCA (chapter <a href="construction-of-expression-matrix.html#visual-pca">4.10.2</a>) and t-SNE (chapter <a href="construction-of-expression-matrix.html#visual-pca">4.10.2</a>).</p>
 </div>
 <div id="clustering-methods" class="section level3">
-<h3><span class="header-section-number">5.1.3</span> Clustering methods</h3>
+<h3><span class="header-section-number">6.1.3</span> Clustering methods</h3>
 <p><strong>Unsupervised clustering</strong> is useful in many different applications and it has been widely studied in machine learning. Some of the most popular approaches are <strong>hierarchical clustering</strong>, <strong>k-means clustering</strong> and <strong>graph-based clustering</strong>.</p>
 <div id="hierarchical-clustering" class="section level4">
-<h4><span class="header-section-number">5.1.3.1</span> Hierarchical clustering</h4>
+<h4><span class="header-section-number">6.1.3.1</span> Hierarchical clustering</h4>
 <p>In <a href="https://en.wikipedia.org/wiki/Hierarchical_clustering">hierarchical clustering</a>, one can use either a bottom-up or a top-down approach. In the former case, each cell is initially assigned to its own cluster and pairs of clusters are subsequently merged to create a hieararchy:</p>
 <div class="figure" style="text-align: center"><span id="fig:clust-hierarch-raw"></span>
 <img src="figures/hierarchical_clustering1.png" alt="Raw data" width="30%" />
 <p class="caption">
-Figure 5.1: Raw data
+Figure 6.1: Raw data
 </p>
 </div>
 <div class="figure" style="text-align: center"><span id="fig:clust-hierarch-dendr"></span>
 <img src="figures/hierarchical_clustering2.png" alt="The hierarchical clustering dendrogram" width="50%" />
 <p class="caption">
-Figure 5.2: The hierarchical clustering dendrogram
+Figure 6.2: The hierarchical clustering dendrogram
 </p>
 </div>
 <p>With a top-down strategy, one instead starts with all observations in one cluster and then recursively split each cluster to form a hierarchy. One of the advantages of this strategy is that the method is deterministic.</p>
 </div>
 <div id="k-means" class="section level4">
-<h4><span class="header-section-number">5.1.3.2</span> k-means</h4>
+<h4><span class="header-section-number">6.1.3.2</span> k-means</h4>
 <p>In <a href="https://en.wikipedia.org/wiki/K-means_clustering"><em>k</em>-means clustering</a>, the goal is to partition <em>N</em> cells into <em>k</em> different clusters. In an iterative manner, cluster centers are assigned and each cell is assigned to its nearest cluster:</p>
 <div class="figure" style="text-align: center"><span id="fig:clust-k-means"></span>
 <img src="figures/k-means.png" alt="Schematic representation of the k-means clustering" width="100%" />
 <p class="caption">
-Figure 5.3: Schematic representation of the k-means clustering
+Figure 6.3: Schematic representation of the k-means clustering
 </p>
 </div>
 <p>Most methods for scRNA-seq analysis includes a <em>k</em>-means step at some point.</p>
 </div>
 <div id="graph-based-methods" class="section level4">
-<h4><span class="header-section-number">5.1.3.3</span> Graph-based methods</h4>
+<h4><span class="header-section-number">6.1.3.3</span> Graph-based methods</h4>
 <p>Over the last two decades there has been a lot of interest in analyzing networks in various domains. One goal is to identify groups or modules of nodes in a network.</p>
 <div class="figure" style="text-align: center"><span id="fig:clust-graph"></span>
 <img src="figures/graph_network.jpg" alt="Schematic representation of the graph network" width="100%" />
 <p class="caption">
-Figure 5.4: Schematic representation of the graph network
+Figure 6.4: Schematic representation of the graph network
 </p>
 </div>
 <p>Some of these methods can be applied to scRNA-seq data by building a graph where each node represents a cell. Note that constructing the graph and assigning weights to the edges is not trivial. One advantage of graph-based methods is that some of them are very efficient and can be applied to networks containing millions of nodes.</p>
 </div>
 </div>
 <div id="challenges-in-clustering" class="section level3">
-<h3><span class="header-section-number">5.1.4</span> Challenges in clustering</h3>
+<h3><span class="header-section-number">6.1.4</span> Challenges in clustering</h3>
 <ul>
 <li>What is the number of clusters <em>k</em>?</li>
-<li><strong>Scalability</strong>: in the last 2 years the number of cells in scRNA-seq experiments has grown by 2 orders of magnitude from ~<span class="math inline">\(10^2\)</span> to ~<span class="math inline">\(10^4\)</span></li>
+<li>What is a cell type?</li>
+<li><strong>Scalability</strong>: in the last few years the number of cells in scRNA-seq experiments has grown by several orders of magnitude from ~<span class="math inline">\(10^2\)</span> to ~<span class="math inline">\(10^6\)</span></li>
 <li>Tools are not user-friendly</li>
 </ul>
 </div>
 <div id="tools-for-scrna-seq-data" class="section level3">
-<h3><span class="header-section-number">5.1.5</span> Tools for scRNA-seq data</h3>
+<h3><span class="header-section-number">6.1.5</span> Tools for scRNA-seq data</h3>
 <div id="sincera" class="section level4">
-<h4><span class="header-section-number">5.1.5.1</span> <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a></h4>
+<h4><span class="header-section-number">6.1.5.1</span> <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a></h4>
 <ul>
 <li>SINCERA <span class="citation">(Guo et al. <a href="#ref-Guo2015-ok">2015</a>)</span> is based on hierarchical clustering</li>
 <li>Data is converted to <em>z</em>-scores before clustering</li>
@@ -405,15 +420,15 @@ Figure 5.4: Schematic representation of the graph network
 </ul>
 </div>
 <div id="pcareduce" class="section level4">
-<h4><span class="header-section-number">5.1.5.2</span> <a href="https://github.com/JustinaZ/pcaReduce">pcaReduce</a></h4>
+<h4><span class="header-section-number">6.1.5.2</span> <a href="https://github.com/JustinaZ/pcaReduce">pcaReduce</a></h4>
 <p>pcaReduce <span class="citation">(Žurauskienė and Yau <a href="#ref-Zurauskiene2016-kg">2016</a>)</span> combines PCA, <em>k</em>-means and “iterative” hierarchical clustering. Starting from a large number of clusters pcaReduce iteratively merges similar clusters; after each merging event it removes the principle component explaning the least variance in the data.</p>
 </div>
 <div id="sc3" class="section level4">
-<h4><span class="header-section-number">5.1.5.3</span> <a href="http://bioconductor.org/packages/SC3/">SC3</a></h4>
+<h4><span class="header-section-number">6.1.5.3</span> <a href="http://bioconductor.org/packages/SC3/">SC3</a></h4>
 <div class="figure" style="text-align: center"><span id="fig:clust-sc3"></span>
 <img src="figures/sc3.png" alt="SC3 pipeline" width="100%" />
 <p class="caption">
-Figure 5.5: SC3 pipeline
+Figure 6.5: SC3 pipeline
 </p>
 </div>
 <ul>
@@ -423,27 +438,27 @@ Figure 5.5: SC3 pipeline
 </ul>
 </div>
 <div id="tsne-k-means" class="section level4">
-<h4><span class="header-section-number">5.1.5.4</span> tSNE + k-means</h4>
+<h4><span class="header-section-number">6.1.5.4</span> tSNE + k-means</h4>
 <ul>
 <li>Based on <strong>tSNE</strong> maps</li>
 <li>Utilises <em>k</em>-means</li>
 </ul>
 </div>
 <div id="seurat" class="section level4">
-<h4><span class="header-section-number">5.1.5.5</span> <a href="https://github.com/satijalab/seurat">SEURAT</a></h4>
+<h4><span class="header-section-number">6.1.5.5</span> <a href="https://github.com/satijalab/seurat">SEURAT</a></h4>
 <p>In the newest versions of SEURAT (v. 1.3-1.4) the clustering is based on a <em>community detection</em> approach similar to one previously proposed for analyzing CyTOF data <span class="citation">(Levine et al. <a href="#ref-Levine2015-fk">2015</a>)</span>. <strong>tSNE</strong> is only used exclusively for visualization. In the next chapter we will be using the latest version of <code>SEURAT</code>.</p>
 <p><strong>Note</strong></p>
 <p>In the original version <code>SEURAT</code> <span class="citation">(Macosko et al. <a href="#ref-Macosko2015-ix">2015</a>)</span> first utilised PCA on a set of cells, then a number of statistically significant PCs were defined. Those PCs were further projected to a 2D space using tSNE. The remaining cells were projected on the same tSNE map. Density clustering algorithm (<a href="https://en.wikipedia.org/wiki/DBSCAN">DBSCAN</a>) was then used to identify cell clusters in the 2D space.</p>
 </div>
 <div id="snn-cliq" class="section level4">
-<h4><span class="header-section-number">5.1.5.6</span> <a href="http://bioinfo.uncc.edu/SNNCliq/">SNN-Cliq</a></h4>
+<h4><span class="header-section-number">6.1.5.6</span> <a href="http://bioinfo.uncc.edu/SNNCliq/">SNN-Cliq</a></h4>
 <p>SNN-Cliq <span class="citation">(C. Xu and Su <a href="#ref-Xu2015-vf">2015</a>)</span> is a graph-based method. First the method identifies the k-nearest-neighbours of each cell according to the <em>distance</em> measure. This is used to calculate the number of Shared Nearest Neighbours (SNN) between each pair of cells. A graph is built by placing an edge between two cells If they have at least one SNN. Clusters are defined as groups of cells with many edges between them using a “clique” method. SNN-Cliq requires several parameters to be defined manually.</p>
 
 </div>
 </div>
 </div>
 <div id="clust-methods" class="section level2">
-<h2><span class="header-section-number">5.2</span> Clustering example</h2>
+<h2><span class="header-section-number">6.2</span> Clustering example</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pcaMethods)
 <span class="kw">library</span>(pcaReduce)
 <span class="kw">library</span>(SC3)
@@ -454,7 +469,7 @@ Figure 5.5: SC3 pipeline
 <span class="kw">set.seed</span>(<span class="dv">1234567</span>)</code></pre></div>
 <p>To illustrate clustering of scRNA-seq data, we consider the <code>Deng</code> dataset of cells from developing mouse embryo <span class="citation">(Deng et al. <a href="#ref-Deng2014-mx">2014</a>)</span>. We have preprocessed the dataset and created a <code>SingleCellExperiment</code> object in advance. We have also annotated the cells with the cell type information (it is the <code>cell_type1</code> and <code>cell_type2</code> columns in the <code>colData</code> slot).</p>
 <div id="deng-dataset" class="section level3">
-<h3><span class="header-section-number">5.2.1</span> Deng dataset</h3>
+<h3><span class="header-section-number">6.2.1</span> Deng dataset</h3>
 <p>Let’s load the data and look at it:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">deng &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;deng/deng-reads.rds&quot;</span>)
 deng</code></pre></div>
@@ -482,7 +497,7 @@ deng</code></pre></div>
 <p><img src="18-clustering_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="sc3-1" class="section level3">
-<h3><span class="header-section-number">5.2.2</span> SC3</h3>
+<h3><span class="header-section-number">6.2.2</span> SC3</h3>
 <p>Let’s run <code>SC3</code> clustering on the Deng data. The advantage of the <code>SC3</code> is that it can directly ingest a <code>SingleCellExperiment</code> object.</p>
 <p>Now let’s image we do not know the number of clusters <em>k</em> (cell types). <code>SC3</code> can estimate a number of clusters for you:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">deng &lt;-<span class="st"> </span><span class="kw">sc3_estimate_k</span>(deng)</code></pre></div>
@@ -530,7 +545,7 @@ deng</code></pre></div>
 </ul>
 </div>
 <div id="pcareduce-1" class="section level3">
-<h3><span class="header-section-number">5.2.3</span> pcaReduce</h3>
+<h3><span class="header-section-number">6.2.3</span> pcaReduce</h3>
 <p><code>pcaReduce</code> operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running <code>pcaReduce</code>. We will use the default <code>SC3</code> gene filter (note that the <code>exprs</code> slot of a <code>scater</code> object is log-transformed by default).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use the same gene filter as in SC3</span>
 input &lt;-<span class="st"> </span><span class="kw">logcounts</span>(deng[<span class="kw">rowData</span>(deng)<span class="op">$</span>sc3_gene_filter, ])</code></pre></div>
@@ -547,20 +562,20 @@ pca.red &lt;-<span class="st"> </span><span class="kw">PCAreduce</span>(<span cl
 <div class="figure" style="text-align: center"><span id="fig:clust-pca-reduce2"></span>
 <img src="18-clustering_files/figure-html/clust-pca-reduce2-1.png" alt="Clustering solutions of pcaReduce method for $k=2$." width="672" />
 <p class="caption">
-Figure 5.6: Clustering solutions of pcaReduce method for <span class="math inline">\(k=2\)</span>.
+Figure 6.6: Clustering solutions of pcaReduce method for <span class="math inline">\(k=2\)</span>.
 </p>
 </div>
 <p><strong>Exercise 6</strong>: Compare the results between <code>SC3</code> and <code>pcaReduce</code> for <span class="math inline">\(k=10\)</span>. What is the main difference between the solutions provided by the two different methods?</p>
 <p><strong>Our solution</strong>: <img src="18-clustering_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="tsne-kmeans" class="section level3">
-<h3><span class="header-section-number">5.2.4</span> tSNE + kmeans</h3>
+<h3><span class="header-section-number">6.2.4</span> tSNE + kmeans</h3>
 <p><a href="https://lvdmaaten.github.io/tsne/">tSNE</a> plots that we saw before (<a href="construction-of-expression-matrix.html#visual-tsne">4.10.3</a>) when used the <strong>scater</strong> package are made by using the <a href="https://cran.r-project.org/web/packages/Rtsne/index.html">Rtsne</a> and <a href="https://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a> packages. Here we will do the same:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">deng &lt;-<span class="st"> </span><span class="kw">plotTSNE</span>(deng, <span class="dt">rand_seed =</span> <span class="dv">1</span>, <span class="dt">return_SCE =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:clust-tsne"></span>
 <img src="18-clustering_files/figure-html/clust-tsne-1.png" alt="tSNE map of the patient data" width="672" />
 <p class="caption">
-Figure 5.7: tSNE map of the patient data
+Figure 6.7: tSNE map of the patient data
 </p>
 </div>
 <p>Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.</p>
@@ -571,7 +586,7 @@ Figure 5.7: tSNE map of the patient data
 <div class="figure" style="text-align: center"><span id="fig:clust-tsne-kmeans2"></span>
 <img src="18-clustering_files/figure-html/clust-tsne-kmeans2-1.png" alt="tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm" width="672" />
 <p class="caption">
-Figure 5.8: tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm
+Figure 6.8: tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm
 </p>
 </div>
 <p><strong>Exercise 7</strong>: Make the same plot for <span class="math inline">\(k=10\)</span>.</p>
@@ -580,7 +595,7 @@ Figure 5.8: tSNE map of the patient data with 8 colored clusters, identified by 
 <p>As you may have noticed, both <code>pcaReduce</code> and <code>tSNE+kmeans</code> are stochastic and give different results every time they are run. To get a better overview of the solutions, we need to run the methods multiple times. <code>SC3</code> is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.</p>
 </div>
 <div id="snn-cliq-1" class="section level3">
-<h3><span class="header-section-number">5.2.5</span> SNN-Cliq</h3>
+<h3><span class="header-section-number">6.2.5</span> SNN-Cliq</h3>
 <p>Here we run SNN-cliq with te default parameters provided in the author’s example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">distan &lt;-<span class="st"> &quot;euclidean&quot;</span>
 par.k &lt;-<span class="st"> </span><span class="dv">3</span>
@@ -621,7 +636,7 @@ snn.res &lt;-<span class="st"> </span>
 <p><strong>Our solution</strong>: <img src="18-clustering_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="sincera-1" class="section level3">
-<h3><span class="header-section-number">5.2.6</span> SINCERA</h3>
+<h3><span class="header-section-number">6.2.6</span> SINCERA</h3>
 <p>As mentioned in the previous chapter <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a> is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># perform gene-by-gene per-sample z-score transformation</span>
 dat &lt;-<span class="st"> </span><span class="kw">apply</span>(input, <span class="dv">1</span>, <span class="cf">function</span>(y) scRNA.seq.funcs<span class="op">::</span><span class="kw">z.transform.helper</span>(y))
@@ -654,15 +669,15 @@ kk &lt;-<span class="st"> </span><span class="dv">1</span>
 <div class="figure" style="text-align: center"><span id="fig:clust-sincera"></span>
 <img src="18-clustering_files/figure-html/clust-sincera-1.png" alt="Clustering solutions of SINCERA method using found $k$" width="672" />
 <p class="caption">
-Figure 5.9: Clustering solutions of SINCERA method using found <span class="math inline">\(k\)</span>
+Figure 6.9: Clustering solutions of SINCERA method using found <span class="math inline">\(k\)</span>
 </p>
 </div>
 <p><strong>Exercise 10</strong>: Compare the results between <code>SC3</code> and <code>SNN-Cliq</code>.</p>
 <p><strong>Our solution</strong>: <img src="18-clustering_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><strong>Exercise 11</strong>: Is using the singleton cluster criteria for finding <strong>k</strong> a good idea?</p>
 </div>
-<div id="sessioninfo-9" class="section level3">
-<h3><span class="header-section-number">5.2.7</span> sessionInfo()</h3>
+<div id="sessioninfo-10" class="section level3">
+<h3><span class="header-section-number">6.2.7</span> sessionInfo()</h3>
 <pre><code>## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux buster/sid
@@ -685,7 +700,7 @@ Figure 5.9: Clustering solutions of SINCERA method using found <span class="math
 ## 
 ## other attached packages:
 ##  [1] irr_0.84                    lpSolve_5.6.13             
-##  [3] pheatmap_1.0.8              scater_1.5.20              
+##  [3] pheatmap_1.0.8              scater_1.5.21              
 ##  [5] ggplot2_2.2.1               SC3_1.5.6                  
 ##  [7] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [9] DelayedArray_0.2.7          matrixStats_0.52.2         
@@ -753,7 +768,7 @@ Figure 5.9: Clustering solutions of SINCERA method using found <span class="math
 </div>
 </div>
 <div id="seurat-1" class="section level2">
-<h2><span class="header-section-number">5.3</span> <code>Seurat</code></h2>
+<h2><span class="header-section-number">6.3</span> <code>Seurat</code></h2>
 <p><a href="http://satijalab.org/seurat/">Seurat</a> is a popular R package that is designed for QC, analysis, and exploration of single cell RNA-seq data, i.e. many of the tasks covered in this course. Although the authors provide several <a href="http://satijalab.org/seurat/get_started.html">tutorials</a>, here we provide a brief overview by following an <a href="http://satijalab.org/seurat/pbmc3k_tutorial.html">example</a> created by the authors of <code>Seurat</code> (2,800 Peripheral Blood Mononuclear Cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors. We start by loading the Deng data that we have used before:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">deng &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;deng/deng-reads.rds&quot;</span>)</code></pre></div>
 <p>First, we initialize the Seurat object with the raw (non-normalized data). Keep all genes expressed in &gt;= 3 cells. Keep all cells with at least 200 detected genes:</p>
@@ -1154,8 +1169,8 @@ seuset &lt;-<span class="st"> </span><span class="kw">FindVariableGenes</span>(
             <span class="dt">nCol =</span> <span class="dv">3</span>)</code></pre></div>
 <p><img src="19-seurat_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><strong>Exercise 13</strong>: Compare marker genes provided by <code>Seurat</code> and <code>SC3</code>.</p>
-<div id="sessioninfo-10" class="section level3">
-<h3><span class="header-section-number">5.3.1</span> sessionInfo()</h3>
+<div id="sessioninfo-11" class="section level3">
+<h3><span class="header-section-number">6.3.1</span> sessionInfo()</h3>
 <pre><code>## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux buster/sid
@@ -1256,7 +1271,7 @@ seuset &lt;-<span class="st"> </span><span class="kw">FindVariableGenes</span>(
 </div>
 </div>
 <div id="feature-selection" class="section level2">
-<h2><span class="header-section-number">5.4</span> Feature Selection</h2>
+<h2><span class="header-section-number">6.4</span> Feature Selection</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scRNA.seq.funcs)
 <span class="kw">library</span>(matrixStats)
 <span class="kw">library</span>(M3Drop)
@@ -1285,11 +1300,11 @@ celltype_labs &lt;-<span class="st"> </span>uso_list<span class="op">$</span>lab
 cell_colors &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="kw">max</span>(<span class="dv">3</span>,<span class="kw">length</span>(<span class="kw">unique</span>(celltype_labs))), <span class="st">&quot;Set3&quot;</span>)</code></pre></div>
 <p><strong>Exercise 1</strong>: How many cells &amp; genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?</p>
 <div id="identifying-genes-vs-a-null-model" class="section level3">
-<h3><span class="header-section-number">5.4.1</span> Identifying Genes vs a Null Model</h3>
+<h3><span class="header-section-number">6.4.1</span> Identifying Genes vs a Null Model</h3>
 <p>There are two main approaches to unsupervised feature selection. The first is to identify genes which behave differently from a null model describing just the technical noise expected in the dataset.</p>
 <p>If the dataset contains spike-in RNAs they can be used to directly model technical noise. However, measurements of spike-ins may not experience the same technical noise as endogenous transcripts <a href="https://www.nature.com/nmeth/journal/v14/n4/full/nmeth.4220.html">(Svensson et al., 2017)</a>. In addition, scRNASeq experiments often contain only a small number of spike-ins which reduces our confidence in fitted model parameters.</p>
 <div id="highly-variable-genes" class="section level4">
-<h4><span class="header-section-number">5.4.1.1</span> Highly Variable Genes</h4>
+<h4><span class="header-section-number">6.4.1.1</span> Highly Variable Genes</h4>
 <p>The first method proposed to identify features in scRNASeq datasets was to identify highly variable genes (HVG). HVG assumes that if genes have large differences in expression across cells some of those differences are due to biological difference between the cells rather than technical noise. However, because of the nature of count data, there is a positive relationship between the mean expression of a gene and the variance in the read counts across cells. This relationship must be corrected for to properly identify HVGs.</p>
 <p><strong>Exercise 2</strong> Using the functions rowMeans and rowVars to plot the relationship between mean expression and variance for all genes in this dataset. (Hint: use log=“xy” to plot on a log-scale).</p>
 <p><img src="20-dropouts_files/figure-html/unnamed-chunk-5-1.png" width="816" style="display: block; margin: auto;" /> A popular method to correct for the relationship between variance and mean expression was proposed by <a href="http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html">Brennecke et al.</a>. To use the Brennecke method, we first normalize for library size then calculate the mean and the square coefficient of variation (variation divided by the squared mean expression). A quadratic curve is fit to the relationship between these two variables for the ERCC spike-in, and then a chi-square test is used to find genes significantly above the curve. This method is included in the M3Drop package as the Brennecke_getVariableGenes(counts, spikes) function. However, this dataset does not contain spike-ins so we will use the entire dataset to estimate the technical noise.</p>
@@ -1303,7 +1318,7 @@ cell_colors &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<sp
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">HVG_genes &lt;-<span class="st"> </span>Brennecke_HVG<span class="op">$</span>Gene</code></pre></div>
 </div>
 <div id="high-dropout-genes" class="section level4">
-<h4><span class="header-section-number">5.4.1.2</span> High Dropout Genes</h4>
+<h4><span class="header-section-number">6.4.1.2</span> High Dropout Genes</h4>
 <p>An alternative to finding HVGs is to identify genes with unexpectedly high numbers of zeros. The frequency of zeros, know as the “dropout rate”, is very closely related to expression level in scRNASeq data. Zeros are the dominant feature of single-cell RNASeq data, typically accounting for over half of the entries in the final expression matrix. These zeros predominantly result from the failure of mRNAs failing to be reversed transcribed <a href="http://www.biorxiv.org/content/early/2017/05/25/065094">(Andrews and Hemberg, 2016)</a>. Reverse transcription is an enzyme reaction thus can be modelled using the Michaelis-Menten equation:</p>
 <p><span class="math display">\[P_{dropout} = 1 - S/(K + S)\]</span></p>
 <p>where <span class="math inline">\(S\)</span> is the mRNA concentration in the cell (we will estimate this as average expression) and <span class="math inline">\(K\)</span> is the Michaelis-Menten constant.</p>
@@ -1338,7 +1353,7 @@ DANB_genes &lt;-<span class="st"> </span><span class="kw">names</span>(DropFS[<s
 </div>
 </div>
 <div id="correlated-expression" class="section level3">
-<h3><span class="header-section-number">5.4.2</span> Correlated Expression</h3>
+<h3><span class="header-section-number">6.4.2</span> Correlated Expression</h3>
 <p>A completely different approach to feature selection is to use gene-gene correlations. This method is based on the idea that multiple genes will be differentially expressed between different cell-types or cell-states. Genes which are expressed in the same cell-population will be positively correlated with each other where as genes expressed in different cell-populations will be negatively correated with each other. Thus important genes can be identified by the magnitude of their correlation with other genes.</p>
 <p>The limitation of this method is that it assumes technical noise is random and independent for each cell, thus shouldn’t produce gene-gene correlations, but this assumption is violated by batch effects which are generally systematic between different experimental batches and will produce gene-gene correlations. As a result it is more appropriate to take the top few thousand genes as ranked by gene-gene correlation than consider the significance of the correlations.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cor_mat &lt;-<span class="st"> </span><span class="kw">cor</span>(<span class="kw">t</span>(expr_matrix), <span class="dt">method=</span><span class="st">&quot;spearman&quot;</span>) <span class="co">#Gene-gene correlations</span>
@@ -1359,7 +1374,7 @@ PCA_genes =<span class="st"> </span><span class="kw">names</span>(score[<span cl
 <p><strong>Exercise 4</strong> Consider the top 5 principal components. Which appear to be most biologically relevant? How does the top 1,500 features change if you consider the loadings for those components?</p>
 </div>
 <div id="comparing-methods" class="section level3">
-<h3><span class="header-section-number">5.4.3</span> Comparing Methods</h3>
+<h3><span class="header-section-number">6.4.3</span> Comparing Methods</h3>
 <p>We can check whether the identified features really do represent genes differentially expressed between cell-types in this dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M3Drop<span class="op">::</span><span class="kw">M3DropExpressionHeatmap</span>(
     M3Drop_genes,
@@ -1377,8 +1392,8 @@ DE_genes =<span class="st"> </span><span class="kw">unique</span>(DESeq_table<sp
 <pre><code>## [1] 0.6478343</code></pre>
 <p><strong>Exercise 5</strong> Plot the expression of the features for each of the other methods. Which appear to be differentially expressed? Which method is the most precise?</p>
 </div>
-<div id="sessioninfo-11" class="section level3">
-<h3><span class="header-section-number">5.4.4</span> sessionInfo()</h3>
+<div id="sessioninfo-12" class="section level3">
+<h3><span class="header-section-number">6.4.4</span> sessionInfo()</h3>
 <pre><code>## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux buster/sid
@@ -1419,7 +1434,7 @@ DE_genes =<span class="st"> </span><span class="kw">unique</span>(DESeq_table<sp
 </div>
 </div>
 <div id="pseudotime-analysis" class="section level2">
-<h2><span class="header-section-number">5.5</span> Pseudotime analysis</h2>
+<h2><span class="header-section-number">6.5</span> Pseudotime analysis</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(SingleCellExperiment)
 <span class="kw">library</span>(TSCAN)
 <span class="kw">library</span>(M3Drop)
@@ -1448,17 +1463,17 @@ DE_genes =<span class="st"> </span><span class="kw">unique</span>(DESeq_table<sp
 <div class="figure" style="text-align: center"><span id="fig:pseudotime-methods-description"></span>
 <img src="figures/cannoodt_pseudotime_properties.png" alt="Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016)." width="90%" />
 <p class="caption">
-Figure 5.10: Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).
+Figure 6.10: Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).
 </p>
 </div>
 <div class="figure" style="text-align: center"><span id="fig:pseudotime-methods"></span>
 <img src="figures/cannoodt_pseudotime_methods.png" alt="Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016)." width="90%" />
 <p class="caption">
-Figure 5.11: Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016).
+Figure 6.11: Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016).
 </p>
 </div>
 <div id="tscan" class="section level3">
-<h3><span class="header-section-number">5.5.1</span> TSCAN</h3>
+<h3><span class="header-section-number">6.5.1</span> TSCAN</h3>
 <p>TSCAN combines clustering with pseudotime analysis. First it clusters the cells using <code>mclust</code>, which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters. The branch of this tree that connects the largest number of clusters is the main branch which is used to determine pseudotime.</p>
 <p>First we will try to use all genes to order the cells.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">deng &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;deng/deng-reads.rds&quot;</span>)
@@ -1495,7 +1510,7 @@ tmp &lt;-
 <p><strong>Exercise 1</strong> Compare results for different numbers of clusters (<code>clusternum</code>).</p>
 </div>
 <div id="monocle" class="section level3">
-<h3><span class="header-section-number">5.5.2</span> monocle</h3>
+<h3><span class="header-section-number">6.5.2</span> monocle</h3>
 <p>Monocle skips the clustering stage of TSCAN and directly builds a minimum spanning tree on a reduced dimension representation of the cells to connect all cells. Monocle then identifies the longest path in this tree to determine pseudotime. If the data contains diverging trajectories (i.e. one cell type differentiates into two different cell-types), monocle can identify these. Each of the resulting forked paths is defined as a separate cell state.</p>
 <p>Unfortunately, Monocle does not work when all the genes are used, so we must carry out feature selection. First, we use M3Drop:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m3dGenes &lt;-<span class="st"> </span><span class="kw">as.character</span>(
@@ -1550,7 +1565,7 @@ pseudotime_order_monocle &lt;-
 <p><img src="21-pseudotime_files/figure-html/monocle-vs-truth-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="diffusion-maps" class="section level3">
-<h3><span class="header-section-number">5.5.3</span> Diffusion maps</h3>
+<h3><span class="header-section-number">6.5.3</span> Diffusion maps</h3>
 <p><a href="https://en.wikipedia.org/wiki/Diffusion_map">Diffusion maps</a> were introduced by <a href="http://www.sciencedirect.com/science/article/pii/S1063520306000546">Ronald Coifman and Stephane Lafon</a>, and the underlying idea is to assume that the data are samples from a diffusion process. The method infers the low-dimensional manifold by estimating the eigenvalues and eigenvectors for the diffusion operator related to the data.</p>
 <p><a href="http://biorxiv.org/content/biorxiv/early/2015/08/04/023309.full.pdf">Haghverdi et al</a> have applied the diffusion maps concept to the analysis of single-cell RNA-seq data to create an R package called <a href="http://bioconductor.org/packages/destiny">destiny</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dm &lt;-<span class="st"> </span><span class="kw">DiffusionMap</span>(<span class="kw">t</span>(<span class="kw">log2</span>(deng <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)))
@@ -1582,7 +1597,7 @@ tmp &lt;-<span class="st"> </span><span class="kw">factor</span>(
 <p><strong>Exercise 3</strong> How does the ordering change if you only use the genes identified by M3Drop?</p>
 </div>
 <div id="slicer" class="section level3">
-<h3><span class="header-section-number">5.5.4</span> SLICER</h3>
+<h3><span class="header-section-number">6.5.4</span> SLICER</h3>
 <p>The SLICER method is an algorithm for constructing trajectories that describe gene expression changes during a sequential biological process, just as Monocle and TSCAN are. SLICER is designed to capture highly nonlinear gene expression changes, automatically select genes related to the process, and detect multiple branch and loop features in the trajectory <span class="citation">(Welch, Hartemink, and Prins <a href="#ref-Welch2016-jr">2016</a>)</span>. The SLICER R package is available from its <a href="https://github.com/jw156605/SLICER">GitHub repository</a> and can be installed from there using the <code>devtools</code> package.</p>
 <p>We use the <code>select_genes</code> function in SLICER to automatically select the genes to use in builing the cell trajectory. The function uses “neighbourhood variance” to identify genes that vary smoothly, rather than fluctuating randomly, across the set of cells. Following this, we determine which value of “k” (number of nearest neighbours) yields an embedding that most resembles a trajectory. Then we estimate the <a href="https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction">locally linear embedding</a> of the cells.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(<span class="st">&quot;lle&quot;</span>)
@@ -1658,7 +1673,7 @@ pseudotime_slicer<span class="op">$</span>pseudotime[pseudotime_order_slicer] &l
 <p><strong>Exercise 5</strong> How does the ordering change if you use a different set of genes from those chosen by SLICER (e.g. the genes identified by M3Drop)?</p>
 </div>
 <div id="comparison-of-the-methods" class="section level3">
-<h3><span class="header-section-number">5.5.5</span> Comparison of the methods</h3>
+<h3><span class="header-section-number">6.5.5</span> Comparison of the methods</h3>
 <p>How do the trajectories inferred by TSCAN and Monocle compare?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">matched_ordering &lt;-
 <span class="st">    </span><span class="kw">match</span>(
@@ -1678,7 +1693,7 @@ timepoint_ordered &lt;-
 <p><strong>Exercise 6</strong>: Compare destiny and SLICER to TSCAN and Monocle.</p>
 </div>
 <div id="expression-of-genes-through-time" class="section level3">
-<h3><span class="header-section-number">5.5.6</span> Expression of genes through time</h3>
+<h3><span class="header-section-number">6.5.6</span> Expression of genes through time</h3>
 <p>Each package also enables the visualization of expression through pseudotime. Following individual genes is very helpful for identifying genes that play an important role in the differentiation process. We illustrate the procedure using the Obox6 gene which is known to be important during early development.</p>
 <p><strong>TSCAN</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(deng) &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(deng)
@@ -1696,8 +1711,8 @@ TSCAN<span class="op">::</span><span class="kw">singlegeneplot</span>(
 <p>Of course, pseudotime values computed with any method can be added to the <code>pData</code> slot of an <code>SCESet</code> object. Having done that, the full plotting capabilities of the <code>scater</code> package can be used to investigate relationships between gene expression, cell populations and pseudotime. This would be particularly useful for the SLICER results, as SLICER does not provide plotting functions.</p>
 <p><strong>Exercise 7</strong>: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes</p>
 </div>
-<div id="sessioninfo-12" class="section level3">
-<h3><span class="header-section-number">5.5.7</span> sessionInfo()</h3>
+<div id="sessioninfo-13" class="section level3">
+<h3><span class="header-section-number">6.5.7</span> sessionInfo()</h3>
 <pre><code>## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux buster/sid
@@ -1774,7 +1789,7 @@ TSCAN<span class="op">::</span><span class="kw">singlegeneplot</span>(
 ##  [73] goftest_1.1-1           robustbase_0.92-7      
 ##  [75] caTools_1.17.1          bindrcpp_0.2           
 ##  [77] nlme_3.1-131            mime_0.5               
-##  [79] quantreg_5.33           slam_0.1-40            
+##  [79] quantreg_5.34           slam_0.1-40            
 ##  [81] R.oo_1.21.0             compiler_3.4.2         
 ##  [83] pbkrtest_0.4-7          curl_3.0               
 ##  [85] e1071_1.6-8             spatstat.utils_1.7-1   
@@ -1800,7 +1815,7 @@ TSCAN<span class="op">::</span><span class="kw">singlegeneplot</span>(
 </div>
 </div>
 <div id="imputation" class="section level2">
-<h2><span class="header-section-number">5.6</span> Imputation</h2>
+<h2><span class="header-section-number">6.6</span> Imputation</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scImpute)
 <span class="kw">library</span>(SC3)
 <span class="kw">library</span>(scater)
@@ -1815,7 +1830,7 @@ TSCAN<span class="op">::</span><span class="kw">singlegeneplot</span>(
 <p>Thus, dropouts could be result of experimental shortcomings, and if this is the case then we would like to provide computational corrections. One possible solution is to impute the dropouts in the expression matrix. To be able to impute gene expression values, one must have an underlying model. However, since we do not know which dropout events are technical artefacts and which correspond to the transcript being truly absent, imputation is a difficult challenges.</p>
 <p>To the best of our knowledge, there are currently two different imputation methods available: MAGIC <span class="citation">(<span class="citeproc-not-found" data-reference-id="vanDijk2017"><strong>???</strong></span>)</span> and scImpute <span class="citation">(<span class="citeproc-not-found" data-reference-id="Li2017"><strong>???</strong></span>)</span>. Since <a href="https://github.com/pkathail/magic">MAGIC</a> is only available for Python or Matlab, we will only cover <a href="https://github.com/Vivianstats/scImpute">scImpute</a> in this chapter.</p>
 <div id="scimpute" class="section level3">
-<h3><span class="header-section-number">5.6.1</span> scImpute</h3>
+<h3><span class="header-section-number">6.6.1</span> scImpute</h3>
 <p>To test <code>scImpute</code>, we use the default parameters and we apply it to the Deng dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:</p>
 <pre><code>## [1] &quot;reading in raw count matrix ...&quot;
 ## [1] &quot;number of genes in raw count matrix 22431&quot;
@@ -1863,12 +1878,12 @@ TSCAN<span class="op">::</span><span class="kw">singlegeneplot</span>(
 <p>Based on the PCA and the clustering results, do you think that imputation is a good idea for the Pollen dataset?</p>
 </div>
 <div id="magic" class="section level3">
-<h3><span class="header-section-number">5.6.2</span> MAGIC</h3>
+<h3><span class="header-section-number">6.6.2</span> MAGIC</h3>
 <p>Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?</p>
 <p>To evaluate the impact of the imputation, we use <code>SC3</code> to cluster the imputed matrix</p>
 </div>
-<div id="sessioninfo-13" class="section level3">
-<h3><span class="header-section-number">5.6.3</span> sessionInfo()</h3>
+<div id="sessioninfo-14" class="section level3">
+<h3><span class="header-section-number">6.6.3</span> sessionInfo()</h3>
 <pre><code>## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux buster/sid
@@ -1890,7 +1905,7 @@ TSCAN<span class="op">::</span><span class="kw">singlegeneplot</span>(
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.20               ggplot2_2.2.1              
+##  [1] scater_1.5.21               ggplot2_2.2.1              
 ##  [3] SC3_1.5.6                   SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          Biobase_2.36.2             
@@ -1952,31 +1967,31 @@ TSCAN<span class="op">::</span><span class="kw">singlegeneplot</span>(
 </div>
 </div>
 <div id="differential-expression-de-analysis" class="section level2">
-<h2><span class="header-section-number">5.7</span> Differential Expression (DE) analysis</h2>
+<h2><span class="header-section-number">6.7</span> Differential Expression (DE) analysis</h2>
 <div id="bulk-rna-seq-1" class="section level3">
-<h3><span class="header-section-number">5.7.1</span> Bulk RNA-seq</h3>
+<h3><span class="header-section-number">6.7.1</span> Bulk RNA-seq</h3>
 <p>One of the most common types of analyses when analyzing bulk RNA-seq data is to identify differentially expressed genes. By comparing the genes that change between two conditions, e.g. mutant and wild-type or stimulated and unstimulated, it is possible to characterize the molecular mechanisms underlying the change.</p>
 <p>Several different methods, e.g. <a href="https://bioconductor.org/packages/DESeq2">DESeq2</a> and <a href="https://bioconductor.org/packages/release/bioc/html/edgeR.html">edgeR</a>, have been developed for bulk RNA-seq. Moreover, there are also extensive <a href="http://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-9-r95">datasets</a> available where the RNA-seq data has been validated using RT-qPCR. These data can be used to benchmark DE finding algorithms.</p>
 </div>
 <div id="single-cell-rna-seq" class="section level3">
-<h3><span class="header-section-number">5.7.2</span> Single cell RNA-seq</h3>
-<p>In contrast to bulk RNA-seq, in scRNA-seq we usually do not have a defined set of experimental conditions. Instead, as was shown in a previous chapter (<a href="biological-analysis.html#clust-methods">5.2</a>) we can identify the cell groups by using an unsupervised clustering approach. Once the groups have been identified one can find differentially expressed genes either by comparing the differences in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for pairwise comparisons.</p>
+<h3><span class="header-section-number">6.7.2</span> Single cell RNA-seq</h3>
+<p>In contrast to bulk RNA-seq, in scRNA-seq we usually do not have a defined set of experimental conditions. Instead, as was shown in a previous chapter (<a href="biological-analysis.html#clust-methods">6.2</a>) we can identify the cell groups by using an unsupervised clustering approach. Once the groups have been identified one can find differentially expressed genes either by comparing the differences in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for pairwise comparisons.</p>
 </div>
 <div id="differences-in-distribution" class="section level3">
-<h3><span class="header-section-number">5.7.3</span> Differences in Distribution</h3>
+<h3><span class="header-section-number">6.7.3</span> Differences in Distribution</h3>
 <p>Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) for each group we are comparing in single-cell experiments. Thus we can take advantage of the whole distribution of expression values in each group to identify differences between groups rather than only comparing estimates of mean-expression as is standard for bulk RNASeq.</p>
 <p>There are two main approaches to comparing distributions. Firstly, we can use existing statistical models/distributions and fit the same type of model to the expression in each group then test for differences in the parameters for each model, or test whether the model fits better if a particular paramter is allowed to be different according to group. For instance in Chapter <a href="construction-of-expression-matrix.html#dealing-with-confounders">4.17</a> we used edgeR to test whether allowing mean expression to be different in different batches significantly improved the fit of a negative binomial model of the data.</p>
 <p>Alternatively, we can use a non-parametric test which does not assume expression values follow any particular distribution, e.g. the <a href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test">Kolmogorov-Smirnov test (KS-test)</a>. Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data. Moreover, if the conditions for a parametric test hold, then it will typically be more powerful than a non-parametric test.</p>
 </div>
 <div id="models-of-single-cell-rnaseq-data" class="section level3">
-<h3><span class="header-section-number">5.7.4</span> Models of single-cell RNASeq data</h3>
+<h3><span class="header-section-number">6.7.4</span> Models of single-cell RNASeq data</h3>
 <p>The most common model of RNASeq data is the negative binomial model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
 <span class="kw">hist</span>(<span class="kw">rnbinom</span>(<span class="dv">1000</span>, <span class="dt">mu=</span><span class="dv">10</span>, <span class="dt">size=</span><span class="dv">100</span>), <span class="dt">col=</span><span class="st">&quot;grey50&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Read Counts&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Negative Binomial&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:nb-plot"></span>
 <img src="23-de-intro_files/figure-html/nb-plot-1.png" alt="Negative Binomial distribution of read counts for a single gene across 1000 cells" width="672" />
 <p class="caption">
-Figure 5.12: Negative Binomial distribution of read counts for a single gene across 1000 cells
+Figure 6.12: Negative Binomial distribution of read counts for a single gene across 1000 cells
 </p>
 </div>
 <p>Mean: <span class="math inline">\(\mu = mu\)</span></p>
@@ -1990,7 +2005,7 @@ counts[<span class="kw">runif</span>(<span class="dv">1000</span>) <span class="
 <div class="figure" style="text-align: center"><span id="fig:zero-inflation-plot"></span>
 <img src="23-de-intro_files/figure-html/zero-inflation-plot-1.png" alt="Zero-inflated Negative Binomial distribution" width="672" />
 <p class="caption">
-Figure 5.13: Zero-inflated Negative Binomial distribution
+Figure 6.13: Zero-inflated Negative Binomial distribution
 </p>
 </div>
 <p>Mean: <span class="math inline">\(\mu = mu \cdot (1 - d)\)</span></p>
@@ -2012,7 +2027,7 @@ counts =<span class="st"> </span><span class="kw">sapply</span>(g<span class="op
 </div>
 </div>
 <div id="de-in-a-real-dataset" class="section level2">
-<h2><span class="header-section-number">5.8</span> DE in a real dataset</h2>
+<h2><span class="header-section-number">6.8</span> DE in a real dataset</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scRNA.seq.funcs)
 <span class="kw">library</span>(edgeR)
 <span class="kw">library</span>(monocle)
@@ -2020,7 +2035,7 @@ counts =<span class="st"> </span><span class="kw">sapply</span>(g<span class="op
 <span class="kw">library</span>(ROCR)
 <span class="kw">set.seed</span>(<span class="dv">1</span>)</code></pre></div>
 <div id="introduction-7" class="section level3">
-<h3><span class="header-section-number">5.8.1</span> Introduction</h3>
+<h3><span class="header-section-number">6.8.1</span> Introduction</h3>
 <p>To test different single-cell differential expression methods we will be using the Blischak dataset from Chapters 7-17. For this experiment bulk RNA-seq data for each cell-line was generated in addition to single-cell data. We will use the differentially expressed genes identified using standard methods on the respective bulk data as the ground truth for evaluating the accuracy of each single-cell method. To save time we have pre-computed these for you, run the commands below to load these data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DE &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;tung/TPs.txt&quot;</span>)
 notDE &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;tung/TNs.txt&quot;</span>)
@@ -2042,13 +2057,13 @@ norm &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t<
 <p>Now we will compare various single-cell DE methods. Note that we will only be running methods which are available as R-packages and run relatively quickly.</p>
 </div>
 <div id="kolmogorov-smirnov-test" class="section level3">
-<h3><span class="header-section-number">5.8.2</span> Kolmogorov-Smirnov test</h3>
+<h3><span class="header-section-number">6.8.2</span> Kolmogorov-Smirnov test</h3>
 <p>The types of test that are easiest to work with are non-parametric ones. The most commonly used non-parametric test is the <a href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test">Kolmogorov-Smirnov test</a> (KS-test) and we can use it to compare the distributions for each gene in the two individuals.</p>
 <p>The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experession and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros). Another issue with the KS-test is that it can be very sensitive for large sample sizes and thus it may end up as significant even though the magnitude of the difference is very small.</p>
 <div class="figure" style="text-align: center"><span id="fig:ks-statistic"></span>
 <img src="figures/KS2_Example.png" alt="Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))" width="60%" />
 <p class="caption">
-Figure 5.14: Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from <a href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test">here</a>)
+Figure 6.14: Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from <a href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test">here</a>)
 </p>
 </div>
 <p>Now run the test:</p>
@@ -2060,7 +2075,7 @@ Figure 5.14: Illustration of the two-sample Kolmogorov–Smirnov statistic. Red 
 pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <span class="dt">method =</span> <span class="st">&quot;fdr&quot;</span>)</code></pre></div>
 <p>This code “applies” the function to each row (specified by 1) of the expression matrix, data. In the function we are returning just the p.value from the ks.test output. We can now consider how many of the ground truth positive and negative DE genes are detected by the KS-test:</p>
 <div id="evaluating-accuracy" class="section level4">
-<h4><span class="header-section-number">5.8.2.1</span> Evaluating Accuracy</h4>
+<h4><span class="header-section-number">6.8.2.1</span> Evaluating Accuracy</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sigDE &lt;-<span class="st"> </span><span class="kw">names</span>(pVals)[pVals <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>]
 <span class="kw">length</span>(sigDE) </code></pre></div>
 <pre><code>## [1] 5095</code></pre>
@@ -2093,7 +2108,7 @@ ROCR<span class="op">::</span><span class="kw">plot</span>(perf)</code></pre></d
 <div class="figure" style="text-align: center"><span id="fig:ks-roc-plot"></span>
 <img src="24-de-real_files/figure-html/ks-roc-plot-1.png" alt="ROC curve for KS-test." width="672" />
 <p class="caption">
-Figure 5.15: ROC curve for KS-test.
+Figure 6.15: ROC curve for KS-test.
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aucObj &lt;-<span class="st"> </span>ROCR<span class="op">::</span><span class="kw">performance</span>(pred, <span class="st">&quot;auc&quot;</span>)
@@ -2114,7 +2129,7 @@ aucObj<span class="op">@</span>y.values[[<span class="dv">1</span>]] <span class
 </div>
 </div>
 <div id="wilcoxmann-whitney-u-test" class="section level3">
-<h3><span class="header-section-number">5.8.3</span> Wilcox/Mann-Whitney-U Test</h3>
+<h3><span class="header-section-number">6.8.3</span> Wilcox/Mann-Whitney-U Test</h3>
 <p>The Wilcox-rank-sum test is another non-parametric test, but tests specifically if values in one group are greater/less than the values in the other group. Thus it is often considered a test for difference in median expression between two groups; whereas the KS-test is sensitive to any change in distribution of expression values.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pVals &lt;-<span class="st"> </span><span class="kw">apply</span>(norm, <span class="dv">1</span>, <span class="cf">function</span>(x) {
         <span class="kw">wilcox.test</span>(x[group <span class="op">==</span><span class="st">&quot;NA19101&quot;</span>], 
@@ -2126,13 +2141,13 @@ pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <spa
 <div class="figure" style="text-align: center"><span id="fig:wilcox-plot"></span>
 <img src="24-de-real_files/figure-html/wilcox-plot-1.png" alt="ROC curve for Wilcox test." width="672" />
 <p class="caption">
-Figure 5.16: ROC curve for Wilcox test.
+Figure 6.16: ROC curve for Wilcox test.
 </p>
 </div>
 <pre><code>## [1] 0.8320326</code></pre>
 </div>
 <div id="edger" class="section level3">
-<h3><span class="header-section-number">5.8.4</span> edgeR</h3>
+<h3><span class="header-section-number">6.8.4</span> edgeR</h3>
 <p>We’ve already used edgeR for differential expression in Chapter <a href="construction-of-expression-matrix.html#dealing-with-confounders">4.17</a>. edgeR is based on a negative binomial model of gene expression and uses a generalized linear model (GLM) framework, the enables us to include other factors such as batch to the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dge &lt;-<span class="st"> </span><span class="kw">DGEList</span>(<span class="dt">counts=</span>counts, <span class="dt">norm.factors =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(counts[<span class="dv">1</span>,])), <span class="dt">group=</span>group)
 group_edgeR &lt;-<span class="st"> </span><span class="kw">factor</span>(group)
@@ -2148,13 +2163,13 @@ pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <spa
 <div class="figure" style="text-align: center"><span id="fig:edger-plot"></span>
 <img src="24-de-real_files/figure-html/edger-plot-1.png" alt="ROC curve for edgeR." width="672" />
 <p class="caption">
-Figure 5.17: ROC curve for edgeR.
+Figure 6.17: ROC curve for edgeR.
 </p>
 </div>
 <pre><code>## [1] 0.8477189</code></pre>
 </div>
 <div id="monocle-1" class="section level3">
-<h3><span class="header-section-number">5.8.5</span> Monocle</h3>
+<h3><span class="header-section-number">6.8.5</span> Monocle</h3>
 <p><a href="https://bioconductor.org/packages/release/bioc/html/monocle.html">Monocle</a> can use several different models for DE. For count data it recommends the Negative Binomial model (negbinomial.size). For normalized data it recommends log-transforming it then using a normal distribution (gaussianff). Similar to edgeR this method uses a GLM framework so in theory can account for batches, however in practice the model fails for this dataset if batches are included.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">group=</span>group, <span class="dt">batch=</span>batch)
 <span class="kw">rownames</span>(pd) &lt;-<span class="st"> </span><span class="kw">colnames</span>(counts)
@@ -2173,7 +2188,7 @@ pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <spa
 <div class="figure" style="text-align: center"><span id="fig:Monocle-plot"></span>
 <img src="24-de-real_files/figure-html/Monocle-plot-1.png" alt="ROC curve for Monocle." width="672" />
 <p class="caption">
-Figure 5.18: ROC curve for Monocle.
+Figure 6.18: ROC curve for Monocle.
 </p>
 </div>
 <pre><code>## [1] 0.8252662</code></pre>
@@ -2182,13 +2197,13 @@ Figure 5.18: ROC curve for Monocle.
 <div class="figure" style="text-align: center"><span id="fig:Monocle-plot2"></span>
 <img src="24-de-real_files/figure-html/Monocle-plot2-1.png" alt="ROC curve for Monocle-gaussian." width="672" />
 <p class="caption">
-Figure 5.19: ROC curve for Monocle-gaussian.
+Figure 6.19: ROC curve for Monocle-gaussian.
 </p>
 </div>
 <pre><code>## [1] 0.7357829</code></pre>
 </div>
 <div id="mast" class="section level3">
-<h3><span class="header-section-number">5.8.6</span> MAST</h3>
+<h3><span class="header-section-number">6.8.6</span> MAST</h3>
 <p><a href="https://bioconductor.org/packages/release/bioc/html/MAST.html">MAST</a> is based on a zero-inflated negative binomial model. It tests for differential expression using a hurdle model to combine tests of discrete (0 vs not zero) and continuous (non-zero values) aspects of gene expression. Again this uses a linear modelling framework to enable complex models to be considered.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">log_counts &lt;-<span class="st"> </span><span class="kw">log</span>(counts<span class="op">+</span><span class="dv">1</span>)<span class="op">/</span><span class="kw">log</span>(<span class="dv">2</span>)
 fData =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">names=</span><span class="kw">rownames</span>(log_counts))
@@ -2218,17 +2233,17 @@ pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <spa
 <div class="figure" style="text-align: center"><span id="fig:MAST-plot"></span>
 <img src="24-de-real_files/figure-html/MAST-plot-1.png" alt="ROC curve for MAST." width="672" />
 <p class="caption">
-Figure 5.20: ROC curve for MAST.
+Figure 6.20: ROC curve for MAST.
 </p>
 </div>
 <pre><code>## [1] 0.8284046</code></pre>
 </div>
 <div id="slow-methods-1h-to-run" class="section level3">
-<h3><span class="header-section-number">5.8.7</span> Slow Methods (&gt;1h to run)</h3>
+<h3><span class="header-section-number">6.8.7</span> Slow Methods (&gt;1h to run)</h3>
 <p>These methods are too slow to run today but we encourage you to try them out on your own:</p>
 </div>
 <div id="bpsc" class="section level3">
-<h3><span class="header-section-number">5.8.8</span> BPSC</h3>
+<h3><span class="header-section-number">6.8.8</span> BPSC</h3>
 <p><a href="https://academic.oup.com/bioinformatics/article/32/14/2128/2288270/Beta-Poisson-model-for-single-cell-RNA-seq-data">BPSC</a> uses the Poisson-Beta model of single-cell gene expression, which we discussed in the previous chapter, and combines it with generalized linear models which we’ve already encountered when using edgeR. BPSC performs comparisons of one or more groups to a reference group (“control”) and can include other factors such as batches in the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(BPSC)
 bpsc_data &lt;-<span class="st"> </span>norm[,batch<span class="op">==</span><span class="st">&quot;NA19101.r1&quot;</span> <span class="op">|</span><span class="st"> </span>batch<span class="op">==</span><span class="st">&quot;NA19239.r1&quot;</span>]
@@ -2244,7 +2259,7 @@ pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <spa
 <span class="kw">DE_Quality_AUC</span>(pVals)</code></pre></div>
 </div>
 <div id="scde" class="section level3">
-<h3><span class="header-section-number">5.8.9</span> SCDE</h3>
+<h3><span class="header-section-number">6.8.9</span> SCDE</h3>
 <p><a href="http://hms-dbmi.github.io/scde/">SCDE</a> is the first single-cell specific DE method. It fits a zero-inflated negative binomial model to expression data using Bayesian statistics. The usage below tests for differences in mean expression of individual genes across groups but recent versions include methods to test for differences in mean expression or dispersion of groups of genes, usually representing a pathway.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scde)
 cnts &lt;-<span class="st"> </span><span class="kw">apply</span>(
@@ -2287,8 +2302,8 @@ pVals &lt;-<span class="st"> </span><span class="kw">pnorm</span>(<span class="k
 pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <span class="dt">method =</span> <span class="st">&quot;fdr&quot;</span>)
 <span class="kw">DE_Quality_AUC</span>(pVals)</code></pre></div>
 </div>
-<div id="sessioninfo-14" class="section level3">
-<h3><span class="header-section-number">5.8.10</span> sessionInfo()</h3>
+<div id="sessioninfo-15" class="section level3">
+<h3><span class="header-section-number">6.8.10</span> sessionInfo()</h3>
 <pre><code>## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux buster/sid
@@ -2396,7 +2411,7 @@ pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <spa
           </div>
         </div>
       </div>
-<a href="construction-of-expression-matrix.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="dealing-with-confounders-reads.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

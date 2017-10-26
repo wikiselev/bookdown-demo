@@ -8,7 +8,7 @@ output: html_document
 
 
 
-In the previous chapter we identified important confounding factors and explanatory variables. scater allows one to account for these variables in subsequent statistical models or to condition them out using `normaliseExprs()`, if so desired. This can be done by providing a design matrix to `normaliseExprs()`. We are not covering this topic here, but you can try to do it yourself as an exercise.
+In the previous chapter we identified important confounding factors and explanatory variables. `scater` allows one to account for these variables in subsequent statistical models or to condition them out using `normaliseExprs()`, if so desired. This can be done by providing a design matrix to `normaliseExprs()`. We are not covering this topic here, but you can try to do it yourself as an exercise.
 
 Instead we will explore how simple size-factor normalisations correcting for library size can remove the effects of some of the confounders and explanatory variables.
 
@@ -44,7 +44,7 @@ __Note__: RPKM, FPKM and TPM are variants on CPM which further adjust counts by 
 
 To deal with this potentiality several other measures were devised:
 
-The __size factor (SF)__ was proposed and popularized by DESeq ([Anders and Huber (2010)](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106)). First the geometric mean of each gene across all cells is calculated. The size factor for each cell is the median across genes of the ratio of the expression to the gene's geometric mean. A drawback to this method is that since it uses the geometric mean only genes with non-zero expression values across all cells can be used in its calculation, making it unadvisable for large low-depth scRNASeq experiments. edgeR & scater call this method __RLE__ for "relative log expression".
+The __size factor (SF)__ was proposed and popularized by DESeq ([Anders and Huber (2010)](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106)). First the geometric mean of each gene across all cells is calculated. The size factor for each cell is the median across genes of the ratio of the expression to the gene's geometric mean. A drawback to this method is that since it uses the geometric mean only genes with non-zero expression values across all cells can be used in its calculation, making it unadvisable for large low-depth scRNASeq experiments. `edgeR` & `scater` call this method __RLE__ for "relative log expression".
 
 
 ```r
@@ -110,9 +110,9 @@ function (expr_mat, spikes = NULL)
 
 The __RLE__, __TMM__, and __UQ__ size-factor methods were developed for bulk RNA-seq data and, depending on the experimental context, may not be appropriate for single-cell RNA-seq data, as their underlying assumptions may be problematically violated. [Lun et al (2016)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0947-7) recently published a size-factor normalisation method specifically designed for scRNA-seq data and accounting for single-cell biases, which we will call __LSF__ (Lun Sum Factors). Briefly, expression values are summed across pools of cells and the summed values are used to compute normalization size-factors per pool. The pool-based size factors can then be deconvolved into cell-specific size factors, which can be used for normalization in the same way as other size factors. 
 
- __scater__ acts as a wrapper for the `calcNormFactors` function from [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html) which implements several library size normalization methods making it easy to apply any of these methods to our data. The __LSF__ method is implementated in the Bioconductor package [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), which allows seamless integrationinto the `scater` workflow. (The `scran` package itself depends on `scater`).
+`scater` acts as a wrapper for the `calcNormFactors` function from `edgeR` which implements several library size normalization methods making it easy to apply any of these methods to our data. The __LSF__ method is implementated in the Bioconductor package [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), which allows seamless integration into the `scater` workflow. (The `scran` package itself depends on `scater`).
 
-__Note:__ edgeR makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/release/bioc/html/DESeq.html) may give different results to the `estimateSizeFactorsForMatrix` method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
+__Note:__ `edgeR` makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/release/bioc/html/DESeq.html) may give different results to the `estimateSizeFactorsForMatrix` method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
 
 ## Normalization practice (UMI)
 
@@ -135,7 +135,7 @@ endog_genes <- !rowData(umi.qc)$is_feature_control
 ```r
 plotPCA(
     umi.qc[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -148,13 +148,12 @@ plotPCA(
 </div>
 
 ### CPM
-`calculateCPM` from `scater` package can be used to perform this normalisation. We will save the results to the `norm_counts` assay:
+`calculateCPM` from `scater` package can be used to perform this normalisation. We will save the results to the `logcounts` assay:
 
 ```r
-assay(umi.qc, "norm_counts") <- log2(calculateCPM(umi.qc, use.size.factors = FALSE) + 1)
+logcounts(umi.qc) <- log2(calculateCPM(umi.qc, use.size.factors = FALSE) + 1)
 plotPCA(
     umi.qc[endog_genes, ],
-    exprs_values = "norm_counts",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -169,7 +168,7 @@ plotPCA(
 ```r
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", CPM = "norm_counts"),
+    exprs_mats = list(Raw = "logcounts_raw", CPM = "logcounts"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -187,20 +186,21 @@ plotRLE(
 umi.qc <- normaliseExprs(
     umi.qc,
     method = "TMM",
-    feature_set = endog_genes
+    feature_set = endog_genes,
+    return_log = TRUE,
+    return_norm_as_exprs = TRUE
 )
 ```
 
 ```
-## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## 'ERCC' should have their own size factors
+## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in 'ERCC' should have their own size
+## factors
 ```
 
 ```r
 plotPCA(
     umi.qc[endog_genes, ],
-    exprs_values = "norm_cpm",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -215,7 +215,7 @@ plotPCA(
 ```r
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", TMM = "norm_cpm"),
+    exprs_mats = list(Raw = "logcounts_raw", TMM = "logcounts"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -256,7 +256,7 @@ plotPCA(
 ```r
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", scran = "logcounts"),
+    exprs_mats = list(Raw = "logcounts_raw", scran = "logcounts"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -273,20 +273,21 @@ plotRLE(
 umi.qc <- normaliseExprs(
     umi.qc,
     method = "RLE", 
-    feature_set = endog_genes
+    feature_set = endog_genes,
+    return_log = TRUE,
+    return_norm_as_exprs = TRUE
 )
 ```
 
 ```
-## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## 'ERCC' should have their own size factors
+## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in 'ERCC' should have their own size
+## factors
 ```
 
 ```r
 plotPCA(
     umi.qc[endog_genes, ],
-    exprs_values = "norm_cpm",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -301,7 +302,7 @@ plotPCA(
 ```r
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", RLE = "norm_cpm"),
+    exprs_mats = list(Raw = "logcounts_raw", RLE = "logcounts"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -320,20 +321,21 @@ umi.qc <- normaliseExprs(
     umi.qc,
     method = "upperquartile", 
     feature_set = endog_genes,
-    p = 0.99
+    p = 0.99,
+    return_log = TRUE,
+    return_norm_as_exprs = TRUE
 )
 ```
 
 ```
-## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## 'ERCC' should have their own size factors
+## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in 'ERCC' should have their own size
+## factors
 ```
 
 ```r
 plotPCA(
     umi.qc[endog_genes, ],
-    exprs_values = "norm_cpm",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -348,7 +350,7 @@ plotPCA(
 ```r
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", UQ = "norm_cpm"),
+    exprs_mats = list(Raw = "logcounts_raw", UQ = "logcounts"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -381,10 +383,9 @@ function (expr_mat)
 
 
 ```r
-assay(umi.qc, "norm_counts") <- log2(Down_Sample_Matrix(counts(umi.qc)) + 1)
+logcounts(umi.qc) <- log2(Down_Sample_Matrix(counts(umi.qc)) + 1)
 plotPCA(
     umi.qc[endog_genes, ],
-    exprs_values = "norm_counts",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -399,7 +400,7 @@ plotPCA(
 ```r
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "log2_counts", DownSample = "norm_counts"),
+    exprs_mats = list(Raw = "logcounts_raw", DownSample = "logcounts"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -426,7 +427,7 @@ from read counts since often only a portion of the entire
 gene/transcript is sequenced, not the entire length. If in doubt check 
 for a relationship between gene/transcript length and expression level.
 
-However, here we show how these normalisations can be calculated using scater. First, we need to find the effective transcript length in Kilobases. However, our dataset containes only gene IDs, therefore we will be using the gene lengths instead of transcripts. scater uses the [biomaRt](https://bioconductor.org/packages/release/bioc/html/biomaRt.html) package, which allows one to annotate genes by other attributes:
+However, here we show how these normalisations can be calculated using `scater`. First, we need to find the effective transcript length in Kilobases. However, our dataset containes only gene IDs, therefore we will be using the gene lengths instead of transcripts. scater uses the [biomaRt](https://bioconductor.org/packages/release/bioc/html/biomaRt.html) package, which allows one to annotate genes by other attributes:
 
 ```r
 umi.qc <- getBMFeatureAnnos(
@@ -569,7 +570,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ## 
 ## other attached packages:
 ##  [1] scran_1.5.14                BiocParallel_1.10.1        
-##  [3] scater_1.5.20               SingleCellExperiment_0.99.4
+##  [3] scater_1.5.21               SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          GenomicRanges_1.28.6       
 ##  [9] GenomeInfoDb_1.12.3         IRanges_2.10.5             

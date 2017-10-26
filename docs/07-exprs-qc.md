@@ -83,7 +83,7 @@ NA19098      r1          A06    NA19098.r1   NA19098.r1.A06
 
 The data consists of 3 individuals and 3 replicates and therefore has 9 batches in total.
 
-We standardize the analysis by using the scater package. First, create the scater SCESet classes:
+We standardize the analysis by using both `SingleCellExperiment` (SCE) and `scater` packages. First, create the SCE object:
 
 ```r
 umi <- SingleCellExperiment(assays = list(counts = as.matrix(molecules)), colData = anno)
@@ -310,7 +310,7 @@ TRUE      657
 
 #### Automatic
 
-Another option available in __scater__ is to conduct PCA on a set of QC metrics and then use automatic outlier detection to identify potentially problematic cells. 
+Another option available in `scater` is to conduct PCA on a set of QC metrics and then use automatic outlier detection to identify potentially problematic cells. 
 
 By default, the following metrics are used for PCA-based outlier detection:
 
@@ -321,7 +321,7 @@ By default, the following metrics are used for PCA-based outlier detection:
 * __log10_counts_endogenous_features__
 * __log10_counts_feature_controls__
 
-scater first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package. 
+`scater` first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package. 
 
 
 ```r
@@ -442,7 +442,7 @@ dim(umi[rowData(umi)$use, colData(umi)$use])
 Let's create an additional slot with log-transformed counts (we will need it in the next chapters) and remove saved PCA results from the `reducedDim` slot:
 
 ```r
-assay(umi, "log2_counts") <- log2(counts(umi) + 1)
+assay(umi, "logcounts_raw") <- log2(counts(umi) + 1)
 reducedDim(umi) <- NULL
 ```
 
@@ -481,7 +481,7 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.20               ggplot2_2.2.1              
+##  [1] scater_1.5.21               ggplot2_2.2.1              
 ##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [7] Biobase_2.36.2              GenomicRanges_1.28.6       
@@ -508,7 +508,7 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 ##  [31] backports_1.1.1         assertthat_0.2.0       
 ##  [33] Matrix_1.2-11           lazyeval_0.2.0         
 ##  [35] limma_3.32.10           htmltools_0.3.6        
-##  [37] quantreg_5.33           tools_3.4.2            
+##  [37] quantreg_5.34           tools_3.4.2            
 ##  [39] bindrcpp_0.2            gtable_0.2.0           
 ##  [41] glue_1.1.1              GenomeInfoDbData_0.99.0
 ##  [43] reshape2_1.4.2          dplyr_0.7.4            
