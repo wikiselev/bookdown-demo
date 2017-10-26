@@ -11,6 +11,7 @@ RUN apt-get update -y --no-install-recommends \
             r-cran-rjava \
             python \
             python3.6 \
+            python3-pip \
             git
 #            texlive-full
 
