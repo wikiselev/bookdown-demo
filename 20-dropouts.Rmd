@@ -36,7 +36,7 @@ the total amount of data to be processed.
 For scRNASeq data, we will be focusing on unsupervised methods of feature
 selection which don't require any a priori information, such as cell-type
 labels or biological group, since they are not available, or may be unreliable,
-for many experiments. In contrast, differential expression (Chapter \ref())
+for many experiments. In contrast, differential expression (chapter \@ref(dechapter))
 can be considered a form of supervised feature selection since it uses the
 known biological label of each sample to identify features (i.e. genes) which
 are expressed at different levels across groups.
@@ -53,7 +53,7 @@ which removes cells with few detected genes, removes
 undetected genes, and converts raw counts to CPM.
 
 ```{r}
-deng_list <- M3Drop::M3DropCleanData(
+deng_list <- M3DropCleanData(
     counts(deng),
     labels = cellLabels,
     min_detected_genes = 100,
@@ -112,7 +112,7 @@ CI. Pink dots are the genes with significant biological variability
 after multiple-testing correction.
 
 ```{r, fig.width = 7, fig.height = 6}
-Brennecke_HVG <- M3Drop::BrenneckeGetVariableGenes(
+Brennecke_HVG <- BrenneckeGetVariableGenes(
     expr_matrix,
     fdr = 0.01,
     minBiolDisp = 0.5
@@ -156,7 +156,7 @@ We use M3Drop to identify significant outliers to the right of the MM
 curve. We also apply 1% FDR multiple testing correction:
 
 ```{r, fig.width = 7, fig.height = 6}
-M3Drop_genes <- M3Drop::M3DropFeatureSelection(
+M3Drop_genes <- M3DropFeatureSelection(
     expr_matrix,
     mt_method = "fdr",
     mt_threshold = 0.01
@@ -233,7 +233,7 @@ We can check whether the identified features really do represent genes different
 cell-types in this dataset.
 
 ```{r, fig.width = 7, fig.height = 10}
-M3Drop::M3DropExpressionHeatmap(
+M3DropExpressionHeatmap(
     M3Drop_genes,
     expr_matrix,
     cell_labels = celltype_labs

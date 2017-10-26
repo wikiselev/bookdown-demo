@@ -2,7 +2,7 @@
 knit: bookdown::preview_chapter
 ---
 
-## Differential Expression (DE) analysis
+## Differential Expression (DE) analysis {#dechapter}
 
 ```{r, echo=FALSE}
 library(knitr)

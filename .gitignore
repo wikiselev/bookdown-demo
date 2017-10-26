@@ -9,6 +9,7 @@
 pars*.rds
 deng.csv
 scimpute_count.txt
+MAGIC_count.csv
 totalCounts_by_cell.rds
 clust.rds
 tung/reads.rds

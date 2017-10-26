@@ -1,0 +1,234 @@
+---
+output: html_document
+---
+
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(fig.align = "center")
+```
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(1234567)
+```
+
+# `Seurat` {#seurat}
+
+[Seurat](http://satijalab.org/seurat/) was originally developed as a clustering tool for scRNA-seq data, however in the last few years the focus of the package has become less specific and at the moment `seurat` is a popular R package that can perform QC, analysis, and exploration of scRNA-seq data, i.e. many of the tasks covered in this course. Although the authors provide several [tutorials](http://satijalab.org/seurat/get_started.html), here we provide a brief overview by following an [example](http://satijalab.org/seurat/pbmc3k_tutorial.html) created by the authors of `Seurat` (2,800 Peripheral Blood Mononuclear Cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors. We start by loading the `Deng` data that we have used before:
+```{r}
+deng <- readRDS("deng/deng-reads.rds")
+```
+
+## `seurat` object class
+
+`Seurat` does not integrate `SingleCellExperiment` Bioconductor class described above, but instead introduces its own object class - `seurat`. All calculations in this chapter are performed on an object of this class. To begin the analysis we first need to initialize the object with the raw (non-normalized) data. We will keep all genes expressed in $>= 3$ cells and all cells with at least 200 detected genes:
+```{r, message=FALSE, warning=FALSE}
+library(SingleCellExperiment)
+library(Seurat)
+library(mclust)
+library(dplyr)
+seuset <- CreateSeuratObject(
+    raw.data = counts(deng),
+    min.cells = 3, 
+    min.genes = 200
+)
+```
+
+## Expression QC
+
+`Seurat` allows you to easily explore QC metrics and filter cells based on any user-defined criteria. We can visualize gene and molecule counts and plot their relationship:
+```{r}
+VlnPlot(
+    object = seuset, 
+    features.plot = c("nGene", "nUMI"), 
+    nCol = 2
+)
+GenePlot(
+    object = seuset, 
+    gene1 = "nUMI", 
+    gene2 = "nGene"
+)
+```
+
+Now we will exclude cells with a clear outlier number of read counts:
+```{r}
+seuset <- FilterCells(
+    object = seuset, 
+    subset.names = c("nUMI"), 
+    high.thresholds = c(2e7)
+)
+```
+
+## Normalization
+
+After removing unwanted cells from the dataset, the next step is to normalize the data. By default, we employ a global-scaling normalization method `LogNormalize` that normalizes the gene expression measurements for each cell by the total expression, multiplies this by a scale factor (10,000 by default), and log-transforms the result:
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+seuset <- NormalizeData(
+    object = seuset, 
+    normalization.method = "LogNormalize", 
+    scale.factor = 10000
+)
+```
+
+## Highly variable genes
+
+Seurat calculates highly variable genes and focuses on these for downstream analysis. `FindVariableGenes` calculates the average expression and dispersion for each gene, places these genes into bins, and then calculates a z-score for dispersion within each bin. This helps control for the relationship between variability and average expression:
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+seuset <- FindVariableGenes(
+    object = seuset,
+    mean.function = ExpMean, 
+    dispersion.function = LogVMR, 
+    x.low.cutoff = 0.0125, 
+    x.high.cutoff = 3, 
+    y.cutoff = 0.5
+)
+length(x = seuset@var.genes)
+```
+
+## Dealing with confounders
+
+To mitigate the effect of confounding factors, `Seurat` constructs linear models to predict gene expression based on user-defined variables. The scaled z-scored residuals of these models are stored in the `scale.data` slot, and are used for dimensionality reduction and clustering.
+
+`Seurat` can regress out cell-cell variation in gene expression driven by batch, cell alignment rate (as provided by Drop-seq tools for Drop-seq data), the number of detected molecules, mitochondrial gene expression and cell cycle. Here we regress on the number of detected molecules per cell.
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+seuset <- ScaleData(
+    object = seuset, 
+    vars.to.regress = c("nUMI")
+)
+```
+
+## Linear dimensionality reduction
+
+Next we perform `PCA` on the scaled data. By default, the genes in `object@var.genes` are used as input, but can be alternatively defined using `pc.genes`. Running dimensionality reduction on highly variable genes can improve performance. However, with some types of data (UMI) - particularly after regressing out technical variables, `PCA` returns similar (albeit slower) results when run on much larger subsets of genes, including the whole transcriptome.
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+seuset <- RunPCA(
+    object = seuset, 
+    pc.genes = seuset@var.genes, 
+    do.print = TRUE, 
+    pcs.print = 1:5, 
+    genes.print = 5
+)
+```
+
+`Seurat` provides several useful ways of visualizing both cells and genes that define the `PCA`:
+```{r}
+PrintPCA(object = seuset, pcs.print = 1:5, genes.print = 5, use.full = FALSE)
+VizPCA(object = seuset, pcs.use = 1:2)
+PCAPlot(object = seuset, dim.1 = 1, dim.2 = 2)
+```
+
+In particular, `PCHeatmap` allows for easy exploration of the primary sources of heterogeneity in a dataset, and can be useful when trying to decide which PCs to include for further downstream analyses. Both cells and genes are ordered according to their `PCA` scores. Setting `cells.use` to a number plots the _extreme_ cells on both ends of the spectrum, which dramatically speeds plotting for large datasets:
+```{r}
+PCHeatmap(
+    object = seuset, 
+    pc.use = 1:6, 
+    cells.use = 500, 
+    do.balanced = TRUE, 
+    label.columns = FALSE,
+    use.full = FALSE
+)
+```
+
+## Significant PCs
+
+To overcome the extensive technical noise in any single gene for scRNA-seq data, `Seurat` clusters cells based on their `PCA` scores, with each PC essentially representing a _metagene_ that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step. `Seurat` randomly permute a subset of the data (1% by default) and rerun `PCA`, constructing a _null distribution_ of gene scores, and repeat this procedure. We identify _significant_ PCs as those who have a strong enrichment of low p-value genes:
+```{r}
+seuset <- JackStraw(
+    object = seuset, 
+    num.replicate = 100, 
+    do.print = FALSE
+)
+```
+
+The `JackStrawPlot` function provides a visualization tool for comparing the distribution of p-values for each PC with a uniform distribution (dashed line). _Significant_ PCs will show a strong enrichment of genes with low p-values (solid curve above the dashed line). In this case it appears that PCs 1-8 are significant.
+```{r}
+JackStrawPlot(object = seuset, PCs = 1:9)
+```
+
+A more ad hoc method for determining which PCs to use is to look at a plot of the standard deviations of the principle components and draw your cutoff where there is a clear elbow in the graph. This can be done with `PCElbowPlot`. In this example, it looks like the elbow would fall around PC 5.
+```{r}
+PCElbowPlot(object = seuset)
+```
+
+## Clustering cells
+
+`Seurat` implements an graph-based clustering approach. Distances between the cells are calculated based on previously identified PCs. `Seurat` approach was heavily inspired by recent manuscripts which applied graph-based clustering approaches to scRNA-seq data - SNN-Cliq ([@Xu2015-vf]) and CyTOF data - PhenoGraph ([@Levine2015-fk]). Briefly, these methods embed cells in a graph structure - for example a K-nearest neighbor (_KNN_) graph, with edges drawn between cells with similar gene expression patterns, and then attempt to partition this graph into highly interconnected _quasi-cliques_ or _communities_. As in PhenoGraph, we first construct a _KNN_ graph based on the euclidean distance in PCA space, and refine the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccard distance). To cluster the cells, we apply modularity optimization techniques - SLM ([@Blondel2008-px]), to iteratively group cells together, with the goal of optimizing the standard modularity function.
+
+The `FindClusters` function implements the procedure, and contains a resolution parameter that sets the `granularity` of the downstream clustering, with increased values leading to a greater number of clusters. We find that setting this parameter between $0.6-1.2$ typically returns good results for single cell datasets of around $3,000$ cells. Optimal resolution often increases for larger datasets. The clusters are saved in the object@ident slot.
+```{r}
+seuset <- FindClusters(
+    object = seuset, 
+    reduction.type = "pca", 
+    dims.use = 1:8, 
+    resolution = 1.0, 
+    print.output = 0, 
+    save.SNN = TRUE
+)
+```
+
+A useful feature in `Seurat` is the ability to recall the parameters that were used in the latest function calls for commonly used functions. For `FindClusters`, there is the function `PrintFindClustersParams` to print a nicely formatted summary of the parameters that were chosen:
+```{r}
+PrintFindClustersParams(object = seuset)
+```
+
+We can look at the clustering results and compare them to the original cell labels:
+```{r}
+table(seuset@ident)
+adjustedRandIndex(colData(deng)[seuset@cell.names, ]$cell_type2, seuset@ident)
+```
+
+`Seurat` also utilises tSNE plot to visulise clustering results. As input to the tSNE, we suggest using the same PCs as input to the clustering analysis, although computing the tSNE based on scaled gene expression is also supported using the `genes.use` argument.
+```{r}
+seuset <- RunTSNE(
+    object = seuset,
+    dims.use = 1:8,
+    do.fast = TRUE
+)
+TSNEPlot(object = seuset)
+```
+
+## Marker genes
+
+Seurat can help you find markers that define clusters via differential expression. By default, it identifes positive and negative markers of a single cluster, compared to all other cells. You can test groups of clusters vs. each other, or against all cells. For example, to find marker genes for cluster 2 we can run:
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+markers2 <- FindMarkers(seuset, 2)
+```
+
+Marker genes can then be visualised:
+```{r}
+VlnPlot(object = seuset, features.plot = rownames(markers2)[1:2])
+FeaturePlot(
+    seuset, 
+    head(rownames(markers2)), 
+    cols.use = c("lightgrey", "blue"), 
+    nCol = 3
+)
+```
+
+`FindAllMarkers` automates this process and find markers for all clusters:
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+markers <- FindAllMarkers(
+    object = seuset, 
+    only.pos = TRUE, 
+    min.pct = 0.25, 
+    thresh.use = 0.25
+)
+```
+
+`DoHeatmap` generates an expression heatmap for given cells and genes. In this case, we are plotting the top 10 markers (or all markers if less than 20) for each cluster:
+```{r}
+top10 <- markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
+DoHeatmap(
+    object = seuset, 
+    genes.use = top10$gene, 
+    slim.col.label = TRUE, 
+    remove.key = TRUE
+)
+```
+
+__Exercise__: Compare marker genes provided by `Seurat` and `SC3`.
+
+## sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```
