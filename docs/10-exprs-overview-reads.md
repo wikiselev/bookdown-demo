@@ -35,7 +35,7 @@ plotPCA(
 ```r
 plotPCA(
     reads[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -51,7 +51,7 @@ plotPCA(
 ```r
 plotPCA(
     reads.qc[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -67,7 +67,7 @@ plotPCA(
 ```r
 plotTSNE(
     reads[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     perplexity = 130,
     colour_by = "batch",
     size_by = "total_features",
@@ -85,7 +85,7 @@ plotTSNE(
 ```r
 plotTSNE(
     reads.qc[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     perplexity = 130,
     colour_by = "batch",
     size_by = "total_features",
@@ -134,7 +134,7 @@ plotTSNE(
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] knitr_1.17                  scater_1.5.20              
+##  [1] knitr_1.17                  scater_1.5.21              
 ##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [7] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        

@@ -353,7 +353,7 @@ Perform the above analysis for each normalization/batch correction method. Which
 
 Another method to check the efficacy of batch-effect correction is to consider the intermingling of points from different batches in local subsamples of the data. If there are no batch-effects then proportion of cells from each batch in any local region should be equal to the global proportion of cells in each batch. 
 
-`kBET` takes `kNN` networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). `kBET` assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, `kBET` can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply `kBET` to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, `kBET` does not determine if biological signal has been preserved. 
+`kBET` ([@Buttner2017-ds]) takes `kNN` networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). `kBET` assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, `kBET` can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply `kBET` to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, `kBET` does not determine if biological signal has been preserved. 
 
 
 ```r
@@ -418,7 +418,7 @@ Why do the raw counts appear to have little batch effects?
 
 ### Exercise
 
-Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.
+Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads `SCE` object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.
 
 ### sessionInfo()
 
@@ -449,7 +449,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ##  [3] sva_3.24.4                  genefilter_1.58.1          
 ##  [5] mgcv_1.8-22                 nlme_3.1-131               
 ##  [7] kBET_0.99.0                 scran_1.5.14               
-##  [9] scater_1.5.20               SingleCellExperiment_0.99.4
+##  [9] scater_1.5.21               SingleCellExperiment_0.99.4
 ## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
 ## [13] edgeR_3.18.1                limma_3.32.10              
 ## [15] EDASeq_2.10.0               ShortRead_1.34.2           

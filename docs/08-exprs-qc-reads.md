@@ -334,7 +334,7 @@ limma::vennDiagram(venn.diag,
 
 
 ```r
-scater::plotQC(reads, type = "highest-expression")
+plotQC(reads, type = "highest-expression")
 ```
 
 <div class="figure" style="text-align: center">
@@ -379,7 +379,7 @@ dim(reads[rowData(reads)$use, colData(reads)$use])
 
 
 ```r
-assay(reads, "log2_counts") <- log2(counts(reads) + 1)
+assay(reads, "logcounts_raw") <- log2(counts(reads) + 1)
 reducedDim(reads) <- NULL
 ```
 
@@ -415,7 +415,7 @@ By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-com
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] knitr_1.17                  scater_1.5.20              
+##  [1] knitr_1.17                  scater_1.5.21              
 ##  [3] ggplot2_2.2.1               SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          Biobase_2.36.2             
@@ -442,7 +442,7 @@ By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-com
 ##  [31] backports_1.1.1         assertthat_0.2.0       
 ##  [33] Matrix_1.2-11           lazyeval_0.2.0         
 ##  [35] limma_3.32.10           htmltools_0.3.6        
-##  [37] quantreg_5.33           tools_3.4.2            
+##  [37] quantreg_5.34           tools_3.4.2            
 ##  [39] bindrcpp_0.2            gtable_0.2.0           
 ##  [41] glue_1.1.1              GenomeInfoDbData_0.99.0
 ##  [43] reshape2_1.4.2          dplyr_0.7.4            

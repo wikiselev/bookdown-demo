@@ -6,7 +6,7 @@ output: html_document
 
 ### Introduction
 
-In this chapter we will continue to work with the filtered `Tung` dataset produced in the previous chapter. We will explore different ways of visualizing the data to allow you to asses what happened to the expression matrix after the quality control step. [scater](https://github.com/davismcc/scater) package provides several very useful functions to simplify visualisation. 
+In this chapter we will continue to work with the filtered `Tung` dataset produced in the previous chapter. We will explore different ways of visualizing the data to allow you to asses what happened to the expression matrix after the quality control step. `scater` package provides several very useful functions to simplify visualisation. 
 
 One important aspect of single-cell RNA-seq is to control for batch effects. Batch effects are technical artefacts that are added to the samples during handling. For example, if two sets of samples were prepared in different labs or even on different days in the same lab, then we may observe greater similarities between the samples that were handled together. In the worst case scenario, batch effects may be [mistaken](http://f1000research.com/articles/4-121/v1) for true biological variation. The `Tung` data allows us to explore these issues in a controlled manner since some of the salient aspects of how the samples were handled have been recorded. Ideally, we expect to see batches from the same individual grouping together and distinct groups corresponding to each individual. 
 
@@ -59,7 +59,7 @@ With log-transformation:
 ```r
 plotPCA(
     umi[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -73,7 +73,7 @@ plotPCA(
 
 Clearly log-transformation is benefitial for our data - it reduces the variance on the first principal component and already separates some biological effects. Moreover, it makes the distribution of the expression values more normal. In the following analysis and chapters we will be using log-transformed raw counts by default.
 
-__However, note that just a log-transformation is not enough to account for different technical factors between the cells (e.g. sequencing depth). Therefore, please do not use `log2_counts` for your downstream analysis, instead as a minimum suitable data use the `exprs` slot of the scater object, which not just log-transformed, but also normalised by library size (CPM normalisation). In the course we use `log2_counts` only for demonstration purposes!__
+__However, note that just a log-transformation is not enough to account for different technical factors between the cells (e.g. sequencing depth). Therefore, please do not use `logcounts_raw` for your downstream analysis, instead as a minimum suitable data use the `logcounts` slot of the `SingleCellExperiment` object, which not just log-transformed, but also normalised by library size (e.g. CPM normalisation). In the course we use `logcounts_raw` only for demonstration purposes!__
 
 #### After QC
 
@@ -81,7 +81,7 @@ __However, note that just a log-transformation is not enough to account for diff
 ```r
 plotPCA(
     umi.qc[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     colour_by = "batch",
     size_by = "total_features",
     shape_by = "individual"
@@ -127,7 +127,7 @@ An alternative to PCA for visualizing scRNASeq data is a tSNE plot. [tSNE](https
 ```r
 plotTSNE(
     umi[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     perplexity = 130,
     colour_by = "batch",
     size_by = "total_features",
@@ -147,7 +147,7 @@ plotTSNE(
 ```r
 plotTSNE(
     umi.qc[endog_genes, ],
-    exprs_values = "log2_counts",
+    exprs_values = "logcounts_raw",
     perplexity = 130,
     colour_by = "batch",
     size_by = "total_features",
@@ -163,7 +163,7 @@ plotTSNE(
 
 Interpreting PCA and tSNE plots is often challenging and due to their stochastic and non-linear nature, they are less intuitive. However, in this case it is clear that they provide a similar picture of the data. Comparing Figure \@ref(fig:expr-overview-tsne-before-qc) and \@ref(fig:expr-overview-tsne-after-qc), it is again clear that the samples from NA19098.r2 are no longer outliers after the QC filtering.
 
-Furthermore tSNE requires you to provide a value of "perplexity" which reflects the number of neighbours used to build the nearest-neighbour network; a high value creates a dense network which clumps cells together while a low value makes the network more sparse allowing groups of cells to separate from each other. __scater__ uses a default perplexity of the total number of cells divided by five (rounded down).
+Furthermore tSNE requires you to provide a value of `perplexity` which reflects the number of neighbours used to build the nearest-neighbour network; a high value creates a dense network which clumps cells together while a low value makes the network more sparse allowing groups of cells to separate from each other. `scater` uses a default perplexity of the total number of cells divided by five (rounded down).
 
 You can read more about the pitfalls of using tSNE [here](http://distill.pub/2016/misread-tsne/).
 
@@ -211,7 +211,7 @@ Perform the same analysis with read counts of the Blischak data. Use `tung/reads
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.20               ggplot2_2.2.1              
+##  [1] scater_1.5.21               ggplot2_2.2.1              
 ##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [7] Biobase_2.36.2              GenomicRanges_1.28.6       

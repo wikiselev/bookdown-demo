@@ -22,9 +22,9 @@ output: html_document
 
 
 ```
-## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## 'ERCC' should have their own size factors
+## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in 'ERCC' should have their own size
+## factors
 ```
 
 <div class="figure" style="text-align: center">
@@ -54,9 +54,9 @@ output: html_document
 
 
 ```
-## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## 'ERCC' should have their own size factors
+## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in 'ERCC' should have their own size
+## factors
 ```
 
 <div class="figure" style="text-align: center">
@@ -71,9 +71,9 @@ output: html_document
 
 
 ```
-## Warning in normalizeSCE(object, exprs_values = exprs_values,
-## return_norm_as_exprs = return_norm_as_exprs): spike-in transcripts in
-## 'ERCC' should have their own size factors
+## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in 'ERCC' should have their own size
+## factors
 ```
 
 <div class="figure" style="text-align: center">
@@ -140,7 +140,7 @@ output: html_document
 ## 
 ## other attached packages:
 ##  [1] knitr_1.17                  scran_1.5.14               
-##  [3] BiocParallel_1.10.1         scater_1.5.20              
+##  [3] BiocParallel_1.10.1         scater_1.5.21              
 ##  [5] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
 ##  [7] DelayedArray_0.2.7          matrixStats_0.52.2         
 ##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        

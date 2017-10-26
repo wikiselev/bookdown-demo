@@ -144,7 +144,7 @@ To evaluate the impact of the imputation, we use `SC3` to cluster the imputed ma
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.20               ggplot2_2.2.1              
+##  [1] scater_1.5.21               ggplot2_2.2.1              
 ##  [3] SC3_1.5.6                   SingleCellExperiment_0.99.4
 ##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
 ##  [7] matrixStats_0.52.2          Biobase_2.36.2             

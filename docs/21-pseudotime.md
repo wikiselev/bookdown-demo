@@ -553,7 +553,7 @@ __Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of
 ##  [73] goftest_1.1-1           robustbase_0.92-7      
 ##  [75] caTools_1.17.1          bindrcpp_0.2           
 ##  [77] nlme_3.1-131            mime_0.5               
-##  [79] quantreg_5.33           slam_0.1-40            
+##  [79] quantreg_5.34           slam_0.1-40            
 ##  [81] R.oo_1.21.0             compiler_3.4.2         
 ##  [83] pbkrtest_0.4-7          curl_3.0               
 ##  [85] e1071_1.6-8             spatstat.utils_1.7-1   
