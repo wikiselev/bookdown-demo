@@ -114,7 +114,7 @@ The __RLE__, __TMM__, and __UQ__ size-factor methods were developed for bulk RNA
 
 __Note:__ edgeR makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/release/bioc/html/DESeq.html) may give different results to the `estimateSizeFactorsForMatrix` method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
 
-## Normalization practice
+## Normalization practice (UMI)
 
 We will continue to work with the `tung` data that was used in the previous chapter.
 
@@ -358,7 +358,7 @@ plotRLE(
 <img src="13-exprs-norm_files/figure-html/norm-ours-rle-uq-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
 <p class="caption">(\#fig:norm-ours-rle-uq)Cell-wise RLE of the tung data</p>
 </div>
-## Downsampling 
+### Downsampling 
 
 A final way to correct for library size is to downsample the expression matrix so that each cell has approximately the same total number of molecules. The benefit of this method is that zero values will be introduced by the down sampling thus eliminating any biases due to differing numbers of detected genes. However, the major drawback is that the process is not deterministic so each time the downsampling is run the resulting expression matrix is slightly different. Thus, often analyses must be run on multiple downsamplings to ensure results are robust.
 
