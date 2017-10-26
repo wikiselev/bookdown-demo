@@ -12,6 +12,7 @@ RUN apt-get update -y --no-install-recommends \
             python \
             python3.6 \
             python3-pip \
+            python3-tk \
             git
 #            texlive-full
 
