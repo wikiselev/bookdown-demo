@@ -16,7 +16,7 @@ library(SC3)
 library(scater)
 library(SingleCellExperiment)
 library(pheatmap)
-library(irr)
+library(mclust)
 set.seed(1234567)
 ```
 

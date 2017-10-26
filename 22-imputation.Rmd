@@ -81,10 +81,17 @@ Based on the PCA and the clustering results, do you think that imputation is a g
 
 ### MAGIC
 
-```{r, eval = FALSE}
-res <- readRDS("deng/deng_MAGIC.rds")
+```{r}
+system("MAGIC.py -d deng.csv -o MAGIC_count.csv --cell-axis columns -l 1 --pca-non-random csv")
+```
+
+```{r}
+res <- read.csv("MAGIC_count.csv", header = TRUE)
+rownames(res) <- res[,1]
+res <- res[,-1]
+res <- t(res)
 res <- SingleCellExperiment(
-    assays = list(logcounts = as.matrix(res)), 
+    assays = list(logcounts = res), 
     colData = colData(deng)
 )
 plotPCA(

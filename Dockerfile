@@ -45,7 +45,8 @@ RUN Rscript -e "install.packages('mvoutlier')"
 RUN Rscript -e "devtools::install_github('MarioniLab/scran')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')"
 
-RUN Rscript -e "install.packages('irr')"
+RUN Rscript -e "install.packages('mclust')"
+RUN Rscript -e "install.packages('dplyr')"
 
 RUN Rscript -e "install.packages('penalized')"
 RUN Rscript -e "devtools::install_github('Vivianstats/scImpute')"
