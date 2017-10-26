@@ -32,19 +32,19 @@ Please follow this link and register for the __"Analysis of single cell RNA-seq 
 ## GitHub
 <a href="https://github.com/hemberg-lab/scRNA.seq.course" target="blank">https://github.com/hemberg-lab/scRNA.seq.course</a>
 
-## Docker image
+## Docker image (RStudio)
 
-The course can be reproduced without any package installation by running the course docker image which contains all the required packages.
+The course can be reproduced without any package installation by running the course docker RStudio image which contains all the required packages.
 
-Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker image:
+Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course RStudio docker image:
 
 ```
-docker run -it quay.io/hemberg-group/scrna-seq-course:latest R
+docker run -d -p 8787:8787 quay.io/hemberg-group/scrna-seq-course-rstudio
 ```
 
-It will download the course docker image (may take some time) and start a new R session in a docker container with all packages installed and all data files available.
+This download the docker image (may take some time) and start a new Rstudio session in a docker container with all packages installed and all data files available.
 
-Note: It is currently not possible to plot figures interactively from the Docker, however figures can still be written to file for inspection.
+Then visit `localhost:8787` in your browser and log in with `username:password` as `rstudio:rstudio`. Now you are ready to go!
 
 ## License
 All of the course material is licensed under <b>GPL-3</b>. Anyone is welcome to go through the material in order to learn about analysis of scRNA-seq data. If you plan to use the material for your own teaching, we would appreciate if you tell us about it in addition to providing a suitable citation.

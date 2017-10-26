@@ -82,4 +82,4 @@ RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('Summariz
 ADD . /home/rstudio/
 
 # run scripts
-CMD bash build.sh
+CMD cd /home/rstudio && bash build.sh
