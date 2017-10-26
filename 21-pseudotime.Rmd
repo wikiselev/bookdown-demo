@@ -343,27 +343,27 @@ __Exercise 6__: Compare destiny and SLICER to TSCAN and Monocle.
 
 ### Expression of genes through time
 
-Each package also enables the visualization of expression through pseudotime. Following individual genes is very helpful for identifying genes that play an important role in the differentiation process. We illustrate the procedure using the Obox6 gene which is known to be important during early development.
+Each package also enables the visualization of expression through pseudotime. Following individual genes is very helpful for identifying genes that play an important role in the differentiation process. We illustrate the procedure using the `Rhoa` gene.
 
 __TSCAN__
-```{r Obox6-tscan}
+```{r Rhoa-tscan}
 colnames(deng) <- 1:ncol(deng)
 TSCAN::singlegeneplot(
-    deng[rownames(deng) == "Obox6", ],
+    deng[rownames(deng) == "Rhoa", ],
     dengorderTSCAN
 )
 ```
 
 __Monocle__
-```{r Obox6-monocle}
+```{r Rhoa-monocle}
 monocle::plot_genes_in_pseudotime(
-    dCellDataSet[fData(dCellDataSet)$gene == "Obox6",],
+    dCellDataSet[fData(dCellDataSet)$gene == "Rhoa",],
     color_by = "timepoint"
 )
 ```
 
 Of course, pseudotime values computed with any method can be added to
-the `pData` slot of an `SCESet` object. Having done that, the full
+the `colData` slot of an `SCE` object. Having done that, the full
 plotting capabilities of the `scater` package can be used to
 investigate relationships between gene expression, cell populations
 and pseudotime. This would be particularly useful for the SLICER
