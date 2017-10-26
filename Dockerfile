@@ -79,7 +79,7 @@ RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('MultiAss
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('SummarizedExperiment')"
 
 # add our scripts
-ADD . /
+ADD . /home/rstudio/
 
 # run scripts
 CMD bash build.sh
