@@ -198,7 +198,7 @@ limma::vennDiagram(venn.diag,
 ```
 
 ```{r top50-gene-expr-reads, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
-scater::plotQC(reads, type = "highest-expression")
+plotQC(reads, type = "highest-expression")
 ```
 
 ```{r}
@@ -221,7 +221,7 @@ dim(reads[rowData(reads)$use, colData(reads)$use])
 ```
 
 ```{r}
-assay(reads, "log2_counts") <- log2(counts(reads) + 1)
+assay(reads, "logcounts_raw") <- log2(counts(reads) + 1)
 reducedDim(reads) <- NULL
 ```
 

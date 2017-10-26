@@ -87,7 +87,8 @@ to scRNA-seq data by building a graph where each node represents a cell. Note th
 ### Challenges in clustering
 
 * What is the number of clusters _k_?
-* __Scalability__: in the last 2 years the number of cells in scRNA-seq experiments has grown by 2 orders of magnitude from ~$10^2$ to ~$10^4$
+* What is a cell type?
+* __Scalability__: in the last few years the number of cells in scRNA-seq experiments has grown by several orders of magnitude from ~$10^2$ to ~$10^6$
 * Tools are not user-friendly
 
 ### Tools for scRNA-seq data
