@@ -14,6 +14,7 @@ library(scRNA.seq.funcs)
 library(matrixStats)
 library(M3Drop)
 library(RColorBrewer)
+library(SingleCellExperiment)
 set.seed(1)
 ```
 
@@ -40,16 +41,11 @@ can be considered a form of supervised feature selection since it uses the
 known biological label of each sample to identify features (i.e. genes) which
 are expressed at different levels across groups.
 
-For this section we will be working with the [Usoskin et
-al](http://www.nature.com/neuro/journal/v18/n1/full/nn.3881.html)
-data. It contains 4 cell types: NP = non-peptidergic nociceptors, PEP
-= peptidergic nociceptors, NF = neurofilament containing and TH =
-tyrosine hydroxylase containing neurons.
+For this section we will continue working with the Deng data. 
 
 ```{r}
-usoskin1 <- readRDS("usoskin/usoskin1.rds")
-dim(usoskin1)
-table(colnames(usoskin1))
+deng <- readRDS("deng/deng-reads.rds")
+cellLabels <- colData(deng)$cell_type2
 ```
 
 This data can be QCed and normalized for library size using M3Drop,
@@ -57,17 +53,18 @@ which removes cells with few detected genes, removes
 undetected genes, and converts raw counts to CPM.
 
 ```{r}
-uso_list <- M3Drop::M3DropCleanData(
-    usoskin1,
-    labels = colnames(usoskin1),
-    min_detected_genes = 2000,
+deng_list <- M3Drop::M3DropCleanData(
+    counts(deng),
+    labels = cellLabels,
+    min_detected_genes = 100,
     is.counts = TRUE
 )
-expr_matrix <- uso_list$data # Normalized & filtered expression matrix
-celltype_labs <- uso_list$labels # filtered cell-type labels
+expr_matrix <- deng_list$data # Normalized & filtered expression matrix
+celltype_labs <- factor(deng_list$labels) # filtered cell-type labels
 cell_colors <- brewer.pal(max(3,length(unique(celltype_labs))), "Set3")
 ```
-__Exercise 1__: How many cells & genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?
+
+__Exercise 1__: How many cells & genes have been removed by this filtering? 
 
 ### Identifying Genes vs a Null Model ##
 
@@ -164,7 +161,6 @@ M3Drop_genes <- M3Drop::M3DropFeatureSelection(
     mt_method = "fdr",
     mt_threshold = 0.01
 )
-title(main = "Usoskin")
 M3Drop_genes <- M3Drop_genes$Gene
 ```
 
@@ -180,8 +176,8 @@ Unlike the Michaelis-Menten and HVG methods there isn't a reliable statistical t
 selected by this model, so we will consider the top 1500 genes instead.
 
 ```{r, fig.width=8, fig.height=5}
-usoskin_int <- NBumiConvertToInteger(usoskin1)
-DANB_fit <- NBumiFitModel(usoskin_int) # DANB is fit to the raw count matrix
+deng_int <- NBumiConvertToInteger(counts(deng))
+DANB_fit <- NBumiFitModel(deng_int) # DANB is fit to the raw count matrix
 # Perform DANB feature selection
 DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit)
 DANB_genes <- names(DropFS[1:1500])
@@ -239,25 +235,18 @@ cell-types in this dataset.
 ```{r, fig.width = 7, fig.height = 10}
 M3Drop::M3DropExpressionHeatmap(
     M3Drop_genes,
-    uso_list$data,
-    cell_labels = uso_list$labels
+    expr_matrix,
+    cell_labels = celltype_labs
 )
 ```
 
-For a quantitative estimate you have been provided with differentially expressed genes for this dataset as calculated by DESeq:
-
+We can also consider how consistent each feature selection method is with the others using the Jaccard Index:
 ```{r}
-# Load DE genes
-DESeq_table <- readRDS("usoskin/DESeq_table.rds")
-DE_genes = unique(DESeq_table$Gene)
-
-# Calculate precision
-sum(M3Drop_genes %in% DE_genes)/length(M3Drop_genes)
+J <- sum(M3Drop_genes %in% HVG_genes)/length(unique(c(M3Drop_genes, HVG_genes)))
 ```
 
 __Exercise 5__
-Plot the expression of the features for each of the other methods. Which appear to be differentially expressed?
-Which method is the most precise?
+Plot the expression of the features for each of the other methods. Which appear to be differentially expressed? How consistent are the different methods for this dataset?
 
 ### sessionInfo()
 
