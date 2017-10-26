@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Dealing with confounders (Reads)
+## Dealing with confounders (Reads)
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -30,9 +30,9 @@ reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- normalize(reads.qc)
 ```
 
-## Remove Unwanted Variation
+### Remove Unwanted Variation
 
-### RUVg
+#### RUVg
 
 ```{r, message=FALSE, warning=FALSE}
 ruvg <- RUVg(counts(reads.qc), erccs, k = 1)
@@ -45,7 +45,7 @@ assay(reads.qc, "ruvg10") <- log2(
 )
 ```
 
-### RUVs
+#### RUVs
 
 ```{r}
 scIdx <- matrix(-1, ncol = max(table(reads.qc$individual)), nrow = 3)
@@ -66,7 +66,7 @@ assay(reads.qc, "ruvs10") <- log2(
 )
 ```
 
-### Combat
+#### Combat
 
 ```{r, eval = TRUE, message = FALSE}
 combat_data <- logcounts(reads.qc)
@@ -98,7 +98,7 @@ assay(reads.qc, "combat_tf") <- ComBat(
 )
 ```
 
-### mnnCorrect 
+#### mnnCorrect 
 
 ```{r}
 do_mnn <- function(data.qc) {
@@ -143,7 +143,7 @@ assay(reads.qc, "mnn") <- cbind(indi1, indi2, indi3);
 #)
 ```
 
-### GLM
+#### GLM
 
 ```{r}
 glm_fun <- function(g, batch, indi) {
@@ -188,7 +188,7 @@ indi3 <- do_glm(reads.qc[, reads.qc$individual == "NA19239"])
 assay(reads.qc, "glm_indi") <- cbind(indi1, indi2, indi3);
 ```
 
-### Effectiveness 1
+#### Effectiveness 1
 
 ```{r}
 for(n in assayNames(reads.qc)) {
@@ -205,7 +205,7 @@ for(n in assayNames(reads.qc)) {
 }
 ```
 
-### Effectiveness 2
+#### Effectiveness 2
 
 ```{r}
 res <- list()
@@ -216,7 +216,7 @@ par(mar=c(6,4,1,1))
 boxplot(res, las=2)
 ```
 
-### Effectiveness 3
+#### Effectiveness 3
 
 ```{r}
 for(n in assayNames(reads.qc)) {
@@ -239,7 +239,7 @@ for(n in assayNames(reads.qc)) {
 }
 ```
 
-### Effectiveness 4
+#### Effectiveness 4
 
 ```{r, message = FALSE}
 compare_kBET_results <- function(sce){
@@ -294,7 +294,7 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
     ggtitle("Effect of batch regression methods per individual")
 ```
 
-### sessionInfo()
+#### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()
