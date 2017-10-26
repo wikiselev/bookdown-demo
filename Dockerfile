@@ -10,7 +10,7 @@ RUN apt-get update -y --no-install-recommends \
             pandoc-citeproc \
             r-cran-rjava \
             python \
-            python3.6 \
+#            python3.6 \
             python3-pip \
             python3-tk \
             git
