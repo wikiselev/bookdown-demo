@@ -181,7 +181,7 @@ plotTSNE(
 
 ### Big Exercise
 
-Perform the same analysis with read counts of the Blischak data. Use `tung/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
+Perform the same analysis with read counts of the Blischak data. Use `tung/reads.rds` file to load the reads SCE object. Once you have finished please compare your results to ours (next chapter).
 
 ### sessionInfo()
 

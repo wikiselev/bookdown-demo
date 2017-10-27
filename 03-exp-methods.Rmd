@@ -9,8 +9,6 @@ opts_chunk$set(fig.align = "center", echo=FALSE, out.width = '70%')
 
 ## Experimental methods
 
-### Overview of experimental methods for generating scRNA-seq data
-
 ```{r, fig.cap="Moore's law in single cell transcriptomics (image taken from [Svensson et al](https://arxiv.org/abs/1704.01379))", out.width = '100%'}
 knitr::include_graphics("figures/moores-law.png")
 ```

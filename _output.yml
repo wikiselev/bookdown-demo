@@ -10,9 +10,6 @@ bookdown::gitbook:
       after: |
         <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2017</a></li>
     download: [pdf]
-    edit:
-      link: https://github.com/hemberg-lab/scRNA.seq.course/edit/master/%s
-      text: "Edit"
     search: true
 bookdown::tufte_html_book:
   css: [style.css, toc.css]

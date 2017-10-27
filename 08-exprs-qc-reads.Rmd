@@ -9,7 +9,6 @@ This chapter contains the summary plots and tables for the QC exercise based on 
 ```{r, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 library(scater)
-library(knitr)
 options(stringsAsFactors = FALSE)
 ```
 
@@ -23,18 +22,15 @@ anno <- read.table("tung/annotation.txt", sep = "\t", header = TRUE)
 ```
 
 ```{r}
-knitr::kable(
-    head(reads[ , 1:3]), booktabs = TRUE,
-    caption = 'A table of the first 6 rows and 3 columns of the molecules table.'
-)
-knitr::kable(
-    head(anno), booktabs = TRUE,
-    caption = 'A table of the first 6 rows of the anno table.'
-)
+head(reads[ , 1:3])
+head(anno)
 ```
 
 ```{r}
-reads <- SingleCellExperiment(assays = list(counts = as.matrix(reads)), colData = anno)
+reads <- SingleCellExperiment(
+    assays = list(counts = as.matrix(reads)), 
+    colData = anno
+)
 ```
 
 ```{r}
@@ -55,7 +51,10 @@ isSpike(reads, "MT") <- rownames(reads) %in%
 ```{r}
 reads <- calculateQCMetrics(
     reads,
-    feature_controls = list(ERCC = isSpike(reads, "ERCC"), MT = isSpike(reads, "MT"))
+    feature_controls = list(
+        ERCC = isSpike(reads, "ERCC"), 
+        MT = isSpike(reads, "MT")
+    )
 )
 ```
 
@@ -72,12 +71,7 @@ filter_by_total_counts <- (reads$total_counts > 1.3e6)
 ```
 
 ```{r}
-knitr::kable(
-    as.data.frame(table(filter_by_total_counts)),
-    booktabs = TRUE,
-    row.names = FALSE,
-    caption = 'The number of cells removed by total counts filter (FALSE)'
-)
+table(filter_by_total_counts)
 ```
 
 ```{r total-features-hist-reads, fig.cap = "Histogram of the number of detected genes in all cells"}
@@ -93,57 +87,37 @@ filter_by_expr_features <- (reads$total_features > 7000)
 ```
 
 ```{r}
-knitr::kable(
-    as.data.frame(table(filter_by_expr_features)),
-    booktabs = TRUE,
-    row.names = FALSE,
-    caption = 'The number of cells removed by total features filter (FALSE)'
-)
+table(filter_by_expr_features)
 ```
 
 ```{r mt-vs-counts-reads, fig.cap = "Percentage of counts in MT genes"}
 plotPhenoData(
     reads,
-    aes_string(x = "total_features",
-               y = "pct_counts_MT",
-               colour = "batch")
+    aes_string(
+        x = "total_features",
+        y = "pct_counts_MT",
+        colour = "batch"
+    )
 )
 ```
 
 ```{r ercc-vs-counts-reads, fig.cap = "Percentage of counts in ERCCs"}
 plotPhenoData(
     reads,
-    aes_string(x = "total_features",
-               y = "pct_counts_ERCC",
-               colour = "batch")
+    aes_string(
+        x = "total_features",
+        y = "pct_counts_ERCC",
+        colour = "batch"
+    )
 )
 ```
 
 ```{r}
-filter_by_ERCC <- reads$batch != "NA19098.r2" &
-    reads$pct_counts_ERCC < 25
-```
-
-```{r}
-knitr::kable(
-  as.data.frame(table(filter_by_ERCC)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by ERCC filter (FALSE)'
-)
-```
-
-```{r}
+filter_by_ERCC <- 
+    reads$batch != "NA19098.r2" & reads$pct_counts_ERCC < 25
+table(filter_by_ERCC)
 filter_by_MT <- reads$pct_counts_MT < 30
-```
-
-```{r}
-knitr::kable(
-  as.data.frame(table(filter_by_MT)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by MT filter (FALSE)'
-)
+table(filter_by_MT)
 ```
 
 ```{r}
@@ -160,41 +134,36 @@ reads$use <- (
 ```
 
 ```{r}
-knitr::kable(
-  as.data.frame(table(reads$use)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by manual filter (FALSE)'
-)
+table(reads$use)
 ```
 
 ```{r auto-cell-filt-reads, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
-reads <-
-plotPCA(reads,
+reads <- plotPCA(
+    reads,
     size_by = "total_features", 
     shape_by = "use",
     pca_data_input = "pdata",
     detect_outliers = TRUE,
-    return_SCE = TRUE)
+    return_SCE = TRUE
+)
 ```
 
 ```{r}
-knitr::kable(
-  as.data.frame(table(reads$outlier)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by automatic filter (FALSE)'
-)
+table(reads$outlier)
 ```
 
 ```{r cell-filt-comp-reads, fig.cap = "Comparison of the default, automatic and manual cell filters"}
 auto <- colnames(reads)[reads$outlier]
 man <- colnames(reads)[!reads$use]
-venn.diag <- limma::vennCounts(cbind(colnames(reads) %in% auto,
-                                     colnames(reads) %in% man))
-limma::vennDiagram(venn.diag,
-                   names = c("Automatic", "Manual"),
-                   circle.col = c("blue", "green"))
+venn.diag <- vennCounts(
+    cbind(colnames(reads) %in% auto,
+    colnames(reads) %in% man)
+)
+vennDiagram(
+    venn.diag,
+    names = c("Automatic", "Manual"),
+    circle.col = c("blue", "green")
+)
 ```
 
 ```{r top50-gene-expr-reads, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
@@ -202,18 +171,16 @@ plotQC(reads, type = "highest-expression")
 ```
 
 ```{r}
-filter_genes <- apply(counts(reads[, colData(reads)$use]), 1, 
-                      function(x) length(x[x > 1]) >= 2)
+filter_genes <- apply(
+    counts(reads[, colData(reads)$use]), 
+    1, 
+    function(x) length(x[x > 1]) >= 2
+)
 rowData(reads)$use <- filter_genes
 ```
 
 ```{r}
-knitr::kable(
-    as.data.frame(table(filter_genes)),
-    booktabs = TRUE,
-    row.names = FALSE,
-    caption = 'The number of genes removed by gene filter (FALSE)'
-)
+table(filter_genes)
 ```
 
 ```{r}
@@ -231,8 +198,6 @@ saveRDS(reads, file = "tung/reads.rds")
 
 By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-comp-reads), it is clear that the reads based filtering removed 49 more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.
 
-### sessionInfo()
-
-```{r echo=FALSE}
+```{r}
 sessionInfo()
 ```

@@ -5,7 +5,7 @@ output: html_document
 ## Data visualization (Reads)
 
 ```{r, message=FALSE, warning=FALSE}
-library(scater, quietly = TRUE)
+library(scater)
 options(stringsAsFactors = FALSE)
 reads <- readRDS("tung/reads.rds")
 reads.qc <- reads[rowData(reads)$use, colData(reads)$use]
