@@ -82,7 +82,7 @@ Based on the PCA and the clustering results, do you think that imputation is a g
 ### MAGIC
 
 ```{r}
-system("MAGIC.py -d deng.csv -o MAGIC_count.csv --cell-axis columns -l 1 --pca-non-random csv")
+system("utils/MAGIC.py -d deng.csv -o MAGIC_count.csv --cell-axis columns -l 1 --pca-non-random csv")
 ```
 
 ```{r}
