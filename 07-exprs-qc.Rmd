@@ -30,7 +30,6 @@ opts_chunk$set(out.width='90%', fig.align = 'center')
 ```{r, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 library(scater)
-library(knitr)
 options(stringsAsFactors = FALSE)
 ```
 
@@ -42,21 +41,18 @@ anno <- read.table("tung/annotation.txt", sep = "\t", header = TRUE)
 
 Inspect a small portion of the expression matrix
 ```{r}
-knitr::kable(
-    head(molecules[ , 1:3]), booktabs = TRUE,
-    caption = 'A table of the first 6 rows and 3 columns of the molecules table.'
-)
-knitr::kable(
-    head(anno), booktabs = TRUE,
-    caption = 'A table of the first 6 rows of the anno table.'
-)
+head(molecules[ , 1:3])
+head(anno)
 ```
 
 The data consists of `r length(unique(anno$individual))` individuals and `r length(unique(anno$replicate))` replicates and therefore has `r length(unique(anno$batch))` batches in total.
 
 We standardize the analysis by using both `SingleCellExperiment` (SCE) and `scater` packages. First, create the SCE object:
 ```{r}
-umi <- SingleCellExperiment(assays = list(counts = as.matrix(molecules)), colData = anno)
+umi <- SingleCellExperiment(
+    assays = list(counts = as.matrix(molecules)), 
+    colData = anno
+)
 ```
 
 Remove genes that are not expressed in any cell:
@@ -80,7 +76,10 @@ Calculate the quality metrics:
 ```{r}
 umi <- calculateQCMetrics(
     umi,
-    feature_controls = list(ERCC = isSpike(umi, "ERCC"), MT = isSpike(umi, "MT"))
+    feature_controls = list(
+        ERCC = isSpike(umi, "ERCC"), 
+        MT = isSpike(umi, "MT")
+    )
 )
 ```
 
@@ -91,8 +90,7 @@ umi <- calculateQCMetrics(
 
 Next we consider the total number of RNA molecules detected per
 sample (if we were using read counts rather than UMI counts this would
-be the total number of reads). Wells with few reads/molecules are likely to have
-been broken or failed to capture a cell, and should thus be removed.
+be the total number of reads). Wells with few reads/molecules are likely to have been broken or failed to capture a cell, and should thus be removed.
 
 ```{r total-counts-hist, fig.cap = "Histogram of library sizes for all cells"}
 hist(
@@ -113,15 +111,10 @@ __Our answer__
 
 ```{r, echo=FALSE}
 filter_by_total_counts <- (umi$total_counts > 25000)
-knitr::kable(
-    as.data.frame(table(filter_by_total_counts)),
-    booktabs = TRUE,
-    row.names = FALSE,
-    caption = 'The number of cells removed by total counts filter (FALSE)'
-)
+table(filter_by_total_counts)
 ```
 
-#### Detected genes (1)
+#### Detected genes
 
 In addition to ensuring sufficient sequencing depth for each sample, we also want to make sure that the reads are distributed across the transcriptome. Thus, we count the total number of unique genes detected in each sample.
 
@@ -149,12 +142,7 @@ __Our answer__
 
 ```{r, echo=FALSE}
 filter_by_expr_features <- (umi$total_features > 7000)
-knitr::kable(
-    as.data.frame(table(filter_by_expr_features)),
-    booktabs = TRUE,
-    row.names = FALSE,
-    caption = 'The number of cells removed by total features filter (FALSE)'
-)
+table(filter_by_expr_features)
 ```
 
 #### ERCCs and MTs
@@ -168,18 +156,22 @@ dead or stressed which may result in the RNA being degraded.
 ```{r mt-vs-counts, fig.cap = "Percentage of counts in MT genes"}
 plotPhenoData(
     umi,
-    aes_string(x = "total_features",
-               y = "pct_counts_MT",
-               colour = "batch")
+    aes_string(
+        x = "total_features",
+        y = "pct_counts_MT",
+        colour = "batch"
+    )
 )
 ```
 
 ```{r ercc-vs-counts, fig.cap = "Percentage of counts in ERCCs"}
 plotPhenoData(
     umi,
-    aes_string(x = "total_features",
-               y = "pct_counts_ERCC",
-               colour = "batch")
+    aes_string(
+        x = "total_features",
+        y = "pct_counts_ERCC",
+        colour = "batch"
+    )
 )
 ```
 
@@ -193,19 +185,9 @@ __Our answer__
 
 ```{r, echo=FALSE}
 filter_by_ERCC <- umi$batch != "NA19098.r2"
-knitr::kable(
-  as.data.frame(table(filter_by_ERCC)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by ERCC filter (FALSE)'
-)
+table(filter_by_ERCC)
 filter_by_MT <- umi$pct_counts_MT < 10
-knitr::kable(
-  as.data.frame(table(filter_by_MT)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by MT filter (FALSE)'
-)
+table(filter_by_MT)
 ```
 
 __Exercise 4__
@@ -236,12 +218,7 @@ umi$use <- (
 ```
 
 ```{r}
-knitr::kable(
-  as.data.frame(table(umi$use)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by manual filter (FALSE)'
-)
+table(umi$use)
 ```
 
 #### Automatic
@@ -260,22 +237,18 @@ By default, the following metrics are used for PCA-based outlier detection:
 `scater` first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package. 
 
 ```{r auto-cell-filt, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
-umi <-
-plotPCA(umi,
-        size_by = "total_features", 
-        shape_by = "use",
-        pca_data_input = "pdata",
-        detect_outliers = TRUE,
-        return_SCE = TRUE)
+umi <- plotPCA(
+    umi,
+    size_by = "total_features", 
+    shape_by = "use",
+    pca_data_input = "pdata",
+    detect_outliers = TRUE,
+    return_SCE = TRUE
+)
 ```
 
 ```{r}
-knitr::kable(
-  as.data.frame(table(umi$outlier)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by automatic filter (FALSE)'
-)
+table(umi$outlier)
 ```
 
 ### Compare filterings
@@ -284,18 +257,22 @@ __Exercise 5__
 
 Compare the default, automatic and manual cell filters. Plot a Venn diagram of the outlier cells from these filterings.
 
-__Hint__: Use `limma::vennCounts` and `limma::vennDiagram` functions from the [limma](https://bioconductor.org/packages/release/bioc/html/limma.html) package to make a Venn diagram.
+__Hint__: Use `vennCounts` and `vennDiagram` functions from the [limma](https://bioconductor.org/packages/release/bioc/html/limma.html) package to make a Venn diagram.
 
 __Answer__
 
 ```{r cell-filt-comp, fig.cap = "Comparison of the default, automatic and manual cell filters", echo=FALSE}
 auto <- colnames(umi)[umi$outlier]
 man <- colnames(umi)[!umi$use]
-venn.diag <- limma::vennCounts(cbind(colnames(umi) %in% auto,
-                                     colnames(umi) %in% man))
-limma::vennDiagram(venn.diag,
-                   names = c("Automatic", "Manual"),
-                   circle.col = c("blue", "green"))
+venn.diag <- vennCounts(
+    cbind(colnames(umi) %in% auto,
+    colnames(umi) %in% man)
+)
+vennDiagram(
+    venn.diag,
+    names = c("Automatic", "Manual"),
+    circle.col = c("blue", "green")
+)
 ```
 
 ### Gene analysis
@@ -318,18 +295,16 @@ The distributions are relatively flat indicating (but not guaranteeing!) good co
 It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells (__note__ `colData(umi)$use` filter applied to the `umi` dataset).
 
 ```{r}
-filter_genes <- apply(counts(umi[ , colData(umi)$use]), 1, 
-                      function(x) length(x[x > 1]) >= 2)
+filter_genes <- apply(
+    counts(umi[ , colData(umi)$use]), 
+    1, 
+    function(x) length(x[x > 1]) >= 2
+)
 rowData(umi)$use <- filter_genes
 ```
 
 ```{r}
-knitr::kable(
-    as.data.frame(table(filter_genes)),
-    booktabs = TRUE,
-    row.names = FALSE,
-    caption = 'The number of genes removed by gene filter (FALSE)'
-)
+table(filter_genes)
 ```
 
 Depending on the cell-type, protocol and sequencing depth, other cut-offs may be appropriate.

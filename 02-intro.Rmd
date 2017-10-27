@@ -24,7 +24,7 @@ opts_chunk$set(fig.align = "center", echo=FALSE)
 * Did not gain widespread popularity until [~2014](https://www.ohio.edu/bioinformatics/upload/Single-Cell-RNA-seq-Method-of-the-Year-2013.pdf) when new protocols and lower sequencing costs made it more accessible
 * Measures the __distribution of expression levels__ for each gene across a population of cells
 * Allows to study new biological questions in which __cell-specific changes in transcriptome are important__, e.g. cell type identification, heterogeneity of cell responses, stochasticity of gene expression, inference of gene regulatory networks across the cells.
-* Datasets range __from $10^2$ to $10^5$ cells__ and increase in size every year
+* Datasets range __from $10^2$ to $10^6$ cells__ and increase in size every year
 * Currently there are several different protocols in use, e.g. SMART-seq2 [@Picelli2013-sb], CELL-seq [@Hashimshony2012-kd] and Drop-seq [@Macosko2015-ix]
 * There are also commercial platforms available, including the [Fluidigm C1](https://www.fluidigm.com/products/c1-system), [Wafergen ICELL8](https://www.wafergen.com/products/icell8-single-cell-system) and the [10X Genomics Chromium](https://www.10xgenomics.com/single-cell/)
 * Several computational analysis methods from bulk RNA-seq __can__ be used
