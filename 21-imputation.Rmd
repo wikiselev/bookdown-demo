@@ -31,7 +31,7 @@ To the best of our knowledge, there are currently two different imputation metho
 
 To test `scImpute`, we use the default parameters and we apply it to the Deng dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:
 
-```{r}
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 deng <- readRDS("deng/deng-reads.rds")
 write.csv(counts(deng), "deng.csv")
 scimpute(
@@ -59,7 +59,7 @@ plotPCA(
 )
 ```
 
-Compare this result to the original data in Chapter \@ref(18-clustering). What are the most significant differences?
+Compare this result to the original data in Chapter \@ref(clust-methods). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
 ```{r}
@@ -77,7 +77,7 @@ plotPCA(
 )
 ```
 
-__Exercise:__ Based on the PCA and the clustering results, do you think that imputation using scImpute is a good idea for the Deng dataset?
+__Exercise:__ Based on the PCA and the clustering results, do you think that imputation using `scImpute` is a good idea for the Deng dataset?
 
 ### MAGIC
 
@@ -100,7 +100,7 @@ plotPCA(
 )
 ```
 
-Compare this result to the original data in Chapter \@ref(18-clustering). What are the most significant differences?
+Compare this result to the original data in Chapter \@ref(clust-methods). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
 ```{r}
@@ -117,7 +117,7 @@ plotPCA(
     colour_by = "sc3_10_clusters"
 )
 ```
-__Exercise:__ What is the difference between scImpute and MAGIC based on the PCA and clustering analysis? Which one do you think is best to use?
+__Exercise:__ What is the difference between `scImpute` and `MAGIC` based on the PCA and clustering analysis? Which one do you think is best to use?
 
 
 ### sessionInfo()
