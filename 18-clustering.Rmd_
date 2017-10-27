@@ -203,7 +203,7 @@ scRNA.seq.funcs::SNN(
 snn.res <- 
     system(
         paste0(
-            "python snn-cliq/Cliq.py ", 
+            "python utils/Cliq.py ", 
             "-i snn-cliq.txt ",
             "-o res-snn-cliq.txt ",
             "-r ", par.r,
