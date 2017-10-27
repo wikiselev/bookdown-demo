@@ -56,7 +56,7 @@ RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('sva')"
 
 # RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('SC3')"
 
-RUN Rscript -e "install.packages("cluster")"
+RUN Rscript -e "install.packages('cluster')"
 RUN Rscript -e "devtools::install_github('hemberg-lab/SC3')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')"
 RUN Rscript -e "devtools::install_github('JustinaZ/pcaReduce')"
