@@ -76,6 +76,7 @@ RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('DESeq2')
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('edgeR')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('MAST')"
 
+RUN Rscript -e "devtools::install_github('hemberg-lab/scfind')"
 RUN Rscript -e "devtools::install_github('hemberg-lab/scmap')"
 RUN Rscript -e "install.packages('googleVis')"
 

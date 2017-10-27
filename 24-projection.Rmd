@@ -31,7 +31,13 @@ segerstolpe <- readRDS("pancreas/segerstolpe.rds")
 
 `scmap` can be used to perform both types of projections to either a single dataset or to a reference collection of datasets (Atlas):
 
+```{r, out.width = '80%', fig.cap="scmap can be used to compare the annotations of two different samples by providing a one to one mapping between the cells."}
+knitr::include_graphics("figures/scmap1.png")
+```
 
+```{r, out.width = '80%', fig.cap=" scmap can also be used to project cells from a new experiment onto an annotated reference."}
+knitr::include_graphics("figures/scmap2.png")
+```
 
 ### Run `scmap`
 
