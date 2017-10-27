@@ -6,7 +6,7 @@ output: html_document
 
 ```{r, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align="center", echo=FALSE)
+opts_chunk$set(fig.align="center")
 ```
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(scImpute)

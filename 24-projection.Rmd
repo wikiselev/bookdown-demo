@@ -1,0 +1,91 @@
+---
+output: html_document
+---
+
+## Projecting scRNA-seq data
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(knitr)
+library(googleVis)
+opts_chunk$set(fig.align="center", dev = 'png')
+op <- options(gvis.plot.tag='chart')
+```
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+library(scmap)
+library(scater)
+library(SingleCellExperiment)
+set.seed(1234567)
+```
+
+As more and more scRNA-seq datasets become available, carrying out comparisons between them is key. A central application is to compare datasets of similar biological origin collected by different labs to ensure that the annotation and the analysis is consistent. Moreover, as very large references, e.g. the Human Cell Atlas (HCA) ([@Regev2017-mw]), become available, an important application will be to project cells from a new sample (e.g. from a disease tissue) onto the reference to characterize differences in composition, or to detect new cell-types. Conceptually, such projections are similar to the popular BLAST method ([@Altschul1990-ts]), which makes it possible to quickly find the closest match in a database for a newly identified nucleotide or amino acid sequence. 
+
+We recently developed `scmap` ([@Kiselev2017-nb]) - a method for projecting cells from a scRNA-seq experiment onto the cell-types identified in other experiments. Additionally, a cloud version of `scmap` can be run for free, without restrictions, from [http://www.hemberg-lab.cloud/scmap](http://www.hemberg-lab.cloud/scmap).
+
+### Datasets
+
+We will run `scmap` on two human pancreas datasets: Muraro et al. ([@Muraro2016-yk]) and Segerstolpe et al. ([@Segerstolpe2016-wc]). These datasets are well annotated. As usual cell type labels are store in the `cell_type1` column of the `colData` slots.
+```{r}
+muraro <- readRDS("pancreas/muraro.rds")
+segerstolpe <- readRDS("pancreas/segerstolpe.rds")
+```
+
+`scmap` can be used to perform both types of projections to either a single dataset or to a reference collection of datasets (Atlas):
+
+
+
+### Run `scmap`
+
+#### Feature Selection
+Once we have a `SingleCellExperiment` object we can run `scmap`. Firstly, we need to select the most informative features from our input dataset:
+```{r}
+muraro <- getFeatures(muraro, suppress_plot = FALSE)
+```
+
+Genes highlighted with the red colour will be used in the futher analysis (projection).
+
+#### Projecting
+
+We will project the `segerstolpe` dataset to `muraro` dataset:
+```{r}
+segerstolpe <- projectData(projection = segerstolpe, reference = muraro)
+```
+
+In your own analysis you can choose any two scRNASeq datasets and project them to each other. Note that the `getFeatures` functions has to be run on the reference dataset before running the `projectData` function.
+
+### Results
+
+Let's look at the results. The labels produced by `scmap` are located in the `scmap_labs` column of the `colData` slot of the projection dataset. We will compare them to the original labels provided by the authors of the publication:
+```{r}
+colData(segerstolpe)[,c("scmap_labs", "scmap_siml")]
+```
+
+Clearly the projection is almost perfect. With `scmap` one can also plot a [Sankey diagram](https://developers.google.com/chart/interactive/docs/gallery/sankey) (however, `cell_type1` columns have to be provided in the `colData` slots of both the reference and the projection datasets):
+```{r results='asis', tidy=FALSE}
+plot(getSankey(colData(segerstolpe)$cell_type1, colData(segerstolpe)$scmap_labs))
+```
+
+### Creating a precomputed Reference
+
+The cell type centroids can be precomputed by using the `createReference` method:
+```{r}
+reference <- createReference(muraro[rowData(muraro)$scmap_features, ])
+```
+
+One can also visualise the cell type centroids, e.g.:
+```{r fig.height=7}
+heatmap(as.matrix(reference))
+```
+
+Exactly the same projection as above can be performed by providing the precomputed reference instead of the `SingleCellExperiment` object:
+```{r}
+segerstolpe <- projectData(projection = segerstolpe, reference = reference)
+colData(segerstolpe)[,c("scmap_labs", "scmap_siml")]
+```
+
+### sessionInfo()
+
+```{r echo=FALSE}
+sessionInfo()
+```
+
+
