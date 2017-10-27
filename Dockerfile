@@ -61,7 +61,8 @@ RUN Rscript -e "devtools::install_github('hemberg-lab/SC3')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')"
 RUN Rscript -e "devtools::install_github('JustinaZ/pcaReduce')"
 RUN Rscript -e "install.packages('Seurat')"
-  
+
+RUN Rscript -e "install.packages('KernSmooth')"
 RUN Rscript -e "devtools::install_github('tallulandrews/M3Drop')"
 
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('TSCAN')"
@@ -73,6 +74,9 @@ RUN Rscript -e "install.packages('ROCR')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('DESeq2')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('edgeR')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('MAST')"
+
+RUN Rscript -e "devtools::install_github('hemberg-lab/scmap')"
+RUN Rscript -e "install.packages('googleVis')"
 
 ## optional
 # RUN Rscript -e "devtools::install_github('hms-dbmi/scde', build_vignettes = FALSE)"
