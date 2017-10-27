@@ -62,7 +62,7 @@ plotPCA(
 Compare this result to the original data in Chapter \@ref(clust-methods). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
-```{r}
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
 res <- sc3(res, ks = 10, gene_filter = FALSE)
@@ -103,7 +103,7 @@ plotPCA(
 Compare this result to the original data in Chapter \@ref(clust-methods). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
-```{r}
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
 res <- sc3(res, ks = 10, gene_filter = FALSE)
