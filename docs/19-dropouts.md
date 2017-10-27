@@ -3,7 +3,7 @@
 output: html_document
 ---
 
-# Feature Selection
+## Feature Selection
 
 
 
@@ -12,6 +12,7 @@ library(scRNA.seq.funcs)
 library(matrixStats)
 library(M3Drop)
 library(RColorBrewer)
+library(SingleCellExperiment)
 set.seed(1)
 ```
 
@@ -33,35 +34,17 @@ the total amount of data to be processed.
 For scRNASeq data, we will be focusing on unsupervised methods of feature
 selection which don't require any a priori information, such as cell-type
 labels or biological group, since they are not available, or may be unreliable,
-for many experiments. In contrast, differential expression (Chapter \ref())
+for many experiments. In contrast, differential expression (chapter \@ref(dechapter))
 can be considered a form of supervised feature selection since it uses the
 known biological label of each sample to identify features (i.e. genes) which
 are expressed at different levels across groups.
 
-For this section we will be working with the [Usoskin et
-al](http://www.nature.com/neuro/journal/v18/n1/full/nn.3881.html)
-data. It contains 4 cell types: NP = non-peptidergic nociceptors, PEP
-= peptidergic nociceptors, NF = neurofilament containing and TH =
-tyrosine hydroxylase containing neurons.
+For this section we will continue working with the Deng data. 
 
 
 ```r
-usoskin1 <- readRDS("usoskin/usoskin1.rds")
-dim(usoskin1)
-```
-
-```
-## [1] 25334   622
-```
-
-```r
-table(colnames(usoskin1))
-```
-
-```
-## 
-##  NF  NP PEP  TH 
-## 139 169  81 233
+deng <- readRDS("deng/deng-reads.rds")
+cellLabels <- colData(deng)$cell_type2
 ```
 
 This data can be QCed and normalized for library size using M3Drop,
@@ -70,18 +53,20 @@ undetected genes, and converts raw counts to CPM.
 
 
 ```r
-uso_list <- M3Drop::M3DropCleanData(
-    usoskin1,
-    labels = colnames(usoskin1),
-    min_detected_genes = 2000,
+deng_list <- M3DropCleanData(
+    counts(deng),
+    labels = cellLabels,
+    min_detected_genes = 100,
     is.counts = TRUE
 )
-expr_matrix <- uso_list$data # Normalized & filtered expression matrix
-celltype_labs <- uso_list$labels # filtered cell-type labels
+expr_matrix <- deng_list$data # Normalized & filtered expression matrix
+celltype_labs <- factor(deng_list$labels) # filtered cell-type labels
 cell_colors <- brewer.pal(max(3,length(unique(celltype_labs))), "Set3")
 ```
-__Exercise 1__: How many cells & genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?
-## Identifying Genes vs a Null Model ##
+
+__Exercise 1__: How many cells & genes have been removed by this filtering? 
+
+### Identifying Genes vs a Null Model ##
 
 There are two main approaches to unsupervised feature selection. The
 first is to identify genes which behave differently from a null model
@@ -93,7 +78,7 @@ the same technical noise as endogenous transcripts [(Svensson et al., 2017)](htt
 In addition, scRNASeq experiments often contain only a small number of
 spike-ins which reduces our confidence in fitted model parameters.
 
-### Highly Variable Genes ###
+#### Highly Variable Genes ###
 
 The first method proposed to identify features in scRNASeq datasets
 was to identify highly variable genes (HVG). HVG assumes that if genes
@@ -107,8 +92,7 @@ __Exercise 2__
 Using the functions rowMeans and rowVars to plot the relationship between mean expression
 and variance for all genes in this dataset. (Hint: use log="xy" to plot on a log-scale).
 
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-5-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-5-1.png" width="816" style="display: block; margin: auto;" />
 A popular method to correct for the relationship between variance and mean expression
 was proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html).
 To use the Brennecke method, we first normalize for library size then calculate
@@ -126,21 +110,19 @@ after multiple-testing correction.
 
 
 ```r
-Brennecke_HVG <- M3Drop::BrenneckeGetVariableGenes(
+Brennecke_HVG <- BrenneckeGetVariableGenes(
     expr_matrix,
     fdr = 0.01,
     minBiolDisp = 0.5
 )
 ```
 
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-6-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 HVG_genes <- Brennecke_HVG$Gene
 ```
-### High Dropout Genes ###
+#### High Dropout Genes
 
 An alternative to finding HVGs is to identify genes with unexpectedly high numbers of zeros.
 The frequency of zeros, know as the "dropout rate", is very closely related to expression level
@@ -171,9 +153,7 @@ mix = 0.5; # proportion of cells in condition 1
 points(S1*mix+S2*(1-mix), P1*mix+P2*(1-mix), pch=16, col="grey35", cex=3)
 ```
 
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-7-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-7-1.png" width="816" style="display: block; margin: auto;" />
 __Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures.
 
 __Exercise 3__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
@@ -183,17 +163,14 @@ curve. We also apply 1% FDR multiple testing correction:
 
 
 ```r
-M3Drop_genes <- M3Drop::M3DropFeatureSelection(
+M3Drop_genes <- M3DropFeatureSelection(
     expr_matrix,
     mt_method = "fdr",
     mt_threshold = 0.01
 )
-title(main = "Usoskin")
 ```
 
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-8-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 M3Drop_genes <- M3Drop_genes$Gene
@@ -212,14 +189,14 @@ selected by this model, so we will consider the top 1500 genes instead.
 
 
 ```r
-usoskin_int <- NBumiConvertToInteger(usoskin1)
-DANB_fit <- NBumiFitModel(usoskin_int) # DANB is fit to the raw count matrix
+deng_int <- NBumiConvertToInteger(counts(deng))
+DANB_fit <- NBumiFitModel(deng_int) # DANB is fit to the raw count matrix
 # Perform DANB feature selection
 DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit)
 DANB_genes <- names(DropFS[1:1500])
 ```
 
-## Correlated Expression ##
+### Correlated Expression
 
 A completely different approach to feature selection is to use gene-gene correlations. This method
 is based on the idea that multiple genes will be differentially expressed between different cell-types
@@ -257,9 +234,7 @@ pca <- prcomp(log(expr_matrix+1)/log(2)); # PCA is typically performed on log-tr
 plot(pca$rotation[,1], pca$rotation[,2], pch=16, col=cell_colors[as.factor(celltype_labs)]) # plot projection
 ```
 
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-11-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 score <- rowSums(abs(pca$x[,c(1,2)])) # calculate loadings for components 1 and 2
@@ -271,40 +246,82 @@ __Exercise 4__
 Consider the top 5 principal components. Which appear to be most biologically relevant? How does the top 1,500
 features change if you consider the loadings for those components?
 
-### Comparing Methods ####
+### Comparing Methods
 
 We can check whether the identified features really do represent genes differentially expressed between
 cell-types in this dataset.
 
 
 ```r
-M3Drop::M3DropExpressionHeatmap(
+M3DropExpressionHeatmap(
     M3Drop_genes,
-    uso_list$data,
-    cell_labels = uso_list$labels,
+    expr_matrix,
+    cell_labels = celltype_labs
 )
 ```
 
+<img src="19-dropouts_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
 
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-12-1} \end{center}
-
-For a quantitative estimate you have been provided with differentially expressed genes for this dataset as calculated by DESeq:
-
+We can also consider how consistent each feature selection method is with the others using the Jaccard Index:
 
 ```r
-# Load DE genes
-DESeq_table <- readRDS("usoskin/DESeq_table.rds")
-DE_genes = unique(DESeq_table$Gene)
-
-# Calculate precision
-sum(M3Drop_genes %in% DE_genes)/length(M3Drop_genes)
-```
-
-```
-## [1] 0.6478343
+J <- sum(M3Drop_genes %in% HVG_genes)/length(unique(c(M3Drop_genes, HVG_genes)))
 ```
 
 __Exercise 5__
-Plot the expression of the features for each of the other methods. Which appear to be differentially expressed?
-Which method is the most precise?
+Plot the expression of the features for each of the other methods. Which appear to be differentially expressed? How consistent are the different methods for this dataset?
+
+### sessionInfo()
+
+
+```
+## R version 3.4.2 (2017-09-28)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Debian GNU/Linux 9 (stretch)
+## 
+## Matrix products: default
+## BLAS/LAPACK: /usr/lib/libopenblasp-r0.2.19.so
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] parallel  stats4    methods   stats     graphics  grDevices utils    
+## [8] datasets  base     
+## 
+## other attached packages:
+##  [1] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
+##  [3] DelayedArray_0.2.7          Biobase_2.36.2             
+##  [5] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
+##  [7] IRanges_2.10.5              S4Vectors_0.14.7           
+##  [9] BiocGenerics_0.22.1         RColorBrewer_1.1-2         
+## [11] M3Drop_2.02.00              numDeriv_2016.8-1          
+## [13] matrixStats_0.52.2          scRNA.seq.funcs_0.1.0      
+## [15] knitr_1.17                 
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.13            XVector_0.16.0         
+##  [3] compiler_3.4.2          zlibbioc_1.22.0        
+##  [5] moments_0.14            bitops_1.0-6           
+##  [7] tools_3.4.2             digest_0.6.12          
+##  [9] statmod_1.4.30          evaluate_0.10.1        
+## [11] Rtsne_0.13              lattice_0.20-34        
+## [13] Matrix_1.2-7.1          yaml_2.1.14            
+## [15] GenomeInfoDbData_0.99.0 stringr_1.2.0          
+## [17] contfrac_1.1-11         gtools_3.5.0           
+## [19] elliptic_1.3-7          caTools_1.17.1         
+## [21] rprojroot_1.2           grid_3.4.2             
+## [23] deSolve_1.20            orthopolynom_1.0-5     
+## [25] rmarkdown_1.6           bookdown_0.5           
+## [27] gdata_2.18.0            magrittr_1.5           
+## [29] backports_1.1.1         gplots_3.0.1           
+## [31] htmltools_0.3.6         MASS_7.3-45            
+## [33] bbmle_1.0.19            KernSmooth_2.23-15     
+## [35] stringi_1.1.5           RCurl_1.95-4.8         
+## [37] hypergeo_1.2-13
+```

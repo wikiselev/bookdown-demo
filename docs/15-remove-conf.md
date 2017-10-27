@@ -426,16 +426,15 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ```
 ## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Debian GNU/Linux buster/sid
+## Running under: Debian GNU/Linux 9 (stretch)
 ## 
 ## Matrix products: default
-## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## BLAS/LAPACK: /usr/lib/libopenblasp-r0.2.19.so
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
 ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
 ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
 ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
@@ -447,7 +446,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ## other attached packages:
 ##  [1] RColorBrewer_1.1-2          reshape2_1.4.2             
 ##  [3] sva_3.24.4                  genefilter_1.58.1          
-##  [5] mgcv_1.8-22                 nlme_3.1-131               
+##  [5] mgcv_1.8-22                 nlme_3.1-129               
 ##  [7] kBET_0.99.0                 scran_1.5.15               
 ##  [9] scater_1.5.21               SingleCellExperiment_0.99.4
 ## [11] ggplot2_2.2.1               RUVSeq_1.10.0              
@@ -474,7 +473,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ## [17] cluster_2.0.6           R.oo_1.21.0            
 ## [19] shinydashboard_0.6.1    shiny_1.0.5            
 ## [21] compiler_3.4.2          backports_1.1.1        
-## [23] assertthat_0.2.0        Matrix_1.2-11          
+## [23] assertthat_0.2.0        Matrix_1.2-7.1         
 ## [25] lazyeval_0.2.0          htmltools_0.3.6        
 ## [27] tools_3.4.2             igraph_1.1.2           
 ## [29] bindrcpp_0.2            gtable_0.2.0           
@@ -483,7 +482,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ## [35] rtracklayer_1.36.6      stringr_1.2.0          
 ## [37] mime_0.5                hypergeo_1.2-13        
 ## [39] statmod_1.4.30          XML_3.98-1.9           
-## [41] zlibbioc_1.22.0         MASS_7.3-47            
+## [41] zlibbioc_1.22.0         MASS_7.3-45            
 ## [43] zoo_1.8-0               scales_0.5.0           
 ## [45] aroma.light_3.6.0       rhdf5_2.20.0           
 ## [47] yaml_2.1.14             memoise_1.1.0          
@@ -494,16 +493,16 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ## [57] contfrac_1.1-11         rlang_0.1.2            
 ## [59] pkgconfig_2.0.1         moments_0.14           
 ## [61] bitops_1.0-6            evaluate_0.10.1        
-## [63] lattice_0.20-35         bindr_0.1              
+## [63] lattice_0.20-34         bindr_0.1              
 ## [65] labeling_0.3            htmlwidgets_0.9        
 ## [67] cowplot_0.8.0           bit_1.1-12             
 ## [69] deSolve_1.20            plyr_1.8.4             
 ## [71] magrittr_1.5            bookdown_0.5           
 ## [73] R6_2.2.2                DBI_0.7                
-## [75] survival_2.41-3         RCurl_1.95-4.8         
+## [75] survival_2.40-1         RCurl_1.95-4.8         
 ## [77] tibble_1.3.4            rmarkdown_1.6          
 ## [79] viridis_0.4.0           locfit_1.5-9.1         
-## [81] grid_3.4.2              data.table_1.10.4-2    
+## [81] grid_3.4.2              data.table_1.10.4-3    
 ## [83] FNN_1.1                 blob_1.1.0             
 ## [85] digest_0.6.12           xtable_1.8-2           
 ## [87] httpuv_1.3.5            elliptic_1.3-7         
