@@ -120,14 +120,10 @@ pcaReduce [@Zurauskiene2016-kg] combines PCA, _k_-means and “iterative” hier
 * Based on __tSNE__ maps
 * Utilises _k_-means
 
-#### [SEURAT](https://github.com/satijalab/seurat)
-
-In the newest versions of SEURAT (v. 1.3-1.4) the clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. __tSNE__ is only used exclusively for visualization. In the next chapter we will be using the latest version of `SEURAT`.
-
-__Note__ 
-
-In the original version `SEURAT` [@Macosko2015-ix] first utilised PCA on a set of cells, then a number of statistically significant PCs were defined. Those PCs were further projected to a 2D space using tSNE. The remaining cells were projected on the same tSNE map. Density clustering algorithm ([DBSCAN](https://en.wikipedia.org/wiki/DBSCAN)) was then used to identify cell clusters in the 2D space.
-
 #### [SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/)
 
-SNN-Cliq [@Xu2015-vf] is a graph-based method. First the method identifies the k-nearest-neighbours of each cell according to the _distance_ measure. This is used to calculate the number of Shared Nearest Neighbours (SNN) between each pair of cells. A graph is built by placing an edge between two cells If they have at least one SNN. Clusters are defined as groups of cells with many edges between them using a "clique" method. SNN-Cliq requires several parameters to be defined manually.
+`SNN-Cliq` [@Xu2015-vf] is a graph-based method. First the method identifies the k-nearest-neighbours of each cell according to the _distance_ measure. This is used to calculate the number of Shared Nearest Neighbours (SNN) between each pair of cells. A graph is built by placing an edge between two cells If they have at least one SNN. Clusters are defined as groups of cells with many edges between them using a "clique" method. SNN-Cliq requires several parameters to be defined manually.
+
+#### [Seurat](https://github.com/satijalab/seurat)
+
+`Seurat` clustering is based on a _community detection_ approach similar to `SNN-Cliq` and to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. Since `Seurat` has become more like an all-in-one tool for scRNA-seq data analysis we dedicate a separate chapter to discuss it in more details (chapter \@ref(seurat)).

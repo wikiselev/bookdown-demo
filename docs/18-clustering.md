@@ -14,7 +14,7 @@ library(SC3)
 library(scater)
 library(SingleCellExperiment)
 library(pheatmap)
-library(irr)
+library(mclust)
 set.seed(1234567)
 ```
 
@@ -308,7 +308,7 @@ scRNA.seq.funcs::SNN(
 snn.res <- 
     system(
         paste0(
-            "python snn-cliq/Cliq.py ", 
+            "python utils/Cliq.py ", 
             "-i snn-cliq.txt ",
             "-o res-snn-cliq.txt ",
             "-r ", par.r,
@@ -407,16 +407,15 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ```
 ## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Debian GNU/Linux buster/sid
+## Running under: Debian GNU/Linux 9 (stretch)
 ## 
 ## Matrix products: default
-## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## BLAS/LAPACK: /usr/lib/libopenblasp-r0.2.19.so
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
 ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
 ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
 ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
@@ -426,17 +425,16 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] irr_0.84                    lpSolve_5.6.13             
-##  [3] pheatmap_1.0.8              scater_1.5.21              
-##  [5] ggplot2_2.2.1               SC3_1.5.6                  
-##  [7] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
-##  [9] DelayedArray_0.2.7          matrixStats_0.52.2         
-## [11] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
-## [13] IRanges_2.10.5              S4Vectors_0.14.7           
-## [15] pcaReduce_1.0               mclust_5.3                 
-## [17] mnormt_1.5-5                pcaMethods_1.68.0          
-## [19] Biobase_2.36.2              BiocGenerics_0.22.1        
-## [21] knitr_1.17                 
+##  [1] pheatmap_1.0.8              scater_1.5.21              
+##  [3] ggplot2_2.2.1               SC3_1.5.6                  
+##  [5] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
+##  [7] DelayedArray_0.2.7          matrixStats_0.52.2         
+##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
+## [11] IRanges_2.10.5              S4Vectors_0.14.7           
+## [13] pcaReduce_1.0               mclust_5.3                 
+## [15] mnormt_1.5-5                pcaMethods_1.68.0          
+## [17] Biobase_2.36.2              BiocGenerics_0.22.1        
+## [19] knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] Rtsne_0.13              ggbeeswarm_0.6.0       
@@ -444,13 +442,13 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ##   [5] class_7.3-14            rprojroot_1.2          
 ##   [7] XVector_0.16.0          bit64_0.9-7            
 ##   [9] AnnotationDbi_1.38.2    mvtnorm_1.0-6          
-##  [11] scRNA.seq.funcs_0.1.0   codetools_0.2-15       
+##  [11] codetools_0.2-15        scRNA.seq.funcs_0.1.0  
 ##  [13] tximport_1.4.0          doParallel_1.0.11      
 ##  [15] robustbase_0.92-7       cluster_2.0.6          
 ##  [17] shinydashboard_0.6.1    shiny_1.0.5            
 ##  [19] rrcov_1.4-3             compiler_3.4.2         
 ##  [21] backports_1.1.1         assertthat_0.2.0       
-##  [23] Matrix_1.2-11           lazyeval_0.2.0         
+##  [23] Matrix_1.2-7.1          lazyeval_0.2.0         
 ##  [25] limma_3.32.10           htmltools_0.3.6        
 ##  [27] tools_3.4.2             bindrcpp_0.2           
 ##  [29] gtable_0.2.0            glue_1.1.1             
@@ -458,11 +456,11 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ##  [33] dplyr_0.7.4             doRNG_1.6.6            
 ##  [35] Rcpp_0.12.13            gdata_2.18.0           
 ##  [37] iterators_1.0.8         stringr_1.2.0          
-##  [39] mime_0.5                hypergeo_1.2-13        
-##  [41] rngtools_1.2.4          gtools_3.5.0           
-##  [43] WriteXLS_4.0.0          statmod_1.4.30         
+##  [39] mime_0.5                rngtools_1.2.4         
+##  [41] gtools_3.5.0            WriteXLS_4.0.0         
+##  [43] hypergeo_1.2-13         statmod_1.4.30         
 ##  [45] XML_3.98-1.9            edgeR_3.18.1           
-##  [47] DEoptimR_1.0-8          MASS_7.3-47            
+##  [47] DEoptimR_1.0-8          MASS_7.3-45            
 ##  [49] zlibbioc_1.22.0         scales_0.5.0           
 ##  [51] rhdf5_2.20.0            RColorBrewer_1.1-2     
 ##  [53] yaml_2.1.14             memoise_1.1.0          
@@ -474,7 +472,7 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ##  [65] contfrac_1.1-11         caTools_1.17.1         
 ##  [67] moments_0.14            rlang_0.1.2            
 ##  [69] pkgconfig_2.0.1         bitops_1.0-6           
-##  [71] evaluate_0.10.1         lattice_0.20-35        
+##  [71] evaluate_0.10.1         lattice_0.20-34        
 ##  [73] ROCR_1.0-7              bindr_0.1              
 ##  [75] labeling_0.3            cowplot_0.8.0          
 ##  [77] bit_1.1-12              deSolve_1.20           
@@ -484,7 +482,7 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 ##  [85] RCurl_1.95-4.8          tibble_1.3.4           
 ##  [87] KernSmooth_2.23-15      rmarkdown_1.6          
 ##  [89] viridis_0.4.0           locfit_1.5-9.1         
-##  [91] grid_3.4.2              data.table_1.10.4-2    
+##  [91] grid_3.4.2              data.table_1.10.4-3    
 ##  [93] blob_1.1.0              digest_0.6.12          
 ##  [95] xtable_1.8-2            httpuv_1.3.5           
 ##  [97] elliptic_1.3-7          munsell_0.4.3          

@@ -115,16 +115,15 @@ plotTSNE(
 ```
 ## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Debian GNU/Linux buster/sid
+## Running under: Debian GNU/Linux 9 (stretch)
 ## 
 ## Matrix products: default
-## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## BLAS/LAPACK: /usr/lib/libopenblasp-r0.2.19.so
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
 ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
 ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
 ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
@@ -149,12 +148,12 @@ plotTSNE(
 ##  [7] highr_0.6               blob_1.1.0             
 ##  [9] GenomeInfoDbData_0.99.0 vipor_0.4.5            
 ## [11] yaml_2.1.14             RSQLite_2.0            
-## [13] backports_1.1.1         lattice_0.20-35        
+## [13] backports_1.1.1         lattice_0.20-34        
 ## [15] glue_1.1.1              limma_3.32.10          
 ## [17] digest_0.6.12           XVector_0.16.0         
 ## [19] colorspace_1.3-2        cowplot_0.8.0          
 ## [21] htmltools_0.3.6         httpuv_1.3.5           
-## [23] Matrix_1.2-11           plyr_1.8.4             
+## [23] Matrix_1.2-7.1          plyr_1.8.4             
 ## [25] XML_3.98-1.9            pkgconfig_2.0.1        
 ## [27] biomaRt_2.32.1          bookdown_0.5           
 ## [29] zlibbioc_1.22.0         xtable_1.8-2           
@@ -163,7 +162,7 @@ plotTSNE(
 ## [35] magrittr_1.5            mime_0.5               
 ## [37] memoise_1.1.0           evaluate_0.10.1        
 ## [39] beeswarm_0.2.3          shinydashboard_0.6.1   
-## [41] tools_3.4.2             data.table_1.10.4-2    
+## [41] tools_3.4.2             data.table_1.10.4-3    
 ## [43] stringr_1.2.0           munsell_0.4.3          
 ## [45] locfit_1.5-9.1          AnnotationDbi_1.38.2   
 ## [47] bindrcpp_0.2            compiler_3.4.2         

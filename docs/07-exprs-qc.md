@@ -462,16 +462,15 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 ```
 ## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Debian GNU/Linux buster/sid
+## Running under: Debian GNU/Linux 9 (stretch)
 ## 
 ## Matrix products: default
-## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## BLAS/LAPACK: /usr/lib/libopenblasp-r0.2.19.so
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
 ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
 ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
 ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
@@ -506,20 +505,20 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 ##  [27] shinydashboard_0.6.1    shiny_1.0.5            
 ##  [29] rrcov_1.4-3             compiler_3.4.2         
 ##  [31] backports_1.1.1         assertthat_0.2.0       
-##  [33] Matrix_1.2-11           lazyeval_0.2.0         
+##  [33] Matrix_1.2-7.1          lazyeval_0.2.0         
 ##  [35] limma_3.32.10           htmltools_0.3.6        
 ##  [37] quantreg_5.34           tools_3.4.2            
 ##  [39] bindrcpp_0.2            gtable_0.2.0           
 ##  [41] glue_1.1.1              GenomeInfoDbData_0.99.0
 ##  [43] reshape2_1.4.2          dplyr_0.7.4            
 ##  [45] Rcpp_0.12.13            trimcluster_0.1-2      
-##  [47] sgeostat_1.0-27         nlme_3.1-131           
+##  [47] sgeostat_1.0-27         nlme_3.1-129           
 ##  [49] fpc_2.1-10              lmtest_0.9-35          
 ##  [51] laeken_0.4.6            stringr_1.2.0          
 ##  [53] lme4_1.1-14             mime_0.5               
 ##  [55] XML_3.98-1.9            edgeR_3.18.1           
 ##  [57] DEoptimR_1.0-8          zoo_1.8-0              
-##  [59] zlibbioc_1.22.0         MASS_7.3-47            
+##  [59] zlibbioc_1.22.0         MASS_7.3-45            
 ##  [61] scales_0.5.0            VIM_4.7.0              
 ##  [63] rhdf5_2.20.0            SparseM_1.77           
 ##  [65] RColorBrewer_1.1-2      yaml_2.1.14            
@@ -527,10 +526,10 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 ##  [69] biomaRt_2.32.1          reshape_0.8.7          
 ##  [71] stringi_1.1.5           RSQLite_2.0            
 ##  [73] highr_0.6               pcaPP_1.9-72           
-##  [75] e1071_1.6-8             boot_1.3-20            
+##  [75] e1071_1.6-8             boot_1.3-18            
 ##  [77] prabclus_2.2-6          rlang_0.1.2            
 ##  [79] pkgconfig_2.0.1         bitops_1.0-6           
-##  [81] evaluate_0.10.1         lattice_0.20-35        
+##  [81] evaluate_0.10.1         lattice_0.20-34        
 ##  [83] bindr_0.1               labeling_0.3           
 ##  [85] cowplot_0.8.0           bit_1.1-12             
 ##  [87] GGally_1.3.2            plyr_1.8.4             
@@ -541,7 +540,7 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 ##  [97] tibble_1.3.4            car_2.1-5              
 ##  [99] rmarkdown_1.6           viridis_0.4.0          
 ## [101] locfit_1.5-9.1          grid_3.4.2             
-## [103] data.table_1.10.4-2     blob_1.1.0             
+## [103] data.table_1.10.4-3     blob_1.1.0             
 ## [105] diptest_0.75-7          vcd_1.4-3              
 ## [107] digest_0.6.12           xtable_1.8-2           
 ## [109] httpuv_1.3.5            munsell_0.4.3          
