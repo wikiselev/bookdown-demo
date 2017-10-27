@@ -25,7 +25,7 @@ As discussed previously, one of the main challenges when analyzing scRNA-seq dat
 
 Thus, dropouts could be result of experimental shortcomings, and if this is the case then we would like to provide computational corrections. One possible solution is to impute the dropouts in the expression matrix. To be able to impute gene expression values, one must have an underlying model. However, since we do not know which dropout events are technical artefacts and which correspond to the transcript being truly absent, imputation is a difficult challenges.
 
-To the best of our knowledge, there are currently two different imputation methods available: MAGIC [@Van_Dijk2017-bh] and scImpute [@Li2017-tz]. Since [MAGIC](https://github.com/pkathail/magic) is only available for Python or Matlab, we will only cover [scImpute](https://github.com/Vivianstats/scImpute) in this chapter.
+To the best of our knowledge, there are currently two different imputation methods available: MAGIC [@Van_Dijk2017-bh] and scImpute [@Li2017-tz]. [MAGIC](https://github.com/pkathail/magic) is only available for Python or Matlab, but we will run it from within R.
 
 ### scImpute
 
@@ -59,7 +59,7 @@ plotPCA(
 )
 ```
 
-Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
+Compare this result to the original data in Chapter \@ref(18-clustering). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
 ```{r}
@@ -77,7 +77,7 @@ plotPCA(
 )
 ```
 
-Based on the PCA and the clustering results, do you think that imputation is a good idea for the Deng dataset?
+__Exercise:__ Based on the PCA and the clustering results, do you think that imputation using scImpute is a good idea for the Deng dataset?
 
 ### MAGIC
 
@@ -100,7 +100,7 @@ plotPCA(
 )
 ```
 
-Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
+Compare this result to the original data in Chapter \@ref(18-clustering). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
 ```{r}
@@ -117,6 +117,8 @@ plotPCA(
     colour_by = "sc3_10_clusters"
 )
 ```
+__Exercise:__ What is the difference between scImpute and MAGIC based on the PCA and clustering analysis? Which one do you think is best to use?
+
 
 ### sessionInfo()
 
