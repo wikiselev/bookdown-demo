@@ -49,7 +49,15 @@ The most common model of RNASeq data is the negative binomial model:
 
 ```{r nb-plot, fig.cap="Negative Binomial distribution of read counts for a single gene across 1000 cells"}
 set.seed(1)
-hist(rnbinom(1000, mu=10, size=100), col="grey50", xlab="Read Counts", main="Negative Binomial")
+hist(
+    rnbinom(
+        1000, 
+        mu = 10, 
+        size = 100), 
+    col = "grey50", 
+    xlab = "Read Counts", 
+    main = "Negative Binomial"
+)
 ```
 Mean:
 $\mu = mu$
@@ -62,10 +70,19 @@ It is parameterized by the mean expression (mu) and the dispersion (size), which
 However, a raw negative binomial model does not fit full-length transcript data as well due to the high dropout rates relative to the non-zero read counts. For this type of data a variety of zero-inflated negative binomial models have been proposed (e.g. [MAST](https://bioconductor.org/packages/release/bioc/html/MAST.html), [SCDE](https://bioconductor.org/packages/release/bioc/html/scde.html)).
 
 ```{r zero-inflation-plot, fig.cap="Zero-inflated Negative Binomial distribution"}
-d = 0.5;
-counts <- rnbinom(1000, mu=10, size=100);
-counts[runif(1000) < d] = 0;
-hist(counts, col="grey50", xlab="Read Counts", main="Zero-inflated NB");
+d <- 0.5;
+counts <- rnbinom(
+    1000, 
+    mu = 10, 
+    size = 100
+)
+counts[runif(1000) < d] <- 0
+hist(
+    counts, 
+    col = "grey50", 
+    xlab = "Read Counts", 
+    main = "Zero-inflated NB"
+)
 ```
 Mean:
 $\mu = mu \cdot (1 - d)$
@@ -78,12 +95,17 @@ These models introduce a new parameter $d$, for the dropout rate, to the negativ
 Finally, several methods use a Poisson-Beta distribution which is based on a mechanistic model of transcriptional bursting. There is strong experimental support for this model ([Kim and Marioni, 2013](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-1-r7)) and it provides a good fit to scRNA-seq data but it is less easy to use than the negative-binomial models and much less existing methods upon which to build than the negative binomial model.
 
 ```{r pois-beta-plot, fit.cap="Poisson-Beta distribution"}
-a = 0.1
-b = 0.1
-g = 100
-lambdas = rbeta(1000, a, b)
-counts = sapply(g*lambdas, function(l) {rpois(1, lambda=l)})
-hist(counts, col="grey50", xlab="Read Counts", main="Poisson-Beta")
+a <- 0.1
+b <- 0.1
+g <- 100
+lambdas <- rbeta(1000, a, b)
+counts <- sapply(g*lambdas, function(l) {rpois(1, lambda = l)})
+hist(
+    counts, 
+    col = "grey50", 
+    xlab = "Read Counts", 
+    main = "Poisson-Beta"
+)
 ```
 Mean:
 $\mu = g \cdot a / (a + b)$
