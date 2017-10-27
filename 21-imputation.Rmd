@@ -77,7 +77,7 @@ plotPCA(
 )
 ```
 
-Based on the PCA and the clustering results, do you think that imputation is a good idea for the Pollen dataset?
+Based on the PCA and the clustering results, do you think that imputation is a good idea for the Deng dataset?
 
 ### MAGIC
 
@@ -103,7 +103,7 @@ plotPCA(
 Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
-```{r, eval = FALSE}
+```{r}
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
 res <- sc3(res, ks = 10, gene_filter = FALSE)

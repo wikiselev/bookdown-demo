@@ -28,7 +28,10 @@ accuracy of each single-cell method. To save time we have pre-computed these for
 ```{r}
 DE <- read.table("tung/TPs.txt")
 notDE <- read.table("tung/TNs.txt")
-GroundTruth <- list(DE=as.character(unlist(DE)), notDE=as.character(unlist(notDE)))
+GroundTruth <- list(
+    DE = as.character(unlist(DE)), 
+    notDE = as.character(unlist(notDE))
+)
 ```
 
 This ground truth has been produce for the comparison of individual NA19101 to NA19239. Now load the respective single-cell data:
@@ -45,7 +48,7 @@ gkeep <- rowSums(data > 0) > 5;
 counts <- data[gkeep,]
 # Library size normalization
 lib_size = colSums(counts)
-norm <- t(t(counts)/lib_size*median(lib_size)) 
+norm <- t(t(counts)/lib_size * median(lib_size)) 
 # Variant of CPM for datasets with library sizes of fewer than 1 mil molecules
 ```
 
@@ -66,16 +69,21 @@ knitr::include_graphics("figures/KS2_Example.png")
 Now run the test:
 
 ```{r, message=FALSE, warning=FALSE}
-pVals <- apply(norm, 1, function(x) {
-        ks.test(x[group =="NA19101"], 
-                x[group=="NA19239"])$p.value
-         })
+pVals <- apply(
+    norm, 1, function(x) {
+        ks.test(
+            x[group == "NA19101"], 
+            x[group == "NA19239"]
+        )$p.value
+    }
+)
 # multiple testing correction
 pVals <- p.adjust(pVals, method = "fdr")
 ```
 This code "applies" the function to each row (specified by 1) of the expression matrix, data. In the function we are returning just the p.value from the ks.test output. We can now consider how many of the ground truth positive and negative DE genes are detected by the KS-test:
 
 #### Evaluating Accuracy
+
 ```{r}
 sigDE <- names(pVals)[pVals < 0.05]
 length(sigDE) 
@@ -117,15 +125,15 @@ Finally to facilitate the comparisons of other DE methods let's put this code in
 
 ```{r}
 DE_Quality_AUC <- function(pVals) {
-        pVals <- pVals[names(pVals) %in% GroundTruth$DE | 
-                       names(pVals) %in% GroundTruth$notDE]
-        truth <- rep(1, times = length(pVals));
-        truth[names(pVals) %in% GroundTruth$DE] = 0;
-        pred <- ROCR::prediction(pVals, truth)
-        perf <- ROCR::performance(pred, "tpr", "fpr")
-        ROCR::plot(perf)
-        aucObj <- ROCR::performance(pred, "auc")
-        return(aucObj@y.values[[1]])
+    pVals <- pVals[names(pVals) %in% GroundTruth$DE | 
+                   names(pVals) %in% GroundTruth$notDE]
+    truth <- rep(1, times = length(pVals));
+    truth[names(pVals) %in% GroundTruth$DE] = 0;
+    pred <- ROCR::prediction(pVals, truth)
+    perf <- ROCR::performance(pred, "tpr", "fpr")
+    ROCR::plot(perf)
+    aucObj <- ROCR::performance(pred, "auc")
+    return(aucObj@y.values[[1]])
 }
 ```
 ### Wilcox/Mann-Whitney-U Test
@@ -133,23 +141,32 @@ DE_Quality_AUC <- function(pVals) {
 The Wilcox-rank-sum test is another non-parametric test, but tests specifically if values in one group are greater/less than the values in the other group. Thus it is often considered a test for difference in median expression between two groups; whereas the KS-test is sensitive to any change in distribution of expression values.
 
 ```{r wilcox-plot, fig.cap="ROC curve for Wilcox test.", message=FALSE, warning=FALSE}
-pVals <- apply(norm, 1, function(x) {
-        wilcox.test(x[group =="NA19101"], 
-                x[group=="NA19239"])$p.value
-        })
+pVals <- apply(
+    norm, 1, function(x) {
+        wilcox.test(
+            x[group == "NA19101"], 
+            x[group == "NA19239"]
+        )$p.value
+    }
+)
 # multiple testing correction
 pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
 ### edgeR
+
 We've already used edgeR for differential expression in Chapter \@ref(dealing-with-confounders). edgeR is based on a negative binomial model of gene expression and uses a generalized linear model (GLM) framework, the enables us to include other factors such as batch to the model.
 
 ```{r edger-plot, fig.cap="ROC curve for edgeR.", message=FALSE}
-dge <- DGEList(counts=counts, norm.factors = rep(1, length(counts[1,])), group=group)
+dge <- DGEList(
+    counts = counts, 
+    norm.factors = rep(1, length(counts[1,])), 
+    group = group
+)
 group_edgeR <- factor(group)
-design <- model.matrix(~group_edgeR)
-dge <- estimateDisp(dge, design = design, trend.method="none")
+design <- model.matrix(~ group_edgeR)
+dge <- estimateDisp(dge, design = design, trend.method = "none")
 fit <- glmFit(dge, design)
 res <- glmLRT(fit)
 pVals <- res$table[,4]
@@ -160,36 +177,44 @@ DE_Quality_AUC(pVals)
 ```
 
 ### Monocle
+
 [Monocle](https://bioconductor.org/packages/release/bioc/html/monocle.html) can use several different models for DE. For count data it recommends the Negative Binomial model (negbinomial.size). For normalized data it recommends log-transforming it then using a normal distribution (gaussianff). Similar to edgeR this method uses a GLM framework so in theory can account for batches, however in practice the model fails for this dataset if batches are included.
 
 ```{r Monocle-plot, fig.cap="ROC curve for Monocle.", message=FALSE, warning=FALSE}
-pd <- data.frame(group=group, batch=batch)
+pd <- data.frame(group = group, batch = batch)
 rownames(pd) <- colnames(counts)
 pd <- new("AnnotatedDataFrame", data = pd)
 
-Obj <- newCellDataSet(as.matrix(counts), phenoData=pd, 
-        expressionFamily=negbinomial.size())
+Obj <- newCellDataSet(
+    as.matrix(counts), 
+    phenoData = pd, 
+    expressionFamily = negbinomial.size()
+)
 Obj <- estimateSizeFactors(Obj)
 Obj <- estimateDispersions(Obj)
-res <- differentialGeneTest(Obj,fullModelFormulaStr="~group")
+res <- differentialGeneTest(Obj, fullModelFormulaStr = "~group")
 
 pVals <- res[,3]
 names(pVals) <- rownames(res)
 pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
-__Exercise__: Compare the results using the negative binomial model on counts and those from using the normal/gaussian model (gaussianff()) on log-transformed normalized counts.
+__Exercise__: Compare the results using the negative binomial model on counts and those from using the normal/gaussian model (`gaussianff()`) on log-transformed normalized counts.
 
 __Answer__:
 ```{r Monocle-plot2, fig.cap="ROC curve for Monocle-gaussian.", message=FALSE, echo=FALSE, warning=FALSE}
-pd <- data.frame(group=group, batch=batch)
+pd <- data.frame(group = group, batch = batch)
 rownames(pd) <- colnames(norm)
 pd <- new("AnnotatedDataFrame", data = pd)
 
-Obj_log <- newCellDataSet(as.matrix(log(norm+1)/log(2)), phenoData=pd, expressionFamily=gaussianff())
+Obj_log <- newCellDataSet(
+    as.matrix(log(norm + 1) / log(2)), 
+    phenoData = pd, 
+    expressionFamily = gaussianff()
+)
 Obj_log <- estimateSizeFactors(Obj_log)
 # Obj_log <- estimateDispersions(Obj_log)
-res <- differentialGeneTest(Obj_log,fullModelFormulaStr="~group")
+res <- differentialGeneTest(Obj_log, fullModelFormulaStr = "~group")
 
 pVals <- res[,3]
 names(pVals) <- rownames(res)
@@ -198,23 +223,24 @@ DE_Quality_AUC(pVals)
 ```
 
 ### MAST
+
 [MAST](https://bioconductor.org/packages/release/bioc/html/MAST.html) is based on a zero-inflated negative binomial model. It tests for differential expression using a hurdle model to combine tests of discrete (0 vs not zero) and continuous (non-zero values) aspects of gene expression. Again this uses a linear modelling framework to enable complex models to be considered.
 
 ```{r MAST-plot, fig.cap="ROC curve for MAST.", message=FALSE}
-log_counts <- log(counts+1)/log(2)
-fData = data.frame(names=rownames(log_counts))
-rownames(fData) = rownames(log_counts);
-cData = data.frame(cond=group)
-rownames(cData) = colnames(log_counts)
+log_counts <- log(counts + 1) / log(2)
+fData <- data.frame(names = rownames(log_counts))
+rownames(fData) <- rownames(log_counts);
+cData <- data.frame(cond = group)
+rownames(cData) <- colnames(log_counts)
 
 obj <- FromMatrix(as.matrix(log_counts), cData, fData)
-colData(obj)$cngeneson <- scale(colSums(assay(obj)>0))
+colData(obj)$cngeneson <- scale(colSums(assay(obj) > 0))
 cond <- factor(colData(obj)$cond)
 
 # Model expression as function of condition & number of detected genes
-zlmCond <- zlm.SingleCellAssay(~cond + cngeneson, obj) 
+zlmCond <- zlm.SingleCellAssay(~ cond + cngeneson, obj) 
 
-summaryCond <- summary(zlmCond, doLRT="condNA19101")
+summaryCond <- summary(zlmCond, doLRT = "condNA19101")
 summaryDt <- summaryCond$datatable
 
 summaryDt <- as.data.frame(summaryDt)
