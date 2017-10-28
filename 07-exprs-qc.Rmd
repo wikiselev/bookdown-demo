@@ -262,6 +262,7 @@ __Hint__: Use `vennCounts` and `vennDiagram` functions from the [limma](https://
 __Answer__
 
 ```{r cell-filt-comp, fig.cap = "Comparison of the default, automatic and manual cell filters", echo=FALSE}
+library(limma)
 auto <- colnames(umi)[umi$outlier]
 man <- colnames(umi)[!umi$use]
 venn.diag <- vennCounts(
