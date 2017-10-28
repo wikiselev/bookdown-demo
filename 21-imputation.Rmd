@@ -13,6 +13,7 @@ library(scImpute)
 library(SC3)
 library(scater)
 library(SingleCellExperiment)
+library(mclust)
 set.seed(1234567)
 ```
 
@@ -66,11 +67,7 @@ To evaluate the impact of the imputation, we use `SC3` to cluster the imputed ma
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
 res <- sc3(res, ks = 10, gene_filter = FALSE)
-sc3_plot_consensus(
-    res, 
-    k = 10, 
-    show_pdata = "cell_type2"
-)
+adjustedRandIndex(colData(deng)$cell_type2, colData(res)$sc3_10_clusters)
 plotPCA(
     res, 
     colour_by = "sc3_10_clusters"
@@ -107,11 +104,7 @@ To evaluate the impact of the imputation, we use `SC3` to cluster the imputed ma
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
 res <- sc3(res, ks = 10, gene_filter = FALSE)
-sc3_plot_consensus(
-    res, 
-    k = 10, 
-    show_pdata = "cell_type2"
-)
+adjustedRandIndex(colData(deng)$cell_type2, colData(res)$sc3_10_clusters)
 plotPCA(
     res, 
     colour_by = "sc3_10_clusters"

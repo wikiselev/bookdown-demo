@@ -20,9 +20,7 @@ library(mclust)
 set.seed(1234567)
 ```
 
-To illustrate clustering of scRNA-seq data, we consider the `Deng` dataset of cells from 
-developing mouse embryo [@Deng2014-mx]. We have preprocessed the dataset and created a 
-`SingleCellExperiment` object in advance. We have also annotated the cells with the cell type information (it is the `cell_type1` and `cell_type2` columns in the `colData` slot).
+To illustrate clustering of scRNA-seq data, we consider the `Deng` dataset of cells from developing mouse embryo [@Deng2014-mx]. We have preprocessed the dataset and created a `SingleCellExperiment` object in advance. We have also annotated the cells with the cell types identified in the original publication (it is the `cell_type2` column in the `colData` slot).
 
 ### Deng dataset
 
@@ -67,7 +65,6 @@ deng <- sc3(deng, ks = 10, biology = TRUE)
 Consensus matrix:
 ```{r, fig.height=6}
 sc3_plot_consensus(deng, k = 10, show_pdata = "cell_type2")
-adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$sc3_10_clusters)
 ```
 
 Silhouette plot:
@@ -81,13 +78,18 @@ sc3_plot_expression(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 Identified marker genes:
-```{r, fig.height=17}
+```{r, fig.height=11}
 sc3_plot_markers(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 PCA plot with highlighted `SC3` clusters:
 ```{r}
 plotPCA(deng, colour_by = "sc3_10_clusters")
+```
+
+Compare the results of `SC3` clustering with the original publication cell type labels:
+```{r}
+adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$sc3_10_clusters)
 ```
 
 Note, that one can also run `SC3` in an interactive `Shiny` session:
@@ -140,16 +142,13 @@ colData(deng)$pcaReduce <- as.character(pca.red[,32 - 2])
 plotPCA(deng, colour_by = "pcaReduce")
 ```
 
-__Exercise 6__: Compare the results between `SC3` and `pcaReduce` for $k=10$. What is
-the main difference between the solutions provided by the two
-different methods?
+__Exercise 6__: Compare the results between `SC3` and the original publication cell types for $k=10$.
 
 __Our solution__:
 ```{r, echo=FALSE}
 colData(deng)$pcaReduce <- as.character(pca.red[,32 - 10])
-sc3_plot_expression(deng, k = 10, show_pdata = "pcaReduce")
+adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$pcaReduce)
 ```
-
 
 ### tSNE + kmeans
 
@@ -170,13 +169,12 @@ plotTSNE(deng, rand_seed = 1, colour_by = "tSNE_kmeans")
 
 __Exercise 7__: Make the same plot for $k=10$.
 
-__Exercise 8__: Compare the results between `SC3` and `tSNE+kmeans`. Can the
-results be improved by changing the `perplexity` parameter?
+__Exercise 8__: Compare the results between `tSNE+kmeans` and the original publication cell types. Can the results be improved by changing the `perplexity` parameter?
 
 __Our solution__:
 ```{r, echo=FALSE}
-colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 11)$clust)
-sc3_plot_expression(deng, k = 10, show_pdata = "tSNE_kmeans")
+colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 10)$clust)
+adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$tSNE_kmeans)
 ```
 
 As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
@@ -220,11 +218,11 @@ colData(deng)$SNNCliq <- as.character(snn.res[,1])
 plotPCA(deng, colour_by = "SNNCliq")
 ```
 
-__Exercise 9__: Compare the results between `SC3` and `SNN-Cliq`.
+__Exercise 9__: Compare the results between `SNN-Cliq` and the original publication cell types.
 
 __Our solution__:
 ```{r, echo=FALSE}
-sc3_plot_expression(deng, k = 10, show_pdata = "SNNCliq")
+adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$SNNCliq)
 ```
 
 ### SINCERA
@@ -267,12 +265,12 @@ pheatmap(
 )
 ```
 
-__Exercise 10__: Compare the results between `SC3` and `SNN-Cliq`.
+__Exercise 10__: Compare the results between `SINCERA` and the original publication cell types.
 
 __Our solution__:
 ```{r, echo=FALSE}
 colData(deng)$SINCERA <- as.character(cutree(hc, k = kk))
-sc3_plot_expression(deng, k = 10, show_pdata = "SINCERA")
+adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$SINCERA)
 ```
 
 __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a good idea?
