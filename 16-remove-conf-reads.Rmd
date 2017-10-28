@@ -30,10 +30,6 @@ reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- normalize(reads.qc)
 ```
 
-### Remove Unwanted Variation
-
-#### RUVg
-
 ```{r, message=FALSE, warning=FALSE}
 ruvg <- RUVg(counts(reads.qc), erccs, k = 1)
 assay(reads.qc, "ruvg1") <- log2(
@@ -44,8 +40,6 @@ assay(reads.qc, "ruvg10") <- log2(
     t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
 )
 ```
-
-#### RUVs
 
 ```{r}
 scIdx <- matrix(-1, ncol = max(table(reads.qc$individual)), nrow = 3)
@@ -66,9 +60,7 @@ assay(reads.qc, "ruvs10") <- log2(
 )
 ```
 
-#### Combat
-
-```{r, eval = TRUE, message = FALSE}
+```{r, eval = TRUE, message=FALSE, warning=FALSE}
 combat_data <- logcounts(reads.qc)
 mod_data <- as.data.frame(t(combat_data))
 # Basic batch removal
@@ -88,7 +80,7 @@ assay(reads.qc, "combat") <- ComBat(
 
 __Exercise 1__
 
-```{r, eval = TRUE, echo = FALSE, message = FALSE}
+```{r, eval = TRUE, echo = FALSE, message=FALSE, warning=FALSE}
 assay(reads.qc, "combat_tf") <- ComBat(
     dat = t(mod_data), 
     batch = factor(reads.qc$batch), 
@@ -97,8 +89,6 @@ assay(reads.qc, "combat_tf") <- ComBat(
     prior.plots = FALSE
 )
 ```
-
-#### mnnCorrect 
 
 ```{r}
 do_mnn <- function(data.qc) {
@@ -143,8 +133,6 @@ assay(reads.qc, "mnn") <- cbind(indi1, indi2, indi3);
 #)
 ```
 
-#### GLM
-
 ```{r}
 glm_fun <- function(g, batch, indi) {
   model <- glm(g ~ batch + indi)
@@ -188,8 +176,6 @@ indi3 <- do_glm(reads.qc[, reads.qc$individual == "NA19239"])
 assay(reads.qc, "glm_indi") <- cbind(indi1, indi2, indi3);
 ```
 
-#### Effectiveness 1
-
 ```{r}
 for(n in assayNames(reads.qc)) {
     print(
@@ -205,8 +191,6 @@ for(n in assayNames(reads.qc)) {
 }
 ```
 
-#### Effectiveness 2
-
 ```{r}
 res <- list()
 for(n in assayNames(reads.qc)) {
@@ -216,9 +200,7 @@ par(mar=c(6,4,1,1))
 boxplot(res, las=2)
 ```
 
-#### Effectiveness 3
-
-```{r}
+```{r message=FALSE, warning=FALSE}
 for(n in assayNames(reads.qc)) {
     print(
         plotQC(
@@ -238,8 +220,6 @@ for(n in assayNames(reads.qc)) {
     )
 }
 ```
-
-#### Effectiveness 4
 
 ```{r, message = FALSE}
 compare_kBET_results <- function(sce){
@@ -293,8 +273,6 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
     ) + 
     ggtitle("Effect of batch regression methods per individual")
 ```
-
-#### sessionInfo()
 
 ```{r echo=FALSE}
 sessionInfo()

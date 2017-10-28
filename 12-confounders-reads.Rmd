@@ -48,8 +48,6 @@ plotQC(
 )
 ```
 
-### sessionInfo()
-
-```{r echo=FALSE}
+```{r}
 sessionInfo()
 ```

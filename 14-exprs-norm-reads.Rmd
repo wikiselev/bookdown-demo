@@ -45,51 +45,6 @@ plotRLE(
 )
 ```
 
-```{r norm-pca-tmm-reads, fig.cap = "PCA plot of the tung data after TMM normalisation"}
-reads.qc <- normaliseExprs(
-    reads.qc,
-    method = "TMM",
-    feature_set = endog_genes,
-    return_log = TRUE,
-    return_norm_as_exprs = TRUE
-)
-plotPCA(
-    reads.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual"
-)
-```
-```{r norm-ours-rle-tmm-reads, fig.cap = "Cell-wise RLE of the tung data"}
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", TMM = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
-    colour_by = "batch"
-)
-```
-
-```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the tung data after LSF normalisation"}
-qclust <- quickCluster(reads.qc, min.size = 30)
-reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
-reads.qc <- normalize(reads.qc)
-plotPCA(
-    reads.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual"
-)
-```
-
-```{r norm-ours-rle-scran-reads, fig.cap = "Cell-wise RLE of the tung data"}
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", scran = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
-    colour_by = "batch"
-)
-```
-
 ```{r norm-pca-rle-reads, fig.cap = "PCA plot of the tung data after RLE normalisation"}
 reads.qc <- normaliseExprs(
     reads.qc,
@@ -135,6 +90,51 @@ plotPCA(
 plotRLE(
     reads.qc[endog_genes, ], 
     exprs_mats = list(Raw = "logcounts_raw", UQ = "logcounts"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
+```
+
+```{r norm-pca-tmm-reads, fig.cap = "PCA plot of the tung data after TMM normalisation"}
+reads.qc <- normaliseExprs(
+    reads.qc,
+    method = "TMM",
+    feature_set = endog_genes,
+    return_log = TRUE,
+    return_norm_as_exprs = TRUE
+)
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual"
+)
+```
+```{r norm-ours-rle-tmm-reads, fig.cap = "Cell-wise RLE of the tung data"}
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "logcounts_raw", TMM = "logcounts"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
+```
+
+```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the tung data after LSF normalisation"}
+qclust <- quickCluster(reads.qc, min.size = 30)
+reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
+reads.qc <- normalize(reads.qc)
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual"
+)
+```
+
+```{r norm-ours-rle-scran-reads, fig.cap = "Cell-wise RLE of the tung data"}
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "logcounts_raw", scran = "logcounts"),
     exprs_logged = c(TRUE, TRUE),
     colour_by = "batch"
 )
@@ -214,9 +214,7 @@ plotPCA(
 )
 ```
 
-### sessionInfo()
-
-```{r echo=FALSE}
+```{r}
 sessionInfo()
 ```
 

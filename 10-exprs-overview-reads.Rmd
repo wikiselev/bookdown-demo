@@ -95,8 +95,6 @@ plotTSNE(
 )
 ```
 
-### sessionInfo()
-
-```{r echo=FALSE}
+```{r}
 sessionInfo()
 ```
