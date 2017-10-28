@@ -153,6 +153,7 @@ table(reads$outlier)
 ```
 
 ```{r cell-filt-comp-reads, fig.cap = "Comparison of the default, automatic and manual cell filters"}
+library(limma)
 auto <- colnames(reads)[reads$outlier]
 man <- colnames(reads)[!reads$use]
 venn.diag <- vennCounts(
