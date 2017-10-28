@@ -9,7 +9,7 @@ output: html_document
 set.seed(1234567)
 ```
 
-# `Seurat` {#seurat}
+# `Seurat` {#seurat-chapter}
 
 [Seurat](http://satijalab.org/seurat/) was originally developed as a clustering tool for scRNA-seq data, however in the last few years the focus of the package has become less specific and at the moment `seurat` is a popular R package that can perform QC, analysis, and exploration of scRNA-seq data, i.e. many of the tasks covered in this course. Although the authors provide several [tutorials](http://satijalab.org/seurat/get_started.html), here we provide a brief overview by following an [example](http://satijalab.org/seurat/pbmc3k_tutorial.html) created by the authors of `Seurat` (2,800 Peripheral Blood Mononuclear Cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors. We start by loading the `Deng` data that we have used before:
 
@@ -295,7 +295,7 @@ PrintFindClustersParams(object = seuset)
 ```
 
 ```
-## Parameters used in latest FindClusters calculation run on: 2017-10-27 21:39:15
+## Parameters used in latest FindClusters calculation run on: 2017-10-28 18:41:46
 ## =============================================================================
 ## Resolution: 1
 ## -----------------------------------------------------------------------------

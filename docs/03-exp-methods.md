@@ -6,8 +6,6 @@ output: html_document
 
 ## Experimental methods
 
-### Overview of experimental methods for generating scRNA-seq data
-
 <div class="figure" style="text-align: center">
 <img src="figures/moores-law.png" alt="Moore's law in single cell transcriptomics (image taken from [Svensson et al](https://arxiv.org/abs/1704.01379))" width="100%" />
 <p class="caption">(\#fig:unnamed-chunk-2)Moore's law in single cell transcriptomics (image taken from [Svensson et al](https://arxiv.org/abs/1704.01379))</p>

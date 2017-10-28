@@ -15,7 +15,7 @@ We strongly recommend all new comers and even experienced high-throughput data a
 
 ### `SingleCellExperiment` class
 
-[`SingleCellExperiment`](http://bioconductor.org/packages/SingleCellExperiment) is a S4 class for storing data from single-cell experiments. This includes specialized methods to store and retrieve spike-in information, dimensionality reduction coordinates and size factors for each cell, along with the usual metadata for genes and libraries.
+[`SingleCellExperiment`](http://bioconductor.org/packages/SingleCellExperiment) (SCE) is a S4 class for storing data from single-cell experiments. This includes specialized methods to store and retrieve spike-in information, dimensionality reduction coordinates and size factors for each cell, along with the usual metadata for genes and libraries.
 
 In practice, an object of this class can be created using its constructor:
 
