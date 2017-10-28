@@ -23,7 +23,7 @@ As discussed previously, one of the main challenges when analyzing scRNA-seq dat
 
 Thus, dropouts could be result of experimental shortcomings, and if this is the case then we would like to provide computational corrections. One possible solution is to impute the dropouts in the expression matrix. To be able to impute gene expression values, one must have an underlying model. However, since we do not know which dropout events are technical artefacts and which correspond to the transcript being truly absent, imputation is a difficult challenges.
 
-To the best of our knowledge, there are currently two different imputation methods available: MAGIC [@Van_Dijk2017-bh] and scImpute [@Li2017-tz]. Since [MAGIC](https://github.com/pkathail/magic) is only available for Python or Matlab, we will only cover [scImpute](https://github.com/Vivianstats/scImpute) in this chapter.
+To the best of our knowledge, there are currently two different imputation methods available: MAGIC [@Van_Dijk2017-bh] and scImpute [@Li2017-tz]. [MAGIC](https://github.com/pkathail/magic) is only available for Python or Matlab, but we will run it from within R.
 
 ### scImpute
 
@@ -47,8 +47,6 @@ scimpute(
 ## [1] "reading in raw count matrix ..."
 ## [1] "number of genes in raw count matrix 22431"
 ## [1] "number of cells in raw count matrix 268"
-## [1] "estimating mixture models ..."
-## [1] "imputing dropout values ..."
 ## [1] "inferring cell similarities ..."
 ## [1] "cluster sizes:"
 ##  [1] 12  9 26  5  9 57 58 43 17 22
@@ -97,19 +95,12 @@ plotPCA(
 
 <img src="21-imputation_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" />
 
-Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
+Compare this result to the original data in Chapter \@ref(clust-methods). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
 
 ```r
 res <- sc3_estimate_k(res)
-```
-
-```
-## Estimating k...
-```
-
-```r
 metadata(res)$sc3$k_estimation
 ```
 
@@ -119,30 +110,6 @@ metadata(res)$sc3$k_estimation
 
 ```r
 res <- sc3(res, ks = 10, gene_filter = FALSE)
-```
-
-```
-## Setting SC3 parameters...
-```
-
-```
-## Setting a range of k...
-```
-
-```
-## Calculating distances between the cells...
-```
-
-```
-## Performing transformations and calculating eigenvectors...
-```
-
-```
-## Performing k-means clustering...
-```
-
-```
-## Calculating consensus matrix...
 ```
 
 ```r
@@ -164,7 +131,7 @@ plotPCA(
 
 <img src="21-imputation_files/figure-html/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" />
 
-Based on the PCA and the clustering results, do you think that imputation is a good idea for the Deng dataset?
+__Exercise:__ Based on the PCA and the clustering results, do you think that imputation using `scImpute` is a good idea for the Deng dataset?
 
 ### MAGIC
 
@@ -191,19 +158,12 @@ plotPCA(
 
 <img src="21-imputation_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" />
 
-Compare this result to the original data in Fig. X, Chapter Y. What are the most significant differences?
+Compare this result to the original data in Chapter \@ref(clust-methods). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
 
 ```r
 res <- sc3_estimate_k(res)
-```
-
-```
-## Estimating k...
-```
-
-```r
 metadata(res)$sc3$k_estimation
 ```
 
@@ -213,30 +173,6 @@ metadata(res)$sc3$k_estimation
 
 ```r
 res <- sc3(res, ks = 10, gene_filter = FALSE)
-```
-
-```
-## Setting SC3 parameters...
-```
-
-```
-## Setting a range of k...
-```
-
-```
-## Calculating distances between the cells...
-```
-
-```
-## Performing transformations and calculating eigenvectors...
-```
-
-```
-## Performing k-means clustering...
-```
-
-```
-## Calculating consensus matrix...
 ```
 
 ```r
@@ -257,6 +193,8 @@ plotPCA(
 ```
 
 <img src="21-imputation_files/figure-html/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" />
+__Exercise:__ What is the difference between `scImpute` and `MAGIC` based on the PCA and clustering analysis? Which one do you think is best to use?
+
 
 ### sessionInfo()
 
@@ -288,56 +226,56 @@ plotPCA(
 ##  [7] matrixStats_0.52.2          Biobase_2.36.2             
 ##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
 ## [11] IRanges_2.10.5              S4Vectors_0.14.7           
-## [13] BiocGenerics_0.22.1         scImpute_0.0.3             
-## [15] penalized_0.9-50            survival_2.40-1            
-## [17] kernlab_0.9-25              knitr_1.17                 
+## [13] BiocGenerics_0.22.1         scImpute_0.0.4             
+## [15] doParallel_1.0.11           iterators_1.0.8            
+## [17] foreach_1.4.3               penalized_0.9-50           
+## [19] survival_2.40-1             kernlab_0.9-25             
+## [21] knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] bitops_1.0-6            bit64_0.9-7            
-##  [3] doParallel_1.0.11       RColorBrewer_1.1-2     
-##  [5] rprojroot_1.2           tools_3.4.2            
-##  [7] backports_1.1.1         doRNG_1.6.6            
-##  [9] R6_2.2.2                vipor_0.4.5            
-## [11] KernSmooth_2.23-15      DBI_0.7                
-## [13] lazyeval_0.2.0          colorspace_1.3-2       
-## [15] gridExtra_2.3           bit_1.1-12             
-## [17] compiler_3.4.2          pkgmaker_0.22          
-## [19] labeling_0.3            bookdown_0.5           
-## [21] caTools_1.17.1          scales_0.5.0           
-## [23] DEoptimR_1.0-8          mvtnorm_1.0-6          
-## [25] robustbase_0.92-7       stringr_1.2.0          
-## [27] digest_0.6.12           rmarkdown_1.6          
-## [29] XVector_0.16.0          pkgconfig_2.0.1        
-## [31] rrcov_1.4-3             htmltools_0.3.6        
-## [33] WriteXLS_4.0.0          limma_3.32.10          
-## [35] rlang_0.1.2             RSQLite_2.0            
-## [37] shiny_1.0.5             bindr_0.1              
-## [39] gtools_3.5.0            dplyr_0.7.4            
-## [41] RCurl_1.95-4.8          magrittr_1.5           
-## [43] GenomeInfoDbData_0.99.0 Matrix_1.2-7.1         
-## [45] ggbeeswarm_0.6.0        Rcpp_0.12.13           
-## [47] munsell_0.4.3           viridis_0.4.0          
-## [49] edgeR_3.18.1            stringi_1.1.5          
-## [51] yaml_2.1.14             zlibbioc_1.22.0        
-## [53] rhdf5_2.20.0            gplots_3.0.1           
-## [55] plyr_1.8.4              grid_3.4.2             
-## [57] blob_1.1.0              gdata_2.18.0           
-## [59] shinydashboard_0.6.1    lattice_0.20-34        
-## [61] cowplot_0.8.0           splines_3.4.2          
-## [63] locfit_1.5-9.1          rjson_0.2.15           
-## [65] rngtools_1.2.4          reshape2_1.4.2         
-## [67] codetools_0.2-15        biomaRt_2.32.1         
-## [69] glue_1.1.1              XML_3.98-1.9           
-## [71] evaluate_0.10.1         data.table_1.10.4-3    
-## [73] httpuv_1.3.5            foreach_1.4.3          
-## [75] gtable_0.2.0            assertthat_0.2.0       
-## [77] mime_0.5                xtable_1.8-2           
-## [79] e1071_1.6-8             class_7.3-14           
-## [81] pcaPP_1.9-72            viridisLite_0.2.0      
-## [83] tibble_1.3.4            pheatmap_1.0.8         
-## [85] iterators_1.0.8         beeswarm_0.2.3         
-## [87] AnnotationDbi_1.38.2    registry_0.3           
-## [89] memoise_1.1.0           tximport_1.4.0         
-## [91] bindrcpp_0.2            cluster_2.0.6          
-## [93] ROCR_1.0-7
+##  [3] RColorBrewer_1.1-2      rprojroot_1.2          
+##  [5] tools_3.4.2             backports_1.1.1        
+##  [7] doRNG_1.6.6             R6_2.2.2               
+##  [9] vipor_0.4.5             KernSmooth_2.23-15     
+## [11] DBI_0.7                 lazyeval_0.2.0         
+## [13] colorspace_1.3-2        gridExtra_2.3          
+## [15] bit_1.1-12              compiler_3.4.2         
+## [17] pkgmaker_0.22           labeling_0.3           
+## [19] bookdown_0.5            caTools_1.17.1         
+## [21] scales_0.5.0            DEoptimR_1.0-8         
+## [23] mvtnorm_1.0-6           robustbase_0.92-7      
+## [25] stringr_1.2.0           digest_0.6.12          
+## [27] rmarkdown_1.6           XVector_0.16.0         
+## [29] pkgconfig_2.0.1         rrcov_1.4-3            
+## [31] htmltools_0.3.6         WriteXLS_4.0.0         
+## [33] limma_3.32.10           rlang_0.1.2            
+## [35] RSQLite_2.0             shiny_1.0.5            
+## [37] bindr_0.1               gtools_3.5.0           
+## [39] dplyr_0.7.4             RCurl_1.95-4.8         
+## [41] magrittr_1.5            GenomeInfoDbData_0.99.0
+## [43] Matrix_1.2-7.1          ggbeeswarm_0.6.0       
+## [45] Rcpp_0.12.13            munsell_0.4.3          
+## [47] viridis_0.4.0           edgeR_3.18.1           
+## [49] stringi_1.1.5           yaml_2.1.14            
+## [51] zlibbioc_1.22.0         rhdf5_2.20.0           
+## [53] gplots_3.0.1            plyr_1.8.4             
+## [55] grid_3.4.2              blob_1.1.0             
+## [57] gdata_2.18.0            shinydashboard_0.6.1   
+## [59] lattice_0.20-34         cowplot_0.8.0          
+## [61] splines_3.4.2           locfit_1.5-9.1         
+## [63] rjson_0.2.15            rngtools_1.2.4         
+## [65] reshape2_1.4.2          codetools_0.2-15       
+## [67] biomaRt_2.32.1          glue_1.1.1             
+## [69] XML_3.98-1.9            evaluate_0.10.1        
+## [71] data.table_1.10.4-3     httpuv_1.3.5           
+## [73] gtable_0.2.0            assertthat_0.2.0       
+## [75] mime_0.5                xtable_1.8-2           
+## [77] e1071_1.6-8             class_7.3-14           
+## [79] pcaPP_1.9-72            viridisLite_0.2.0      
+## [81] tibble_1.3.4            pheatmap_1.0.8         
+## [83] beeswarm_0.2.3          AnnotationDbi_1.38.2   
+## [85] registry_0.3            memoise_1.1.0          
+## [87] tximport_1.4.0          bindrcpp_0.2           
+## [89] cluster_2.0.6           ROCR_1.0-7
 ```

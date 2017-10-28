@@ -6,7 +6,7 @@ output: html_document
 
 
 ```r
-library(scater, quietly = TRUE)
+library(scater)
 options(stringsAsFactors = FALSE)
 reads <- readRDS("tung/reads.rds")
 reads.qc <- reads[rowData(reads)$use, colData(reads)$use]

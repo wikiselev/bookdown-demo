@@ -28,7 +28,6 @@ molecular identifiers (UMIs) and ERCC _spike-ins_ were used. The data files are 
 ```r
 library(SingleCellExperiment)
 library(scater)
-library(knitr)
 options(stringsAsFactors = FALSE)
 ```
 
@@ -42,51 +41,42 @@ anno <- read.table("tung/annotation.txt", sep = "\t", header = TRUE)
 Inspect a small portion of the expression matrix
 
 ```r
-knitr::kable(
-    head(molecules[ , 1:3]), booktabs = TRUE,
-    caption = 'A table of the first 6 rows and 3 columns of the molecules table.'
-)
+head(molecules[ , 1:3])
 ```
 
-
-
-Table: (\#tab:unnamed-chunk-4)A table of the first 6 rows and 3 columns of the molecules table.
-
-                   NA19098.r1.A01   NA19098.r1.A02   NA19098.r1.A03
-----------------  ---------------  ---------------  ---------------
-ENSG00000237683                 0                0                0
-ENSG00000187634                 0                0                0
-ENSG00000188976                 3                6                1
-ENSG00000187961                 0                0                0
-ENSG00000187583                 0                0                0
-ENSG00000187642                 0                0                0
+```
+##                 NA19098.r1.A01 NA19098.r1.A02 NA19098.r1.A03
+## ENSG00000237683              0              0              0
+## ENSG00000187634              0              0              0
+## ENSG00000188976              3              6              1
+## ENSG00000187961              0              0              0
+## ENSG00000187583              0              0              0
+## ENSG00000187642              0              0              0
+```
 
 ```r
-knitr::kable(
-    head(anno), booktabs = TRUE,
-    caption = 'A table of the first 6 rows of the anno table.'
-)
+head(anno)
 ```
 
-
-
-Table: (\#tab:unnamed-chunk-4)A table of the first 6 rows of the anno table.
-
-individual   replicate   well   batch        sample_id      
------------  ----------  -----  -----------  ---------------
-NA19098      r1          A01    NA19098.r1   NA19098.r1.A01 
-NA19098      r1          A02    NA19098.r1   NA19098.r1.A02 
-NA19098      r1          A03    NA19098.r1   NA19098.r1.A03 
-NA19098      r1          A04    NA19098.r1   NA19098.r1.A04 
-NA19098      r1          A05    NA19098.r1   NA19098.r1.A05 
-NA19098      r1          A06    NA19098.r1   NA19098.r1.A06 
+```
+##   individual replicate well      batch      sample_id
+## 1    NA19098        r1  A01 NA19098.r1 NA19098.r1.A01
+## 2    NA19098        r1  A02 NA19098.r1 NA19098.r1.A02
+## 3    NA19098        r1  A03 NA19098.r1 NA19098.r1.A03
+## 4    NA19098        r1  A04 NA19098.r1 NA19098.r1.A04
+## 5    NA19098        r1  A05 NA19098.r1 NA19098.r1.A05
+## 6    NA19098        r1  A06 NA19098.r1 NA19098.r1.A06
+```
 
 The data consists of 3 individuals and 3 replicates and therefore has 9 batches in total.
 
 We standardize the analysis by using both `SingleCellExperiment` (SCE) and `scater` packages. First, create the SCE object:
 
 ```r
-umi <- SingleCellExperiment(assays = list(counts = as.matrix(molecules)), colData = anno)
+umi <- SingleCellExperiment(
+    assays = list(counts = as.matrix(molecules)), 
+    colData = anno
+)
 ```
 
 Remove genes that are not expressed in any cell:
@@ -113,7 +103,10 @@ Calculate the quality metrics:
 ```r
 umi <- calculateQCMetrics(
     umi,
-    feature_controls = list(ERCC = isSpike(umi, "ERCC"), MT = isSpike(umi, "MT"))
+    feature_controls = list(
+        ERCC = isSpike(umi, "ERCC"), 
+        MT = isSpike(umi, "MT")
+    )
 )
 ```
 
@@ -124,8 +117,7 @@ umi <- calculateQCMetrics(
 
 Next we consider the total number of RNA molecules detected per
 sample (if we were using read counts rather than UMI counts this would
-be the total number of reads). Wells with few reads/molecules are likely to have
-been broken or failed to capture a cell, and should thus be removed.
+be the total number of reads). Wells with few reads/molecules are likely to have been broken or failed to capture a cell, and should thus be removed.
 
 
 ```r
@@ -151,14 +143,13 @@ total number of molecules for each cell should follow?
 __Our answer__
 
 
-Table: (\#tab:unnamed-chunk-9)The number of cells removed by total counts filter (FALSE)
+```
+## filter_by_total_counts
+## FALSE  TRUE 
+##    46   818
+```
 
-filter_by_total_counts    Freq
------------------------  -----
-FALSE                       46
-TRUE                       818
-
-#### Detected genes (1)
+#### Detected genes
 
 In addition to ensuring sufficient sequencing depth for each sample, we also want to make sure that the reads are distributed across the transcriptome. Thus, we count the total number of unique genes detected in each sample.
 
@@ -191,12 +182,11 @@ How many cells does our filter remove?
 __Our answer__
 
 
-Table: (\#tab:unnamed-chunk-10)The number of cells removed by total features filter (FALSE)
-
-filter_by_expr_features    Freq
-------------------------  -----
-FALSE                       116
-TRUE                        748
+```
+## filter_by_expr_features
+## FALSE  TRUE 
+##   116   748
+```
 
 #### ERCCs and MTs
 
@@ -210,9 +200,11 @@ dead or stressed which may result in the RNA being degraded.
 ```r
 plotPhenoData(
     umi,
-    aes_string(x = "total_features",
-               y = "pct_counts_MT",
-               colour = "batch")
+    aes_string(
+        x = "total_features",
+        y = "pct_counts_MT",
+        colour = "batch"
+    )
 )
 ```
 
@@ -225,9 +217,11 @@ plotPhenoData(
 ```r
 plotPhenoData(
     umi,
-    aes_string(x = "total_features",
-               y = "pct_counts_ERCC",
-               colour = "batch")
+    aes_string(
+        x = "total_features",
+        y = "pct_counts_ERCC",
+        colour = "batch"
+    )
 )
 ```
 
@@ -245,21 +239,17 @@ Create filters for removing batch NA19098.r2 and cells with high expression of m
 __Our answer__
 
 
-Table: (\#tab:unnamed-chunk-11)The number of cells removed by ERCC filter (FALSE)
+```
+## filter_by_ERCC
+## FALSE  TRUE 
+##    96   768
+```
 
-filter_by_ERCC    Freq
----------------  -----
-FALSE               96
-TRUE               768
-
-
-
-Table: (\#tab:unnamed-chunk-11)The number of cells removed by MT filter (FALSE)
-
-filter_by_MT    Freq
--------------  -----
-FALSE             31
-TRUE             833
+```
+## filter_by_MT
+## FALSE  TRUE 
+##    31   833
+```
 
 __Exercise 4__
 
@@ -291,22 +281,14 @@ umi$use <- (
 
 
 ```r
-knitr::kable(
-  as.data.frame(table(umi$use)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by manual filter (FALSE)'
-)
+table(umi$use)
 ```
 
-
-
-Table: (\#tab:unnamed-chunk-13)The number of cells removed by manual filter (FALSE)
-
-Var1     Freq
-------  -----
-FALSE     207
-TRUE      657
+```
+## 
+## FALSE  TRUE 
+##   207   657
+```
 
 #### Automatic
 
@@ -325,13 +307,14 @@ By default, the following metrics are used for PCA-based outlier detection:
 
 
 ```r
-umi <-
-plotPCA(umi,
-        size_by = "total_features", 
-        shape_by = "use",
-        pca_data_input = "pdata",
-        detect_outliers = TRUE,
-        return_SCE = TRUE)
+umi <- plotPCA(
+    umi,
+    size_by = "total_features", 
+    shape_by = "use",
+    pca_data_input = "pdata",
+    detect_outliers = TRUE,
+    return_SCE = TRUE
+)
 ```
 
 <div class="figure" style="text-align: center">
@@ -341,22 +324,14 @@ plotPCA(umi,
 
 
 ```r
-knitr::kable(
-  as.data.frame(table(umi$outlier)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by automatic filter (FALSE)'
-)
+table(umi$outlier)
 ```
 
-
-
-Table: (\#tab:unnamed-chunk-14)The number of cells removed by automatic filter (FALSE)
-
-Var1     Freq
-------  -----
-FALSE     819
-TRUE       45
+```
+## 
+## FALSE  TRUE 
+##   819    45
+```
 
 ### Compare filterings
 
@@ -364,9 +339,27 @@ __Exercise 5__
 
 Compare the default, automatic and manual cell filters. Plot a Venn diagram of the outlier cells from these filterings.
 
-__Hint__: Use `limma::vennCounts` and `limma::vennDiagram` functions from the [limma](https://bioconductor.org/packages/release/bioc/html/limma.html) package to make a Venn diagram.
+__Hint__: Use `vennCounts` and `vennDiagram` functions from the [limma](https://bioconductor.org/packages/release/bioc/html/limma.html) package to make a Venn diagram.
 
 __Answer__
+
+
+```
+## 
+## Attaching package: 'limma'
+```
+
+```
+## The following object is masked from 'package:scater':
+## 
+##     plotMDS
+```
+
+```
+## The following object is masked from 'package:BiocGenerics':
+## 
+##     plotMA
+```
 
 <div class="figure" style="text-align: center">
 <img src="07-exprs-qc_files/figure-html/cell-filt-comp-1.png" alt="Comparison of the default, automatic and manual cell filters" width="90%" />
@@ -400,29 +393,24 @@ It is typically a good idea to remove genes whose expression level is considered
 
 
 ```r
-filter_genes <- apply(counts(umi[ , colData(umi)$use]), 1, 
-                      function(x) length(x[x > 1]) >= 2)
+filter_genes <- apply(
+    counts(umi[ , colData(umi)$use]), 
+    1, 
+    function(x) length(x[x > 1]) >= 2
+)
 rowData(umi)$use <- filter_genes
 ```
 
 
 ```r
-knitr::kable(
-    as.data.frame(table(filter_genes)),
-    booktabs = TRUE,
-    row.names = FALSE,
-    caption = 'The number of genes removed by gene filter (FALSE)'
-)
+table(filter_genes)
 ```
 
-
-
-Table: (\#tab:unnamed-chunk-16)The number of genes removed by gene filter (FALSE)
-
-filter_genes     Freq
--------------  ------
-FALSE            4660
-TRUE            14066
+```
+## filter_genes
+## FALSE  TRUE 
+##  4660 14066
+```
 
 Depending on the cell-type, protocol and sequencing depth, other cut-offs may be appropriate.
 
@@ -480,13 +468,13 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.21               ggplot2_2.2.1              
-##  [3] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
-##  [5] DelayedArray_0.2.7          matrixStats_0.52.2         
-##  [7] Biobase_2.36.2              GenomicRanges_1.28.6       
-##  [9] GenomeInfoDb_1.12.3         IRanges_2.10.5             
-## [11] S4Vectors_0.14.7            BiocGenerics_0.22.1        
-## [13] knitr_1.17                 
+##  [1] limma_3.32.10               scater_1.5.21              
+##  [3] ggplot2_2.2.1               SingleCellExperiment_0.99.4
+##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
+##  [7] matrixStats_0.52.2          Biobase_2.36.2             
+##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
+## [11] IRanges_2.10.5              S4Vectors_0.14.7           
+## [13] BiocGenerics_0.22.1         knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] ggbeeswarm_0.6.0        minqa_1.2.4            
@@ -506,44 +494,43 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 ##  [29] rrcov_1.4-3             compiler_3.4.2         
 ##  [31] backports_1.1.1         assertthat_0.2.0       
 ##  [33] Matrix_1.2-7.1          lazyeval_0.2.0         
-##  [35] limma_3.32.10           htmltools_0.3.6        
-##  [37] quantreg_5.34           tools_3.4.2            
-##  [39] bindrcpp_0.2            gtable_0.2.0           
-##  [41] glue_1.1.1              GenomeInfoDbData_0.99.0
-##  [43] reshape2_1.4.2          dplyr_0.7.4            
-##  [45] Rcpp_0.12.13            trimcluster_0.1-2      
-##  [47] sgeostat_1.0-27         nlme_3.1-129           
-##  [49] fpc_2.1-10              lmtest_0.9-35          
-##  [51] laeken_0.4.6            stringr_1.2.0          
-##  [53] lme4_1.1-14             mime_0.5               
-##  [55] XML_3.98-1.9            edgeR_3.18.1           
-##  [57] DEoptimR_1.0-8          zoo_1.8-0              
-##  [59] zlibbioc_1.22.0         MASS_7.3-45            
-##  [61] scales_0.5.0            VIM_4.7.0              
-##  [63] rhdf5_2.20.0            SparseM_1.77           
-##  [65] RColorBrewer_1.1-2      yaml_2.1.14            
-##  [67] memoise_1.1.0           gridExtra_2.3          
-##  [69] biomaRt_2.32.1          reshape_0.8.7          
-##  [71] stringi_1.1.5           RSQLite_2.0            
-##  [73] highr_0.6               pcaPP_1.9-72           
-##  [75] e1071_1.6-8             boot_1.3-18            
-##  [77] prabclus_2.2-6          rlang_0.1.2            
-##  [79] pkgconfig_2.0.1         bitops_1.0-6           
-##  [81] evaluate_0.10.1         lattice_0.20-34        
-##  [83] bindr_0.1               labeling_0.3           
-##  [85] cowplot_0.8.0           bit_1.1-12             
-##  [87] GGally_1.3.2            plyr_1.8.4             
-##  [89] magrittr_1.5            bookdown_0.5           
-##  [91] R6_2.2.2                DBI_0.7                
-##  [93] mgcv_1.8-22             RCurl_1.95-4.8         
-##  [95] sp_1.2-5                nnet_7.3-12            
-##  [97] tibble_1.3.4            car_2.1-5              
-##  [99] rmarkdown_1.6           viridis_0.4.0          
-## [101] locfit_1.5-9.1          grid_3.4.2             
-## [103] data.table_1.10.4-3     blob_1.1.0             
-## [105] diptest_0.75-7          vcd_1.4-3              
-## [107] digest_0.6.12           xtable_1.8-2           
-## [109] httpuv_1.3.5            munsell_0.4.3          
-## [111] beeswarm_0.2.3          viridisLite_0.2.0      
-## [113] vipor_0.4.5
+##  [35] htmltools_0.3.6         quantreg_5.34          
+##  [37] tools_3.4.2             bindrcpp_0.2           
+##  [39] gtable_0.2.0            glue_1.1.1             
+##  [41] GenomeInfoDbData_0.99.0 reshape2_1.4.2         
+##  [43] dplyr_0.7.4             Rcpp_0.12.13           
+##  [45] trimcluster_0.1-2       sgeostat_1.0-27        
+##  [47] nlme_3.1-129            fpc_2.1-10             
+##  [49] lmtest_0.9-35           laeken_0.4.6           
+##  [51] stringr_1.2.0           lme4_1.1-14            
+##  [53] mime_0.5                XML_3.98-1.9           
+##  [55] edgeR_3.18.1            DEoptimR_1.0-8         
+##  [57] zoo_1.8-0               zlibbioc_1.22.0        
+##  [59] MASS_7.3-45             scales_0.5.0           
+##  [61] VIM_4.7.0               rhdf5_2.20.0           
+##  [63] SparseM_1.77            RColorBrewer_1.1-2     
+##  [65] yaml_2.1.14             memoise_1.1.0          
+##  [67] gridExtra_2.3           biomaRt_2.32.1         
+##  [69] reshape_0.8.7           stringi_1.1.5          
+##  [71] RSQLite_2.0             highr_0.6              
+##  [73] pcaPP_1.9-72            e1071_1.6-8            
+##  [75] boot_1.3-18             prabclus_2.2-6         
+##  [77] rlang_0.1.2             pkgconfig_2.0.1        
+##  [79] bitops_1.0-6            evaluate_0.10.1        
+##  [81] lattice_0.20-34         bindr_0.1              
+##  [83] labeling_0.3            cowplot_0.8.0          
+##  [85] bit_1.1-12              GGally_1.3.2           
+##  [87] plyr_1.8.4              magrittr_1.5           
+##  [89] bookdown_0.5            R6_2.2.2               
+##  [91] DBI_0.7                 mgcv_1.8-22            
+##  [93] RCurl_1.95-4.8          sp_1.2-5               
+##  [95] nnet_7.3-12             tibble_1.3.4           
+##  [97] car_2.1-5               rmarkdown_1.6          
+##  [99] viridis_0.4.0           locfit_1.5-9.1         
+## [101] grid_3.4.2              data.table_1.10.4-3    
+## [103] blob_1.1.0              diptest_0.75-7         
+## [105] vcd_1.4-3               digest_0.6.12          
+## [107] xtable_1.8-2            httpuv_1.3.5           
+## [109] munsell_0.4.3           beeswarm_0.2.3         
+## [111] viridisLite_0.2.0       vipor_0.4.5
 ```
