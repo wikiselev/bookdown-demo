@@ -571,7 +571,7 @@ __Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of
 ##  [43] sgeostat_1.0-27         pheatmap_1.0.8         
 ##  [45] Rcpp_0.12.13            xtable_1.8-2           
 ##  [47] laeken_0.4.6            htmlTable_1.9          
-##  [49] foreign_0.8-67          proxy_0.4-17           
+##  [49] foreign_0.8-67          proxy_0.4-19           
 ##  [51] mclust_5.3              Formula_1.2-2          
 ##  [53] vcd_1.4-3               htmlwidgets_0.9        
 ##  [55] FNN_1.1                 gplots_3.0.1           

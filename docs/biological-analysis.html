@@ -418,7 +418,7 @@ Figure 4.4: Schematic representation of the graph network
 </div>
 <div id="pcareduce" class="section level4">
 <h4><span class="header-section-number">4.1.5.2</span> <a href="https://github.com/JustinaZ/pcaReduce">pcaReduce</a></h4>
-<p>pcaReduce <span class="citation">(Žurauskienė and Yau <a href="#ref-Zurauskiene2016-kg">2016</a>)</span> combines PCA, <em>k</em>-means and “iterative” hierarchical clustering. Starting from a large number of clusters pcaReduce iteratively merges similar clusters; after each merging event it removes the principle component explaning the least variance in the data.</p>
+<p>pcaReduce <span class="citation">(žurauskienė and Yau <a href="#ref-Zurauskiene2016-kg">2016</a>)</span> combines PCA, <em>k</em>-means and “iterative” hierarchical clustering. Starting from a large number of clusters pcaReduce iteratively merges similar clusters; after each merging event it removes the principle component explaning the least variance in the data.</p>
 </div>
 <div id="sc3" class="section level4">
 <h4><span class="header-section-number">4.1.5.3</span> <a href="http://bioconductor.org/packages/SC3/">SC3</a></h4>
@@ -429,7 +429,7 @@ Figure 4.5: SC3 pipeline
 </p>
 </div>
 <ul>
-<li>SC3 <span class="citation">(Kiselev et al. <a href="#ref-Kiselev2016-bq">2016</a>)</span> is based on PCA and spectral dimensionality reductions</li>
+<li>SC3 <span class="citation">(Kiselev et al. <a href="#ref-Kiselev2016-bq">2017</a>)</span> is based on PCA and spectral dimensionality reductions</li>
 <li>Utilises <em>k</em>-means</li>
 <li>Additionally performs the consensus clustering</li>
 </ul>
@@ -515,7 +515,7 @@ deng</code></pre></div>
 <pre><code>## Performing k-means clustering...</code></pre>
 <pre><code>## Calculating consensus matrix...</code></pre>
 <pre><code>## Calculating biology...</code></pre>
-<p><code>SC3</code> result consists of several different outputs (please look in <span class="citation">(Kiselev et al. <a href="#ref-Kiselev2016-bq">2016</a>)</span> and <a href="http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html">SC3 vignette</a> for more details). Here we show some of them:</p>
+<p><code>SC3</code> result consists of several different outputs (please look in <span class="citation">(Kiselev et al. <a href="#ref-Kiselev2016-bq">2017</a>)</span> and <a href="http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html">SC3 vignette</a> for more details). Here we show some of them:</p>
 <p>Consensus matrix:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sc3_plot_consensus</span>(deng, <span class="dt">k =</span> <span class="dv">10</span>, <span class="dt">show_pdata =</span> <span class="st">&quot;cell_type2&quot;</span>)</code></pre></div>
 <p><img src="18-clustering_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -1273,7 +1273,7 @@ TSCAN<span class="op">::</span><span class="kw">singlegeneplot</span>(
 ##  [43] sgeostat_1.0-27         pheatmap_1.0.8         
 ##  [45] Rcpp_0.12.13            xtable_1.8-2           
 ##  [47] laeken_0.4.6            htmlTable_1.9          
-##  [49] foreign_0.8-67          proxy_0.4-17           
+##  [49] foreign_0.8-67          proxy_0.4-19           
 ##  [51] mclust_5.3              Formula_1.2-2          
 ##  [53] vcd_1.4-3               htmlwidgets_0.9        
 ##  [55] FNN_1.1                 gplots_3.0.1           
@@ -2028,12 +2028,12 @@ Figure 2.6:  scmap can also be used to project cells from a new experiment onto 
 <p>Clearly the projection is almost perfect. With <code>scmap</code> one can also plot a <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey">Sankey diagram</a> (however, <code>cell_type1</code> columns have to be provided in the <code>colData</code> slots of both the reference and the projection datasets):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">getSankey</span>(<span class="kw">colData</span>(segerstolpe)<span class="op">$</span>cell_type1, <span class="kw">colData</span>(segerstolpe)<span class="op">$</span>scmap_labs))</code></pre></div>
 <!-- Sankey generated in R 3.4.2 by googleVis 0.6.2 package -->
-<!-- Sun Oct 29 12:39:13 2017 -->
+<!-- Sun Oct 29 18:08:00 2017 -->
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataSankeyID65c6cc194cb () {
+function gvisDataSankeyID65d7ebd5056 () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -2236,8 +2236,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartSankeyID65c6cc194cb() {
-var data = gvisDataSankeyID65c6cc194cb();
+function drawChartSankeyID65d7ebd5056() {
+var data = gvisDataSankeyID65d7ebd5056();
 var options = {};
 options["width"] = 400;
 options["height"] = 600;
@@ -2256,7 +2256,7 @@ options["sankey"] = {
             };
 
     var chart = new google.visualization.Sankey(
-    document.getElementById('SankeyID65c6cc194cb')
+    document.getElementById('SankeyID65d7ebd5056')
     );
     chart.draw(data,options);
     
@@ -2280,9 +2280,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartSankeyID65c6cc194cb);
+callbacks.push(drawChartSankeyID65d7ebd5056);
 })();
-function displayChartSankeyID65c6cc194cb() {
+function displayChartSankeyID65d7ebd5056() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -2305,9 +2305,9 @@ callbacks.shift()();
 // jsFooter
 </script>
 <!-- jsChart -->
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID65c6cc194cb"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID65d7ebd5056"></script>
 <!-- divChart -->
-<div id="SankeyID65c6cc194cb" style="width: 400; height: 600;">
+<div id="SankeyID65d7ebd5056" style="width: 400; height: 600;">
 
 </div>
 </div>
@@ -2387,7 +2387,7 @@ callbacks.shift()();
 ## [27] pkgconfig_2.0.1         biomaRt_2.32.1         
 ## [29] bookdown_0.5            zlibbioc_1.22.0        
 ## [31] xtable_1.8-2            scales_0.5.0           
-## [33] tibble_1.3.4            proxy_0.4-17           
+## [33] tibble_1.3.4            proxy_0.4-19           
 ## [35] lazyeval_0.2.0          magrittr_1.5           
 ## [37] mime_0.5                memoise_1.1.0          
 ## [39] evaluate_0.10.1         class_7.3-14           
@@ -2582,49 +2582,49 @@ muraro_delta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class
 <h3> References</h3>
 <div id="refs" class="references">
 <div id="ref-Guo2015-ok">
-<p>Guo, Minzhe, Hui Wang, S Steven Potter, Jeffrey A Whitsett, and Yan Xu. 2015. “SINCERA: A Pipeline for Single-Cell RNA-Seq Profiling Analysis.” <em>PLoS Comput. Biol.</em> 11 (11): e1004575.</p>
+<p>Guo, Minzhe, Hui Wang, S. Steven Potter, Jeffrey A. Whitsett, and Yan Xu. 2015. “SINCERA: A Pipeline for Single-Cell RNA-Seq Profiling Analysis.” <em>PLoS Comput Biol</em> 11 (11). Public Library of Science (PLoS): e1004575. doi:<a href="https://doi.org/10.1371/journal.pcbi.1004575">10.1371/journal.pcbi.1004575</a>.</p>
 </div>
 <div id="ref-Zurauskiene2016-kg">
-<p>Žurauskienė, Justina, and Christopher Yau. 2016. “PcaReduce: Hierarchical Clustering of Single Cell Transcriptional Profiles.” <em>BMC Bioinformatics</em> 17 (22~mar): 140.</p>
+<p>žurauskienė, Justina, and Christopher Yau. 2016. “pcaReduce: Hierarchical Clustering of Single Cell Transcriptional Profiles.” <em>BMC Bioinformatics</em> 17 (1). Springer Nature. doi:<a href="https://doi.org/10.1186/s12859-016-0984-y">10.1186/s12859-016-0984-y</a>.</p>
 </div>
 <div id="ref-Kiselev2016-bq">
-<p>Kiselev, Vladimir Yu, Kristina Kirschner, Michael T Schaub, Tallulah Andrews, Tamir Chandra, Kedar N Natarajan, Wolf Reik, Mauricio Barahona, Anthony R Green, and Martin Hemberg. 2016. “SC3 - Consensus Clustering of Single-Cell RNA-Seq Data.” <em>bioRxiv</em>.</p>
+<p>Kiselev, Vladimir Yu, Kristina Kirschner, Michael T Schaub, Tallulah Andrews, Andrew Yiu, Tamir Chandra, Kedar N Natarajan, et al. 2017. “SC3: Consensus Clustering of Single-Cell RNA-Seq Data.” <em>Nat Meth</em> 14 (5). Springer Nature: 483–86. doi:<a href="https://doi.org/10.1038/nmeth.4236">10.1038/nmeth.4236</a>.</p>
 </div>
 <div id="ref-Xu2015-vf">
-<p>Xu, Chen, and Zhengchang Su. 2015. “Identification of Cell Types from Single-Cell Transcriptomes Using a Novel Clustering Method.” <em>Bioinformatics</em>, 11~feb.</p>
+<p>Xu, Chen, and Zhengchang Su. 2015. “Identification of Cell Types from Single-Cell Transcriptomes Using a Novel Clustering Method.” <em>Bioinformatics</em> 31 (12). Oxford University Press (OUP): 1974–80. doi:<a href="https://doi.org/10.1093/bioinformatics/btv088">10.1093/bioinformatics/btv088</a>.</p>
 </div>
 <div id="ref-Levine2015-fk">
-<p>Levine, Jacob H, Erin F Simonds, Sean C Bendall, Kara L Davis, El-Ad D Amir, Michelle D Tadmor, Oren Litvin, et al. 2015. “Data-Driven Phenotypic Dissection of AML Reveals Progenitor-Like Cells That Correlate with Prognosis.” <em>Cell</em> 162 (1): 184–97.</p>
+<p>Levine, Jacob H., Erin F. Simonds, Sean C. Bendall, Kara L. Davis, El-ad D. Amir, Michelle D. Tadmor, Oren Litvin, et al. 2015. “Data-Driven Phenotypic Dissection of AML Reveals Progenitor-Like Cells That Correlate with Prognosis.” <em>Cell</em> 162 (1). Elsevier BV: 184–97. doi:<a href="https://doi.org/10.1016/j.cell.2015.05.047">10.1016/j.cell.2015.05.047</a>.</p>
 </div>
 <div id="ref-Deng2014-mx">
-<p>Deng, Qiaolin, Daniel Ramsköld, Björn Reinius, and Rickard Sandberg. 2014. “Single-Cell RNA-seq Reveals Dynamic, Random Monoallelic Gene Expression in Mammalian Cells.” <em>Science</em> 343 (6167): 193–96.</p>
+<p>Deng, Q., D. Ramskold, B. Reinius, and R. Sandberg. 2014. “Single-Cell RNA-Seq Reveals Dynamic, Random Monoallelic Gene Expression in Mammalian Cells.” <em>Science</em> 343 (6167). American Association for the Advancement of Science (AAAS): 193–96. doi:<a href="https://doi.org/10.1126/science.1245316">10.1126/science.1245316</a>.</p>
 </div>
 <div id="ref-Cannoodt2016-uj">
-<p>Cannoodt, Robrecht, Wouter Saelens, and Yvan Saeys. 2016. “Computational methods for trajectory inference from single-cell transcriptomics.” <em>European Journal of Immunology</em> 46 (11): 2496–2506. doi:<a href="https://doi.org/10.1002/eji.201646347">10.1002/eji.201646347</a>.</p>
+<p>Cannoodt, Robrecht, Wouter Saelens, and Yvan Saeys. 2016. “Computational Methods for Trajectory Inference from Single-Cell Transcriptomics.” <em>Eur. J. Immunol.</em> 46 (11). Wiley-Blackwell: 2496–2506. doi:<a href="https://doi.org/10.1002/eji.201646347">10.1002/eji.201646347</a>.</p>
 </div>
 <div id="ref-Welch2016-jr">
-<p>Welch, Joshua D, Alexander J Hartemink, and Jan F Prins. 2016. “SLICER: inferring branched, nonlinear cellular trajectories from single cell RNA-seq data.” <em>Genome Biology</em> 17 (1): 106. doi:<a href="https://doi.org/10.1186/s13059-016-0975-3">10.1186/s13059-016-0975-3</a>.</p>
+<p>Welch, Joshua D., Alexander J. Hartemink, and Jan F. Prins. 2016. “SLICER: Inferring Branched, Nonlinear Cellular Trajectories from Single Cell RNA-Seq Data.” <em>Genome Biol</em> 17 (1). Springer Nature. doi:<a href="https://doi.org/10.1186/s13059-016-0975-3">10.1186/s13059-016-0975-3</a>.</p>
 </div>
 <div id="ref-Van_Dijk2017-bh">
-<p>Dijk, David van, Juozas Nainys, Roshan Sharma, Pooja Kathail, Ambrose J Carr, Kevin R Moon, Linas Mazutis, Guy Wolf, Smita Krishnaswamy, and Dana Pe’er. 2017. “MAGIC: A Diffusion-Based Imputation Method Reveals Gene-Gene Interactions in Single-Cell RNA-sequencing Data.” <em>bioRxiv</em>.</p>
+<p>Dijk, David van, Juozas Nainys, Roshan Sharma, Pooja Kathail, Ambrose J Carr, Kevin R Moon, Linas Mazutis, Guy Wolf, Smita Krishnaswamy, and Dana Pe’er. 2017. “MAGIC: A Diffusion-Based Imputation Method Reveals Gene-Gene Interactions in Single-Cell RNA-sequencing Data.” <em>bioRxiv</em>, February, 111591.</p>
 </div>
 <div id="ref-Li2017-tz">
-<p>Li, Wei Vivian, and Jingyi Jessica Li. 2017. “ScImpute: Accurate and Robust Imputation for Single Cell RNA-Seq Data.” <em>bioRxiv</em>.</p>
+<p>Li, Wei Vivian, and Jingyi Jessica Li. 2017. “scImpute: Accurate and Robust Imputation for Single Cell RNA-Seq Data.” <em>bioRxiv</em>, June, 141598.</p>
 </div>
 <div id="ref-Regev2017-mw">
-<p>Regev, Aviv, Sarah Teichmann, Eric S Lander, Ido Amit, Christophe Benoist, Ewan Birney, Bernd Bodenmiller, et al. 2017. “The Human Cell Atlas.” <em>bioRxiv</em>.</p>
+<p>Regev, Aviv, Sarah Teichmann, Eric S Lander, Ido Amit, Christophe Benoist, Ewan Birney, Bernd Bodenmiller, et al. 2017. “The Human Cell Atlas.” <em>bioRxiv</em>, May, 121202.</p>
 </div>
 <div id="ref-Altschul1990-ts">
-<p>Altschul, S F, W Gish, W Miller, E W Myers, and D J Lipman. 1990. “Basic Local Alignment Search Tool.” <em>J. Mol. Biol.</em> 215 (3): 403–10.</p>
+<p>Altschul, Stephen F., Warren Gish, Webb Miller, Eugene W. Myers, and David J. Lipman. 1990. “Basic Local Alignment Search Tool.” <em>Journal of Molecular Biology</em> 215 (3). Elsevier BV: 403–10. doi:<a href="https://doi.org/10.1016/s0022-2836(05)80360-2">10.1016/s0022-2836(05)80360-2</a>.</p>
 </div>
 <div id="ref-Kiselev2017-nb">
-<p>Kiselev, Vladimir Yu, and Martin Hemberg. 2017. “Scmap - a Tool for Unsupervised Projection of Single Cell RNA-seq Data.” <em>bioRxiv</em>.</p>
+<p>Kiselev, Vladimir Yu, and Martin Hemberg. 2017. “Scmap - a Tool for Unsupervised Projection of Single Cell RNA-seq Data.” <em>bioRxiv</em>, July, 150292.</p>
 </div>
 <div id="ref-Muraro2016-yk">
-<p>Muraro, Mauro J, Gitanjali Dharmadhikari, Dominic Grün, Nathalie Groen, Tim Dielen, Erik Jansen, Leon van Gurp, et al. 2016. “A Single-Cell Transcriptome Atlas of the Human Pancreas.” <em>Cell Syst</em> 3 (4): 385–394.e3.</p>
+<p>Muraro, Mauro J., Gitanjali Dharmadhikari, Dominic Grün, Nathalie Groen, Tim Dielen, Erik Jansen, Leon van Gurp, et al. 2016. “A Single-Cell Transcriptome Atlas of the Human Pancreas.” <em>Cell Systems</em> 3 (4). Elsevier BV: 385–394.e3. doi:<a href="https://doi.org/10.1016/j.cels.2016.09.002">10.1016/j.cels.2016.09.002</a>.</p>
 </div>
 <div id="ref-Segerstolpe2016-wc">
-<p>Segerstolpe, Åsa, Athanasia Palasantza, Pernilla Eliasson, Eva-Marie Andersson, Anne-Christine Andréasson, Xiaoyan Sun, Simone Picelli, et al. 2016. “Single-Cell Transcriptome Profiling of Human Pancreatic Islets in Health and Type 2 Diabetes.” <em>Cell Metab.</em> 24 (4): 593–607.</p>
+<p>Segerstolpe, Åsa, Athanasia Palasantza, Pernilla Eliasson, Eva-Marie Andersson, Anne-Christine Andréasson, Xiaoyan Sun, Simone Picelli, et al. 2016. “Single-Cell Transcriptome Profiling of Human Pancreatic Islets in Health and Type 2 Diabetes.” <em>Cell Metabolism</em> 24 (4). Elsevier BV: 593–607. doi:<a href="https://doi.org/10.1016/j.cmet.2016.08.020">10.1016/j.cmet.2016.08.020</a>.</p>
 </div>
 </div>
             </section>

@@ -115,14 +115,14 @@ plot(getSankey(colData(segerstolpe)$cell_type1, colData(segerstolpe)$scmap_labs)
 ```
 
 <!-- Sankey generated in R 3.4.2 by googleVis 0.6.2 package -->
-<!-- Sun Oct 29 13:37:00 2017 -->
+<!-- Sun Oct 29 19:05:35 2017 -->
 
 
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataSankeyID11c252840baa () {
+function gvisDataSankeyID11c36ae7cc87 () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -325,8 +325,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartSankeyID11c252840baa() {
-var data = gvisDataSankeyID11c252840baa();
+function drawChartSankeyID11c36ae7cc87() {
+var data = gvisDataSankeyID11c36ae7cc87();
 var options = {};
 options["width"] = 400;
 options["height"] = 600;
@@ -345,7 +345,7 @@ options["sankey"] = {
             };
 
     var chart = new google.visualization.Sankey(
-    document.getElementById('SankeyID11c252840baa')
+    document.getElementById('SankeyID11c36ae7cc87')
     );
     chart.draw(data,options);
     
@@ -369,9 +369,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartSankeyID11c252840baa);
+callbacks.push(drawChartSankeyID11c36ae7cc87);
 })();
-function displayChartSankeyID11c252840baa() {
+function displayChartSankeyID11c36ae7cc87() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -395,11 +395,11 @@ callbacks.shift()();
 </script>
  
 <!-- jsChart -->  
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID11c252840baa"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID11c36ae7cc87"></script>
  
 <!-- divChart -->
   
-<div id="SankeyID11c252840baa" 
+<div id="SankeyID11c36ae7cc87" 
   style="width: 400; height: 600;">
 </div>
 
@@ -504,7 +504,7 @@ colData(segerstolpe)[,c("scmap_labs", "scmap_siml")]
 ## [27] biomaRt_2.32.1          bookdown_0.5           
 ## [29] zlibbioc_1.22.0         xtable_1.8-2           
 ## [31] scales_0.5.0            tibble_1.3.4           
-## [33] proxy_0.4-17            lazyeval_0.2.0         
+## [33] proxy_0.4-19            lazyeval_0.2.0         
 ## [35] magrittr_1.5            mime_0.5               
 ## [37] memoise_1.1.0           evaluate_0.10.1        
 ## [39] class_7.3-14            beeswarm_0.2.3         
