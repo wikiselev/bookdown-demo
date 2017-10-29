@@ -23,9 +23,9 @@ The transcript-level experiment contains three "assays":
 * count
 * efflength (the effective length estimated by [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html))
 
-The `MultiAssayExperiment` also contains the phenotypic data (in the `pData` slot), as well as some metadata for the data set (the genome, the organism and the Salmon index that was used for the quantification).
+The `MultiAssayExperiment` also contains the phenotypic data (in the `colData` slot), as well as some metadata for the data set (the genome, the organism and the Salmon index that was used for the quantification).
 
-Here we will show you how to create an SCESet from a `MultiAssayExperiment` object. For example, if you download `Shalek2013` dataset you will be able to create an SCESet using the following code:
+Here we will show you how to create an `SCE` from a `MultiAssayExperiment` object. For example, if you download `Shalek2013` dataset you will be able to create an `SCE` using the following code:
 
 
 ```r
@@ -35,11 +35,13 @@ library(scater)
 d <- readRDS("~/Desktop/GSE41265.rds")
 cts <- assays(experiments(d)[["gene"]])[["count_lstpm"]]
 tpms <- assays(experiments(d)[["gene"]])[["TPM"]]
-phn <- pData(d)
-sceset <- newSCESet(
-    countData = cts, 
-    tpmData = tpms,
-    phenoData = new("AnnotatedDataFrame", data = as.data.frame(phn))
+phn <- colData(d)
+sce <- SingleCellExperiment(
+    assays = list(
+        countData = cts, 
+        tpmData = tpms
+    ),
+    colData = phn
 )
 ```
 
@@ -47,16 +49,16 @@ You can also see that several different QC metrics have already been pre-calcula
 
 Here are some suggestions for questions that you can explore:
 
-* There are two mESC datasets from different labs (i.e. Xue and Kumar). Can you merge them and remove the batch effects?
+* There are two mESC datasets from different labs (i.e. `Xue` and `Kumar`). Can you merge them and remove the batch effects?
 
 * Clustering and pseudotime analysis look for different patterns among cells. How might you tell which is more appropriate for your dataset?
 
-* One of the main challenging in hard clustering is to identify the appropriate value for k. Can you use one or more of the clustering tools to explore the different hierarchies available? What are good mathematical and/or biological criteria for determining k?
+* One of the main challenging in hard clustering is to identify the appropriate value for `k`. Can you use one or more of the clustering tools to explore the different hierarchies available? What are good mathematical and/or biological criteria for determining `k`?
 
 * The choice of normalization strategy matters, but how do you determine which is the best method? Explore the effect of different normalizations on downstream analyses.
 
 * scRNA-seq datasets are high-dimensional and since most dimensions (ie genes) are not informative. Consequently, dimensionality reduction and feature selection are important when analyzing and visualizing the data. Consider the effect of different feature selection methods and dimensionality reduction on clustering and/or pseudotime inference.
 
-* One of the main challenges after clustering cells is to interpret the biological relevance of the subpopulations. One approach is to identify [gene ontology](http://geneontology.org/) terms that are enriched for the set of marker genes. Identify marker genes (e.g. using SC3 or M3Drop) and explore the ontology terms using [gProfiler](http://biit.cs.ut.ee/gprofiler/), [WebGestalt](http://www.webgestalt.org/) or [DAVID](https://david.ncifcrf.gov/).
+* One of the main challenges after clustering cells is to interpret the biological relevance of the subpopulations. One approach is to identify [gene ontology](http://geneontology.org/) terms that are enriched for the set of marker genes. Identify marker genes (e.g. using `SC3` or `M3Drop`) and explore the ontology terms using [gProfiler](http://biit.cs.ut.ee/gprofiler/), [WebGestalt](http://www.webgestalt.org/) or [DAVID](https://david.ncifcrf.gov/).
 
 * Similarly, when ordering cells according to pseudotime we would like to understand what underlying cellular processes are changing over time. Identify a set of changing genes from the aligned cells and use ontology terms to characterize them.

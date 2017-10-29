@@ -13,13 +13,13 @@ library(SingleCellExperiment)
 set.seed(1234567)
 ```
 
-As more and more scRNA-seq datasets become available, carrying out comparisons between them is key. A central application is to compare datasets of similar biological origin collected by different labs to ensure that the annotation and the analysis is consistent. Moreover, as very large references, e.g. the Human Cell Atlas (HCA) ([@Regev2017-mw]), become available, an important application will be to project cells from a new sample (e.g. from a disease tissue) onto the reference to characterize differences in composition, or to detect new cell-types. Conceptually, such projections are similar to the popular BLAST method ([@Altschul1990-ts]), which makes it possible to quickly find the closest match in a database for a newly identified nucleotide or amino acid sequence. 
+As more and more scRNA-seq datasets become available, carrying out comparisons between them is key. A central application is to compare datasets of similar biological origin collected by different labs to ensure that the annotation and the analysis is consistent. Moreover, as very large references, e.g. the Human Cell Atlas (HCA) [@Regev2017-mw], become available, an important application will be to project cells from a new sample (e.g. from a disease tissue) onto the reference to characterize differences in composition, or to detect new cell-types. Conceptually, such projections are similar to the popular BLAST method [@Altschul1990-ts], which makes it possible to quickly find the closest match in a database for a newly identified nucleotide or amino acid sequence. 
 
-We recently developed `scmap` ([@Kiselev2017-nb]) - a method for projecting cells from a scRNA-seq experiment onto the cell-types identified in other experiments. Additionally, a cloud version of `scmap` can be run for free, without restrictions, from [http://www.hemberg-lab.cloud/scmap](http://www.hemberg-lab.cloud/scmap).
+We recently developed `scmap` [@Kiselev2017-nb] - a method for projecting cells from a scRNA-seq experiment onto the cell-types identified in other experiments. Additionally, a cloud version of `scmap` can be run for free, without restrictions, from [http://www.hemberg-lab.cloud/scmap](http://www.hemberg-lab.cloud/scmap).
 
 ### Datasets
 
-We will run `scmap` on two human pancreas datasets: Muraro et al. ([@Muraro2016-yk]) and Segerstolpe et al. ([@Segerstolpe2016-wc]). These datasets are well annotated. As usual cell type labels are store in the `cell_type1` column of the `colData` slots.
+We will run `scmap` on two human pancreas datasets: [@Muraro2016-yk] and [@Segerstolpe2016-wc]. These datasets are well annotated. As usual cell type labels are store in the `cell_type1` column of the `colData` slots.
 
 ```r
 muraro <- readRDS("pancreas/muraro.rds")
@@ -28,20 +28,10 @@ segerstolpe <- readRDS("pancreas/segerstolpe.rds")
 
 `scmap` can be used to perform both types of projections to either a single dataset or to a reference collection of datasets (Atlas):
 
-
-```r
-knitr::include_graphics("figures/scmap1.png")
-```
-
 <div class="figure" style="text-align: center">
 <img src="figures/scmap1.png" alt="scmap can be used to compare the annotations of two different samples by providing a one to one mapping between the cells." width="80%" />
 <p class="caption">(\#fig:unnamed-chunk-4)scmap can be used to compare the annotations of two different samples by providing a one to one mapping between the cells.</p>
 </div>
-
-
-```r
-knitr::include_graphics("figures/scmap2.png")
-```
 
 <div class="figure" style="text-align: center">
 <img src="figures/scmap2.png" alt=" scmap can also be used to project cells from a new experiment onto an annotated reference." width="80%" />
@@ -115,14 +105,14 @@ plot(getSankey(colData(segerstolpe)$cell_type1, colData(segerstolpe)$scmap_labs)
 ```
 
 <!-- Sankey generated in R 3.4.2 by googleVis 0.6.2 package -->
-<!-- Sat Oct 28 18:39:20 2017 -->
+<!-- Sun Oct 29 07:23:46 2017 -->
 
 
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataSankeyID65d47c41544 () {
+function gvisDataSankeyID65d3fc19796 () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -325,8 +315,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartSankeyID65d47c41544() {
-var data = gvisDataSankeyID65d47c41544();
+function drawChartSankeyID65d3fc19796() {
+var data = gvisDataSankeyID65d3fc19796();
 var options = {};
 options["width"] = 400;
 options["height"] = 600;
@@ -345,7 +335,7 @@ options["sankey"] = {
             };
 
     var chart = new google.visualization.Sankey(
-    document.getElementById('SankeyID65d47c41544')
+    document.getElementById('SankeyID65d3fc19796')
     );
     chart.draw(data,options);
     
@@ -369,9 +359,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartSankeyID65d47c41544);
+callbacks.push(drawChartSankeyID65d3fc19796);
 })();
-function displayChartSankeyID65d47c41544() {
+function displayChartSankeyID65d3fc19796() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -395,11 +385,11 @@ callbacks.shift()();
 </script>
  
 <!-- jsChart -->  
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID65d47c41544"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID65d3fc19796"></script>
  
 <!-- divChart -->
   
-<div id="SankeyID65d47c41544" 
+<div id="SankeyID65d3fc19796" 
   style="width: 400; height: 600;">
 </div>
 

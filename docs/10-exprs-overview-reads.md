@@ -109,8 +109,10 @@ plotTSNE(
 <p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-2)tSNE map of the tung data (perplexity = 200)</p>
 </div>
 
-### sessionInfo()
 
+```r
+sessionInfo()
+```
 
 ```
 ## R version 3.4.2 (2017-09-28)

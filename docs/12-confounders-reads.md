@@ -21,8 +21,6 @@ knit: bookdown::preview_chapter
 <p class="caption">(\#fig:confound-find-expl-vars-reads)Explanatory variables</p>
 </div>
 
-### sessionInfo()
-
 
 ```
 ## R version 3.4.2 (2017-09-28)
