@@ -1,1950 +1,686 @@
-@ARTICLE{Deng2014-mx,
-  title       = "Single-cell {RNA-seq} reveals dynamic, random monoallelic gene
-                 expression in mammalian cells",
-  author      = "Deng, Qiaolin and Ramsk{\"{o}}ld, Daniel and Reinius,
-                 Bj{\"{o}}rn and Sandberg, Rickard",
-  affiliation = "Ludwig Institute for Cancer Research, Box 240, 171 77
-                 Stockholm, Sweden.",
-  abstract    = "Expression from both alleles is generally observed in analyses
-                 of diploid cell populations, but studies addressing allelic
-                 expression patterns genome-wide in single cells are lacking.
-                 Here, we present global analyses of allelic expression across
-                 individual cells of mouse preimplantation embryos of mixed
-                 background (CAST/EiJ \texttimes{} C57BL/6J). We discovered
-                 abundant (12 to 24\%) monoallelic expression of autosomal
-                 genes and that expression of the two alleles occurs
-                 independently. The monoallelic expression appeared random and
-                 dynamic because there was considerable variation among closely
-                 related embryonic cells. Similar patterns of monoallelic
-                 expression were observed in mature cells. Our allelic
-                 expression analysis also demonstrates the de novo inactivation
-                 of the paternal X chromosome. We conclude that independent and
-                 stochastic allelic transcription generates abundant random
-                 monoallelic expression in the mammalian cell.",
-  journal     = "Science",
-  volume      =  343,
-  number      =  6167,
-  pages       = "193--196",
-  month       =  "10~" # jan,
-  year        =  2014
+%comment{This file was created with betterbib v2.5.1.}
+
+@article{Deng2014-mx,
+ author = {Deng, Q. and Ramskold, D. and Reinius, B. and Sandberg, R.},
+ doi = {10.1126/science.1245316},
+ issn = {0036-8075, 1095-9203},
+ journal = {Science},
+ month = jan,
+ number = {6167},
+ pages = {193-196},
+ publisher = {American Association for the Advancement of Science (AAAS)},
+ source = {Crossref},
+ title = {Single-Cell {RNA}-Seq Reveals Dynamic, Random Monoallelic Gene Expression in Mammalian Cells},
+ url = {https://doi.org/10.1126/science.1245316},
+ volume = {343},
+ year = {2014},
 }
 
-% The entry below contains non-ASCII chars that could not be converted
-% to a LaTeX equivalent.
-@ARTICLE{Macosko2015-ix,
-  title    = "Highly Parallel Genome-wide Expression Profiling of Individual
-              Cells Using Nanoliter Droplets",
-  author   = "Macosko, Evan Z and Basu, Anindita and Satija, Rahul and Nemesh,
-              James and Shekhar, Karthik and Goldman, Melissa and Tirosh, Itay
-              and Bialas, Allison R and Kamitaki, Nolan and Martersteck, Emily
-              M and Trombetta, John J and Weitz, David A and Sanes, Joshua R
-              and Shalek, Alex K and Regev, Aviv and McCarroll, Steven A",
-  abstract = "Summary Cells, the basic units of biological structure and
-              function, vary broadly in type and state. Single-cell genomics
-              can characterize cell identity and function, but limitations of
-              ease and scale have prevented its broad application. Here we
-              describe Drop-seq, a strategy for quickly profiling thousands of
-              individual cells by separating them into nanoliter-sized aqueous
-              droplets, associating a different barcode with each cell’s RNAs,
-              and sequencing them all together. Drop-seq analyzes mRNA
-              transcripts from thousands of individual cells simultaneously
-              while remembering transcripts’ cell of origin. We analyzed
-              transcriptomes from 44,808 mouse retinal cells and identified 39
-              transcriptionally distinct cell populations, creating a molecular
-              atlas of gene expression for known retinal cell classes and novel
-              candidate cell subtypes. Drop-seq will accelerate biological
-              discovery by enabling routine transcriptional profiling at
-              single-cell resolution. Video Abstract",
-  journal  = "Cell",
-  volume   =  161,
-  number   =  5,
-  pages    = "1202--1214",
-  month    =  "21~" # may,
-  year     =  2015
+@article{Macosko2015-ix,
+ author = {Macosko, Evan Z. and Basu, Anindita and Satija, Rahul and Nemesh, James and Shekhar, Karthik and Goldman, Melissa and Tirosh, Itay and Bialas, Allison R. and Kamitaki, Nolan and Martersteck, Emily M. and Trombetta, John J. and Weitz, David A. and Sanes, Joshua R. and Shalek, Alex K. and Regev, Aviv and McCarroll, Steven A.},
+ doi = {10.1016/j.cell.2015.05.002},
+ issn = {0092-8674},
+ journal = {Cell},
+ month = may,
+ number = {5},
+ pages = {1202-1214},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {Highly Parallel Genome-wide Expression Profiling of Individual Cells Using Nanoliter Droplets},
+ url = {https://doi.org/10.1016/j.cell.2015.05.002},
+ volume = {161},
+ year = {2015},
 }
 
-@ARTICLE{Xu2015-vf,
-  title       = "Identification of cell types from single-cell transcriptomes
-                 using a novel clustering method",
-  author      = "Xu, Chen and Su, Zhengchang",
-  affiliation = "Department of Bioinformatics and Genomics, University of North
-                 Carolina at Charlotte, Charlotte, NC 28223, USA. Department of
-                 Bioinformatics and Genomics, University of North Carolina at
-                 Charlotte, Charlotte, NC 28223, USA.",
-  abstract    = "MOTIVATION: The recent advance of single-cell technologies has
-                 brought new insights into complex biological phenomena. In
-                 particular, genome-wide single-cell measurements such as
-                 transcriptome sequencing enable the characterization of
-                 cellular composition as well as functional variation in
-                 homogenic cell populations. An important step in the
-                 single-cell transcriptome analysis is to group cells that
-                 belong to the same cell types based on gene expression
-                 patterns. The corresponding computational problem is to
-                 cluster a noisy high dimensional dataset with substantially
-                 fewer objects (cells) than the number of variables (genes).
-                 RESULTS: In this article, we describe a novel algorithm named
-                 shared nearest neighbor (SNN)-Cliq that clusters single-cell
-                 transcriptomes. SNN-Cliq utilizes the concept of shared
-                 nearest neighbor that shows advantages in handling
-                 high-dimensional data. When evaluated on a variety of
-                 synthetic and real experimental datasets, SNN-Cliq
-                 outperformed the state-of-the-art methods tested. More
-                 importantly, the clustering results of SNN-Cliq reflect the
-                 cell types or origins with high accuracy. AVAILABILITY AND
-                 IMPLEMENTATION: The algorithm is implemented in MATLAB and
-                 Python. The source code can be downloaded at
-                 http://bioinfo.uncc.edu/SNNCliq. CONTACT: zcsu@uncc.edu
-                 Supplementary information: Supplementary data are available at
-                 Bioinformatics online.",
-  journal     = "Bioinformatics",
-  month       =  "11~" # feb,
-  year        =  2015
+@article{Xu2015-vf,
+ author = {Xu, Chen and Su, Zhengchang},
+ doi = {10.1093/bioinformatics/btv088},
+ issn = {1367-4803, 1460-2059},
+ journal = {Bioinformatics},
+ month = feb,
+ number = {12},
+ pages = {1974-1980},
+ publisher = {Oxford University Press (OUP)},
+ source = {Crossref},
+ title = {Identification of cell types from single-cell transcriptomes using a novel clustering method},
+ url = {https://doi.org/10.1093/bioinformatics/btv088},
+ volume = {31},
+ year = {2015},
 }
 
-@ARTICLE{Zurauskiene2016-kg,
-  title       = "pcaReduce: hierarchical clustering of single cell
-                 transcriptional profiles",
-  author      = "\v{Z}urauskien\.{e}, Justina and Yau, Christopher",
-  affiliation = "Wellcome Trust Centre for Human Genetics, University of
-                 Oxford, Roosevelt Drive, Oxford, OX3 7BN, UK. Wellcome Trust
-                 Centre for Human Genetics, University of Oxford, Roosevelt
-                 Drive, Oxford, OX3 7BN, UK. cyau@well.ox.ac.uk. Department of
-                 Statistics, University of Oxford, 1 S. Parks Rd, Oxford, OX1
-                 3TG, UK. cyau@well.ox.ac.uk.",
-  abstract    = "BACKGROUND: Advances in single cell genomics provide a way of
-                 routinely generating transcriptomics data at the single cell
-                 level. A frequent requirement of single cell expression
-                 analysis is the identification of novel patterns of
-                 heterogeneity across single cells that might explain complex
-                 cellular states or tissue composition. To date, classical
-                 statistical analysis tools have being routinely applied, but
-                 there is considerable scope for the development of novel
-                 statistical approaches that are better adapted to the
-                 challenges of inferring cellular hierarchies. RESULTS: We have
-                 developed a novel agglomerative clustering method that we call
-                 pcaReduce to generate a cell state hierarchy where each
-                 cluster branch is associated with a principal component of
-                 variation that can be used to differentiate two cell states.
-                 Using two real single cell datasets, we compared our approach
-                 to other commonly used statistical techniques, such as K-means
-                 and hierarchical clustering. We found that pcaReduce was able
-                 to give more consistent clustering structures when compared to
-                 broad and detailed cell type labels. CONCLUSIONS: Our novel
-                 integration of principal components analysis and hierarchical
-                 clustering establishes a connection between the representation
-                 of the expression data and the number of cell types that can
-                 be discovered. In doing so we found that pcaReduce performs
-                 better than either technique in isolation in terms of
-                 characterising putative cell states. Our methodology is
-                 complimentary to other single cell clustering techniques and
-                 adds to a growing palette of single cell bioinformatics tools
-                 for profiling heterogeneous cell populations.",
-  journal     = "BMC Bioinformatics",
-  volume      =  17,
-  pages       = "140",
-  month       =  "22~" # mar,
-  year        =  2016,
-  keywords    = "Gene expression; Hierarchical clustering; Single cell RNA-Seq"
+@article{Zurauskiene2016-kg,
+ author = {žurauskienė, Justina and Yau, Christopher},
+ doi = {10.1186/s12859-016-0984-y},
+ issn = {1471-2105},
+ journal = {BMC Bioinformatics},
+ month = mar,
+ number = {1},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {{pcaReduce:} {Hierarchical} clustering of single cell transcriptional profiles},
+ url = {https://doi.org/10.1186/s12859-016-0984-y},
+ volume = {17},
+ year = {2016},
 }
 
-@ARTICLE{Guo2015-ok,
-  title       = "{SINCERA}: A Pipeline for {Single-Cell} {RNA-Seq} Profiling
-                 Analysis",
-  author      = "Guo, Minzhe and Wang, Hui and Potter, S Steven and Whitsett,
-                 Jeffrey A and Xu, Yan",
-  affiliation = "The Perinatal Institute, Section of Neonatology, Perinatal and
-                 Pulmonary Biology, Cincinnati Children's Hospital Medical
-                 Center, Cincinnati, Ohio, United States of America. Department
-                 of Electrical Engineering and Computing Systems, College of
-                 Engineering and Applied Science, University of Cincinnati,
-                 Cincinnati, Ohio, United States of America. The Perinatal
-                 Institute, Section of Neonatology, Perinatal and Pulmonary
-                 Biology, Cincinnati Children's Hospital Medical Center,
-                 Cincinnati, Ohio, United States of America. Division of
-                 Developmental Biology, Cincinnati Children's Hospital Medical
-                 Center, Cincinnati, Ohio, United States of America. The
-                 Perinatal Institute, Section of Neonatology, Perinatal and
-                 Pulmonary Biology, Cincinnati Children's Hospital Medical
-                 Center, Cincinnati, Ohio, United States of America. The
-                 Perinatal Institute, Section of Neonatology, Perinatal and
-                 Pulmonary Biology, Cincinnati Children's Hospital Medical
-                 Center, Cincinnati, Ohio, United States of America. Division
-                 of Biomedical Informatics, Cincinnati Children's Hospital
-                 Medical Center, Cincinnati, Ohio, United States of America.",
-  abstract    = "A major challenge in developmental biology is to understand
-                 the genetic and cellular processes/programs driving organ
-                 formation and differentiation of the diverse cell types that
-                 comprise the embryo. While recent studies using single cell
-                 transcriptome analysis illustrate the power to measure and
-                 understand cellular heterogeneity in complex biological
-                 systems, processing large amounts of RNA-seq data from
-                 heterogeneous cell populations creates the need for readily
-                 accessible tools for the analysis of single-cell RNA-seq
-                 (scRNA-seq) profiles. The present study presents a generally
-                 applicable analytic pipeline (SINCERA: a computational
-                 pipeline for SINgle CEll RNA-seq profiling Analysis) for
-                 processing scRNA-seq data from a whole organ or sorted cells.
-                 The pipeline supports the analysis for: 1) the distinction and
-                 identification of major cell types; 2) the identification of
-                 cell type specific gene signatures; and 3) the determination
-                 of driving forces of given cell types. We applied this
-                 pipeline to the RNA-seq analysis of single cells isolated from
-                 embryonic mouse lung at E16.5. Through the pipeline analysis,
-                 we distinguished major cell types of fetal mouse lung,
-                 including epithelial, endothelial, smooth muscle, pericyte,
-                 and fibroblast-like cell types, and identified cell type
-                 specific gene signatures, bioprocesses, and key regulators.
-                 SINCERA is implemented in R, licensed under the GNU General
-                 Public License v3, and freely available from CCHMC PBGE
-                 website, https://research.cchmc.org/pbge/sincera.html.",
-  journal     = "PLoS Comput. Biol.",
-  volume      =  11,
-  number      =  11,
-  pages       = "e1004575",
-  month       =  nov,
-  year        =  2015
+@article{Guo2015-ok,
+ author = {Guo, Minzhe and Wang, Hui and Potter, S. Steven and Whitsett, Jeffrey A. and Xu, Yan},
+ doi = {10.1371/journal.pcbi.1004575},
+ issn = {1553-7358},
+ journal = {PLoS Comput Biol},
+ month = nov,
+ number = {11},
+ pages = {e1004575},
+ publisher = {Public Library of Science (PLoS)},
+ source = {Crossref},
+ title = {{SINCERA:} {A} Pipeline for Single-Cell {RNA}-Seq Profiling Analysis},
+ url = {https://doi.org/10.1371/journal.pcbi.1004575},
+ volume = {11},
+ year = {2015},
 }
 
-@UNPUBLISHED{Kiselev2016-bq,
-  title    = "{SC3} - consensus clustering of single-cell {RNA-Seq} data",
-  author   = "Kiselev, Vladimir Yu and Kirschner, Kristina and Schaub, Michael
-              T and Andrews, Tallulah and Chandra, Tamir and Natarajan, Kedar N
-              and Reik, Wolf and Barahona, Mauricio and Green, Anthony R and
-              Hemberg, Martin",
-  abstract = "Using single-cell RNA-seq (scRNA-seq), the full transcriptome of
-              individual cells can be acquired, enabling a quantitative
-              cell-type characterisation based on expression profiles. Due to
-              the large variability in gene expression, assigning cells into
-              groups based on the transcriptome remains challenging. We present
-              Single-Cell Consensus Clustering (SC3), a tool for unsupervised
-              clustering of scRNA-seq data. SC3 achieves high accuracy and
-              robustness by consistently integrating different clustering
-              solutions through a consensus approach. Tests on nine published
-              datasets show that SC3 outperforms 4 existing methods, while
-              remaining scalable for large datasets, as shown by the analysis
-              of a dataset containing 44,808 cells. Moreover, an interactive
-              graphical implementation makes SC3 accessible to a wide audience
-              of users, and SC3 also aids biological interpretation by
-              identifying marker genes, differentially expressed genes and
-              outlier cells. We illustrate the capabilities of SC3 by
-              characterising newly obtained transcriptomes from subclones of
-              neoplastic cells collected from patients.",
-  journal  = "bioRxiv",
-  pages    = "036558",
-  month    =  "1~" # jan,
-  year     =  2016,
-  language = "en"
+@article{Kiselev2016-bq,
+ author = {Kiselev, Vladimir Yu and Kirschner, Kristina and Schaub, Michael T and Andrews, Tallulah and Yiu, Andrew and Chandra, Tamir and Natarajan, Kedar N and Reik, Wolf and Barahona, Mauricio and Green, Anthony R and Hemberg, Martin},
+ doi = {10.1038/nmeth.4236},
+ issn = {1548-7091, 1548-7105},
+ journal = {Nat Meth},
+ month = mar,
+ number = {5},
+ pages = {483-486},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {{SC3:} {Consensus} clustering of single-cell {RNA}-seq data},
+ url = {https://doi.org/10.1038/nmeth.4236},
+ volume = {14},
+ year = {2017},
 }
 
-
-
-@ARTICLE{Tang2009-bu,
-  title       = "{mRNA-Seq} whole-transcriptome analysis of a single cell",
-  author      = "Tang, Fuchou and Barbacioru, Catalin and Wang, Yangzhou and
-                 Nordman, Ellen and Lee, Clarence and Xu, Nanlan and Wang,
-                 Xiaohui and Bodeau, John and Tuch, Brian B and Siddiqui, Asim
-                 and Lao, Kaiqin and Surani, M Azim",
-  affiliation = "Wellcome Trust-Cancer Research UK Gurdon Institute of Cancer
-                 and Developmental Biology, University of Cambridge, Cambridge,
-                 UK.",
-  abstract    = "Next-generation sequencing technology is a powerful tool for
-                 transcriptome analysis. However, under certain conditions,
-                 only a small amount of material is available, which requires
-                 more sensitive techniques that can preferably be used at the
-                 single-cell level. Here we describe a single-cell digital gene
-                 expression profiling assay. Using our mRNA-Seq assay with only
-                 a single mouse blastomere, we detected the expression of 75\%
-                 (5,270) more genes than microarray techniques and identified
-                 1,753 previously unknown splice junctions called by at least 5
-                 reads. Moreover, 8-19\% of the genes with multiple known
-                 transcript isoforms expressed at least two isoforms in the
-                 same blastomere or oocyte, which unambiguously demonstrated
-                 the complexity of the transcript variants at whole-genome
-                 scale in individual cells. Finally, for Dicer1(-/-) and
-                 Ago2(-/-) (Eif2c2(-/-)) oocytes, we found that 1,696 and 1,553
-                 genes, respectively, were abnormally upregulated compared to
-                 wild-type controls, with 619 genes in common.",
-  journal     = "Nat. Methods",
-  volume      =  6,
-  number      =  5,
-  pages       = "377--382",
-  month       =  may,
-  year        =  2009
+@article{Tang2009-bu,
+ author = {Tang, Fuchou and Barbacioru, Catalin and Wang, Yangzhou and Nordman, Ellen and Lee, Clarence and Xu, Nanlan and Wang, Xiaohui and Bodeau, John and Tuch, Brian B and Siddiqui, Asim and Lao, Kaiqin and Surani, M Azim},
+ doi = {10.1038/nmeth.1315},
+ issn = {1548-7091, 1548-7105},
+ journal = {Nat Meth},
+ month = apr,
+ number = {5},
+ pages = {377-382},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {{mRNA}-Seq whole-transcriptome analysis of a single cell},
+ url = {https://doi.org/10.1038/nmeth.1315},
+ volume = {6},
+ year = {2009},
 }
 
-@ARTICLE{Picelli2013-sb,
-  title       = "Smart-seq2 for sensitive full-length transcriptome profiling
-                 in single cells",
-  author      = "Picelli, Simone and Bj{\"{o}}rklund, \AA{}sa K and Faridani,
-                 Omid R and Sagasser, Sven and Winberg, G{\"{o}}sta and
-                 Sandberg, Rickard",
-  affiliation = "Ludwig Institute for Cancer Research, Stockholm, Sweden.",
-  abstract    = "Single-cell gene expression analyses hold promise for
-                 characterizing cellular heterogeneity, but current methods
-                 compromise on either the coverage, the sensitivity or the
-                 throughput. Here, we introduce Smart-seq2 with improved
-                 reverse transcription, template switching and preamplification
-                 to increase both yield and length of cDNA libraries generated
-                 from individual cells. Smart-seq2 transcriptome libraries have
-                 improved detection, coverage, bias and accuracy compared to
-                 Smart-seq libraries and are generated with off-the-shelf
-                 reagents at lower cost.",
-  journal     = "Nat. Methods",
-  volume      =  10,
-  number      =  11,
-  pages       = "1096--1098",
-  month       =  nov,
-  year        =  2013
+@article{Picelli2013-sb,
+ author = {Picelli, Simone and Björklund, Åsa K and Faridani, Omid R and Sagasser, Sven and Winberg, Gösta and Sandberg, Rickard},
+ doi = {10.1038/nmeth.2639},
+ issn = {1548-7091, 1548-7105},
+ journal = {Nat Meth},
+ month = sep,
+ number = {11},
+ pages = {1096-1098},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Smart-seq2 for sensitive full-length transcriptome profiling in single cells},
+ url = {https://doi.org/10.1038/nmeth.2639},
+ volume = {10},
+ year = {2013},
 }
 
-
-@ARTICLE{Hashimshony2012-kd,
-  title       = "{CEL-Seq}: single-cell {RNA-Seq} by multiplexed linear
-                 amplification",
-  author      = "Hashimshony, Tamar and Wagner, Florian and Sher, Noa and
-                 Yanai, Itai",
-  affiliation = "Department of Biology, Technion-Israel Institute of
-                 Technology, Haifa 32000, Israel.",
-  abstract    = "High-throughput sequencing has allowed for unprecedented
-                 detail in gene expression analyses, yet its efficient
-                 application to single cells is challenged by the small
-                 starting amounts of RNA. We have developed CEL-Seq, a method
-                 for overcoming this limitation by barcoding and pooling
-                 samples before linearly amplifying mRNA with the use of one
-                 round of in vitro transcription. We show that CEL-Seq gives
-                 more reproducible, linear, and sensitive results than a
-                 PCR-based amplification method. We demonstrate the power of
-                 this method by studying early C. elegans embryonic development
-                 at single-cell resolution. Differential distribution of
-                 transcripts between sister cells is seen as early as the
-                 two-cell stage embryo, and zygotic expression in the somatic
-                 cell lineages is enriched for transcription factors. The
-                 robust transcriptome quantifications enabled by CEL-Seq will
-                 be useful for transcriptomic analyses of complex tissues
-                 containing populations of diverse cell types.",
-  journal     = "Cell Rep.",
-  volume      =  2,
-  number      =  3,
-  pages       = "666--673",
-  month       =  "27~" # sep,
-  year        =  2012
+@article{Hashimshony2012-kd,
+ author = {Hashimshony, Tamar and Wagner, Florian and Sher, Noa and Yanai, Itai},
+ doi = {10.1016/j.celrep.2012.08.003},
+ issn = {2211-1247},
+ journal = {Cell Reports},
+ month = sep,
+ number = {3},
+ pages = {666-673},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {{CEL}-Seq: {{Single}-cell} {RNA}-Seq by Multiplexed Linear Amplification},
+ url = {https://doi.org/10.1016/j.celrep.2012.08.003},
+ volume = {2},
+ year = {2012},
 }
 
-@ARTICLE{Saliba2014-dy,
-  title       = "Single-cell {RNA-seq}: advances and future challenges",
-  author      = "Saliba, Antoine-Emmanuel and Westermann, Alexander J and
-                 Gorski, Stanislaw A and Vogel, J{\"{o}}rg",
-  affiliation = "Institute for Molecular Infection Biology, University of
-                 W{\"{u}}rzburg, Josef-Schneider-Stra\ss{}e 2, D-97080
-                 W{\"{u}}rzburg, Germany. Institute for Molecular Infection
-                 Biology, University of W{\"{u}}rzburg,
-                 Josef-Schneider-Stra\ss{}e 2, D-97080 W{\"{u}}rzburg, Germany.
-                 Institute for Molecular Infection Biology, University of
-                 W{\"{u}}rzburg, Josef-Schneider-Stra\ss{}e 2, D-97080
-                 W{\"{u}}rzburg, Germany. Institute for Molecular Infection
-                 Biology, University of W{\"{u}}rzburg,
-                 Josef-Schneider-Stra\ss{}e 2, D-97080 W{\"{u}}rzburg, Germany
-                 joerg.vogel@uni-wuerzburg.de.",
-  abstract    = "Phenotypically identical cells can dramatically vary with
-                 respect to behavior during their lifespan and this variation
-                 is reflected in their molecular composition such as the
-                 transcriptomic landscape. Single-cell transcriptomics using
-                 next-generation transcript sequencing (RNA-seq) is now
-                 emerging as a powerful tool to profile cell-to-cell
-                 variability on a genomic scale. Its application has already
-                 greatly impacted our conceptual understanding of diverse
-                 biological processes with broad implications for both basic
-                 and clinical research. Different single-cell RNA-seq protocols
-                 have been introduced and are reviewed here-each one with its
-                 own strengths and current limitations. We further provide an
-                 overview of the biological questions single-cell RNA-seq has
-                 been used to address, the major findings obtained from such
-                 studies, and current challenges and expected future
-                 developments in this booming field.",
-  journal     = "Nucleic Acids Res.",
-  volume      =  42,
-  number      =  14,
-  pages       = "8845--8860",
-  month       =  aug,
-  year        =  2014
+@article{Saliba2014-dy,
+ author = {Saliba, Antoine-Emmanuel and Westermann, Alexander J. and Gorski, Stanislaw A. and Vogel, Jörg},
+ doi = {10.1093/nar/gku555},
+ issn = {0305-1048, 1362-4962},
+ journal = {Nucleic Acids Res},
+ month = jul,
+ number = {14},
+ pages = {8845-8860},
+ publisher = {Oxford University Press (OUP)},
+ source = {Crossref},
+ title = {Single-cell {RNA}-seq: {Advances} and future challenges},
+ url = {https://doi.org/10.1093/nar/gku555},
+ volume = {42},
+ year = {2014},
 }
 
-
-@ARTICLE{Handley2015-yi,
-  title       = "Designing {Cell-Type-Specific} Genome-wide Experiments",
-  author      = "Handley, Ava and Schauer, Tam\'{a}s and Ladurner, Andreas G
-                 and Margulies, Carla E",
-  affiliation = "Department of Physiological Chemistry, Biomedical Center,
-                 Ludwig-Maximilians-University of Munich, Butenandtstrasse 5,
-                 81377 Munich, Germany; International Max Planck Research
-                 School for Molecular and Cellular Life Sciences, Am
-                 Klopferspitz 18, 82152 Martinsried, Germany. Department of
-                 Molecular Biology, Biomedical Center,
-                 Ludwig-Maximilians-University of Munich, Schillerstrasse 44,
-                 80336 Munich, Germany. Department of Physiological Chemistry,
-                 Biomedical Center, Ludwig-Maximilians-University of Munich,
-                 Butenandtstrasse 5, 81377 Munich, Germany; International Max
-                 Planck Research School for Molecular and Cellular Life
-                 Sciences, Am Klopferspitz 18, 82152 Martinsried, Germany;
-                 Center for Integrated Protein Science Munich (CIPSM), 81377
-                 Munich, Germany; Munich Cluster for Systems Neurology
-                 (SyNergy), 80336 Munich, Germany. Department of Physiological
-                 Chemistry, Biomedical Center, Ludwig-Maximilians-University of
-                 Munich, Butenandtstrasse 5, 81377 Munich, Germany. Electronic
-                 address: carla.margulies@med.lmu.de.",
-  abstract    = "Multicellular organisms depend on cell-type-specific division
-                 of labor for survival. Specific cell types have their unique
-                 developmental program and respond differently to environmental
-                 challenges, yet are orchestrated by the same genetic
-                 blueprint. A key challenge in biology is thus to understand
-                 how genes are expressed in the right place, at the right time,
-                 and to the right level. Further, this exquisite control of
-                 gene expression is perturbed in many diseases. As a
-                 consequence, coordinated physiological responses to the
-                 environment are compromised. Recently, innovative tools have
-                 been developed that are able to capture genome-wide gene
-                 expression using cell-type-specific approaches. These novel
-                 techniques allow us to understand gene regulation in vivo with
-                 unprecedented resolution and give us mechanistic insights into
-                 how multicellular organisms adapt to changing environments. In
-                 this article, we discuss the considerations needed when
-                 designing your own cell-type-specific experiment from the
-                 isolation of your starting material through selecting the
-                 appropriate controls and validating the data.",
-  journal     = "Mol. Cell",
-  volume      =  58,
-  number      =  4,
-  pages       = "621--631",
-  month       =  "21~" # may,
-  year        =  2015
+@article{Handley2015-yi,
+ author = {Handley, Ava and Schauer, Tamás and Ladurner, Andreas G. and Margulies, Carla E.},
+ doi = {10.1016/j.molcel.2015.04.024},
+ issn = {1097-2765},
+ journal = {Molecular Cell},
+ month = may,
+ number = {4},
+ pages = {621-631},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {Designing Cell-Type-Specific Genome-wide Experiments},
+ url = {https://doi.org/10.1016/j.molcel.2015.04.024},
+ volume = {58},
+ year = {2015},
 }
 
-
-@ARTICLE{Kolodziejczyk2015-xy,
-  title       = "The Technology and Biology of {Single-Cell} {RNA} Sequencing",
-  author      = "Kolodziejczyk, Aleksandra A and Kim, Jong Kyoung and Svensson,
-                 Valentine and Marioni, John C and Teichmann, Sarah A",
-  affiliation = "European Molecular Biology Laboratory, European Bioinformatics
-                 Institute (EMBL-EBI), Wellcome Trust Genome Campus, Hinxton,
-                 Cambridge CB10 1SD, UK; Wellcome Trust Sanger Institute,
-                 Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SA, UK.
-                 European Molecular Biology Laboratory, European Bioinformatics
-                 Institute (EMBL-EBI), Wellcome Trust Genome Campus, Hinxton,
-                 Cambridge CB10 1SD, UK. European Molecular Biology Laboratory,
-                 European Bioinformatics Institute (EMBL-EBI), Wellcome Trust
-                 Genome Campus, Hinxton, Cambridge CB10 1SD, UK. European
-                 Molecular Biology Laboratory, European Bioinformatics
-                 Institute (EMBL-EBI), Wellcome Trust Genome Campus, Hinxton,
-                 Cambridge CB10 1SD, UK; Wellcome Trust Sanger Institute,
-                 Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SA, UK.
-                 European Molecular Biology Laboratory, European Bioinformatics
-                 Institute (EMBL-EBI), Wellcome Trust Genome Campus, Hinxton,
-                 Cambridge CB10 1SD, UK; Wellcome Trust Sanger Institute,
-                 Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SA, UK.
-                 Electronic address: saraht@ebi.ac.uk.",
-  abstract    = "The differences between individual cells can have profound
-                 functional consequences, in both unicellular and multicellular
-                 organisms. Recently developed single-cell mRNA-sequencing
-                 methods enable unbiased, high-throughput, and high-resolution
-                 transcriptomic analysis of individual cells. This provides an
-                 additional dimension to transcriptomic information relative to
-                 traditional methods that profile bulk populations of cells.
-                 Already, single-cell RNA-sequencing methods have revealed new
-                 biology in terms of the composition of tissues, the dynamics
-                 of transcription, and the regulatory relationships between
-                 genes. Rapid technological developments at the level of cell
-                 capture, phenotyping, molecular biology, and bioinformatics
-                 promise an exciting future with numerous biological and
-                 medical applications.",
-  journal     = "Mol. Cell",
-  volume      =  58,
-  number      =  4,
-  pages       = "610--620",
-  month       =  "21~" # may,
-  year        =  2015
+@article{Kolodziejczyk2015-xy,
+ author = {Kolodziejczyk, Aleksandra A. and Kim, Jong Kyoung and Svensson, Valentine and Marioni, John C. and Teichmann, Sarah A.},
+ doi = {10.1016/j.molcel.2015.04.005},
+ issn = {1097-2765},
+ journal = {Molecular Cell},
+ month = may,
+ number = {4},
+ pages = {610-620},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {The Technology and Biology of Single-Cell {RNA} Sequencing},
+ url = {https://doi.org/10.1016/j.molcel.2015.04.005},
+ volume = {58},
+ year = {2015},
 }
 
-
-@ARTICLE{Kharchenko2014-ts,
-  title       = "Bayesian approach to single-cell differential expression
-                 analysis",
-  author      = "Kharchenko, Peter V and Silberstein, Lev and Scadden, David T",
-  affiliation = "1] Center for Biomedical Informatics, Harvard Medical School,
-                 Boston, Massachusetts, USA. [2] Hematology/Oncology Program,
-                 Children's Hospital, Boston, Massachusetts, USA. [3] Harvard
-                 Stem Cell Institute, Cambridge, Massachusetts, USA. 1] Harvard
-                 Stem Cell Institute, Cambridge, Massachusetts, USA. [2] Center
-                 for Regenerative Medicine, Massachusetts General Hospital,
-                 Boston, Massachusetts, USA. [3] Department of Stem Cell and
-                 Regenerative Biology, Harvard University, Cambridge,
-                 Massachusetts, USA. 1] Harvard Stem Cell Institute, Cambridge,
-                 Massachusetts, USA. [2] Center for Regenerative Medicine,
-                 Massachusetts General Hospital, Boston, Massachusetts, USA.
-                 [3] Department of Stem Cell and Regenerative Biology, Harvard
-                 University, Cambridge, Massachusetts, USA.",
-  abstract    = "Single-cell data provide a means to dissect the composition of
-                 complex tissues and specialized cellular environments.
-                 However, the analysis of such measurements is complicated by
-                 high levels of technical noise and intrinsic biological
-                 variability. We describe a probabilistic model of
-                 expression-magnitude distortions typical of single-cell
-                 RNA-sequencing measurements, which enables detection of
-                 differential expression signatures and identification of
-                 subpopulations of cells in a way that is more tolerant of
-                 noise.",
-  journal     = "Nat. Methods",
-  volume      =  11,
-  number      =  7,
-  pages       = "740--742",
-  month       =  jul,
-  year        =  2014
+@article{Kharchenko2014-ts,
+ author = {Kharchenko, Peter V and Silberstein, Lev and Scadden, David T},
+ doi = {10.1038/nmeth.2967},
+ issn = {1548-7091, 1548-7105},
+ journal = {Nat Meth},
+ month = may,
+ number = {7},
+ pages = {740-742},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Bayesian approach to single-cell differential expression analysis},
+ url = {https://doi.org/10.1038/nmeth.2967},
+ volume = {11},
+ year = {2014},
 }
 
-
-@ARTICLE{Jiang2011-mu,
-  title       = "Synthetic spike-in standards for {RNA-seq} experiments",
-  author      = "Jiang, Lichun and Schlesinger, Felix and Davis, Carrie A and
-                 Zhang, Yu and Li, Renhua and Salit, Marc and Gingeras, Thomas
-                 R and Oliver, Brian",
-  affiliation = "Section of Developmental Genomics, Laboratory of Cellular and
-                 Developmental Biology, National Institute of Diabetes and
-                 Digestive and Kidney Diseases, National Institutes of Health,
-                 Bethesda, MD 20892, USA.",
-  abstract    = "High-throughput sequencing of cDNA (RNA-seq) is a widely
-                 deployed transcriptome profiling and annotation technique, but
-                 questions about the performance of different protocols and
-                 platforms remain. We used a newly developed pool of 96
-                 synthetic RNAs with various lengths, and GC content covering a
-                 2(20) concentration range as spike-in controls to measure
-                 sensitivity, accuracy, and biases in RNA-seq experiments as
-                 well as to derive standard curves for quantifying the
-                 abundance of transcripts. We observed linearity between read
-                 density and RNA input over the entire detection range and
-                 excellent agreement between replicates, but we observed
-                 significantly larger imprecision than expected under pure
-                 Poisson sampling errors. We use the control RNAs to directly
-                 measure reproducible protocol-dependent biases due to GC
-                 content and transcript length as well as stereotypic
-                 heterogeneity in coverage across transcripts correlated with
-                 position relative to RNA termini and priming sequence bias.
-                 These effects lead to biased quantification for short
-                 transcripts and individual exons, which is a serious problem
-                 for measurements of isoform abundances, but that can partially
-                 be corrected using appropriate models of bias. By using the
-                 control RNAs, we derive limits for the discovery and detection
-                 of rare transcripts in RNA-seq experiments. By using data
-                 collected as part of the model organism and human Encyclopedia
-                 of DNA Elements projects (ENCODE and modENCODE), we
-                 demonstrate that external RNA controls are a useful resource
-                 for evaluating sensitivity and accuracy of RNA-seq experiments
-                 for transcriptome discovery and quantification. These quality
-                 metrics facilitate comparable analysis across different
-                 samples, protocols, and platforms.",
-  journal     = "Genome Res.",
-  volume      =  21,
-  number      =  9,
-  pages       = "1543--1551",
-  month       =  sep,
-  year        =  2011
+@article{Jiang2011-mu,
+ author = {Jiang, L. and Schlesinger, F. and Davis, C. A. and Zhang, Y. and Li, R. and Salit, M. and Gingeras, T. R. and Oliver, B.},
+ doi = {10.1101/gr.121095.111},
+ issn = {1088-9051},
+ journal = {Genome Research},
+ month = aug,
+ number = {9},
+ pages = {1543-1551},
+ publisher = {Cold Spring Harbor Laboratory},
+ source = {Crossref},
+ title = {Synthetic spike-in standards for {RNA}-seq experiments},
+ url = {https://doi.org/10.1101/gr.121095.111},
+ volume = {21},
+ year = {2011},
 }
 
-
-@ARTICLE{Kivioja2012-yt,
-  title       = "Counting absolute numbers of molecules using unique molecular
-                 identifiers",
-  author      = "Kivioja, Teemu and V{\"{a}}h{\"{a}}rautio, Anna and Karlsson,
-                 Kasper and Bonke, Martin and Enge, Martin and Linnarsson, Sten
-                 and Taipale, Jussi",
-  affiliation = "Genome-Scale Biology Program, Institute of Biomedicine,
-                 University of Helsinki, Helsinki, Finland.",
-  abstract    = "Counting individual RNA or DNA molecules is difficult because
-                 they are hard to copy quantitatively for detection. To
-                 overcome this limitation, we applied unique molecular
-                 identifiers (UMIs), which make each molecule in a population
-                 distinct, to genome-scale human karyotyping and mRNA
-                 sequencing in Drosophila melanogaster. Use of this method can
-                 improve accuracy of almost any next-generation sequencing
-                 method, including chromatin immunoprecipitation-sequencing,
-                 genome assembly, diagnostics and manufacturing-process control
-                 and monitoring.",
-  journal     = "Nat. Methods",
-  volume      =  9,
-  number      =  1,
-  pages       = "72--74",
-  month       =  jan,
-  year        =  2012
+@article{Kivioja2012-yt,
+ author = {Kivioja, Teemu and Vähärautio, Anna and Karlsson, Kasper and Bonke, Martin and Enge, Martin and Linnarsson, Sten and Taipale, Jussi},
+ doi = {10.1038/nmeth.1778},
+ issn = {1548-7091, 1548-7105},
+ journal = {Nat Meth},
+ month = nov,
+ number = {1},
+ pages = {72-74},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Counting absolute numbers of molecules using unique molecular identifiers},
+ url = {https://doi.org/10.1038/nmeth.1778},
+ volume = {9},
+ year = {2011},
 }
 
-
-@ARTICLE{Stegle2015-uv,
-  title       = "Computational and analytical challenges in single-cell
-                 transcriptomics",
-  author      = "Stegle, Oliver and Teichmann, Sarah A and Marioni, John C",
-  affiliation = "European Molecular Biology Laboratory European Bioinformatics
-                 Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
-                 CB10 1SD, UK. 1] European Molecular Biology Laboratory
-                 European Bioinformatics Institute, Wellcome Trust Genome
-                 Campus, Hinxton, Cambridge, CB10 1SD, UK. [2] Wellcome Trust
-                 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-                 Cambridge, CB10 1SA, UK. 1] European Molecular Biology
-                 Laboratory European Bioinformatics Institute, Wellcome Trust
-                 Genome Campus, Hinxton, Cambridge, CB10 1SD, UK. [2] Wellcome
-                 Trust Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-                 Cambridge, CB10 1SA, UK.",
-  abstract    = "The development of high-throughput RNA sequencing (RNA-seq) at
-                 the single-cell level has already led to profound new
-                 discoveries in biology, ranging from the identification of
-                 novel cell types to the study of global patterns of stochastic
-                 gene expression. Alongside the technological breakthroughs
-                 that have facilitated the large-scale generation of
-                 single-cell transcriptomic data, it is important to consider
-                 the specific computational and analytical challenges that
-                 still have to be overcome. Although some tools for analysing
-                 RNA-seq data from bulk cell populations can be readily applied
-                 to single-cell RNA-seq data, many new computational strategies
-                 are required to fully exploit this data type and to enable a
-                 comprehensive yet detailed study of gene expression at the
-                 single-cell level.",
-  journal     = "Nat. Rev. Genet.",
-  volume      =  16,
-  number      =  3,
-  pages       = "133--145",
-  month       =  mar,
-  year        =  2015
+@article{Stegle2015-uv,
+ author = {Stegle, Oliver and Teichmann, Sarah A. and Marioni, John C.},
+ doi = {10.1038/nrg3833},
+ issn = {1471-0056, 1471-0064},
+ journal = {Nat Rev Genet},
+ month = jan,
+ number = {3},
+ pages = {133-145},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Computational and analytical challenges in single-cell transcriptomics},
+ url = {https://doi.org/10.1038/nrg3833},
+ volume = {16},
+ year = {2015},
 }
 
-
-@ARTICLE{Levine2015-fk,
-  title       = "{Data-Driven} Phenotypic Dissection of {AML} Reveals
-                 Progenitor-like Cells that Correlate with Prognosis",
-  author      = "Levine, Jacob H and Simonds, Erin F and Bendall, Sean C and
-                 Davis, Kara L and Amir, El-Ad D and Tadmor, Michelle D and
-                 Litvin, Oren and Fienberg, Harris G and Jager, Astraea and
-                 Zunder, Eli R and Finck, Rachel and Gedman, Amanda L and
-                 Radtke, Ina and Downing, James R and Pe'er, Dana and Nolan,
-                 Garry P",
-  affiliation = "Departments of Biological Sciences and Systems Biology,
-                 Columbia University, New York, NY 10027, USA. Baxter
-                 Laboratory in Stem Cell Biology, Department of Microbiology
-                 and Immunology, Stanford University, Stanford, CA 94305, USA.
-                 Department of Pathology, Stanford University, Stanford, CA
-                 94305, USA. Baxter Laboratory in Stem Cell Biology, Department
-                 of Microbiology and Immunology, Stanford University, Stanford,
-                 CA 94305, USA. Departments of Biological Sciences and Systems
-                 Biology, Columbia University, New York, NY 10027, USA.
-                 Departments of Biological Sciences and Systems Biology,
-                 Columbia University, New York, NY 10027, USA. Departments of
-                 Biological Sciences and Systems Biology, Columbia University,
-                 New York, NY 10027, USA. Baxter Laboratory in Stem Cell
-                 Biology, Department of Microbiology and Immunology, Stanford
-                 University, Stanford, CA 94305, USA. Baxter Laboratory in Stem
-                 Cell Biology, Department of Microbiology and Immunology,
-                 Stanford University, Stanford, CA 94305, USA. Baxter
-                 Laboratory in Stem Cell Biology, Department of Microbiology
-                 and Immunology, Stanford University, Stanford, CA 94305, USA.
-                 Baxter Laboratory in Stem Cell Biology, Department of
-                 Microbiology and Immunology, Stanford University, Stanford, CA
-                 94305, USA. Department of Pathology, St. Jude Children's
-                 Research Hospital, 262 Danny Thomas Place, Memphis, TN 38105,
-                 USA. Department of Pathology, St. Jude Children's Research
-                 Hospital, 262 Danny Thomas Place, Memphis, TN 38105, USA.
-                 Department of Pathology, St. Jude Children's Research
-                 Hospital, 262 Danny Thomas Place, Memphis, TN 38105, USA.
-                 Departments of Biological Sciences and Systems Biology,
-                 Columbia University, New York, NY 10027, USA. Electronic
-                 address: dpeer@biology.columbia.edu. Baxter Laboratory in Stem
-                 Cell Biology, Department of Microbiology and Immunology,
-                 Stanford University, Stanford, CA 94305, USA. Electronic
-                 address: gnolan@stanford.edu.",
-  abstract    = "Acute myeloid leukemia (AML) manifests as phenotypically and
-                 functionally diverse cells, often within the same patient.
-                 Intratumor phenotypic and functional heterogeneity have been
-                 linked primarily by physical sorting experiments, which assume
-                 that functionally distinct subpopulations can be prospectively
-                 isolated by surface phenotypes. This assumption has proven
-                 problematic, and we therefore developed a data-driven
-                 approach. Using mass cytometry, we profiled surface and
-                 intracellular signaling proteins simultaneously in millions of
-                 healthy and leukemic cells. We developed PhenoGraph, which
-                 algorithmically defines phenotypes in high-dimensional
-                 single-cell data. PhenoGraph revealed that the surface
-                 phenotypes of leukemic blasts do not necessarily reflect their
-                 intracellular state. Using hematopoietic progenitors, we
-                 defined a signaling-based measure of cellular phenotype, which
-                 led to isolation of a gene expression signature that was
-                 predictive of survival in independent cohorts. This study
-                 presents new methods for large-scale analysis of single-cell
-                 heterogeneity and demonstrates their utility, yielding
-                 insights into AML pathophysiology.",
-  journal     = "Cell",
-  volume      =  162,
-  number      =  1,
-  pages       = "184--197",
-  month       =  "2~" # jul,
-  year        =  2015,
-  language    = "en"
+@article{Levine2015-fk,
+ author = {Levine, Jacob H. and Simonds, Erin F. and Bendall, Sean C. and Davis, Kara L. and Amir, El-ad D. and Tadmor, Michelle D. and Litvin, Oren and Fienberg, Harris G. and Jager, Astraea and Zunder, Eli R. and Finck, Rachel and Gedman, Amanda L. and Radtke, Ina and Downing, James R. and Pe’er, Dana and Nolan, Garry P.},
+ doi = {10.1016/j.cell.2015.05.047},
+ issn = {0092-8674},
+ journal = {Cell},
+ month = jul,
+ number = {1},
+ pages = {184-197},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {Data-Driven Phenotypic Dissection of {AML} Reveals Progenitor-like Cells that Correlate with Prognosis},
+ url = {https://doi.org/10.1016/j.cell.2015.05.047},
+ volume = {162},
+ year = {2015},
 }
 
-
-@ARTICLE{Tung2017-ba,
-  title       = "Batch effects and the effective design of single-cell gene
-                 expression studies",
-  author      = "Tung, Po-Yuan and Blischak, John D and Hsiao, Chiaowen Joyce
-                 and Knowles, David A and Burnett, Jonathan E and Pritchard,
-                 Jonathan K and Gilad, Yoav",
-  affiliation = "Department of Human Genetics, University of Chicago, Chicago,
-                 Illinois, USA. Department of Human Genetics, University of
-                 Chicago, Chicago, Illinois, USA. Committee on Genetics,
-                 Genomics, and Systems Biology, University of Chicago, Chicago,
-                 Illinois, USA. Department of Human Genetics, University of
-                 Chicago, Chicago, Illinois, USA. Department of Genetics,
-                 Stanford University, Stanford, CA, USA. Department of
-                 Radiology, Stanford University, Stanford, CA, USA. Department
-                 of Human Genetics, University of Chicago, Chicago, Illinois,
-                 USA. Department of Genetics, Stanford University, Stanford,
-                 CA, USA. Department of Biology, Stanford University, Stanford,
-                 CA, USA. Howard Hughes Medical Institute, Stanford University,
-                 CA, USA. Department of Human Genetics, University of Chicago,
-                 Chicago, Illinois, USA. Department of Medicine, University of
-                 Chicago, Chicago, Illinois, USA.",
-  abstract    = "Single-cell RNA sequencing (scRNA-seq) can be used to
-                 characterize variation in gene expression levels at high
-                 resolution. However, the sources of experimental noise in
-                 scRNA-seq are not yet well understood. We investigated the
-                 technical variation associated with sample processing using
-                 the single-cell Fluidigm C1 platform. To do so, we processed
-                 three C1 replicates from three human induced pluripotent stem
-                 cell (iPSC) lines. We added unique molecular identifiers
-                 (UMIs) to all samples, to account for amplification bias. We
-                 found that the major source of variation in the gene
-                 expression data was driven by genotype, but we also observed
-                 substantial variation between the technical replicates. We
-                 observed that the conversion of reads to molecules using the
-                 UMIs was impacted by both biological and technical variation,
-                 indicating that UMI counts are not an unbiased estimator of
-                 gene expression levels. Based on our results, we suggest a
-                 framework for effective scRNA-seq studies.",
-  journal     = "Sci. Rep.",
-  volume      =  7,
-  pages       = "39921",
-  month       =  "3~" # jan,
-  year        =  2017,
-  language    = "en"
+@article{Tung2017-ba,
+ author = {Tung, Po-Yuan and Blischak, John D. and Hsiao, Chiaowen Joyce and Knowles, David A. and Burnett, Jonathan E. and Pritchard, Jonathan K. and Gilad, Yoav},
+ doi = {10.1038/srep39921},
+ issn = {2045-2322},
+ journal = {Sci. Rep.},
+ month = jan,
+ pages = {39921},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Batch effects and the effective design of single-cell gene expression studies},
+ url = {https://doi.org/10.1038/srep39921},
+ volume = {7},
+ year = {2017},
 }
 
-@ARTICLE{Archer2016-zq,
-  title       = "Modeling Enzyme Processivity Reveals that {RNA-Seq} Libraries
-                 Are Biased in Characteristic and Correctable Ways",
-  author      = "Archer, Nathan and Walsh, Mark D and Shahrezaei, Vahid and
-                 Hebenstreit, Daniel",
-  affiliation = "School of Life Sciences, University of Warwick, Coventry CV4
-                 7AL, UK. School of Life Sciences, University of Warwick,
-                 Coventry CV4 7AL, UK. Department of Mathematics, Imperial
-                 College, London SW7 2AZ, UK. Electronic address:
-                 v.shahrezaei@imperial.ac.uk. School of Life Sciences,
-                 University of Warwick, Coventry CV4 7AL, UK. Electronic
-                 address: d.hebenstreit@warwick.ac.uk.",
-  abstract    = "Experimental procedures for preparing RNA-seq and single-cell
-                 (sc) RNA-seq libraries are based on assumptions regarding
-                 their underlying enzymatic reactions. Here, we show that the
-                 fairness of these assumptions varies within libraries:
-                 coverage by sequencing reads along and between transcripts
-                 exhibits characteristic, protocol-dependent biases. To
-                 understand the mechanistic basis of this bias, we present an
-                 integrated modeling framework that infers the relationship
-                 between enzyme reactions during library preparation and the
-                 characteristic coverage patterns observed for different
-                 protocols. Analysis of new and existing (sc)RNA-seq data from
-                 six different library preparation protocols reveals that
-                 polymerase processivity is the mechanistic origin of coverage
-                 biases. We apply our framework to demonstrate that lowering
-                 incubation temperature increases processivity, yield, and
-                 (sc)RNA-seq sensitivity in all protocols. We also provide
-                 correction factors based on our model for increasing accuracy
-                 of transcript quantification in existing samples prepared at
-                 standard temperatures. In total, our findings improve our
-                 ability to accurately reflect in vivo transcript abundances in
-                 (sc)RNA-seq libraries.",
-  journal     = "Cell Syst",
-  volume      =  3,
-  number      =  5,
-  pages       = "467--479.e12",
-  month       =  "23~" # nov,
-  year        =  2016,
-  keywords    = "Bayesian framework; Markov Chain Monte Carlo; RNA-seq; bias;
-                 coverage; enzyme; mathematical modeling; polymerase;
-                 processivity; reverse transcriptase",
-  language    = "en"
+@article{Archer2016-zq,
+ author = {Archer, Nathan and Walsh, Mark D. and Shahrezaei, Vahid and Hebenstreit, Daniel},
+ doi = {10.1016/j.cels.2016.10.012},
+ issn = {2405-4712},
+ journal = {Cell Systems},
+ month = nov,
+ number = {5},
+ pages = {467-479.e12},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {Modeling Enzyme Processivity Reveals that {RNA}-Seq Libraries Are Biased in Characteristic and Correctable Ways},
+ url = {https://doi.org/10.1016/j.cels.2016.10.012},
+ volume = {3},
+ year = {2016},
 }
 
-
-@ARTICLE{Ziegenhain2017-cu,
-  title       = "Comparative Analysis of {Single-Cell} {RNA} Sequencing Methods",
-  author      = "Ziegenhain, Christoph and Vieth, Beate and Parekh, Swati and
-                 Reinius, Bj{\"o}rn and Guillaumet-Adkins, Amy and Smets,
-                 Martha and Leonhardt, Heinrich and Heyn, Holger and Hellmann,
-                 Ines and Enard, Wolfgang",
-  affiliation = "Anthropology \& Human Genomics, Department of Biology II,
-                 Ludwig-Maximilians University, Gro{\ss}haderner Stra{\ss}e 2,
-                 82152 Martinsried, Germany. Anthropology \& Human Genomics,
-                 Department of Biology II, Ludwig-Maximilians University,
-                 Gro{\ss}haderner Stra{\ss}e 2, 82152 Martinsried, Germany.
-                 Anthropology \& Human Genomics, Department of Biology II,
-                 Ludwig-Maximilians University, Gro{\ss}haderner Stra{\ss}e 2,
-                 82152 Martinsried, Germany. Ludwig Institute for Cancer
-                 Research, Box 240, 171 77 Stockholm, Sweden; Department of
-                 Cell and Molecular Biology, Karolinska Institutet, 171 77
-                 Stockholm, Sweden. CNAG-CRG, Centre for Genomic Regulation
-                 (CRG), Barcelona Institute of Science and Technology (BIST),
-                 08028 Barcelona, Spain; Universitat Pompeu Fabra (UPF), 08002
-                 Barcelona, Spain. Department of Biology II and Center for
-                 Integrated Protein Science Munich (CIPSM), Ludwig-Maximilians
-                 University, Gro{\ss}haderner Stra{\ss}e 2, 82152 Martinsried,
-                 Germany. Department of Biology II and Center for Integrated
-                 Protein Science Munich (CIPSM), Ludwig-Maximilians University,
-                 Gro{\ss}haderner Stra{\ss}e 2, 82152 Martinsried, Germany.
-                 CNAG-CRG, Centre for Genomic Regulation (CRG), Barcelona
-                 Institute of Science and Technology (BIST), 08028 Barcelona,
-                 Spain; Universitat Pompeu Fabra (UPF), 08002 Barcelona, Spain.
-                 Anthropology \& Human Genomics, Department of Biology II,
-                 Ludwig-Maximilians University, Gro{\ss}haderner Stra{\ss}e 2,
-                 82152 Martinsried, Germany. Anthropology \& Human Genomics,
-                 Department of Biology II, Ludwig-Maximilians University,
-                 Gro{\ss}haderner Stra{\ss}e 2, 82152 Martinsried, Germany.
-                 Electronic address: enard@bio.lmu.de.",
-  abstract    = "Single-cell RNA sequencing (scRNA-seq) offers new
-                 possibilities to address biological and medical questions.
-                 However, systematic comparisons of the performance of diverse
-                 scRNA-seq protocols are lacking. We generated data from 583
-                 mouse embryonic stem cells to evaluate six prominent scRNA-seq
-                 methods: CEL-seq2, Drop-seq, MARS-seq, SCRB-seq, Smart-seq,
-                 and Smart-seq2. While Smart-seq2 detected the most genes per
-                 cell and across cells, CEL-seq2, Drop-seq, MARS-seq, and
-                 SCRB-seq quantified mRNA levels with less amplification noise
-                 due to the use of unique molecular identifiers (UMIs). Power
-                 simulations at different sequencing depths showed that
-                 Drop-seq is more cost-efficient for transcriptome
-                 quantification of large numbers of cells, while MARS-seq,
-                 SCRB-seq, and Smart-seq2 are more efficient when analyzing
-                 fewer cells. Our quantitative comparison offers the basis for
-                 an informed choice among six prominent scRNA-seq methods, and
-                 it provides a framework for benchmarking further improvements
-                 of scRNA-seq protocols.",
-  journal     = "Mol. Cell",
-  volume      =  65,
-  number      =  4,
-  pages       = "631--643.e4",
-  month       =  "16~" # feb,
-  year        =  2017,
-  keywords    = "cost-effectiveness; method comparison; power analysis;
-                 simulation; single-cell RNA-seq; transcriptomics",
-  language    = "en"
+@article{Ziegenhain2017-cu,
+ author = {Ziegenhain, Christoph and Vieth, Beate and Parekh, Swati and Reinius, Björn and Guillaumet-Adkins, Amy and Smets, Martha and Leonhardt, Heinrich and Heyn, Holger and Hellmann, Ines and Enard, Wolfgang},
+ doi = {10.1016/j.molcel.2017.01.023},
+ issn = {1097-2765},
+ journal = {Molecular Cell},
+ month = feb,
+ number = {4},
+ pages = {631-643.e4},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {Comparative Analysis of Single-Cell {RNA} Sequencing Methods},
+ url = {https://doi.org/10.1016/j.molcel.2017.01.023},
+ volume = {65},
+ year = {2017},
 }
 
-@ARTICLE{Welch2016-jr,
-  title       = "{SLICER: inferring branched, nonlinear cellular trajectories
-                   from single cell RNA-seq data}",
-		     author      = "Welch, Joshua D and Hartemink, Alexander J and Prins, Jan F",
-		       affiliation = "Department of Computer Science, University of North Carolina
-                 at Chapel Hill, Chapel Hill, NC, 27599, USA. Curriculum in
-                 Bioinformatics and Computational Biology, University of North
-                 Carolina at Chapel Hill, Chapel Hill, NC, 27599, USA.
-                 Department of Computer Science, Duke University, Durham, NC,
-                 27708, USA. Program in Computational Biology and
-                 Bioinformatics, Duke University, Durham, NC, 27708, USA.
-                 Department of Computer Science, University of North Carolina
-                 at Chapel Hill, Chapel Hill, NC, 27599, USA. prins@cs.unc.edu.
-                 Curriculum in Bioinformatics and Computational Biology,
-                 University of North Carolina at Chapel Hill, Chapel Hill, NC,
-                 27599, USA. prins@cs.unc.edu.",
-		   abstract    = "Single cell experiments provide an unprecedented opportunity
-                 to reconstruct a sequence of changes in a biological process
-                 from individual ``snapshots'' of cells. However, nonlinear
-                 gene expression changes, genes unrelated to the process, and
-                 the possibility of branching trajectories make this a
-                 challenging problem. We develop SLICER (Selective Locally
-                 Linear Inference of Cellular Expression Relationships) to
-		        address these challenges. SLICER can infer highly nonlinear
-				trajectories, select genes without prior knowledge of the
-				process, and automatically determine the location and number
-				of branches and loops. SLICER recovers the ordering of points
-				along simulated trajectories more accurately than existing
-				methods. We demonstrate the effectiveness of SLICER on
-				previously published data from mouse lung cells and neural stem cells.",
-  journal     = "Genome biology",
-  volume      =  17,
-  number      =  1,
-  pages       = "106",
-  month       =  "23~" # may,
-  year        =  2016,
-  url         = "http://dx.doi.org/10.1186/s13059-016-0975-3",
-  keywords    = "Manifold learning; Single cell RNA-seq; Time series",
-  language    = "en",
-  issn        = "1465-6906",
-  pmid        = "27215581",
-  doi         = "10.1186/s13059-016-0975-3",
-  pmc         = "PMC4877799"
+@article{Welch2016-jr,
+ author = {Welch, Joshua D. and Hartemink, Alexander J. and Prins, Jan F.},
+ doi = {10.1186/s13059-016-0975-3},
+ issn = {1474-760X},
+ journal = {Genome Biol},
+ month = may,
+ number = {1},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {{SLICER:} {Inferring} branched, nonlinear cellular trajectories from single cell {RNA}-seq data},
+ url = {https://doi.org/10.1186/s13059-016-0975-3},
+ volume = {17},
+ year = {2016},
 }
 
-
-@ARTICLE{Cannoodt2016-uj,
-  title       = "{Computational methods for trajectory inference from
-                   single-cell transcriptomics}",
-		     author      = "Cannoodt, Robrecht and Saelens, Wouter and Saeys, Yvan",
-		       affiliation = "Data Mining and Modelling for Biomedicine group, VIB
-                 Inflammation Research Center, Ghent, Belgium. Department of
-                 Internal Medicine, Ghent University, Ghent, Belgium. Center
-                 for Medical Genetics, Ghent University, Ghent, Belgium. Cancer
-                 Research Institute Ghent (CRIG), Ghent, Belgium. Data Mining
-                 and Modelling for Biomedicine group, VIB Inflammation Research
-		        Center, Ghent, Belgium. Department of Internal Medicine, Ghent
-				University, Ghent, Belgium. Data Mining and Modelling for
-				Biomedicine group, VIB Inflammation Research Center, Ghent,
-				Belgium. yvan.saeys@ugent.be. Department of Internal Medicine,
-				Ghent University, Ghent, Belgium. yvan.saeys@ugent.be.",
-  abstract    = "Recent developments in single-cell transcriptomics have opened
-                new opportunities for studying dynamic processes in immunology
-		        in a high throughput and unbiased manner. Starting from a
-				mixture of cells in different stages of a developmental
-				process, unsupervised trajectory inference algorithms aim to
-				automatically reconstruct the underlying developmental path
-				that cells are following. In this review, we break down the
-				strategies used by this novel class of methods, and organize
-				their components into a common framework, highlighting several
-				practical advantages and disadvantages of the individual
-				methods. We also give an overview of new insights these methods 
-				have already providedregarding the wiring and gene regulation 
-				of cell differentiation. As the trajectory inference field is 
-				still in its infancy, we propose several future developments 
-				that will ultimately lead to a global and data-driven way of 
-				studying immune cell differentiation.",
-  journal     = "European journal of immunology",
-  volume      =  46,
-  number      =  11,
-  pages       = "2496--2506",
-  month       =  nov,
-  year        =  2016,
-  url         = "http://dx.doi.org/10.1002/eji.201646347",
-  keywords    = "Bioinformatics; Cell differentiation; Single-cell
-                   transcriptomics",
-  language    = "en",
-  issn        = "0014-2980, 1521-4141",
-    pmid        = "27682842",
-      doi         = "10.1002/eji.201646347"
+@article{Cannoodt2016-uj,
+ author = {Cannoodt, Robrecht and Saelens, Wouter and Saeys, Yvan},
+ doi = {10.1002/eji.201646347},
+ issn = {0014-2980},
+ journal = {Eur. J. Immunol.},
+ month = oct,
+ number = {11},
+ pages = {2496-2506},
+ publisher = {Wiley-Blackwell},
+ source = {Crossref},
+ title = {Computational methods for trajectory inference from single-cell transcriptomics},
+ url = {https://doi.org/10.1002/eji.201646347},
+ volume = {46},
+ year = {2016},
 }
 
-
-@ARTICLE{Pollen2014-cu,
-  title       = "Low-coverage single-cell {mRNA} sequencing reveals cellular
-                 heterogeneity and activated signaling pathways in developing
-                 cerebral cortex",
-  author      = "Pollen, Alex A and Nowakowski, Tomasz J and Shuga, Joe and
-                 Wang, Xiaohui and Leyrat, Anne A and Lui, Jan H and Li,
-                 Nianzhen and Szpankowski, Lukasz and Fowler, Brian and Chen,
-                 Peilin and Ramalingam, Naveen and Sun, Gang and Thu, Myo and
-                 Norris, Michael and Lebofsky, Ronald and Toppani, Dominique
-                 and Kemp, 2nd, Darnell W and Wong, Michael and Clerkson, Barry
-                 and Jones, Brittnee N and Wu, Shiquan and Knutsson, Lawrence
-                 and Alvarado, Beatriz and Wang, Jing and Weaver, Lesley S and
-                 May, Andrew P and Jones, Robert C and Unger, Marc A and
-                 Kriegstein, Arnold R and West, Jay A A",
-  affiliation = "1] Eli and Edythe Broad Center of Regeneration Medicine and
-                 Stem Cell Research, University of California, San Francisco,
-                 San Francisco, California, USA. [2] Department of Neurology,
-                 University of California, San Francisco, San Francisco,
-                 California, USA. [3]. 1] Eli and Edythe Broad Center of
-                 Regeneration Medicine and Stem Cell Research, University of
-                 California, San Francisco, San Francisco, California, USA. [2]
-                 Department of Neurology, University of California, San
-                 Francisco, San Francisco, California, USA. [3]. 1] Fluidigm
-                 Corporation, South San Francisco, California, USA. [2]. 1]
-                 Fluidigm Corporation, South San Francisco, California, USA.
-                 [2]. Fluidigm Corporation, South San Francisco, California,
-                 USA. 1] Eli and Edythe Broad Center of Regeneration Medicine
-                 and Stem Cell Research, University of California, San
-                 Francisco, San Francisco, California, USA. [2] Department of
-                 Neurology, University of California, San Francisco, San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. Fluidigm Corporation, South San
-                 Francisco, California, USA. 1] Eli and Edythe Broad Center of
-                 Regeneration Medicine and Stem Cell Research, University of
-                 California, San Francisco, San Francisco, California, USA. [2]
-                 Department of Neurology, University of California, San
-                 Francisco, San Francisco, California, USA. Fluidigm
-                 Corporation, South San Francisco, California, USA.",
-  abstract    = "Large-scale surveys of single-cell gene expression have the
-                 potential to reveal rare cell populations and lineage
-                 relationships but require efficient methods for cell capture
-                 and mRNA sequencing. Although cellular barcoding strategies
-                 allow parallel sequencing of single cells at ultra-low depths,
-                 the limitations of shallow sequencing have not been
-                 investigated directly. By capturing 301 single cells from 11
-                 populations using microfluidics and analyzing single-cell
-                 transcriptomes across downsampled sequencing depths, we
-                 demonstrate that shallow single-cell mRNA sequencing (~50,000
-                 reads per cell) is sufficient for unbiased cell-type
-                 classification and biomarker identification. In the developing
-                 cortex, we identify diverse cell types, including multiple
-                 progenitor and neuronal subtypes, and we identify EGR1 and FOS
-                 as previously unreported candidate targets of Notch signaling
-                 in human but not mouse radial glia. Our strategy establishes
-                 an efficient method for unbiased analysis and comparison of
-                 cell populations from heterogeneous tissue by microfluidic
-                 single-cell capture and low-coverage sequencing of many cells.",
-  journal     = "Nat. Biotechnol.",
-  volume      =  32,
-  number      =  10,
-  pages       = "1053--1058",
-  month       =  oct,
-  year        =  2014
+@article{Pollen2014-cu,
+ author = {Pollen, Alex A and Nowakowski, Tomasz J and Shuga, Joe and Wang, Xiaohui and Leyrat, Anne A and Lui, Jan H and Li, Nianzhen and Szpankowski, Lukasz and Fowler, Brian and Chen, Peilin and Ramalingam, Naveen and Sun, Gang and Thu, Myo and Norris, Michael and Lebofsky, Ronald and Toppani, Dominique and Kemp, Darnell W and Wong, Michael and Clerkson, Barry and Jones, Brittnee N and Wu, Shiquan and Knutsson, Lawrence and Alvarado, Beatriz and Wang, Jing and Weaver, Lesley S and May, Andrew P and Jones, Robert C and Unger, Marc A and Kriegstein, Arnold R and West, Jay A A},
+ doi = {10.1038/nbt.2967},
+ issn = {1087-0156, 1546-1696},
+ journal = {Nat Biotechnol},
+ month = aug,
+ number = {10},
+ pages = {1053-1058},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Low-coverage single-cell {mRNA} sequencing reveals cellular heterogeneity and activated signaling pathways in developing cerebral cortex},
+ url = {https://doi.org/10.1038/nbt.2967},
+ volume = {32},
+ year = {2014},
 }
 
-
-@ARTICLE{McCarthy2017-kb,
-  title       = "Scater: pre-processing, quality control, normalization and
-                 visualization of single-cell {RNA-seq} data in {R}",
-  author      = "McCarthy, Davis J and Campbell, Kieran R and Lun, Aaron T L
-                 and Wills, Quin F",
-  affiliation = "European Molecular Biology Laboratory, European Bioinformatics
-                 Institute, Wellcome Genome Campus, CB10 1SD Hinxton,
-                 Cambridge, UK. Wellcome Trust Centre for Human Genetics,
-                 University of Oxford, Oxford OX3 7BN, UK. St Vincent's
-                 Institute of Medical Research, Fitzroy, Victoria 3065,
-                 Australia. Wellcome Trust Centre for Human Genetics,
-                 University of Oxford, Oxford OX3 7BN, UK. Department of
-                 Physiology, Anatomy and Genetics, University of Oxford, Oxford
-                 OX1 3QX, UK. CRUK Cambridge Institute, University of
-                 Cambridge, Cambridge CB2 0RE, UK. Wellcome Trust Centre for
-                 Human Genetics, University of Oxford, Oxford OX3 7BN, UK.
-                 Weatherall Institute for Molecular Medicine, University of
-                 Oxford, John Radcliffe Hospital, Oxford OX3 9DS, UK.",
-  abstract    = "MOTIVATION: Single-cell RNA sequencing (scRNA-seq) is
-                 increasingly used to study gene expression at the level of
-                 individual cells. However, preparing raw sequence data for
-                 further analysis is not a straightforward process. Biases,
-                 artifacts and other sources of unwanted variation are present
-                 in the data, requiring substantial time and effort to be spent
-                 on pre-processing, quality control (QC) and normalization.
-                 RESULTS: We have developed the R/Bioconductor package scater
-                 to facilitate rigorous pre-processing, quality control,
-                 normalization and visualization of scRNA-seq data. The package
-                 provides a convenient, flexible workflow to process raw
-                 sequencing reads into a high-quality expression dataset ready
-                 for downstream analysis. scater provides a rich suite of
-                 plotting tools for single-cell data and a flexible data
-                 structure that is compatible with existing tools and can be
-                 used as infrastructure for future software development.
-                 AVAILABILITY AND IMPLEMENTATION: The open-source code, along
-                 with installation instructions, vignettes and case studies, is
-                 available through Bioconductor at
-                 http://bioconductor.org/packages/scater CONTACT:
-                 davis@ebi.ac.ukSupplementary information: Supplementary data
-                 are available at Bioinformatics online.",
-  journal     = "Bioinformatics",
-  month       =  "14~" # jan,
-  year        =  2017,
-  language    = "en"
+@article{McCarthy2017-kb,
+ author = {McCarthy, Davis J. and Campbell, Kieran R. and Lun, Aaron T. L. and Wills, Quin F.},
+ doi = {10.1093/bioinformatics/btw777},
+ issn = {1367-4803, 1460-2059},
+ journal = {Bioinformatics},
+ month = jan,
+ pages = {btw777},
+ publisher = {Oxford University Press (OUP)},
+ source = {Crossref},
+ title = {Scater: {{Pre}-processing,} quality control, normalization and visualization of single-cell {RNA}-seq data in R},
+ url = {https://doi.org/10.1093/bioinformatics/btw777},
+ year = {2017},
 }
 
-
-@ARTICLE{Svensson2017-op,
-  title       = "Power analysis of single-cell {RNA-sequencing} experiments",
-  author      = "Svensson, Valentine and Natarajan, Kedar Nath and Ly, Lam-Ha
-                 and Miragaia, Ricardo J and Labalette, Charlotte and Macaulay,
-                 Iain C and Cvejic, Ana and Teichmann, Sarah A",
-  affiliation = "European Molecular Biology Laboratory, European Bioinformatics
-                 Institute (EMBL-EBI), Hinxton, Cambridge, UK. Wellcome Trust
-                 Sanger Institute, Hinxton, Cambridge, UK. European Molecular
-                 Biology Laboratory, European Bioinformatics Institute
-                 (EMBL-EBI), Hinxton, Cambridge, UK. Wellcome Trust Sanger
-                 Institute, Hinxton, Cambridge, UK. Wellcome Trust Sanger
-                 Institute, Hinxton, Cambridge, UK. Wellcome Trust Sanger
-                 Institute, Hinxton, Cambridge, UK. Centre of Biological
-                 Engineering, University of Minho, Braga, Portugal. Wellcome
-                 Trust Sanger Institute, Hinxton, Cambridge, UK. Wellcome
-                 Trust-Medical Research Council Cambridge Stem Cell Institute,
-                 Cambridge, UK. Department of Haematology, University of
-                 Cambridge, Cambridge, UK. Wellcome Trust Sanger Institute,
-                 Hinxton, Cambridge, UK. Wellcome Trust Sanger Institute,
-                 Hinxton, Cambridge, UK. Wellcome Trust-Medical Research
-                 Council Cambridge Stem Cell Institute, Cambridge, UK.
-                 Department of Haematology, University of Cambridge, Cambridge,
-                 UK. European Molecular Biology Laboratory, European
-                 Bioinformatics Institute (EMBL-EBI), Hinxton, Cambridge, UK.
-                 Wellcome Trust Sanger Institute, Hinxton, Cambridge, UK.",
-  abstract    = "Single-cell RNA sequencing (scRNA-seq) has become an
-                 established and powerful method to investigate transcriptomic
-                 cell-to-cell variation, thereby revealing new cell types and
-                 providing insights into developmental processes and
-                 transcriptional stochasticity. A key question is how the
-                 variety of available protocols compare in terms of their
-                 ability to detect and accurately quantify gene expression.
-                 Here, we assessed the protocol sensitivity and accuracy of
-                 many published data sets, on the basis of spike-in standards
-                 and uniform data processing. For our workflow, we developed a
-                 flexible tool for counting the number of unique molecular
-                 identifiers (https://github.com/vals/umis/). We compared 15
-                 protocols computationally and 4 protocols experimentally for
-                 batch-matched cell populations, in addition to investigating
-                 the effects of spike-in molecular degradation. Our analysis
-                 provides an integrated framework for comparing scRNA-seq
-                 protocols.",
-  journal     = "Nat. Methods",
-  month       =  "6~" # mar,
-  year        =  2017,
-  language    = "en"
+@article{Svensson2017-op,
+ author = {Svensson, Valentine and Natarajan, Kedar Nath and Ly, Lam-Ha and Miragaia, Ricardo J and Labalette, Charlotte and Macaulay, Iain C and Cvejic, Ana and Teichmann, Sarah A},
+ doi = {10.1038/nmeth.4220},
+ issn = {1548-7091, 1548-7105},
+ journal = {Nat Meth},
+ month = mar,
+ number = {4},
+ pages = {381-387},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Power analysis of single-cell {RNA}-sequencing experiments},
+ url = {https://doi.org/10.1038/nmeth.4220},
+ volume = {14},
+ year = {2017},
 }
 
-@ARTICLE{Hashimshony2016-lx,
-  title       = "{CEL-Seq2}: sensitive highly-multiplexed single-cell {RNA-Seq}",
-  author      = "Hashimshony, Tamar and Senderovich, Naftalie and Avital, Gal
-                 and Klochendler, Agnes and de Leeuw, Yaron and Anavy, Leon and
-                 Gennert, Dave and Li, Shuqiang and Livak, Kenneth J and
-                 Rozenblatt-Rosen, Orit and Dor, Yuval and Regev, Aviv and
-                 Yanai, Itai",
-  affiliation = "Department of Biology, Technion - Israel Institute of
-                 Technology, Haifa, Israel. Department of Biology, Technion -
-                 Israel Institute of Technology, Haifa, Israel. Department of
-                 Biology, Technion - Israel Institute of Technology, Haifa,
-                 Israel. Department of Developmental Biology and Cancer
-                 Research, The Institute for Medical Research Israel-Canada,
-                 The Hebrew University-Hadassah Medical School, Jerusalem,
-                 Israel. Department of Biology, Technion - Israel Institute of
-                 Technology, Haifa, Israel. Department of Biology, Technion -
-                 Israel Institute of Technology, Haifa, Israel. Klarman Cell
-                 Observatory, Broad Institute of Harvard and MIT, Cambridge,
-                 MA, 02142, USA. Department of Biology, MIT, Cambridge, MA,
-                 02139, USA. Howard Hughes Medical Institute, Department of
-                 Biology, Massachusetts Institute of Technology, Cambridge, MA,
-                 02140, USA. Fluidigm Corporation, 7000 Shoreline Court, Suite
-                 100, South San Francisco, CA, 94080, USA. Fluidigm
-                 Corporation, 7000 Shoreline Court, Suite 100, South San
-                 Francisco, CA, 94080, USA. Klarman Cell Observatory, Broad
-                 Institute of Harvard and MIT, Cambridge, MA, 02142, USA.
-                 Department of Biology, MIT, Cambridge, MA, 02139, USA. Howard
-                 Hughes Medical Institute, Department of Biology, Massachusetts
-                 Institute of Technology, Cambridge, MA, 02140, USA. Department
-                 of Developmental Biology and Cancer Research, The Institute
-                 for Medical Research Israel-Canada, The Hebrew
-                 University-Hadassah Medical School, Jerusalem, Israel. Klarman
-                 Cell Observatory, Broad Institute of Harvard and MIT,
-                 Cambridge, MA, 02142, USA. Department of Biology, MIT,
-                 Cambridge, MA, 02139, USA. Howard Hughes Medical Institute,
-                 Department of Biology, Massachusetts Institute of Technology,
-                 Cambridge, MA, 02140, USA. Department of Biology, Technion -
-                 Israel Institute of Technology, Haifa, Israel.
-                 yanai@technion.ac.il.",
-  abstract    = "Single-cell transcriptomics requires a method that is
-                 sensitive, accurate, and reproducible. Here, we present
-                 CEL-Seq2, a modified version of our CEL-Seq method, with
-                 threefold higher sensitivity, lower costs, and less hands-on
-                 time. We implemented CEL-Seq2 on Fluidigm's C1 system,
-                 providing its first single-cell, on-chip barcoding method, and
-                 we detected gene expression changes accompanying the
-                 progression through the cell cycle in mouse fibroblast cells.
-                 We also compare with Smart-Seq to demonstrate CEL-Seq2's
-                 increased sensitivity relative to other available methods.
-                 Collectively, the improvements make CEL-Seq2 uniquely suited
-                 to single-cell RNA-Seq analysis in terms of economics,
-                 resolution, and ease of use.",
-  journal     = "Genome Biol.",
-  volume      =  17,
-  pages       = "77",
-  month       =  apr,
-  year        =  2016,
-  language    = "en"
+@article{Hashimshony2016-lx,
+ author = {Hashimshony, Tamar and Senderovich, Naftalie and Avital, Gal and Klochendler, Agnes and de Leeuw, Yaron and Anavy, Leon and Gennert, Dave and Li, Shuqiang and Livak, Kenneth J. and Rozenblatt-Rosen, Orit and Dor, Yuval and Regev, Aviv and Yanai, Itai},
+ doi = {10.1186/s13059-016-0938-8},
+ issn = {1474-760X},
+ journal = {Genome Biol},
+ month = apr,
+ number = {1},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {{CEL}-Seq2: {Sensitive} highly-multiplexed single-cell {RNA}-Seq},
+ url = {https://doi.org/10.1186/s13059-016-0938-8},
+ volume = {17},
+ year = {2016},
 }
 
-
-@ARTICLE{Klein2015-kz,
-  title     = "Droplet Barcoding for {Single-Cell} Transcriptomics Applied to
-               Embryonic Stem Cells",
-  author    = "Klein, Allon M and Mazutis, Linas and Akartuna, Ilke and
-               Tallapragada, Naren and Veres, Adrian and Li, Victor and
-               Peshkin, Leonid and Weitz, David A and Kirschner, Marc W",
-  abstract  = "Capturing single cells along with a set of uniquely barcoded
-               primers in tiny droplets enables single-cell transcriptomics of
-               a large number of cells in a heterogeneous population. Applying
-               this analysis to mouse embryonic stem cells reveals their
-               population structure, gene expression relationships, and the
-               heterogeneous onset of differentiation.",
-  journal   = "Cell",
-  publisher = "Elsevier",
-  volume    =  161,
-  number    =  5,
-  pages     = "1187--1201",
-  month     =  may,
-  year      =  2015,
-  language  = "en"
+@article{Klein2015-kz,
+ author = {Klein, Allon M. and Mazutis, Linas and Akartuna, Ilke and Tallapragada, Naren and Veres, Adrian and Li, Victor and Peshkin, Leonid and Weitz, David A. and Kirschner, Marc W.},
+ doi = {10.1016/j.cell.2015.04.044},
+ issn = {0092-8674},
+ journal = {Cell},
+ month = may,
+ number = {5},
+ pages = {1187-1201},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {Droplet Barcoding for Single-Cell Transcriptomics Applied to Embryonic Stem Cells},
+ url = {https://doi.org/10.1016/j.cell.2015.04.044},
+ volume = {161},
+ year = {2015},
 }
 
-@ARTICLE{Jaitin2014-ko,
-  title       = "Massively parallel single-cell {RNA-seq} for marker-free
-                 decomposition of tissues into cell types",
-  author      = "Jaitin, Diego Adhemar and Kenigsberg, Ephraim and Keren-Shaul,
-                 Hadas and Elefant, Naama and Paul, Franziska and Zaretsky,
-                 Irina and Mildner, Alexander and Cohen, Nadav and Jung,
-                 Steffen and Tanay, Amos and Amit, Ido",
-  affiliation = "Department of Immunology, Weizmann Institute, Rehovot 76100,
-                 Israel.",
-  abstract    = "In multicellular organisms, biological function emerges when
-                 heterogeneous cell types form complex organs. Nevertheless,
-                 dissection of tissues into mixtures of cellular subpopulations
-                 is currently challenging. We introduce an automated massively
-                 parallel single-cell RNA sequencing (RNA-seq) approach for
-                 analyzing in vivo transcriptional states in thousands of
-                 single cells. Combined with unsupervised classification
-                 algorithms, this facilitates ab initio cell-type
-                 characterization of splenic tissues. Modeling single-cell
-                 transcriptional states in dendritic cells and additional
-                 hematopoietic cell types uncovers rich cell-type heterogeneity
-                 and gene-modules activity in steady state and after pathogen
-                 activation. Cellular diversity is thereby approached through
-                 inference of variable and dynamic pathway activity rather than
-                 a fixed preprogrammed cell-type hierarchy. These data
-                 demonstrate single-cell RNA-seq as an effective tool for
-                 comprehensive cellular decomposition of complex tissues.",
-  journal     = "Science",
-  volume      =  343,
-  number      =  6172,
-  pages       = "776--779",
-  month       =  feb,
-  year        =  2014
+@article{Jaitin2014-ko,
+ author = {Jaitin, Diego Adhemar and Kenigsberg, Ephraim and Keren-Shaul, Hadas and Elefant, Naama and Paul, Franziska and Zaretsky, Irina and Mildner, Alexander and Cohen, Nadav and Jung, Steffen and Tanay, Amos and Amit, Ido},
+ abstract = {In multicellular organisms, biological function emerges when heterogeneous cell types form complex organs. Nevertheless, dissection of tissues into mixtures of cellular subpopulations is currently challenging. We introduce an automated massively parallel single-cell RNA sequencing (RNA-seq) approach for analyzing in vivo transcriptional states in thousands of single cells. Combined with unsupervised classification algorithms, this facilitates ab initio cell-type characterization of splenic tissues. Modeling single-cell transcriptional states in dendritic cells and additional hematopoietic cell types uncovers rich cell-type heterogeneity and gene-modules activity in steady state and after pathogen activation. Cellular diversity is thereby approached through inference of variable and dynamic pathway activity rather than a fixed preprogrammed cell-type hierarchy. These data demonstrate single-cell RNA-seq as an effective tool for comprehensive cellular decomposition of complex tissues.},
+ affiliation = {Department of Immunology, Weizmann Institute, Rehovot 76100, Israel.},
+ journal = {Science},
+ month = feb,
+ number = {6172},
+ pages = {776--779},
+ title = {Massively parallel single-cell {{RNA}-seq} for marker-free decomposition of tissues into cell types},
+ volume = {343},
+ year = {2014},
 }
 
-@UNPUBLISHED{Soumillon2014-eu,
-  title    = "Characterization of directed differentiation by high-throughput
-              single-cell {RNA-Seq}",
-  author   = "Soumillon, Magali and Cacchiarelli, Davide and Semrau, Stefan and
-              van Oudenaarden, Alexander and Mikkelsen, Tarjei S",
-  abstract = "Directed differentiation of cells in vitro is a powerful approach
-              for dissection of developmental pathways, disease modeling and
-              regenerative medicine, but analysis of such systems is
-              complicated by heterogeneous and asynchronous cellular responses
-              to differentiation-inducing stimuli. To enable deep
-              characterization of heterogeneous cell populations, we developed
-              an efficient digital gene expression profiling protocol that
-              enables surveying of mRNA in thousands of single cells at a time.
-              We then applied this protocol to profile 12,832 cells collected
-              at multiple time points during directed adipogenic
-              differentiation of human adipose-derived stem/stromal cells in
-              vitro. The resulting data reveal the major axes of cell-to-cell
-              variation within and between time points, and an inverse
-              relationship between inflammatory gene expression and lipid
-              accumulation across cells from a single donor.",
-  journal  = "bioRxiv",
-  pages    = "003236",
-  month    =  mar,
-  year     =  2014,
-  language = "en"
+@article{Soumillon2014-eu,
+ author = {Soumillon, Magali and Cacchiarelli, Davide and Semrau, Stefan and van Oudenaarden, Alexander and Mikkelsen, Tarjei S},
+ abstract = {Directed differentiation of cells in vitro is a powerful approach for dissection of developmental pathways, disease modeling and regenerative medicine, but analysis of such systems is complicated by heterogeneous and asynchronous cellular responses to differentiation-inducing stimuli. To enable deep characterization of heterogeneous cell populations, we developed an efficient digital gene expression profiling protocol that enables surveying of mRNA in thousands of single cells at a time. We then applied this protocol to profile 12,832 cells collected at multiple time points during directed adipogenic differentiation of human adipose-derived stem/stromal cells in vitro. The resulting data reveal the major axes of cell-to-cell variation within and between time points, and an inverse relationship between inflammatory gene expression and lipid accumulation across cells from a single donor.},
+ journal = {bioRxiv},
+ language = {en},
+ month = mar,
+ pages = {003236},
+ title = {Characterization of directed differentiation by high-throughput single-cell {{RNA}-Seq}},
+ year = {2014},
 }
 
-@ARTICLE{Gierahn2017-es,
-  title       = "{Seq-Well}: portable, low-cost {RNA} sequencing of single
-                 cells at high throughput",
-  author      = "Gierahn, Todd M and Wadsworth, 2nd, Marc H and Hughes, Travis
-                 K and Bryson, Bryan D and Butler, Andrew and Satija, Rahul and
-                 Fortune, Sarah and Love, J Christopher and Shalek, Alex K",
-  affiliation = "Koch Institute for Integrative Cancer Research, MIT,
-                 Cambridge, Massachusetts, USA. Institute for Medical
-                 Engineering \&Science (IMES) and Department of Chemistry, MIT,
-                 Cambridge, Massachusetts, USA. Broad Institute of MIT and
-                 Harvard, Cambridge, Massachusetts, USA. Ragon Institute of
-                 MGH, MIT and Harvard, Cambridge, Massachusetts, USA.
-                 Department of Immunology and Infectious Diseases, Harvard
-                 School of Public Health, Boston, Massachusetts, USA. Center
-                 for Genomics and Systems Biology, Department of Biology, New
-                 York University, New York, New York, USA. New York Genome
-                 Center, New York, New York, USA.",
-  abstract    = "Single-cell RNA-seq can precisely resolve cellular states, but
-                 applying this method to low-input samples is challenging.
-                 Here, we present Seq-Well, a portable, low-cost platform for
-                 massively parallel single-cell RNA-seq. Barcoded mRNA capture
-                 beads and single cells are sealed in an array of subnanoliter
-                 wells using a semipermeable membrane, enabling efficient cell
-                 lysis and transcript capture. We use Seq-Well to profile
-                 thousands of primary human macrophages exposed to
-                 Mycobacterium tuberculosis.",
-  journal     = "Nat. Methods",
-  volume      =  14,
-  number      =  4,
-  pages       = "395--398",
-  month       =  apr,
-  year        =  2017,
-  language    = "en"
+@article{Gierahn2017-es,
+ author = {Gierahn, Todd M and Wadsworth, 2nd, Marc H and Hughes, Travis K and Bryson, Bryan D and Butler, Andrew and Satija, Rahul and Fortune, Sarah and Love, J Christopher and Shalek, Alex K},
+ abstract = {Single-cell RNA-seq can precisely resolve cellular states, but applying this method to low-input samples is challenging. Here, we present Seq-Well, a portable, low-cost platform for massively parallel single-cell RNA-seq. Barcoded mRNA capture beads and single cells are sealed in an array of subnanoliter wells using a semipermeable membrane, enabling efficient cell lysis and transcript capture. We use Seq-Well to profile thousands of primary human macrophages exposed to Mycobacterium tuberculosis.},
+ affiliation = {Koch Institute for Integrative Cancer Research, MIT, Cambridge, Massachusetts, USA. Institute for Medical Engineering \&Science (IMES) and Department of Chemistry, MIT, Cambridge, Massachusetts, USA. Broad Institute of MIT and Harvard, Cambridge, Massachusetts, USA. Ragon Institute of MGH, MIT and Harvard, Cambridge, Massachusetts, USA. Department of Immunology and Infectious Diseases, Harvard School of Public Health, Boston, Massachusetts, USA. Center for Genomics and Systems Biology, Department of Biology, New York University, New York, New York, USA. New York Genome Center, New York, New York, USA.},
+ journal = {Nat. Methods},
+ language = {en},
+ month = apr,
+ number = {4},
+ pages = {395--398},
+ title = {{{Seq}-Well}: {Portable,} low-cost {RNA} sequencing of single cells at high throughput},
+ volume = {14},
+ year = {2017},
 }
 
-% The entry below contains non-ASCII chars that could not be converted
-% to a LaTeX equivalent.
-@ARTICLE{Picelli2014-ic,
-  title       = "Full-length {RNA-seq} from single cells using Smart-seq2",
-  author      = "Picelli, Simone and Faridani, Omid R and Bj{\"o}rklund, Asa K
-                 and Winberg, G{\"o}sta and Sagasser, Sven and Sandberg,
-                 Rickard",
-  affiliation = "Ludwig Institute for Cancer Research, Stockholm, Sweden. 1]
-                 Ludwig Institute for Cancer Research, Stockholm, Sweden. [2]
-                 Department of Cell and Molecular Biology, Karolinska
-                 Institutet, Stockholm, Sweden.",
-  abstract    = "Emerging methods for the accurate quantification of gene
-                 expression in individual cells hold promise for revealing the
-                 extent, function and origins of cell-to-cell variability.
-                 Different high-throughput methods for single-cell RNA-seq have
-                 been introduced that vary in coverage, sensitivity and
-                 multiplexing ability. We recently introduced Smart-seq for
-                 transcriptome analysis from single cells, and we subsequently
-                 optimized the method for improved sensitivity, accuracy and
-                 full-length coverage across transcripts. Here we present a
-                 detailed protocol for Smart-seq2 that allows the generation of
-                 full-length cDNA and sequencing libraries by using standard
-                 reagents. The entire protocol takes ∼2 d from cell picking to
-                 having a final library ready for sequencing; sequencing will
-                 require an additional 1-3 d depending on the strategy and
-                 sequencer. The current limitations are the lack of strand
-                 specificity and the inability to detect nonpolyadenylated
-                 (polyA(-)) RNA.",
-  journal     = "Nat. Protoc.",
-  volume      =  9,
-  number      =  1,
-  pages       = "171--181",
-  month       =  jan,
-  year        =  2014,
-  language    = "en"
+@article{Picelli2014-ic,
+ author = {Picelli, Simone and Faridani, Omid R and Bj{\"o}rklund, Asa K and Winberg, G{\"o}sta and Sagasser, Sven and Sandberg, Rickard},
+ abstract = {Emerging methods for the accurate quantification of gene expression in individual cells hold promise for revealing the extent, function and origins of cell-to-cell variability. Different high-throughput methods for single-cell RNA-seq have been introduced that vary in coverage, sensitivity and multiplexing ability. We recently introduced Smart-seq for transcriptome analysis from single cells, and we subsequently optimized the method for improved sensitivity, accuracy and full-length coverage across transcripts. Here we present a detailed protocol for Smart-seq2 that allows the generation of full-length cDNA and sequencing libraries by using standard reagents. The entire protocol takes ∼2 d from cell picking to having a final library ready for sequencing; sequencing will require an additional 1-3 d depending on the strategy and sequencer. The current limitations are the lack of strand specificity and the inability to detect nonpolyadenylated (polyA(-)) RNA.},
+ affiliation = {Ludwig Institute for Cancer Research, Stockholm, Sweden. 1] Ludwig Institute for Cancer Research, Stockholm, Sweden. [2] Department of Cell and Molecular Biology, Karolinska Institutet, Stockholm, Sweden.},
+ journal = {Nat. Protoc.},
+ language = {en},
+ month = jan,
+ number = {1},
+ pages = {171--181},
+ title = {Full-length {{RNA}-seq} from single cells using Smart-seq2},
+ volume = {9},
+ year = {2014},
 }
 
-@ARTICLE{Islam2014-cn,
-  title       = "Quantitative single-cell {RNA-seq} with unique molecular
-                 identifiers",
-  author      = "Islam, Saiful and Zeisel, Amit and Joost, Simon and La Manno,
-                 Gioele and Zajac, Pawel and Kasper, Maria and L{\"o}nnerberg,
-                 Peter and Linnarsson, Sten",
-  affiliation = "Department of Medical Biochemistry and Biophysics, Karolinska
-                 Institutet, Stockholm, Sweden. Department of Medical
-                 Biochemistry and Biophysics, Karolinska Institutet, Stockholm,
-                 Sweden. Department of Biosciences and Nutrition, Karolinska
-                 Institutet, Stockholm, Sweden. Department of Medical
-                 Biochemistry and Biophysics, Karolinska Institutet, Stockholm,
-                 Sweden. Department of Medical Biochemistry and Biophysics,
-                 Karolinska Institutet, Stockholm, Sweden. Department of
-                 Biosciences and Nutrition, Karolinska Institutet, Stockholm,
-                 Sweden. Department of Medical Biochemistry and Biophysics,
-                 Karolinska Institutet, Stockholm, Sweden. Department of
-                 Medical Biochemistry and Biophysics, Karolinska Institutet,
-                 Stockholm, Sweden.",
-  abstract    = "Single-cell RNA sequencing (RNA-seq) is a powerful tool to
-                 reveal cellular heterogeneity, discover new cell types and
-                 characterize tumor microevolution. However, losses in cDNA
-                 synthesis and bias in cDNA amplification lead to severe
-                 quantitative errors. We show that molecular labels--random
-                 sequences that label individual molecules--can nearly
-                 eliminate amplification noise, and that microfluidic sample
-                 preparation and optimized reagents produce a fivefold
-                 improvement in mRNA capture efficiency.",
-  journal     = "Nat. Methods",
-  volume      =  11,
-  number      =  2,
-  pages       = "163--166",
-  month       =  feb,
-  year        =  2014,
-  language    = "en"
+@article{Islam2014-cn,
+ author = {Islam, Saiful and Zeisel, Amit and Joost, Simon and La Manno, Gioele and Zajac, Pawel and Kasper, Maria and Lönnerberg, Peter and Linnarsson, Sten},
+ doi = {10.1038/nmeth.2772},
+ issn = {1548-7091, 1548-7105},
+ journal = {Nat Meth},
+ month = dec,
+ number = {2},
+ pages = {163-166},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Quantitative single-cell {RNA}-seq with unique molecular identifiers},
+ url = {https://doi.org/10.1038/nmeth.2772},
+ volume = {11},
+ year = {2013},
 }
 
-
-@UNPUBLISHED{Buttner2017-ds,
-  title    = "Assessment of batch-correction methods for {scRNA-seq} data with
-              a new test metric",
-  author   = "Buttner, Maren and Miao, Zhichao and Wolf, Alexander and
-              Teichmann, Sarah A and Theis, Fabian J",
-  abstract = "Single-cell transcriptomics is a versatile tool for exploring
-              heterogeneous cell populations. As with all genomics experiments,
-              batch effects can hamper data integration and interpretation. The
-              success of batch effect correction is often evaluated by visual
-              inspection of dimension reduced representations such as principal
-              component analysis. This is inherently imprecise due to the high
-              number of genes and non-normal distribution of gene expression.
-              Here, we present a k-nearest neighbour batch effect test (kBET,
-              https://github.com/theislab/kBET) to quantitatively measure batch
-              effects. kBET is easier to interpret, more sensitive and more
-              robust than visual evaluation and other measures of batch
-              effects. We use kBET to assess commonly used batch regression and
-              normalisation approaches, and quantify the extent to which they
-              remove batch effects while preserving biological variability. Our
-              results illustrate that batch correction based on
-              log-transformation or scran pooling followed by ComBat reduced
-              the batch effect while preserving structure across data sets.
-              Finally we show that kBET can pinpoint successful data
-              integration methods across multiple data sets, in this case from
-              different publications all charting mouse embryonic development.
-              This has important implications for future data integration
-              efforts, which will be central to projects such as the Human Cell
-              Atlas where data for the same tissue may be generated in multiple
-              locations around the world.",
-  journal  = "bioRxiv",
-  pages    = "200345",
-  month    =  oct,
-  year     =  2017,
-  language = "en"
+@article{Buttner2017-ds,
+ author = {Buttner, Maren and Miao, Zhichao and Wolf, Alexander and Teichmann, Sarah A and Theis, Fabian J},
+ abstract = {Single-cell transcriptomics is a versatile tool for exploring heterogeneous cell populations. As with all genomics experiments, batch effects can hamper data integration and interpretation. The success of batch effect correction is often evaluated by visual inspection of dimension reduced representations such as principal component analysis. This is inherently imprecise due to the high number of genes and non-normal distribution of gene expression. Here, we present a k-nearest neighbour batch effect test (kBET, https://github.com/theislab/kBET) to quantitatively measure batch effects. kBET is easier to interpret, more sensitive and more robust than visual evaluation and other measures of batch effects. We use kBET to assess commonly used batch regression and normalisation approaches, and quantify the extent to which they remove batch effects while preserving biological variability. Our results illustrate that batch correction based on log-transformation or scran pooling followed by ComBat reduced the batch effect while preserving structure across data sets. Finally we show that kBET can pinpoint successful data integration methods across multiple data sets, in this case from different publications all charting mouse embryonic development. This has important implications for future data integration efforts, which will be central to projects such as the Human Cell Atlas where data for the same tissue may be generated in multiple locations around the world.},
+ journal = {bioRxiv},
+ language = {en},
+ month = oct,
+ pages = {200345},
+ title = {Assessment of batch-correction methods for {{scRNA}-seq} data with a new test metric},
+ year = {2017},
 }
 
-
-@UNPUBLISHED{Van_Dijk2017-bh,
-  title    = "{MAGIC}: A diffusion-based imputation method reveals gene-gene
-              interactions in single-cell {RNA-sequencing} data",
-  author   = "van Dijk, David and Nainys, Juozas and Sharma, Roshan and
-              Kathail, Pooja and Carr, Ambrose J and Moon, Kevin R and Mazutis,
-              Linas and Wolf, Guy and Krishnaswamy, Smita and Pe'er, Dana",
-  abstract = "Single-cell RNA-sequencing is fast becoming a major technology
-              that is revolutionizing biological discovery in fields such as
-              development, immunology and cancer. The ability to simultaneously
-              measure thousands of genes at single cell resolution allows,
-              among other prospects, for the possibility of learning gene
-              regulatory networks at large scales. However, scRNA-seq
-              technologies suffer from many sources of significant technical
-              noise, the most prominent of which is dropout due to inefficient
-              mRNA capture. This results in data that has a high degree of
-              sparsity, with typically only 10\% non-zero values. To address
-              this, we developed MAGIC (Markov Affinity-based Graph Imputation
-              of Cells), a method for imputing missing values, and restoring
-              the structure of the data. After MAGIC, we find that two- and
-              three-dimensional gene interactions are restored and that MAGIC
-              is able to impute complex and non-linear shapes of interactions.
-              MAGIC also retains cluster structure, enhances cluster-specific
-              gene interactions and restores trajectories, as demonstrated in
-              mouse retinal bipolar cells, hematopoiesis, and our newly
-              generated epithelial-to-mesenchymal transition dataset.",
-  journal  = "bioRxiv",
-  pages    = "111591",
-  month    =  feb,
-  year     =  2017,
-  language = "en"
+@article{Van_Dijk2017-bh,
+ author = {van Dijk, David and Nainys, Juozas and Sharma, Roshan and Kathail, Pooja and Carr, Ambrose J and Moon, Kevin R and Mazutis, Linas and Wolf, Guy and Krishnaswamy, Smita and Pe'er, Dana},
+ abstract = {Single-cell RNA-sequencing is fast becoming a major technology that is revolutionizing biological discovery in fields such as development, immunology and cancer. The ability to simultaneously measure thousands of genes at single cell resolution allows, among other prospects, for the possibility of learning gene regulatory networks at large scales. However, scRNA-seq technologies suffer from many sources of significant technical noise, the most prominent of which is dropout due to inefficient mRNA capture. This results in data that has a high degree of sparsity, with typically only 10\% non-zero values. To address this, we developed MAGIC (Markov Affinity-based Graph Imputation of Cells), a method for imputing missing values, and restoring the structure of the data. After MAGIC, we find that two- and three-dimensional gene interactions are restored and that MAGIC is able to impute complex and non-linear shapes of interactions. MAGIC also retains cluster structure, enhances cluster-specific gene interactions and restores trajectories, as demonstrated in mouse retinal bipolar cells, hematopoiesis, and our newly generated epithelial-to-mesenchymal transition dataset.},
+ journal = {bioRxiv},
+ language = {en},
+ month = feb,
+ pages = {111591},
+ title = {{{MAGIC}:} {A} diffusion-based imputation method reveals gene-gene interactions in single-cell {{RNA}-sequencing} data},
+ year = {2017},
 }
 
-
-@UNPUBLISHED{Li2017-tz,
-  title    = "scImpute: Accurate And Robust Imputation For Single Cell
-              {RNA-Seq} Data",
-  author   = "Li, Wei Vivian and Li, Jingyi Jessica",
-  abstract = "The analysis of single-cell RNA-seq (scRNA-seq) data is
-              complicated and biased by excess zero or near zero counts, the
-              so-called dropouts due to the low amounts of mRNA sequenced
-              within individual cells. We introduce scImpute, a statistical
-              method to accurately and robustly impute the dropouts in
-              scRNA-seq data. scImpute is shown as an effective tool to enhance
-              the clustering of cell populations, improve the accuracy of
-              differential expression analysis, and aid the study of gene
-              expression dynamics in time series scRNA-seq experiments.",
-  journal  = "bioRxiv",
-  pages    = "141598",
-  month    =  jun,
-  year     =  2017,
-  language = "en"
+@article{Li2017-tz,
+ author = {Li, Wei Vivian and Li, Jingyi Jessica},
+ abstract = {The analysis of single-cell RNA-seq (scRNA-seq) data is complicated and biased by excess zero or near zero counts, the so-called dropouts due to the low amounts of mRNA sequenced within individual cells. We introduce scImpute, a statistical method to accurately and robustly impute the dropouts in scRNA-seq data. scImpute is shown as an effective tool to enhance the clustering of cell populations, improve the accuracy of differential expression analysis, and aid the study of gene expression dynamics in time series scRNA-seq experiments.},
+ journal = {bioRxiv},
+ language = {en},
+ month = jun,
+ pages = {141598},
+ title = {{scImpute:} {Accurate} And Robust Imputation For Single Cell {{RNA}-Seq} Data},
+ year = {2017},
 }
 
-
-@ARTICLE{Levine2015-fk,
-  title       = "{Data-Driven} Phenotypic Dissection of {AML} Reveals
-                 Progenitor-like Cells that Correlate with Prognosis",
-  author      = "Levine, Jacob H and Simonds, Erin F and Bendall, Sean C and
-                 Davis, Kara L and Amir, El-Ad D and Tadmor, Michelle D and
-                 Litvin, Oren and Fienberg, Harris G and Jager, Astraea and
-                 Zunder, Eli R and Finck, Rachel and Gedman, Amanda L and
-                 Radtke, Ina and Downing, James R and Pe'er, Dana and Nolan,
-                 Garry P",
-  affiliation = "Departments of Biological Sciences and Systems Biology,
-                 Columbia University, New York, NY 10027, USA. Baxter
-                 Laboratory in Stem Cell Biology, Department of Microbiology
-                 and Immunology, Stanford University, Stanford, CA 94305, USA.
-                 Department of Pathology, Stanford University, Stanford, CA
-                 94305, USA. Baxter Laboratory in Stem Cell Biology, Department
-                 of Microbiology and Immunology, Stanford University, Stanford,
-                 CA 94305, USA. Departments of Biological Sciences and Systems
-                 Biology, Columbia University, New York, NY 10027, USA.
-                 Departments of Biological Sciences and Systems Biology,
-                 Columbia University, New York, NY 10027, USA. Departments of
-                 Biological Sciences and Systems Biology, Columbia University,
-                 New York, NY 10027, USA. Baxter Laboratory in Stem Cell
-                 Biology, Department of Microbiology and Immunology, Stanford
-                 University, Stanford, CA 94305, USA. Baxter Laboratory in Stem
-                 Cell Biology, Department of Microbiology and Immunology,
-                 Stanford University, Stanford, CA 94305, USA. Baxter
-                 Laboratory in Stem Cell Biology, Department of Microbiology
-                 and Immunology, Stanford University, Stanford, CA 94305, USA.
-                 Baxter Laboratory in Stem Cell Biology, Department of
-                 Microbiology and Immunology, Stanford University, Stanford, CA
-                 94305, USA. Department of Pathology, St. Jude Children's
-                 Research Hospital, 262 Danny Thomas Place, Memphis, TN 38105,
-                 USA. Department of Pathology, St. Jude Children's Research
-                 Hospital, 262 Danny Thomas Place, Memphis, TN 38105, USA.
-                 Department of Pathology, St. Jude Children's Research
-                 Hospital, 262 Danny Thomas Place, Memphis, TN 38105, USA.
-                 Departments of Biological Sciences and Systems Biology,
-                 Columbia University, New York, NY 10027, USA. Electronic
-                 address: dpeer@biology.columbia.edu. Baxter Laboratory in Stem
-                 Cell Biology, Department of Microbiology and Immunology,
-                 Stanford University, Stanford, CA 94305, USA. Electronic
-                 address: gnolan@stanford.edu.",
-  abstract    = "Acute myeloid leukemia (AML) manifests as phenotypically and
-                 functionally diverse cells, often within the same patient.
-                 Intratumor phenotypic and functional heterogeneity have been
-                 linked primarily by physical sorting experiments, which assume
-                 that functionally distinct subpopulations can be prospectively
-                 isolated by surface phenotypes. This assumption has proven
-                 problematic, and we therefore developed a data-driven
-                 approach. Using mass cytometry, we profiled surface and
-                 intracellular signaling proteins simultaneously in millions of
-                 healthy and leukemic cells. We developed PhenoGraph, which
-                 algorithmically defines phenotypes in high-dimensional
-                 single-cell data. PhenoGraph revealed that the surface
-                 phenotypes of leukemic blasts do not necessarily reflect their
-                 intracellular state. Using hematopoietic progenitors, we
-                 defined a signaling-based measure of cellular phenotype, which
-                 led to isolation of a gene expression signature that was
-                 predictive of survival in independent cohorts. This study
-                 presents new methods for large-scale analysis of single-cell
-                 heterogeneity and demonstrates their utility, yielding
-                 insights into AML pathophysiology.",
-  journal     = "Cell",
-  volume      =  162,
-  number      =  1,
-  pages       = "184--197",
-  month       =  jul,
-  year        =  2015,
-  language    = "en"
+@article{Blondel2008-px,
+ author = {Blondel, Vincent D and Guillaume, Jean-Loup and Lambiotte, Renaud and Lefebvre, Etienne},
+ doi = {10.1088/1742-5468/2008/10/p10008},
+ issn = {1742-5468},
+ journal = {J. Stat. Mech.},
+ month = oct,
+ number = {10},
+ pages = {P10008},
+ publisher = {IOP Publishing},
+ source = {Crossref},
+ title = {Fast unfolding of communities in large networks},
+ url = {https://doi.org/10.1088/1742-5468/2008/10/p10008},
+ volume = {2008},
+ year = {2008},
 }
 
-
-@ARTICLE{Blondel2008-px,
-  title     = "Fast unfolding of communities in large networks",
-  author    = "Blondel, Vincent D and Guillaume, Jean-Loup and Lambiotte,
-               Renaud and Lefebvre, Etienne",
-  abstract  = "We propose a simple method to extract the community structure of
-               large networks. Our method is a heuristic method that is based
-               on modularity optimization. It is shown to outperform all other
-               known community detection methods in terms of computation time.
-               Moreover, the quality of the communities detected is very good,
-               as measured by the so-called modularity. This is shown first by
-               identifying language communities in a Belgian mobile phone
-               network of 2 million customers and by analysing a web graph of
-               118 million nodes and more than one billion links. The accuracy
-               of our algorithm is also verified on ad hoc modular networks.",
-  journal   = "J. Stat. Mech.",
-  publisher = "IOP Publishing",
-  volume    =  2008,
-  number    =  10,
-  pages     = "P10008",
-  month     =  oct,
-  year      =  2008,
-  language  = "en"
+@article{Kiselev2017-nb,
+ author = {Kiselev, Vladimir Yu and Hemberg, Martin},
+ abstract = {Single-cell RNA-seq (scRNA-seq) is widely used to investigate the composition of complex tissues since the technology allows researchers to define cell-types using unsupervised clustering of the transcriptome. However, due to differences in experimental methods and computational analyses, it is often challenging to directly compare the cells identified in two different experiments. Here, we present scmap (http://bioconductor.org/packages/scmap), a method for projecting cells from a scRNA-seq experiment onto the cell-types identified in other experiments (the application can be run for free, without restrictions, from http://www.hemberg-lab.cloud/scmap).},
+ journal = {bioRxiv},
+ language = {en},
+ month = jul,
+ pages = {150292},
+ title = {scmap - A tool for unsupervised projection of single cell {{RNA}-seq} data},
+ year = {2017},
 }
 
-
-@UNPUBLISHED{Kiselev2017-nb,
-  title    = "scmap - A tool for unsupervised projection of single cell
-              {RNA-seq} data",
-  author   = "Kiselev, Vladimir Yu and Hemberg, Martin",
-  abstract = "Single-cell RNA-seq (scRNA-seq) is widely used to investigate the
-              composition of complex tissues since the technology allows
-              researchers to define cell-types using unsupervised clustering of
-              the transcriptome. However, due to differences in experimental
-              methods and computational analyses, it is often challenging to
-              directly compare the cells identified in two different
-              experiments. Here, we present scmap
-              (http://bioconductor.org/packages/scmap), a method for projecting
-              cells from a scRNA-seq experiment onto the cell-types identified
-              in other experiments (the application can be run for free,
-              without restrictions, from http://www.hemberg-lab.cloud/scmap).",
-  journal  = "bioRxiv",
-  pages    = "150292",
-  month    =  jul,
-  year     =  2017,
-  language = "en"
+@article{Muraro2016-yk,
+ author = {Muraro, Mauro J. and Dharmadhikari, Gitanjali and Grün, Dominic and Groen, Nathalie and Dielen, Tim and Jansen, Erik and van Gurp, Leon and Engelse, Marten A. and Carlotti, Francoise and de Koning, Eelco J.P. and van Oudenaarden, Alexander},
+ doi = {10.1016/j.cels.2016.09.002},
+ issn = {2405-4712},
+ journal = {Cell Systems},
+ month = oct,
+ number = {4},
+ pages = {385-394.e3},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {A Single-Cell Transcriptome Atlas of the Human Pancreas},
+ url = {https://doi.org/10.1016/j.cels.2016.09.002},
+ volume = {3},
+ year = {2016},
 }
 
-
-@ARTICLE{Muraro2016-yk,
-  title       = "A {Single-Cell} Transcriptome Atlas of the Human Pancreas",
-  author      = "Muraro, Mauro J and Dharmadhikari, Gitanjali and Gr{\"u}n,
-                 Dominic and Groen, Nathalie and Dielen, Tim and Jansen, Erik
-                 and van Gurp, Leon and Engelse, Marten A and Carlotti,
-                 Francoise and de Koning, Eelco J P and van Oudenaarden,
-                 Alexander",
-  affiliation = "Hubrecht Institute-KNAW (Royal Netherlands Academy of Arts and
-                 Sciences) and University Medical Center Utrecht, Cancer
-                 Genomics Netherlands, 3584 CT Utrecht, the Netherlands.
-                 Hubrecht Institute-KNAW (Royal Netherlands Academy of Arts and
-                 Sciences) and University Medical Center Utrecht, Cancer
-                 Genomics Netherlands, 3584 CT Utrecht, the Netherlands.
-                 Hubrecht Institute-KNAW (Royal Netherlands Academy of Arts and
-                 Sciences) and University Medical Center Utrecht, Cancer
-                 Genomics Netherlands, 3584 CT Utrecht, the Netherlands; Max
-                 Planck Institute of Immunobiology and Epigenetics, 79108
-                 Freiburg, Germany. Department of Internal Medicine, Leiden
-                 University Medical Center, 2333 ZA Leiden, the Netherlands.
-                 Hubrecht Institute-KNAW (Royal Netherlands Academy of Arts and
-                 Sciences) and University Medical Center Utrecht, Cancer
-                 Genomics Netherlands, 3584 CT Utrecht, the Netherlands.
-                 Hubrecht Institute-KNAW (Royal Netherlands Academy of Arts and
-                 Sciences) and University Medical Center Utrecht, Cancer
-                 Genomics Netherlands, 3584 CT Utrecht, the Netherlands.
-                 Hubrecht Institute-KNAW (Royal Netherlands Academy of Arts and
-                 Sciences) and University Medical Center Utrecht, Cancer
-                 Genomics Netherlands, 3584 CT Utrecht, the Netherlands.
-                 Section of Nephrology and Section of Endocrinology, Department
-                 of Medicine, Leiden University Medical Center, 2333 ZA Leiden,
-                 the Netherlands. Department of Internal Medicine, Leiden
-                 University Medical Center, 2333 ZA Leiden, the Netherlands.
-                 Hubrecht Institute-KNAW (Royal Netherlands Academy of Arts and
-                 Sciences) and University Medical Center Utrecht, Cancer
-                 Genomics Netherlands, 3584 CT Utrecht, the Netherlands;
-                 Section of Nephrology and Section of Endocrinology, Department
-                 of Medicine, Leiden University Medical Center, 2333 ZA Leiden,
-                 the Netherlands. Electronic address: e.koning@hubrecht.eu.
-                 Hubrecht Institute-KNAW (Royal Netherlands Academy of Arts and
-                 Sciences) and University Medical Center Utrecht, Cancer
-                 Genomics Netherlands, 3584 CT Utrecht, the Netherlands.
-                 Electronic address: a.vanoudenaarden@hubrecht.eu.",
-  abstract    = "To understand organ function, it is important to have an
-                 inventory of its cell types and of their corresponding marker
-                 genes. This is a particularly challenging task for human
-                 tissues like the pancreas, because reliable markers are
-                 limited. Hence, transcriptome-wide studies are typically done
-                 on pooled islets of Langerhans, obscuring contributions from
-                 rare cell types and of potential subpopulations. To overcome
-                 this challenge, we developed an automated platform that uses
-                 FACS, robotics, and the CEL-Seq2 protocol to obtain the
-                 transcriptomes of thousands of single pancreatic cells from
-                 deceased organ donors, allowing in silico purification of all
-                 main pancreatic cell types. We identify cell type-specific
-                 transcription factors and a subpopulation of REG3A-positive
-                 acinar cells. We also show that CD24 and TM4SF4 expression can
-                 be used to sort live alpha and beta cells with high purity.
-                 This resource will be useful for developing a deeper
-                 understanding of pancreatic biology and pathophysiology of
-                 diabetes mellitus.",
-  journal     = "Cell Syst",
-  volume      =  3,
-  number      =  4,
-  pages       = "385--394.e3",
-  month       =  oct,
-  year        =  2016,
-  keywords    = "islets of Langerhans; pancreas; sequencing; single-cell
-                 transcriptomics",
-  language    = "en"
+@article{Segerstolpe2016-wc,
+ author = {Segerstolpe, Åsa and Palasantza, Athanasia and Eliasson, Pernilla and Andersson, Eva-Marie and Andréasson, Anne-Christine and Sun, Xiaoyan and Picelli, Simone and Sabirsh, Alan and Clausen, Maryam and Bjursell, Magnus K. and Smith, David M. and Kasper, Maria and Ämmälä, Carina and Sandberg, Rickard},
+ doi = {10.1016/j.cmet.2016.08.020},
+ issn = {1550-4131},
+ journal = {Cell Metabolism},
+ month = oct,
+ number = {4},
+ pages = {593-607},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {Single-Cell Transcriptome Profiling of Human Pancreatic Islets in Health and Type 2 Diabetes},
+ url = {https://doi.org/10.1016/j.cmet.2016.08.020},
+ volume = {24},
+ year = {2016},
 }
 
-
-@ARTICLE{Segerstolpe2016-wc,
-  title       = "{Single-Cell} Transcriptome Profiling of Human Pancreatic
-                 Islets in Health and Type 2 Diabetes",
-  author      = "Segerstolpe, {\AA}sa and Palasantza, Athanasia and Eliasson,
-                 Pernilla and Andersson, Eva-Marie and Andr{\'e}asson,
-                 Anne-Christine and Sun, Xiaoyan and Picelli, Simone and
-                 Sabirsh, Alan and Clausen, Maryam and Bjursell, Magnus K and
-                 Smith, David M and Kasper, Maria and {\"A}mm{\"a}l{\"a},
-                 Carina and Sandberg, Rickard",
-  affiliation = "Department of Cell and Molecular Biology (CMB), Karolinska
-                 Institutet, 171 77 Stockholm, Sweden; Integrated Cardio
-                 Metabolic Center (ICMC), Karolinska Institutet, 141 57
-                 Huddinge, Sweden. Department of Cell and Molecular Biology
-                 (CMB), Karolinska Institutet, 171 77 Stockholm, Sweden.
-                 Cardiovascular and Metabolic Diseases (CVMD), Innovative
-                 Medicines and Early Development Biotech Unit (iMed),
-                 AstraZeneca, 431 83 M{\"o}lndal, Sweden. Cardiovascular and
-                 Metabolic Diseases (CVMD), Innovative Medicines and Early
-                 Development Biotech Unit (iMed), AstraZeneca, 431 83
-                 M{\"o}lndal, Sweden. Cardiovascular and Metabolic Diseases
-                 (CVMD), Innovative Medicines and Early Development Biotech
-                 Unit (iMed), AstraZeneca, 431 83 M{\"o}lndal, Sweden.
-                 Department of Biosciences and Nutrition and Center for
-                 Innovative Medicine, Novum, Karolinska Institutet, 141 83
-                 Huddinge, Sweden. Ludwig Institute for Cancer Research, 171 77
-                 Stockholm, Sweden. Cardiovascular and Metabolic Diseases
-                 (CVMD), Innovative Medicines and Early Development Biotech
-                 Unit (iMed), AstraZeneca, 431 83 M{\"o}lndal, Sweden.
-                 Discovery Sciences, Innovative Medicines and Early Development
-                 Biotech Unit (iMed), AstraZeneca, 431 83 M{\"o}lndal, Sweden.
-                 R\&D Information (RDI), AstraZeneca, 431 83 M{\"o}lndal,
-                 Sweden. Discovery Sciences, Innovative Medicines and Early
-                 Development Biotech Unit (iMed), AstraZeneca, Cambridge
-                 Science Park, Milton Road, Cambridge CB4 0WG, UK. Department
-                 of Biosciences and Nutrition and Center for Innovative
-                 Medicine, Novum, Karolinska Institutet, 141 83 Huddinge,
-                 Sweden. Cardiovascular and Metabolic Diseases (CVMD),
-                 Innovative Medicines and Early Development Biotech Unit
-                 (iMed), AstraZeneca, 431 83 M{\"o}lndal, Sweden. Department of
-                 Cell and Molecular Biology (CMB), Karolinska Institutet, 171
-                 77 Stockholm, Sweden; Integrated Cardio Metabolic Center
-                 (ICMC), Karolinska Institutet, 141 57 Huddinge, Sweden; Ludwig
-                 Institute for Cancer Research, 171 77 Stockholm, Sweden.
-                 Electronic address: rickard.sandberg@ki.se.",
-  abstract    = "Hormone-secreting cells within pancreatic islets of Langerhans
-                 play important roles in metabolic homeostasis and disease.
-                 However, their transcriptional characterization is still
-                 incomplete. Here, we sequenced the transcriptomes of thousands
-                 of human islet cells from healthy and type 2 diabetic donors.
-                 We could define specific genetic programs for each individual
-                 endocrine and exocrine cell type, even for rare $\delta$,
-                 $\gamma$, $\epsilon$, and stellate cells, and revealed
-                 subpopulations of $\alpha$, $\beta$, and acinar cells.
-                 Intriguingly, $\delta$ cells expressed several important
-                 receptors, indicating an unrecognized importance of these
-                 cells in integrating paracrine and systemic metabolic signals.
-                 Genes previously associated with obesity or diabetes were
-                 found to correlate with BMI. Finally, comparing healthy and
-                 T2D transcriptomes in a cell-type resolved manner uncovered
-                 candidates for future functional studies. Altogether, our
-                 analyses demonstrate the utility of the generated single-cell
-                 gene expression resource.",
-  journal     = "Cell Metab.",
-  volume      =  24,
-  number      =  4,
-  pages       = "593--607",
-  month       =  oct,
-  year        =  2016,
-  language    = "en"
+@article{Regev2017-mw,
+ author = {Regev, Aviv and Teichmann, Sarah and Lander, Eric S and Amit, Ido and Benoist, Christophe and Birney, Ewan and Bodenmiller, Bernd and Campbell, Peter and Carninci, Piero and Clatworthy, Menna and Clevers, Hans and Deplancke, Bart and Dunham, Ian and Eberwine, James and Eils, Roland and Enard, Wolfgang and Farmer, Andrew and Fugger, Lars and Gottgens, Berthold and Hacohen, Nir and Haniffa, Muzlifah and Hemberg, Martin and Kim, Seung K and Klenerman, Paul and Kriegstein, Arnold and Lein, Ed and Linnarsson, Sten and Lundeberg, Joakim and Majumder, Partha and Marioni, John and Merad, Miriam and Mhlanga, Musa and Nawijn, Martijn and Netea, Mihai and Nolan, Garry and Pe'er, Dana and Philipakis, Anthony and Ponting, Chris P and Quake, Stephen R and Reik, Wolf and Rozenblatt-Rosen, Orit and Sanes, Joshua R and Satija, Rahul and Shumacher, Ton and Shalek, Alex K and Shapiro, Ehud and Sharma, Padmanee and Shin, Jay and Stegle, Oliver and Stratton, Michael and Stubbington, Michael J T and van Oudenaarden, Alexander and Wagner, Allon and Watt, Fiona M and Weissman, Jonathan S and Wold, Barbara and Xavier, Ramnik J and Yosef, Nir and {Human Cell Atlas}},
+ abstract = {The recent advent of methods for high-throughput single-cell molecular profiling has catalyzed a growing sense in the scientific community that the time is ripe to complete the 150-year-old effort to identify all cell types in the human body, by undertaking a Human Cell Atlas Project as an international collaborative effort. The aim would be to define all human cell types in terms of distinctive molecular profiles (e.g., gene expression) and connect this information with classical cellular descriptions (e.g., location and morphology). A comprehensive reference map of the molecular state of cells in healthy human tissues would propel the systematic study of physiological states, developmental trajectories, regulatory circuitry and interactions of cells, as well as provide a framework for understanding cellular dysregulation in human disease. Here we describe the idea, its potential utility, early proofs-of-concept, and some design considerations for the Human Cell Atlas.},
+ journal = {bioRxiv},
+ language = {en},
+ month = may,
+ pages = {121202},
+ title = {The Human Cell Atlas},
+ year = {2017},
 }
 
-
-@UNPUBLISHED{Regev2017-mw,
-  title    = "The Human Cell Atlas",
-  author   = "Regev, Aviv and Teichmann, Sarah and Lander, Eric S and Amit, Ido
-              and Benoist, Christophe and Birney, Ewan and Bodenmiller, Bernd
-              and Campbell, Peter and Carninci, Piero and Clatworthy, Menna and
-              Clevers, Hans and Deplancke, Bart and Dunham, Ian and Eberwine,
-              James and Eils, Roland and Enard, Wolfgang and Farmer, Andrew and
-              Fugger, Lars and Gottgens, Berthold and Hacohen, Nir and Haniffa,
-              Muzlifah and Hemberg, Martin and Kim, Seung K and Klenerman, Paul
-              and Kriegstein, Arnold and Lein, Ed and Linnarsson, Sten and
-              Lundeberg, Joakim and Majumder, Partha and Marioni, John and
-              Merad, Miriam and Mhlanga, Musa and Nawijn, Martijn and Netea,
-              Mihai and Nolan, Garry and Pe'er, Dana and Philipakis, Anthony
-              and Ponting, Chris P and Quake, Stephen R and Reik, Wolf and
-              Rozenblatt-Rosen, Orit and Sanes, Joshua R and Satija, Rahul and
-              Shumacher, Ton and Shalek, Alex K and Shapiro, Ehud and Sharma,
-              Padmanee and Shin, Jay and Stegle, Oliver and Stratton, Michael
-              and Stubbington, Michael J T and van Oudenaarden, Alexander and
-              Wagner, Allon and Watt, Fiona M and Weissman, Jonathan S and
-              Wold, Barbara and Xavier, Ramnik J and Yosef, Nir and {Human Cell
-              Atlas}",
-  abstract = "The recent advent of methods for high-throughput single-cell
-              molecular profiling has catalyzed a growing sense in the
-              scientific community that the time is ripe to complete the
-              150-year-old effort to identify all cell types in the human body,
-              by undertaking a Human Cell Atlas Project as an international
-              collaborative effort. The aim would be to define all human cell
-              types in terms of distinctive molecular profiles (e.g., gene
-              expression) and connect this information with classical cellular
-              descriptions (e.g., location and morphology). A comprehensive
-              reference map of the molecular state of cells in healthy human
-              tissues would propel the systematic study of physiological
-              states, developmental trajectories, regulatory circuitry and
-              interactions of cells, as well as provide a framework for
-              understanding cellular dysregulation in human disease. Here we
-              describe the idea, its potential utility, early
-              proofs-of-concept, and some design considerations for the Human
-              Cell Atlas.",
-  journal  = "bioRxiv",
-  pages    = "121202",
-  month    =  may,
-  year     =  2017,
-  language = "en"
+@article{Altschul1990-ts,
+ author = {Altschul, Stephen F. and Gish, Warren and Miller, Webb and Myers, Eugene W. and Lipman, David J.},
+ doi = {10.1016/s0022-2836(05)80360-2},
+ issn = {0022-2836},
+ journal = {Journal of Molecular Biology},
+ month = oct,
+ number = {3},
+ pages = {403-410},
+ publisher = {Elsevier BV},
+ source = {Crossref},
+ title = {Basic local alignment search tool},
+ url = {https://doi.org/10.1016/s0022-2836(05)80360-2},
+ volume = {215},
+ year = {1990},
 }
 
-
-@ARTICLE{Altschul1990-ts,
-  title       = "Basic local alignment search tool",
-  author      = "Altschul, S F and Gish, W and Miller, W and Myers, E W and
-                 Lipman, D J",
-  affiliation = "National Center for Biotechnology Information, National
-                 Library of Medicine, National Institutes of Health, Bethesda,
-                 MD 20894.",
-  abstract    = "A new approach to rapid sequence comparison, basic local
-                 alignment search tool (BLAST), directly approximates
-                 alignments that optimize a measure of local similarity, the
-                 maximal segment pair (MSP) score. Recent mathematical results
-                 on the stochastic properties of MSP scores allow an analysis
-                 of the performance of this method as well as the statistical
-                 significance of alignments it generates. The basic algorithm
-                 is simple and robust; it can be implemented in a number of
-                 ways and applied in a variety of contexts including
-                 straightforward DNA and protein sequence database searches,
-                 motif searches, gene identification searches, and in the
-                 analysis of multiple regions of similarity in long DNA
-                 sequences. In addition to its flexibility and tractability to
-                 mathematical analysis, BLAST is an order of magnitude faster
-                 than existing sequence comparison tools of comparable
-                 sensitivity.",
-  journal     = "J. Mol. Biol.",
-  volume      =  215,
-  number      =  3,
-  pages       = "403--410",
-  month       =  oct,
-  year        =  1990,
-  language    = "en"
+@article{Anders2010-jr,
+ author = {Anders, Simon and Huber, Wolfgang},
+ doi = {10.1186/gb-2010-11-10-r106},
+ issn = {1465-6906},
+ journal = {Genome Biol},
+ number = {10},
+ pages = {R106},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Differential expression analysis for sequence count data},
+ url = {https://doi.org/10.1186/gb-2010-11-10-r106},
+ volume = {11},
+ year = {2010},
 }
 
-
-@ARTICLE{Anders2010-jr,
-  title       = "Differential expression analysis for sequence count data",
-  author      = "Anders, Simon and Huber, Wolfgang",
-  affiliation = "European Molecular Biology Laboratory, Mayerhofstra{\ss}e 1,
-                 69117 Heidelberg, Germany. sanders@fs.tum.de",
-  abstract    = "High-throughput sequencing assays such as RNA-Seq, ChIP-Seq or
-                 barcode counting provide quantitative readouts in the form of
-                 count data. To infer differential signal in such data
-                 correctly and with good statistical power, estimation of data
-                 variability throughout the dynamic range and a suitable error
-                 model are required. We propose a method based on the negative
-                 binomial distribution, with variance and mean linked by local
-                 regression and present an implementation, DESeq, as an
-                 R/Bioconductor package.",
-  journal     = "Genome Biol.",
-  volume      =  11,
-  number      =  10,
-  pages       = "R106",
-  month       =  oct,
-  year        =  2010
+@article{Bullard2010-eb,
+ author = {Bullard, James H and Purdom, Elizabeth and Hansen, Kasper D and Dudoit, Sandrine},
+ doi = {10.1186/1471-2105-11-94},
+ issn = {1471-2105},
+ journal = {BMC Bioinformatics},
+ number = {1},
+ pages = {94},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Evaluation of statistical methods for normalization and differential expression in {mRNA}-Seq experiments},
+ url = {https://doi.org/10.1186/1471-2105-11-94},
+ volume = {11},
+ year = {2010},
 }
 
-
-@ARTICLE{Bullard2010-eb,
-  title       = "Evaluation of statistical methods for normalization and
-                 differential expression in {mRNA-Seq} experiments",
-  author      = "Bullard, James H and Purdom, Elizabeth and Hansen, Kasper D
-                 and Dudoit, Sandrine",
-  affiliation = "Division of Biostatistics, University of California, Berkeley,
-                 Berkeley, CA, USA. bullard@berkeley.edu",
-  abstract    = "BACKGROUND: High-throughput sequencing technologies, such as
-                 the Illumina Genome Analyzer, are powerful new tools for
-                 investigating a wide range of biological and medical
-                 questions. Statistical and computational methods are key for
-                 drawing meaningful and accurate conclusions from the massive
-                 and complex datasets generated by the sequencers. We provide a
-                 detailed evaluation of statistical methods for normalization
-                 and differential expression (DE) analysis of Illumina
-                 transcriptome sequencing (mRNA-Seq) data. RESULTS: We compare
-                 statistical methods for detecting genes that are significantly
-                 DE between two types of biological samples and find that there
-                 are substantial differences in how the test statistics handle
-                 low-count genes. We evaluate how DE results are affected by
-                 features of the sequencing platform, such as, varying gene
-                 lengths, base-calling calibration method (with and without phi
-                 X control lane), and flow-cell/library preparation effects. We
-                 investigate the impact of the read count normalization method
-                 on DE results and show that the standard approach of scaling
-                 by total lane counts (e.g., RPKM) can bias estimates of DE. We
-                 propose more general quantile-based normalization procedures
-                 and demonstrate an improvement in DE detection. CONCLUSIONS:
-                 Our results have significant practical and methodological
-                 implications for the design and analysis of mRNA-Seq
-                 experiments. They highlight the importance of appropriate
-                 statistical methods for normalization and DE inference, to
-                 account for features of the sequencing platform that could
-                 impact the accuracy of results. They also reveal the need for
-                 further research in the development of statistical and
-                 computational methods for mRNA-Seq.",
-  journal     = "BMC Bioinformatics",
-  volume      =  11,
-  pages       = "94",
-  month       =  feb,
-  year        =  2010,
-  language    = "en"
+@article{Robinson2010-hz,
+ author = {Robinson, Mark D and Oshlack, Alicia},
+ doi = {10.1186/gb-2010-11-3-r25},
+ issn = {1465-6906},
+ journal = {Genome Biol},
+ number = {3},
+ pages = {R25},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {A scaling normalization method for differential expression analysis of {RNA}-seq data},
+ url = {https://doi.org/10.1186/gb-2010-11-3-r25},
+ volume = {11},
+ year = {2010},
 }
 
-
-@ARTICLE{Robinson2010-hz,
-  title       = "A scaling normalization method for differential expression
-                 analysis of {RNA-seq} data",
-  author      = "Robinson, Mark D and Oshlack, Alicia",
-  affiliation = "Bioinformatics Division, Walter and Eliza Hall Institute, 1G
-                 Royal Parade, Parkville, Australia. mrobinson@wehi.edu.au",
-  abstract    = "The fine detail provided by sequencing-based transcriptome
-                 surveys suggests that RNA-seq is likely to become the platform
-                 of choice for interrogating steady state RNA. In order to
-                 discover biologically important changes in expression, we show
-                 that normalization continues to be an essential step in the
-                 analysis. We outline a simple and effective method for
-                 performing normalization and show dramatically improved
-                 results for inferring differential expression in simulated and
-                 publicly available data sets.",
-  journal     = "Genome Biol.",
-  volume      =  11,
-  number      =  3,
-  pages       = "R25",
-  month       =  mar,
-  year        =  2010,
-  language    = "en"
+@article{L_Lun2016-pq,
+ author = {L. Lun, Aaron T. and Bach, Karsten and Marioni, John C.},
+ doi = {10.1186/s13059-016-0947-7},
+ issn = {1474-760X},
+ journal = {Genome Biol},
+ month = apr,
+ number = {1},
+ publisher = {Springer Nature},
+ source = {Crossref},
+ title = {Pooling across cells to normalize single-cell {RNA} sequencing data with many zero counts},
+ url = {https://doi.org/10.1186/s13059-016-0947-7},
+ volume = {17},
+ year = {2016},
 }
 
-@ARTICLE{L_Lun2016-pq,
-  title    = "Pooling across cells to normalize single-cell {RNA} sequencing
-              data with many zero counts",
-  author   = "L. Lun, Aaron T and Bach, Karsten and Marioni, John C",
-  abstract = "Normalization of single-cell RNA sequencing data is necessary to
-              eliminate cell-specific biases prior to downstream analyses.
-              However, this is not straightforward for noisy single-cell data
-              where many counts are zero. We present a novel approach where
-              expression values are summed across pools of cells, and the
-              summed values are used for normalization. Pool-based size factors
-              are then deconvolved to yield cell-based factors. Our
-              deconvolution approach outperforms existing methods for accurate
-              normalization of cell-specific biases in simulated data. Similar
-              behavior is observed in real data, where deconvolution improves
-              the relevance of results of downstream analyses.",
-  journal  = "Genome Biol.",
-  volume   =  17,
-  number   =  1,
-  pages    = "1--14",
-  year     =  2016
+@article{Haghverdi2017-vh,
+ author = {Haghverdi, Laleh and Lun, Aaron T L and Morgan, Michael D and Marioni, John C},
+ abstract = {The presence of batch effects is a well-known problem in experimental data analysis, and single-cell RNA sequencing (scRNA-seq) is no exception. Large-scale scRNA-seq projects that generate data from different laboratories and at different times are rife with batch effects that can fatally compromise integration and interpretation of the data. In such cases, computational batch correction is critical for eliminating uninteresting technical factors and obtaining valid biological conclusions. However, existing methods assume that the composition of cell populations are either known or the same across batches. Here, we present a new strategy for batch correction based on the detection of mutual nearest neighbours in the high-dimensional expression space. Our approach does not rely on pre-defined or equal population compositions across batches, only requiring that a subset of the population be shared between batches. We demonstrate the superiority of our approach over existing methods on a range of simulated and real scRNA-seq data sets. We also show how our method can be applied to integrate scRNA-seq data from two separate studies of early embryonic development.},
+ journal = {bioRxiv},
+ language = {en},
+ month = jul,
+ pages = {165118},
+ title = {Correcting batch effects in single-cell {RNA} sequencing data by matching mutual nearest neighbours},
+ year = {2017},
 }
 
-@UNPUBLISHED{Haghverdi2017-vh,
-  title    = "Correcting batch effects in single-cell {RNA} sequencing data by
-              matching mutual nearest neighbours",
-  author   = "Haghverdi, Laleh and Lun, Aaron T L and Morgan, Michael D and
-              Marioni, John C",
-  abstract = "The presence of batch effects is a well-known problem in
-              experimental data analysis, and single-cell RNA sequencing
-              (scRNA-seq) is no exception. Large-scale scRNA-seq projects that
-              generate data from different laboratories and at different times
-              are rife with batch effects that can fatally compromise
-              integration and interpretation of the data. In such cases,
-              computational batch correction is critical for eliminating
-              uninteresting technical factors and obtaining valid biological
-              conclusions. However, existing methods assume that the
-              composition of cell populations are either known or the same
-              across batches. Here, we present a new strategy for batch
-              correction based on the detection of mutual nearest neighbours in
-              the high-dimensional expression space. Our approach does not rely
-              on pre-defined or equal population compositions across batches,
-              only requiring that a subset of the population be shared between
-              batches. We demonstrate the superiority of our approach over
-              existing methods on a range of simulated and real scRNA-seq data
-              sets. We also show how our method can be applied to integrate
-              scRNA-seq data from two separate studies of early embryonic
-              development.",
-  journal  = "bioRxiv",
-  pages    = "165118",
-  month    =  jul,
-  year     =  2017,
-  language = "en"
-}
