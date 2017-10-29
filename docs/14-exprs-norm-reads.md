@@ -28,38 +28,6 @@ output: html_document
 ```
 
 <div class="figure" style="text-align: center">
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-tmm-reads-1.png" alt="PCA plot of the tung data after TMM normalisation" width="90%" />
-<p class="caption">(\#fig:norm-pca-tmm-reads)PCA plot of the tung data after TMM normalisation</p>
-</div>
-<div class="figure" style="text-align: center">
-<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-tmm-reads-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
-<p class="caption">(\#fig:norm-ours-rle-tmm-reads)Cell-wise RLE of the tung data</p>
-</div>
-
-
-```
-## Warning in .local(object, ...): spike-in transcripts in 'ERCC' should have
-## their own size factors
-```
-
-<div class="figure" style="text-align: center">
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-lsf-umi-1.png" alt="PCA plot of the tung data after LSF normalisation" width="90%" />
-<p class="caption">(\#fig:norm-pca-lsf-umi)PCA plot of the tung data after LSF normalisation</p>
-</div>
-
-<div class="figure" style="text-align: center">
-<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-scran-reads-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
-<p class="caption">(\#fig:norm-ours-rle-scran-reads)Cell-wise RLE of the tung data</p>
-</div>
-
-
-```
-## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
-## = return_log, : spike-in transcripts in 'ERCC' should have their own size
-## factors
-```
-
-<div class="figure" style="text-align: center">
 <img src="14-exprs-norm-reads_files/figure-html/norm-pca-rle-reads-1.png" alt="PCA plot of the tung data after RLE normalisation" width="90%" />
 <p class="caption">(\#fig:norm-pca-rle-reads)PCA plot of the tung data after RLE normalisation</p>
 </div>
@@ -83,6 +51,38 @@ output: html_document
 <div class="figure" style="text-align: center">
 <img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-uq-reads-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
 <p class="caption">(\#fig:norm-ours-rle-uq-reads)Cell-wise RLE of the tung data</p>
+</div>
+
+
+```
+## Warning in normalizeSCE(object, exprs_values = exprs_values, return_log
+## = return_log, : spike-in transcripts in 'ERCC' should have their own size
+## factors
+```
+
+<div class="figure" style="text-align: center">
+<img src="14-exprs-norm-reads_files/figure-html/norm-pca-tmm-reads-1.png" alt="PCA plot of the tung data after TMM normalisation" width="90%" />
+<p class="caption">(\#fig:norm-pca-tmm-reads)PCA plot of the tung data after TMM normalisation</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-tmm-reads-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-ours-rle-tmm-reads)Cell-wise RLE of the tung data</p>
+</div>
+
+
+```
+## Warning in .local(object, ...): spike-in transcripts in 'ERCC' should have
+## their own size factors
+```
+
+<div class="figure" style="text-align: center">
+<img src="14-exprs-norm-reads_files/figure-html/norm-pca-lsf-umi-1.png" alt="PCA plot of the tung data after LSF normalisation" width="90%" />
+<p class="caption">(\#fig:norm-pca-lsf-umi)PCA plot of the tung data after LSF normalisation</p>
+</div>
+
+<div class="figure" style="text-align: center">
+<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-scran-reads-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-ours-rle-scran-reads)Cell-wise RLE of the tung data</p>
 </div>
 
 <div class="figure" style="text-align: center">
@@ -113,8 +113,6 @@ output: html_document
 <img src="14-exprs-norm-reads_files/figure-html/norm-pca-fpkm-reads-1.png" alt="PCA plot of the tung data after FPKM normalisation" width="90%" />
 <p class="caption">(\#fig:norm-pca-fpkm-reads)PCA plot of the tung data after FPKM normalisation</p>
 </div>
-
-### sessionInfo()
 
 
 ```

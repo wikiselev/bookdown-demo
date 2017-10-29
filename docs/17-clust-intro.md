@@ -127,3 +127,7 @@ pcaReduce [@Zurauskiene2016-kg] combines PCA, _k_-means and “iterative” hier
 #### Seurat clustering
 
 [`Seurat`](https://github.com/satijalab/seurat) clustering is based on a _community detection_ approach similar to `SNN-Cliq` and to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. Since `Seurat` has become more like an all-in-one tool for scRNA-seq data analysis we dedicate a separate chapter to discuss it in more details (chapter \@ref(seurat-chapter)).
+
+### Comparing clustering
+
+To compare two sets of clustering labels we can use [adjusted Rand index](https://en.wikipedia.org/wiki/Rand_index). The index is a measure of the similarity between two data clusterings. Values of the adjusted Rand index lie in $[0;1]$ interval, where $1$ means that two clusterings are identical and $0$ means the level of similarity expected by chance.

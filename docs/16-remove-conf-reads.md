@@ -28,10 +28,6 @@ reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- normalize(reads.qc)
 ```
 
-### Remove Unwanted Variation
-
-#### RUVg
-
 
 ```r
 ruvg <- RUVg(counts(reads.qc), erccs, k = 1)
@@ -43,8 +39,6 @@ assay(reads.qc, "ruvg10") <- log2(
     t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
 )
 ```
-
-#### RUVs
 
 
 ```r
@@ -65,8 +59,6 @@ assay(reads.qc, "ruvs10") <- log2(
     t(t(ruvs$normalizedCounts) / colSums(ruvs$normalizedCounts) * 1e6) + 1
 )
 ```
-
-#### Combat
 
 
 ```r
@@ -97,8 +89,6 @@ __Exercise 1__
 ```
 ## Standardizing Data across genes
 ```
-
-#### mnnCorrect 
 
 
 ```r
@@ -144,8 +134,6 @@ assay(reads.qc, "mnn") <- cbind(indi1, indi2, indi3);
 #)
 ```
 
-#### GLM
-
 
 ```r
 glm_fun <- function(g, batch, indi) {
@@ -168,8 +156,6 @@ __Exercise 2__
 
 
 
-#### Effectiveness 1
-
 
 ```r
 for(n in assayNames(reads.qc)) {
@@ -188,8 +174,6 @@ for(n in assayNames(reads.qc)) {
 
 <img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-5.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-6.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-7.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-8.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-9.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-10.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-11.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-12.png" width="672" style="display: block; margin: auto;" />
 
-#### Effectiveness 2
-
 
 ```r
 res <- list()
@@ -201,8 +185,6 @@ boxplot(res, las=2)
 ```
 
 <img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
-
-#### Effectiveness 3
 
 
 ```r
@@ -226,35 +208,7 @@ for(n in assayNames(reads.qc)) {
 }
 ```
 
-<img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-3.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-4.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-5.png" width="672" style="display: block; margin: auto;" />
-
-```
-## Warning: Removed 6 rows containing non-finite values (stat_density).
-```
-
-<img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-6.png" width="672" style="display: block; margin: auto;" />
-
-```
-## Warning: Removed 54 rows containing non-finite values (stat_density).
-```
-
-<img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-7.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-8.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-9.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-10.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-11.png" width="672" style="display: block; margin: auto;" />
-
-```
-## Warning in self$trans$transform(x): NaNs produced
-```
-
-```
-## Warning: Transformation introduced infinite values in continuous x-axis
-```
-
-```
-## Warning: Removed 125 rows containing non-finite values (stat_density).
-```
-
-<img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-12.png" width="672" style="display: block; margin: auto;" />
-
-#### Effectiveness 4
+<img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-3.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-4.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-5.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-6.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-7.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-8.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-9.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-10.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-11.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-12.png" width="672" style="display: block; margin: auto;" />
 
 
 ```r
@@ -312,8 +266,6 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
 ```
 
 <img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" />
-
-#### sessionInfo()
 
 
 ```

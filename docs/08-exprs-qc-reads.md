@@ -6,8 +6,6 @@ output: html_document
 
 
 
-This chapter contains the summary plots and tables for the QC exercise based on the reads for the Bischak data discussed in the previous chapter.
-
 
 ```r
 library(SingleCellExperiment)
@@ -349,7 +347,7 @@ reducedDim(reads) <- NULL
 saveRDS(reads, file = "tung/reads.rds")
 ```
 
-By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-comp-reads), it is clear that the reads based filtering removed 49 more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.
+By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-comp-reads), it is clear that the reads based filtering removed more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.
 
 
 ```r

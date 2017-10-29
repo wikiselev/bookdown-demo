@@ -11,6 +11,7 @@ library(scImpute)
 library(SC3)
 library(scater)
 library(SingleCellExperiment)
+library(mclust)
 set.seed(1234567)
 ```
 
@@ -113,14 +114,12 @@ res <- sc3(res, ks = 10, gene_filter = FALSE)
 ```
 
 ```r
-sc3_plot_consensus(
-    res, 
-    k = 10, 
-    show_pdata = "cell_type2"
-)
+adjustedRandIndex(colData(deng)$cell_type2, colData(res)$sc3_10_clusters)
 ```
 
-<img src="21-imputation_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
+```
+## [1] 0.4687332
+```
 
 ```r
 plotPCA(
@@ -129,7 +128,7 @@ plotPCA(
 )
 ```
 
-<img src="21-imputation_files/figure-html/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" />
+<img src="21-imputation_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise:__ Based on the PCA and the clustering results, do you think that imputation using `scImpute` is a good idea for the Deng dataset?
 
@@ -176,14 +175,12 @@ res <- sc3(res, ks = 10, gene_filter = FALSE)
 ```
 
 ```r
-sc3_plot_consensus(
-    res, 
-    k = 10, 
-    show_pdata = "cell_type2"
-)
+adjustedRandIndex(colData(deng)$cell_type2, colData(res)$sc3_10_clusters)
 ```
 
-<img src="21-imputation_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
+```
+## [1] 0.3752866
+```
 
 ```r
 plotPCA(
@@ -192,7 +189,7 @@ plotPCA(
 )
 ```
 
-<img src="21-imputation_files/figure-html/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" />
+<img src="21-imputation_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
 __Exercise:__ What is the difference between `scImpute` and `MAGIC` based on the PCA and clustering analysis? Which one do you think is best to use?
 
 
@@ -220,17 +217,17 @@ __Exercise:__ What is the difference between `scImpute` and `MAGIC` based on the
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] scater_1.5.21               ggplot2_2.2.1              
-##  [3] SC3_1.5.6                   SingleCellExperiment_0.99.4
-##  [5] SummarizedExperiment_1.6.5  DelayedArray_0.2.7         
-##  [7] matrixStats_0.52.2          Biobase_2.36.2             
-##  [9] GenomicRanges_1.28.6        GenomeInfoDb_1.12.3        
-## [11] IRanges_2.10.5              S4Vectors_0.14.7           
-## [13] BiocGenerics_0.22.1         scImpute_0.0.4             
-## [15] doParallel_1.0.11           iterators_1.0.8            
-## [17] foreach_1.4.3               penalized_0.9-50           
-## [19] survival_2.40-1             kernlab_0.9-25             
-## [21] knitr_1.17                 
+##  [1] mclust_5.3                  scater_1.5.21              
+##  [3] ggplot2_2.2.1               SC3_1.5.6                  
+##  [5] SingleCellExperiment_0.99.4 SummarizedExperiment_1.6.5 
+##  [7] DelayedArray_0.2.7          matrixStats_0.52.2         
+##  [9] Biobase_2.36.2              GenomicRanges_1.28.6       
+## [11] GenomeInfoDb_1.12.3         IRanges_2.10.5             
+## [13] S4Vectors_0.14.7            BiocGenerics_0.22.1        
+## [15] scImpute_0.0.4              doParallel_1.0.11          
+## [17] iterators_1.0.8             foreach_1.4.3              
+## [19] penalized_0.9-50            survival_2.40-1            
+## [21] kernlab_0.9-25              knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] bitops_1.0-6            bit64_0.9-7            

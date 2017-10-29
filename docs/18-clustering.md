@@ -18,9 +18,7 @@ library(mclust)
 set.seed(1234567)
 ```
 
-To illustrate clustering of scRNA-seq data, we consider the `Deng` dataset of cells from 
-developing mouse embryo [@Deng2014-mx]. We have preprocessed the dataset and created a 
-`SingleCellExperiment` object in advance. We have also annotated the cells with the cell type information (it is the `cell_type1` and `cell_type2` columns in the `colData` slot).
+To illustrate clustering of scRNA-seq data, we consider the `Deng` dataset of cells from developing mouse embryo [@Deng2014-mx]. We have preprocessed the dataset and created a `SingleCellExperiment` object in advance. We have also annotated the cells with the cell types identified in the original publication (it is the `cell_type2` column in the `colData` slot).
 
 ### Deng dataset
 
@@ -142,14 +140,6 @@ sc3_plot_consensus(deng, k = 10, show_pdata = "cell_type2")
 
 <img src="18-clustering_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" />
 
-```r
-adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$sc3_10_clusters)
-```
-
-```
-## [1] 0.7705208
-```
-
 Silhouette plot:
 
 ```r
@@ -181,6 +171,16 @@ plotPCA(deng, colour_by = "sc3_10_clusters")
 ```
 
 <img src="18-clustering_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" />
+
+Compare the results of `SC3` clustering with the original publication cell type labels:
+
+```r
+adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$sc3_10_clusters)
+```
+
+```
+## [1] 0.7705208
+```
 
 Note, that one can also run `SC3` in an interactive `Shiny` session:
 
@@ -226,7 +226,7 @@ colData(deng)$pcaReduce <- as.character(pca.red[,32 - 10])
 plotPCA(deng, colour_by = "pcaReduce")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" />
+<img src="18-clustering_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise 5__: Run pcaReduce for $k=2$ and plot a similar PCA plot. Does it look good?
 
@@ -238,13 +238,13 @@ __Our solution__:
 <p class="caption">(\#fig:clust-pca-reduce2)Clustering solutions of pcaReduce method for $k=2$.</p>
 </div>
 
-__Exercise 6__: Compare the results between `SC3` and `pcaReduce` for $k=10$. What is
-the main difference between the solutions provided by the two
-different methods?
+__Exercise 6__: Compare the results between `SC3` and the original publication cell types for $k=10$.
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" />
 
+```
+## [1] 0.4216031
+```
 
 ### tSNE + kmeans
 
@@ -277,11 +277,13 @@ plotTSNE(deng, rand_seed = 1, colour_by = "tSNE_kmeans")
 
 __Exercise 7__: Make the same plot for $k=10$.
 
-__Exercise 8__: Compare the results between `SC3` and `tSNE+kmeans`. Can the
-results be improved by changing the `perplexity` parameter?
+__Exercise 8__: Compare the results between `tSNE+kmeans` and the original publication cell types. Can the results be improved by changing the `perplexity` parameter?
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" />
+
+```
+## [1] 0.3976772
+```
 
 As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
 and give different results every time they are run. To get a better
@@ -335,12 +337,15 @@ colData(deng)$SNNCliq <- as.character(snn.res[,1])
 plotPCA(deng, colour_by = "SNNCliq")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" />
+<img src="18-clustering_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" />
 
-__Exercise 9__: Compare the results between `SC3` and `SNN-Cliq`.
+__Exercise 9__: Compare the results between `SNN-Cliq` and the original publication cell types.
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" />
+
+```
+## [1] 0.2629731
+```
 
 ### SINCERA
 
@@ -394,10 +399,13 @@ pheatmap(
 <p class="caption">(\#fig:clust-sincera)Clustering solutions of SINCERA method using found $k$</p>
 </div>
 
-__Exercise 10__: Compare the results between `SC3` and `SNN-Cliq`.
+__Exercise 10__: Compare the results between `SINCERA` and the original publication cell types.
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" />
+
+```
+## [1] 0.3823537
+```
 
 __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a good idea?
 
