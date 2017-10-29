@@ -176,10 +176,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-pca-raw-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:norm-pca-raw)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-raw-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:norm-pca-raw)
+\end{figure}
 
 ### CPM
 
@@ -193,10 +197,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-pca-cpm-1.png" alt="PCA plot of the tung data after CPM normalisation" width="90%" />
-<p class="caption">(\#fig:norm-pca-cpm)PCA plot of the tung data after CPM normalisation</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-cpm-1} 
+
+}
+
+\caption{PCA plot of the tung data after CPM normalisation}(\#fig:norm-pca-cpm)
+\end{figure}
 
 ```r
 plotRLE(
@@ -207,10 +215,14 @@ plotRLE(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-ours-rle-cpm-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
-<p class="caption">(\#fig:norm-ours-rle-cpm)Cell-wise RLE of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-cpm-1} 
+
+}
+
+\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-cpm)
+\end{figure}
 
 ### Size-factor (RLE)
 
@@ -239,10 +251,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-pca-rle-1.png" alt="PCA plot of the tung data after RLE normalisation" width="90%" />
-<p class="caption">(\#fig:norm-pca-rle)PCA plot of the tung data after RLE normalisation</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-rle-1} 
+
+}
+
+\caption{PCA plot of the tung data after RLE normalisation}(\#fig:norm-pca-rle)
+\end{figure}
 
 ```r
 plotRLE(
@@ -253,10 +269,14 @@ plotRLE(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-ours-rle-rle-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
-<p class="caption">(\#fig:norm-ours-rle-rle)Cell-wise RLE of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-rle-1} 
+
+}
+
+\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-rle)
+\end{figure}
 
 
 ### Upperquantile
@@ -287,10 +307,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-pca-uq-1.png" alt="PCA plot of the tung data after UQ normalisation" width="90%" />
-<p class="caption">(\#fig:norm-pca-uq)PCA plot of the tung data after UQ normalisation</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-uq-1} 
+
+}
+
+\caption{PCA plot of the tung data after UQ normalisation}(\#fig:norm-pca-uq)
+\end{figure}
 
 ```r
 plotRLE(
@@ -301,10 +325,14 @@ plotRLE(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-ours-rle-uq-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
-<p class="caption">(\#fig:norm-ours-rle-uq)Cell-wise RLE of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-uq-1} 
+
+}
+
+\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-uq)
+\end{figure}
 
 ### TMM
 
@@ -333,10 +361,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-pca-tmm-1.png" alt="PCA plot of the tung data after TMM normalisation" width="90%" />
-<p class="caption">(\#fig:norm-pca-tmm)PCA plot of the tung data after TMM normalisation</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-tmm-1} 
+
+}
+
+\caption{PCA plot of the tung data after TMM normalisation}(\#fig:norm-pca-tmm)
+\end{figure}
 
 ```r
 plotRLE(
@@ -347,10 +379,14 @@ plotRLE(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-ours-rle-tmm-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
-<p class="caption">(\#fig:norm-ours-rle-tmm)Cell-wise RLE of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-tmm-1} 
+
+}
+
+\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-tmm)
+\end{figure}
 
 ### scran
 
@@ -374,10 +410,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-pca-lsf-1.png" alt="PCA plot of the tung data after LSF normalisation" width="90%" />
-<p class="caption">(\#fig:norm-pca-lsf)PCA plot of the tung data after LSF normalisation</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-lsf-1} 
+
+}
+
+\caption{PCA plot of the tung data after LSF normalisation}(\#fig:norm-pca-lsf)
+\end{figure}
 
 ```r
 plotRLE(
@@ -388,10 +428,14 @@ plotRLE(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-ours-rle-scran-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
-<p class="caption">(\#fig:norm-ours-rle-scran)Cell-wise RLE of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-scran-1} 
+
+}
+
+\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-scran)
+\end{figure}
 
 
 ### Downsampling 
@@ -407,10 +451,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-pca-downsample-1.png" alt="PCA plot of the tung data after downsampling" width="90%" />
-<p class="caption">(\#fig:norm-pca-downsample)PCA plot of the tung data after downsampling</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-downsample-1} 
+
+}
+
+\caption{PCA plot of the tung data after downsampling}(\#fig:norm-pca-downsample)
+\end{figure}
 
 ```r
 plotRLE(
@@ -421,10 +469,14 @@ plotRLE(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-ours-rle-downsample-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
-<p class="caption">(\#fig:norm-ours-rle-downsample)Cell-wise RLE of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-downsample-1} 
+
+}
+
+\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-downsample)
+\end{figure}
 
 ### Normalisation for gene/transcript length
 
@@ -502,10 +554,14 @@ eff_length <-
 plot(eff_length, rowMeans(counts(umi.qc.ann)))
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/length-vs-mean-1.png" alt="Gene length vs Mean Expression for the raw data" width="90%" />
-<p class="caption">(\#fig:length-vs-mean)Gene length vs Mean Expression for the raw data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/length-vs-mean-1} 
+
+}
+
+\caption{Gene length vs Mean Expression for the raw data}(\#fig:length-vs-mean)
+\end{figure}
 There is no relationship between gene length and mean expression so __FPKM__s & __TPM__s are inappropriate for this dataset. 
 But we will demonstrate them anyway.
 
@@ -529,10 +585,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-pca-fpkm-1.png" alt="PCA plot of the tung data after TPM normalisation" width="90%" />
-<p class="caption">(\#fig:norm-pca-fpkm)PCA plot of the tung data after TPM normalisation</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-fpkm-1} 
+
+}
+
+\caption{PCA plot of the tung data after TPM normalisation}(\#fig:norm-pca-fpkm)
+\end{figure}
 
 
 ```r
@@ -550,10 +610,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="13-exprs-norm_files/figure-html/norm-pca-tpm-1.png" alt="PCA plot of the tung data after FPKM normalisation" width="90%" />
-<p class="caption">(\#fig:norm-pca-tpm)PCA plot of the tung data after FPKM normalisation</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-tpm-1} 
+
+}
+
+\caption{PCA plot of the tung data after FPKM normalisation}(\#fig:norm-pca-tpm)
+\end{figure}
 
 __Note__ The `PCA` looks for differences between cells. Gene length is the same across cells for each gene thus __FPKM__ is almost identical to the __CPM__ plot (it is just rotated) since it performs __CPM__ first then normalizes gene length. Whereas, __TPM__ is different because it weights genes by their length before performing __CPM__. 
 
@@ -608,33 +672,33 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ## [21] scales_0.5.0            stringr_1.2.0          
 ## [23] digest_0.6.12           rmarkdown_1.6          
 ## [25] XVector_0.16.0          pkgconfig_2.0.1        
-## [27] htmltools_0.3.6         highr_0.6              
-## [29] limma_3.32.10           htmlwidgets_0.9        
-## [31] rlang_0.1.2             RSQLite_2.0            
-## [33] FNN_1.1                 shiny_1.0.5            
-## [35] bindr_0.1               zoo_1.8-0              
-## [37] dplyr_0.7.4             RCurl_1.95-4.8         
-## [39] magrittr_1.5            GenomeInfoDbData_0.99.0
-## [41] Matrix_1.2-7.1          Rcpp_0.12.13           
-## [43] ggbeeswarm_0.6.0        munsell_0.4.3          
-## [45] viridis_0.4.0           stringi_1.1.5          
-## [47] yaml_2.1.14             edgeR_3.18.1           
-## [49] MASS_7.3-45             zlibbioc_1.22.0        
-## [51] rhdf5_2.20.0            Rtsne_0.13             
-## [53] plyr_1.8.4              grid_3.4.2             
-## [55] blob_1.1.0              shinydashboard_0.6.1   
-## [57] contfrac_1.1-11         lattice_0.20-34        
-## [59] cowplot_0.8.0           splines_3.4.2          
-## [61] locfit_1.5-9.1          igraph_1.1.2           
-## [63] rjson_0.2.15            reshape2_1.4.2         
-## [65] biomaRt_2.32.1          XML_3.98-1.9           
-## [67] glue_1.1.1              evaluate_0.10.1        
-## [69] data.table_1.10.4-3     deSolve_1.20           
-## [71] httpuv_1.3.5            gtable_0.2.0           
-## [73] assertthat_0.2.0        mime_0.5               
-## [75] xtable_1.8-2            viridisLite_0.2.0      
-## [77] tibble_1.3.4            elliptic_1.3-7         
-## [79] AnnotationDbi_1.38.2    beeswarm_0.2.3         
-## [81] memoise_1.1.0           tximport_1.4.0         
-## [83] bindrcpp_0.2            statmod_1.4.30
+## [27] htmltools_0.3.6         limma_3.32.10          
+## [29] htmlwidgets_0.9         rlang_0.1.2            
+## [31] RSQLite_2.0             FNN_1.1                
+## [33] shiny_1.0.5             bindr_0.1              
+## [35] zoo_1.8-0               dplyr_0.7.4            
+## [37] RCurl_1.95-4.8          magrittr_1.5           
+## [39] GenomeInfoDbData_0.99.0 Matrix_1.2-7.1         
+## [41] Rcpp_0.12.13            ggbeeswarm_0.6.0       
+## [43] munsell_0.4.3           viridis_0.4.0          
+## [45] stringi_1.1.5           yaml_2.1.14            
+## [47] edgeR_3.18.1            MASS_7.3-45            
+## [49] zlibbioc_1.22.0         rhdf5_2.20.0           
+## [51] Rtsne_0.13              plyr_1.8.4             
+## [53] grid_3.4.2              blob_1.1.0             
+## [55] shinydashboard_0.6.1    contfrac_1.1-11        
+## [57] lattice_0.20-34         cowplot_0.8.0          
+## [59] splines_3.4.2           locfit_1.5-9.1         
+## [61] igraph_1.1.2            rjson_0.2.15           
+## [63] reshape2_1.4.2          biomaRt_2.32.1         
+## [65] XML_3.98-1.9            glue_1.1.1             
+## [67] evaluate_0.10.1         data.table_1.10.4-3    
+## [69] deSolve_1.20            httpuv_1.3.5           
+## [71] gtable_0.2.0            assertthat_0.2.0       
+## [73] mime_0.5                xtable_1.8-2           
+## [75] viridisLite_0.2.0       tibble_1.3.4           
+## [77] elliptic_1.3-7          AnnotationDbi_1.38.2   
+## [79] beeswarm_0.2.3          memoise_1.1.0          
+## [81] tximport_1.4.0          bindrcpp_0.2           
+## [83] statmod_1.4.30
 ```

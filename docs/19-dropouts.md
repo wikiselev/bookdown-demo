@@ -92,7 +92,8 @@ __Exercise 2__
 Using the functions rowMeans and rowVars to plot the relationship between mean expression
 and variance for all genes in this dataset. (Hint: use log="xy" to plot on a log-scale).
 
-<img src="19-dropouts_files/figure-html/unnamed-chunk-5-1.png" width="816" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-5-1} \end{center}
 A popular method to correct for the relationship between variance and mean expression
 was proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html).
 To use the Brennecke method, we first normalize for library size then calculate
@@ -117,7 +118,9 @@ Brennecke_HVG <- BrenneckeGetVariableGenes(
 )
 ```
 
-<img src="19-dropouts_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 ```r
 HVG_genes <- Brennecke_HVG$Gene
@@ -153,7 +156,9 @@ mix = 0.5; # proportion of cells in condition 1
 points(S1*mix+S2*(1-mix), P1*mix+P2*(1-mix), pch=16, col="grey35", cex=3)
 ```
 
-<img src="19-dropouts_files/figure-html/unnamed-chunk-7-1.png" width="816" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-7-1} \end{center}
 __Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures.
 
 __Exercise 3__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
@@ -170,7 +175,9 @@ M3Drop_genes <- M3DropFeatureSelection(
 )
 ```
 
-<img src="19-dropouts_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-8-1} \end{center}
 
 ```r
 M3Drop_genes <- M3Drop_genes$Gene
@@ -234,7 +241,9 @@ pca <- prcomp(log(expr_matrix+1)/log(2)); # PCA is typically performed on log-tr
 plot(pca$rotation[,1], pca$rotation[,2], pch=16, col=cell_colors[as.factor(celltype_labs)]) # plot projection
 ```
 
-<img src="19-dropouts_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-11-1} \end{center}
 
 ```r
 score <- rowSums(abs(pca$x[,c(1,2)])) # calculate loadings for components 1 and 2
@@ -260,7 +269,9 @@ M3DropExpressionHeatmap(
 )
 ```
 
-<img src="19-dropouts_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-12-1} \end{center}
 
 We can also consider how consistent each feature selection method is with the others using the Jaccard Index:
 

@@ -2028,12 +2028,12 @@ Figure 2.6:  scmap can also be used to project cells from a new experiment onto 
 <p>Clearly the projection is almost perfect. With <code>scmap</code> one can also plot a <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey">Sankey diagram</a> (however, <code>cell_type1</code> columns have to be provided in the <code>colData</code> slots of both the reference and the projection datasets):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">getSankey</span>(<span class="kw">colData</span>(segerstolpe)<span class="op">$</span>cell_type1, <span class="kw">colData</span>(segerstolpe)<span class="op">$</span>scmap_labs))</code></pre></div>
 <!-- Sankey generated in R 3.4.2 by googleVis 0.6.2 package -->
-<!-- Sun Oct 29 09:38:26 2017 -->
+<!-- Sun Oct 29 12:39:13 2017 -->
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataSankeyID65d33456810 () {
+function gvisDataSankeyID65c6cc194cb () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -2236,8 +2236,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartSankeyID65d33456810() {
-var data = gvisDataSankeyID65d33456810();
+function drawChartSankeyID65c6cc194cb() {
+var data = gvisDataSankeyID65c6cc194cb();
 var options = {};
 options["width"] = 400;
 options["height"] = 600;
@@ -2256,7 +2256,7 @@ options["sankey"] = {
             };
 
     var chart = new google.visualization.Sankey(
-    document.getElementById('SankeyID65d33456810')
+    document.getElementById('SankeyID65c6cc194cb')
     );
     chart.draw(data,options);
     
@@ -2280,9 +2280,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartSankeyID65d33456810);
+callbacks.push(drawChartSankeyID65c6cc194cb);
 })();
-function displayChartSankeyID65d33456810() {
+function displayChartSankeyID65c6cc194cb() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -2305,9 +2305,9 @@ callbacks.shift()();
 // jsFooter
 </script>
 <!-- jsChart -->
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID65d33456810"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID65c6cc194cb"></script>
 <!-- divChart -->
-<div id="SankeyID65d33456810" style="width: 400; height: 600;">
+<div id="SankeyID65c6cc194cb" style="width: 400; height: 600;">
 
 </div>
 </div>

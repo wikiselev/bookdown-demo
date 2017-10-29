@@ -43,15 +43,23 @@ top-down approach. In the former case, each cell is initially assigned to
 its own cluster and pairs of clusters are subsequently merged to
 create a hieararchy:
 
-<div class="figure" style="text-align: center">
-<img src="figures/hierarchical_clustering1.png" alt="Raw data" width="30%" />
-<p class="caption">(\#fig:clust-hierarch-raw)Raw data</p>
-</div>
+\begin{figure}
 
-<div class="figure" style="text-align: center">
-<img src="figures/hierarchical_clustering2.png" alt="The hierarchical clustering dendrogram" width="50%" />
-<p class="caption">(\#fig:clust-hierarch-dendr)The hierarchical clustering dendrogram</p>
-</div>
+{\centering \includegraphics[width=0.3\linewidth]{figures/hierarchical_clustering1} 
+
+}
+
+\caption{Raw data}(\#fig:clust-hierarch-raw)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{figures/hierarchical_clustering2} 
+
+}
+
+\caption{The hierarchical clustering dendrogram}(\#fig:clust-hierarch-dendr)
+\end{figure}
 
 With a top-down strategy, one instead starts with
 all observations in one cluster and then recursively split each
@@ -64,10 +72,14 @@ In [_k_-means clustering](https://en.wikipedia.org/wiki/K-means_clustering), the
 different clusters. In an iterative manner, cluster centers are
 assigned and each cell is assigned to its nearest cluster:
 
-<div class="figure" style="text-align: center">
-<img src="figures/k-means.png" alt="Schematic representation of the k-means clustering" width="100%" />
-<p class="caption">(\#fig:clust-k-means)Schematic representation of the k-means clustering</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/k-means} 
+
+}
+
+\caption{Schematic representation of the k-means clustering}(\#fig:clust-k-means)
+\end{figure}
 
 Most methods for scRNA-seq analysis includes a _k_-means step at some point.
 
@@ -77,10 +89,14 @@ Over the last two decades there has been a lot of interest in
 analyzing networks in various domains. One goal is to identify groups
 or modules of nodes in a network.
 
-<div class="figure" style="text-align: center">
-<img src="figures/graph_network.jpg" alt="Schematic representation of the graph network" width="100%" />
-<p class="caption">(\#fig:clust-graph)Schematic representation of the graph network</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/graph_network} 
+
+}
+
+\caption{Schematic representation of the graph network}(\#fig:clust-graph)
+\end{figure}
 
 Some of these methods can be applied
 to scRNA-seq data by building a graph where each node represents a cell. Note that constructing the graph and assigning weights to the edges is not trivial. One advantage of graph-based methods is that some of them are very efficient and can be applied to networks containing millions of nodes.
@@ -106,10 +122,14 @@ pcaReduce [@Zurauskiene2016-kg] combines PCA, _k_-means and “iterative” hier
 
 #### [SC3](http://bioconductor.org/packages/SC3/)
 
-<div class="figure" style="text-align: center">
-<img src="figures/sc3.png" alt="SC3 pipeline" width="100%" />
-<p class="caption">(\#fig:clust-sc3)SC3 pipeline</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/sc3} 
+
+}
+
+\caption{SC3 pipeline}(\#fig:clust-sc3)
+\end{figure}
 
 * SC3 [@Kiselev2016-bq] is based on PCA and spectral dimensionality reductions
 * Utilises _k_-means

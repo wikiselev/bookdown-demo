@@ -65,15 +65,23 @@ gold standard of open-source software hosted in a reputable repository.
 The following figures from the paper summarise some of the features of
 the various tools.
 
-<div class="figure" style="text-align: center">
-<img src="figures/cannoodt_pseudotime_properties.png" alt="Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016)." width="90%" />
-<p class="caption">(\#fig:pseudotime-methods-description)Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).</p>
-</div>
+\begin{figure}
 
-<div class="figure" style="text-align: center">
-<img src="figures/cannoodt_pseudotime_methods.png" alt="Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016)." width="90%" />
-<p class="caption">(\#fig:pseudotime-methods)Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016).</p>
-</div>
+{\centering \includegraphics[width=0.9\linewidth]{figures/cannoodt_pseudotime_properties} 
+
+}
+
+\caption{Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).}(\#fig:pseudotime-methods-description)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{figures/cannoodt_pseudotime_methods} 
+
+}
+
+\caption{Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016).}(\#fig:pseudotime-methods)
+\end{figure}
 
 
 ### TSCAN
@@ -94,7 +102,9 @@ dengclust <- TSCAN::exprmclust(procdeng, clusternum = 10)
 TSCAN::plotmclust(dengclust)
 ```
 
-<img src="20-pseudotime_files/figure-html/tscan-all-genes-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/tscan-all-genes-1} \end{center}
 
 ```r
 dengorderTSCAN <- TSCAN::TSCANorder(dengclust, orderonly = F)
@@ -131,7 +141,9 @@ plot(
 )
 ```
 
-<img src="20-pseudotime_files/figure-html/tscan-vs-truth-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/tscan-vs-truth-1} \end{center}
 
 __Exercise 1__ Compare results for different numbers of clusters (`clusternum`).
 
@@ -159,7 +171,9 @@ m3dGenes <- as.character(
 ## genes.
 ```
 
-<img src="20-pseudotime_files/figure-html/m3d-select-genes-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/m3d-select-genes-1} \end{center}
 
 ```r
 d <- deng[which(rownames(deng) %in% m3dGenes), ]
@@ -185,7 +199,9 @@ dCellDataSet <- orderCells(dCellDataSet, reverse = FALSE)
 plot_cell_trajectory(dCellDataSet)
 ```
 
-<img src="20-pseudotime_files/figure-html/monocle-all-genes-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/monocle-all-genes-1} \end{center}
 
 ```r
 # Store the ordering
@@ -219,7 +235,9 @@ plot(
 )
 ```
 
-<img src="20-pseudotime_files/figure-html/monocle-vs-truth-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/monocle-vs-truth-1} \end{center}
 
 ### Diffusion maps
 
@@ -254,7 +272,9 @@ plot(
 )
 ```
 
-<img src="20-pseudotime_files/figure-html/destiny-deng-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/destiny-deng-1} \end{center}
 
 Like the other methods, destiny does a good job at ordering the early time-points, but it is unable to distinguish the later ones.
 
@@ -329,7 +349,9 @@ plot(slicer_traj_lle, xlab = "LLE Comp 1", ylab = "LLE Comp 2",
      col=colours[tmp], pch=16)
 ```
 
-<img src="20-pseudotime_files/figure-html/slicer-analyis-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/slicer-analyis-1} \end{center}
 
 With the locally linear embedding computed we can construct a
 k-nearest neighbour graph that is fully connected. This plot displays
@@ -344,7 +366,9 @@ slicer_traj_graph <- conn_knn_graph(slicer_traj_lle, 10)
 plot(slicer_traj_graph, main = "Fully connected kNN graph from SLICER")
 ```
 
-<img src="20-pseudotime_files/figure-html/slicer-build-graph-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/slicer-build-graph-1} \end{center}
 
 From this graph we can identify "extreme" cells that are candidates
 for start/end cells in the trajectory.
@@ -354,7 +378,9 @@ for start/end cells in the trajectory.
 ends <- find_extreme_cells(slicer_traj_graph, slicer_traj_lle)
 ```
 
-<img src="20-pseudotime_files/figure-html/slicer-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/slicer-1} \end{center}
 
 ```r
 start <- ends[1]
@@ -399,7 +425,9 @@ plot(
 )
 ```
 
-<img src="20-pseudotime_files/figure-html/slicer-vs-truth-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/slicer-vs-truth-1} \end{center}
 
 Like the previous method, SLICER here provides a good ordering for the
 early time points and struggles for later time points.
@@ -433,7 +461,9 @@ plot(
 )
 ```
 
-<img src="20-pseudotime_files/figure-html/tscan-monocle-compare-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/tscan-monocle-compare-1} \end{center}
 
 __Exercise 6__: Compare destiny and SLICER to TSCAN and Monocle.
 
@@ -451,7 +481,9 @@ TSCAN::singlegeneplot(
 )
 ```
 
-<img src="20-pseudotime_files/figure-html/Rhoa-tscan-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/Rhoa-tscan-1} \end{center}
 
 __Monocle__
 
@@ -462,7 +494,9 @@ monocle::plot_genes_in_pseudotime(
 )
 ```
 
-<img src="20-pseudotime_files/figure-html/Rhoa-monocle-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{20-pseudotime_files/figure-latex/Rhoa-monocle-1} \end{center}
 
 Of course, pseudotime values computed with any method can be added to
 the `colData` slot of an `SCE` object. Having done that, the full
@@ -558,20 +592,19 @@ __Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of
 ##  [85] e1071_1.6-8             spatstat.utils_1.7-1   
 ##  [87] smoother_1.1            tibble_1.3.4           
 ##  [89] statmod_1.4.30          stringi_1.1.5          
-##  [91] highr_0.6               lattice_0.20-34        
-##  [93] nloptr_1.0.4            HSMMSingleCell_0.110.0 
-##  [95] combinat_0.0-8          lmtest_0.9-35          
-##  [97] data.table_1.10.4-3     bitops_1.0-6           
-##  [99] httpuv_1.3.5            R6_2.2.2               
-## [101] latticeExtra_0.6-28     bookdown_0.5           
-## [103] KernSmooth_2.23-15      gridExtra_2.3          
-## [105] boot_1.3-18             gtools_3.5.0           
-## [107] assertthat_0.2.0        rprojroot_1.2          
-## [109] qlcMatrix_0.9.5         GenomeInfoDbData_0.99.0
-## [111] mgcv_1.8-22             grid_3.4.2             
-## [113] rpart_4.1-10            class_7.3-14           
-## [115] minqa_1.2.4             rmarkdown_1.6          
-## [117] Rtsne_0.13              TTR_0.23-2             
-## [119] bbmle_1.0.19            shiny_1.0.5            
-## [121] base64enc_0.1-3
+##  [91] lattice_0.20-34         nloptr_1.0.4           
+##  [93] HSMMSingleCell_0.110.0  combinat_0.0-8         
+##  [95] lmtest_0.9-35           data.table_1.10.4-3    
+##  [97] bitops_1.0-6            httpuv_1.3.5           
+##  [99] R6_2.2.2                latticeExtra_0.6-28    
+## [101] bookdown_0.5            KernSmooth_2.23-15     
+## [103] gridExtra_2.3           boot_1.3-18            
+## [105] gtools_3.5.0            assertthat_0.2.0       
+## [107] rprojroot_1.2           qlcMatrix_0.9.5        
+## [109] GenomeInfoDbData_0.99.0 mgcv_1.8-22            
+## [111] grid_3.4.2              rpart_4.1-10           
+## [113] class_7.3-14            minqa_1.2.4            
+## [115] rmarkdown_1.6           Rtsne_0.13             
+## [117] TTR_0.23-2              bbmle_1.0.19           
+## [119] shiny_1.0.5             base64enc_0.1-3
 ```

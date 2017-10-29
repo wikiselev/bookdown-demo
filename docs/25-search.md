@@ -16,10 +16,14 @@ set.seed(1234567)
 
 `scfind` is a tool that allows one to search single cell RNA-Seq collections (Atlas) using lists of genes, e.g. searching for cells and cell-types where a specific set of genes are expressed. `scfind` is a [Bioconductor package](http://bioconductor.org/packages/scfind). Cloud implementation of `scfind` with a large collection of datasets is available on our [website](http://www.hemberg-lab.cloud/scfind).
 
-<div class="figure" style="text-align: center">
-<img src="figures/scfind.png" alt="scfind can be used to search large collection of scRNA-seq data by a list of gene IDs." width="80%" />
-<p class="caption">(\#fig:unnamed-chunk-3)scfind can be used to search large collection of scRNA-seq data by a list of gene IDs.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/scfind} 
+
+}
+
+\caption{scfind can be used to search large collection of scRNA-seq data by a list of gene IDs.}(\#fig:unnamed-chunk-3)
+\end{figure}
 
 ### Dataset
 
@@ -66,7 +70,9 @@ res <- findCell(cellIndex, muraro_alpha)
 barplot(-log10(res$p_values), ylab = "-log10(pval)", las = 2)
 ```
 
-<img src="25-search_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{25-search_files/figure-latex/unnamed-chunk-7-1} \end{center}
 
 ```r
 head(res$common_exprs_cells)
@@ -86,7 +92,8 @@ __Exercise 1__
 
 Perform a search by _beta_, _delta_ and _gamma_ gene lists and explore the results.
 
-<img src="25-search_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{25-search_files/figure-latex/unnamed-chunk-8-1} \end{center}
 
 ```
 ##   cell_id cell_type
@@ -98,7 +105,9 @@ Perform a search by _beta_, _delta_ and _gamma_ gene lists and explore the resul
 ## 6     102      beta
 ```
 
-<img src="25-search_files/figure-html/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{25-search_files/figure-latex/unnamed-chunk-8-2} \end{center}
 
 ```
 ##   cell_id cell_type
@@ -110,7 +119,9 @@ Perform a search by _beta_, _delta_ and _gamma_ gene lists and explore the resul
 ## 6     400     delta
 ```
 
-<img src="25-search_files/figure-html/unnamed-chunk-8-3.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{25-search_files/figure-latex/unnamed-chunk-8-3} \end{center}
 
 ```
 ##   cell_id cell_type
@@ -127,7 +138,8 @@ __Exercise 2__
 
 Load the `segerstolpe` and search it using _alpha_, _beta_, _delta_ and _gamma_ gene lists identified in `muraro` dataset.
 
-<img src="25-search_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{25-search_files/figure-latex/unnamed-chunk-9-1} \end{center}
 
 ```
 ##   cell_id cell_type
@@ -139,7 +151,9 @@ Load the `segerstolpe` and search it using _alpha_, _beta_, _delta_ and _gamma_ 
 ## 6      48     alpha
 ```
 
-<img src="25-search_files/figure-html/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{25-search_files/figure-latex/unnamed-chunk-9-2} \end{center}
 
 ```
 ##   cell_id     cell_type
@@ -151,7 +165,9 @@ Load the `segerstolpe` and search it using _alpha_, _beta_, _delta_ and _gamma_ 
 ## 6     506          beta
 ```
 
-<img src="25-search_files/figure-html/unnamed-chunk-9-3.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{25-search_files/figure-latex/unnamed-chunk-9-3} \end{center}
 
 ```
 ##   cell_id     cell_type
@@ -163,7 +179,9 @@ Load the `segerstolpe` and search it using _alpha_, _beta_, _delta_ and _gamma_ 
 ## 6    1721         delta
 ```
 
-<img src="25-search_files/figure-html/unnamed-chunk-9-4.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{25-search_files/figure-latex/unnamed-chunk-9-4} \end{center}
 
 ```
 ##   cell_id cell_type
@@ -211,23 +229,23 @@ sessionInfo()
 ## [11] scfind_0.99.6               knitr_1.17                 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.13            highr_0.6              
-##  [3] plyr_1.8.4              compiler_3.4.2         
-##  [5] XVector_0.16.0          bindr_0.1              
-##  [7] bitops_1.0-6            tools_3.4.2            
-##  [9] zlibbioc_1.22.0         digest_0.6.12          
-## [11] bit_1.1-12              tibble_1.3.4           
-## [13] evaluate_0.10.1         lattice_0.20-34        
-## [15] pkgconfig_2.0.1         rlang_0.1.2            
-## [17] Matrix_1.2-7.1          yaml_2.1.14            
-## [19] bindrcpp_0.2            GenomeInfoDbData_0.99.0
-## [21] stringr_1.2.0           dplyr_0.7.4            
-## [23] rprojroot_1.2           grid_3.4.2             
-## [25] glue_1.1.1              R6_2.2.2               
-## [27] hash_2.2.6              rmarkdown_1.6          
-## [29] bookdown_0.5            reshape2_1.4.2         
-## [31] magrittr_1.5            backports_1.1.1        
-## [33] htmltools_0.3.6         assertthat_0.2.0       
-## [35] stringi_1.1.5           RCurl_1.95-4.8
+##  [1] Rcpp_0.12.13            plyr_1.8.4             
+##  [3] compiler_3.4.2          XVector_0.16.0         
+##  [5] bindr_0.1               bitops_1.0-6           
+##  [7] tools_3.4.2             zlibbioc_1.22.0        
+##  [9] digest_0.6.12           bit_1.1-12             
+## [11] tibble_1.3.4            evaluate_0.10.1        
+## [13] lattice_0.20-34         pkgconfig_2.0.1        
+## [15] rlang_0.1.2             Matrix_1.2-7.1         
+## [17] yaml_2.1.14             bindrcpp_0.2           
+## [19] GenomeInfoDbData_0.99.0 stringr_1.2.0          
+## [21] dplyr_0.7.4             rprojroot_1.2          
+## [23] grid_3.4.2              glue_1.1.1             
+## [25] R6_2.2.2                hash_2.2.6             
+## [27] rmarkdown_1.6           bookdown_0.5           
+## [29] reshape2_1.4.2          magrittr_1.5           
+## [31] backports_1.1.1         htmltools_0.3.6        
+## [33] assertthat_0.2.0        stringi_1.1.5          
+## [35] RCurl_1.95-4.8
 ```
 

@@ -62,10 +62,14 @@ ones. The most commonly used non-parametric test is the
 
 The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experession and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros). Another issue with the KS-test is that it can be very sensitive for large sample sizes and thus it may end up as significant even though the magnitude of the difference is very small.
 
-<div class="figure" style="text-align: center">
-<img src="figures/KS2_Example.png" alt="Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))" width="60%" />
-<p class="caption">(\#fig:ks-statistic)Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\linewidth]{figures/KS2_Example} 
+
+}
+
+\caption{Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))}(\#fig:ks-statistic)
+\end{figure}
 
 Now run the test:
 
@@ -150,10 +154,14 @@ perf <- ROCR::performance(pred, "tpr", "fpr")
 ROCR::plot(perf)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/ks-roc-plot-1.png" alt="ROC curve for KS-test." width="672" />
-<p class="caption">(\#fig:ks-roc-plot)ROC curve for KS-test.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/ks-roc-plot-1} 
+
+}
+
+\caption{ROC curve for KS-test.}(\#fig:ks-roc-plot)
+\end{figure}
 
 ```r
 aucObj <- ROCR::performance(pred, "auc")
@@ -198,10 +206,14 @@ pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/wilcox-plot-1.png" alt="ROC curve for Wilcox test." width="672" />
-<p class="caption">(\#fig:wilcox-plot)ROC curve for Wilcox test.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/wilcox-plot-1} 
+
+}
+
+\caption{ROC curve for Wilcox test.}(\#fig:wilcox-plot)
+\end{figure}
 
 ```
 ## [1] 0.8320326
@@ -230,10 +242,14 @@ pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/edger-plot-1.png" alt="ROC curve for edgeR." width="672" />
-<p class="caption">(\#fig:edger-plot)ROC curve for edgeR.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/edger-plot-1} 
+
+}
+
+\caption{ROC curve for edgeR.}(\#fig:edger-plot)
+\end{figure}
 
 ```
 ## [1] 0.8477189
@@ -264,10 +280,14 @@ pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/Monocle-plot-1.png" alt="ROC curve for Monocle." width="672" />
-<p class="caption">(\#fig:Monocle-plot)ROC curve for Monocle.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/Monocle-plot-1} 
+
+}
+
+\caption{ROC curve for Monocle.}(\#fig:Monocle-plot)
+\end{figure}
 
 ```
 ## [1] 0.8252662
@@ -275,10 +295,14 @@ DE_Quality_AUC(pVals)
 __Exercise__: Compare the results using the negative binomial model on counts and those from using the normal/gaussian model (`gaussianff()`) on log-transformed normalized counts.
 
 __Answer__:
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/Monocle-plot2-1.png" alt="ROC curve for Monocle-gaussian." width="672" />
-<p class="caption">(\#fig:Monocle-plot2)ROC curve for Monocle-gaussian.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/Monocle-plot2-1} 
+
+}
+
+\caption{ROC curve for Monocle-gaussian.}(\#fig:Monocle-plot2)
+\end{figure}
 
 ```
 ## [1] 0.7357829
@@ -326,10 +350,14 @@ pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/MAST-plot-1.png" alt="ROC curve for MAST." width="672" />
-<p class="caption">(\#fig:MAST-plot)ROC curve for MAST.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/MAST-plot-1} 
+
+}
+
+\caption{ROC curve for MAST.}(\#fig:MAST-plot)
+\end{figure}
 
 ```
 ## [1] 0.8284046
@@ -445,36 +473,35 @@ DE_Quality_AUC(pVals)
 ## loaded via a namespace (and not attached):
 ##  [1] gtools_3.5.0            elliptic_1.3-7         
 ##  [3] moments_0.14            assertthat_0.2.0       
-##  [5] statmod_1.4.30          highr_0.6              
-##  [7] GenomeInfoDbData_0.99.0 yaml_2.1.14            
-##  [9] slam_0.1-40             ggrepel_0.7.0          
-## [11] backports_1.1.1         lattice_0.20-34        
-## [13] glue_1.1.1              densityClust_0.3       
-## [15] digest_0.6.12           RColorBrewer_1.1-2     
-## [17] XVector_0.16.0          colorspace_1.3-2       
-## [19] fastICA_1.2-1           htmltools_0.3.6        
-## [21] plyr_1.8.4              pkgconfig_2.0.1        
-## [23] pheatmap_1.0.8          HSMMSingleCell_0.110.0 
-## [25] qlcMatrix_0.9.5         zlibbioc_1.22.0        
-## [27] bookdown_0.5            scales_0.5.0           
-## [29] gdata_2.18.0            Rtsne_0.13             
-## [31] tibble_1.3.4            combinat_0.0-8         
-## [33] lazyeval_0.2.0          magrittr_1.5           
-## [35] evaluate_0.10.1         MASS_7.3-45            
-## [37] FNN_1.1                 data.table_1.10.4-3    
-## [39] tools_3.4.2             stringr_1.2.0          
-## [41] munsell_0.4.3           locfit_1.5-9.1         
-## [43] cluster_2.0.6           bindrcpp_0.2           
-## [45] orthopolynom_1.0-5      compiler_3.4.2         
-## [47] caTools_1.17.1          contfrac_1.1-11        
-## [49] rlang_0.1.2             grid_3.4.2             
-## [51] RCurl_1.95-4.8          igraph_1.1.2           
-## [53] bitops_1.0-6            rmarkdown_1.6          
-## [55] hypergeo_1.2-13         gtable_0.2.0           
-## [57] abind_1.4-5             deSolve_1.20           
-## [59] reshape2_1.4.2          R6_2.2.2               
-## [61] gridExtra_2.3           dplyr_0.7.4            
-## [63] bindr_0.1               rprojroot_1.2          
-## [65] KernSmooth_2.23-15      stringi_1.1.5          
-## [67] Rcpp_0.12.13
+##  [5] statmod_1.4.30          GenomeInfoDbData_0.99.0
+##  [7] yaml_2.1.14             slam_0.1-40            
+##  [9] ggrepel_0.7.0           backports_1.1.1        
+## [11] lattice_0.20-34         glue_1.1.1             
+## [13] densityClust_0.3        digest_0.6.12          
+## [15] RColorBrewer_1.1-2      XVector_0.16.0         
+## [17] colorspace_1.3-2        fastICA_1.2-1          
+## [19] htmltools_0.3.6         plyr_1.8.4             
+## [21] pkgconfig_2.0.1         pheatmap_1.0.8         
+## [23] HSMMSingleCell_0.110.0  qlcMatrix_0.9.5        
+## [25] zlibbioc_1.22.0         bookdown_0.5           
+## [27] scales_0.5.0            gdata_2.18.0           
+## [29] Rtsne_0.13              tibble_1.3.4           
+## [31] combinat_0.0-8          lazyeval_0.2.0         
+## [33] magrittr_1.5            evaluate_0.10.1        
+## [35] MASS_7.3-45             FNN_1.1                
+## [37] data.table_1.10.4-3     tools_3.4.2            
+## [39] stringr_1.2.0           munsell_0.4.3          
+## [41] locfit_1.5-9.1          cluster_2.0.6          
+## [43] bindrcpp_0.2            orthopolynom_1.0-5     
+## [45] compiler_3.4.2          caTools_1.17.1         
+## [47] contfrac_1.1-11         rlang_0.1.2            
+## [49] grid_3.4.2              RCurl_1.95-4.8         
+## [51] igraph_1.1.2            bitops_1.0-6           
+## [53] rmarkdown_1.6           hypergeo_1.2-13        
+## [55] gtable_0.2.0            abind_1.4-5            
+## [57] deSolve_1.20            reshape2_1.4.2         
+## [59] R6_2.2.2                gridExtra_2.3          
+## [61] dplyr_0.7.4             bindr_0.1              
+## [63] rprojroot_1.2           KernSmooth_2.23-15     
+## [65] stringi_1.1.5           Rcpp_0.12.13
 ```

@@ -28,15 +28,23 @@ segerstolpe <- readRDS("pancreas/segerstolpe.rds")
 
 `scmap` can be used to perform both types of projections to either a single dataset or to a reference collection of datasets (Atlas):
 
-<div class="figure" style="text-align: center">
-<img src="figures/scmap1.png" alt="scmap can be used to compare the annotations of two different samples by providing a one to one mapping between the cells." width="80%" />
-<p class="caption">(\#fig:unnamed-chunk-4)scmap can be used to compare the annotations of two different samples by providing a one to one mapping between the cells.</p>
-</div>
+\begin{figure}
 
-<div class="figure" style="text-align: center">
-<img src="figures/scmap2.png" alt=" scmap can also be used to project cells from a new experiment onto an annotated reference." width="80%" />
-<p class="caption">(\#fig:unnamed-chunk-5) scmap can also be used to project cells from a new experiment onto an annotated reference.</p>
-</div>
+{\centering \includegraphics[width=0.8\linewidth]{figures/scmap1} 
+
+}
+
+\caption{scmap can be used to compare the annotations of two different samples by providing a one to one mapping between the cells.}(\#fig:unnamed-chunk-4)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/scmap2} 
+
+}
+
+\caption{ scmap can also be used to project cells from a new experiment onto an annotated reference.}(\#fig:unnamed-chunk-5)
+\end{figure}
 
 ### Run `scmap`
 
@@ -52,7 +60,9 @@ muraro <- getFeatures(muraro, suppress_plot = FALSE)
 ## counts() slot. Dropouts were calculated using logcounts() slot...
 ```
 
-<img src="24-projection_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{24-projection_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 Genes highlighted with the red colour will be used in the futher analysis (projection).
 
@@ -105,14 +115,14 @@ plot(getSankey(colData(segerstolpe)$cell_type1, colData(segerstolpe)$scmap_labs)
 ```
 
 <!-- Sankey generated in R 3.4.2 by googleVis 0.6.2 package -->
-<!-- Sun Oct 29 09:38:26 2017 -->
+<!-- Sun Oct 29 13:37:00 2017 -->
 
 
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataSankeyID65d33456810 () {
+function gvisDataSankeyID11c252840baa () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -315,8 +325,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartSankeyID65d33456810() {
-var data = gvisDataSankeyID65d33456810();
+function drawChartSankeyID11c252840baa() {
+var data = gvisDataSankeyID11c252840baa();
 var options = {};
 options["width"] = 400;
 options["height"] = 600;
@@ -335,7 +345,7 @@ options["sankey"] = {
             };
 
     var chart = new google.visualization.Sankey(
-    document.getElementById('SankeyID65d33456810')
+    document.getElementById('SankeyID11c252840baa')
     );
     chart.draw(data,options);
     
@@ -359,9 +369,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartSankeyID65d33456810);
+callbacks.push(drawChartSankeyID11c252840baa);
 })();
-function displayChartSankeyID65d33456810() {
+function displayChartSankeyID11c252840baa() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -385,11 +395,11 @@ callbacks.shift()();
 </script>
  
 <!-- jsChart -->  
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID65d33456810"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID11c252840baa"></script>
  
 <!-- divChart -->
   
-<div id="SankeyID65d33456810" 
+<div id="SankeyID11c252840baa" 
   style="width: 400; height: 600;">
 </div>
 
@@ -407,7 +417,9 @@ One can also visualise the cell type centroids, e.g.:
 heatmap(as.matrix(reference))
 ```
 
-<img src="24-projection_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{24-projection_files/figure-latex/unnamed-chunk-11-1} \end{center}
 
 Exactly the same projection as above can be performed by providing the precomputed reference instead of the `SingleCellExperiment` object:
 
@@ -479,39 +491,39 @@ colData(segerstolpe)[,c("scmap_labs", "scmap_siml")]
 ##  [1] viridis_0.4.0           edgeR_3.18.1           
 ##  [3] bit64_0.9-7             jsonlite_1.5           
 ##  [5] viridisLite_0.2.0       shiny_1.0.5            
-##  [7] assertthat_0.2.0        highr_0.6              
-##  [9] blob_1.1.0              vipor_0.4.5            
-## [11] GenomeInfoDbData_0.99.0 yaml_2.1.14            
-## [13] RSQLite_2.0             backports_1.1.1        
-## [15] lattice_0.20-34         glue_1.1.1             
-## [17] limma_3.32.10           digest_0.6.12          
-## [19] XVector_0.16.0          randomForest_4.6-12    
-## [21] colorspace_1.3-2        htmltools_0.3.6        
-## [23] httpuv_1.3.5            Matrix_1.2-7.1         
-## [25] plyr_1.8.4              XML_3.98-1.9           
-## [27] pkgconfig_2.0.1         biomaRt_2.32.1         
-## [29] bookdown_0.5            zlibbioc_1.22.0        
-## [31] xtable_1.8-2            scales_0.5.0           
-## [33] tibble_1.3.4            proxy_0.4-17           
-## [35] lazyeval_0.2.0          magrittr_1.5           
-## [37] mime_0.5                memoise_1.1.0          
-## [39] evaluate_0.10.1         class_7.3-14           
-## [41] beeswarm_0.2.3          shinydashboard_0.6.1   
-## [43] tools_3.4.2             data.table_1.10.4-3    
-## [45] stringr_1.2.0           munsell_0.4.3          
-## [47] locfit_1.5-9.1          AnnotationDbi_1.38.2   
-## [49] compiler_3.4.2          e1071_1.6-8            
-## [51] rlang_0.1.2             rhdf5_2.20.0           
-## [53] grid_3.4.2              RCurl_1.95-4.8         
-## [55] tximport_1.4.0          rjson_0.2.15           
-## [57] labeling_0.3            bitops_1.0-6           
-## [59] rmarkdown_1.6           gtable_0.2.0           
-## [61] codetools_0.2-15        DBI_0.7                
-## [63] reshape2_1.4.2          R6_2.2.2               
-## [65] gridExtra_2.3           dplyr_0.7.4            
-## [67] bit_1.1-12              bindr_0.1              
-## [69] rprojroot_1.2           ggbeeswarm_0.6.0       
-## [71] stringi_1.1.5           Rcpp_0.12.13
+##  [7] assertthat_0.2.0        blob_1.1.0             
+##  [9] vipor_0.4.5             GenomeInfoDbData_0.99.0
+## [11] yaml_2.1.14             RSQLite_2.0            
+## [13] backports_1.1.1         lattice_0.20-34        
+## [15] glue_1.1.1              limma_3.32.10          
+## [17] digest_0.6.12           XVector_0.16.0         
+## [19] randomForest_4.6-12     colorspace_1.3-2       
+## [21] htmltools_0.3.6         httpuv_1.3.5           
+## [23] Matrix_1.2-7.1          plyr_1.8.4             
+## [25] XML_3.98-1.9            pkgconfig_2.0.1        
+## [27] biomaRt_2.32.1          bookdown_0.5           
+## [29] zlibbioc_1.22.0         xtable_1.8-2           
+## [31] scales_0.5.0            tibble_1.3.4           
+## [33] proxy_0.4-17            lazyeval_0.2.0         
+## [35] magrittr_1.5            mime_0.5               
+## [37] memoise_1.1.0           evaluate_0.10.1        
+## [39] class_7.3-14            beeswarm_0.2.3         
+## [41] shinydashboard_0.6.1    tools_3.4.2            
+## [43] data.table_1.10.4-3     stringr_1.2.0          
+## [45] munsell_0.4.3           locfit_1.5-9.1         
+## [47] AnnotationDbi_1.38.2    compiler_3.4.2         
+## [49] e1071_1.6-8             rlang_0.1.2            
+## [51] rhdf5_2.20.0            grid_3.4.2             
+## [53] RCurl_1.95-4.8          tximport_1.4.0         
+## [55] rjson_0.2.15            labeling_0.3           
+## [57] bitops_1.0-6            rmarkdown_1.6          
+## [59] gtable_0.2.0            codetools_0.2-15       
+## [61] DBI_0.7                 reshape2_1.4.2         
+## [63] R6_2.2.2                gridExtra_2.3          
+## [65] dplyr_0.7.4             bit_1.1-12             
+## [67] bindr_0.1               rprojroot_1.2          
+## [69] ggbeeswarm_0.6.0        stringi_1.1.5          
+## [71] Rcpp_0.12.13
 ```
 
 

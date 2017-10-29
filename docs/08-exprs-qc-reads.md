@@ -93,10 +93,14 @@ hist(
 abline(v = 1.3e6, col = "red")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="08-exprs-qc-reads_files/figure-html/total-counts-hist-reads-1.png" alt="Histogram of library sizes for all cells" width="90%" />
-<p class="caption">(\#fig:total-counts-hist-reads)Histogram of library sizes for all cells</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/total-counts-hist-reads-1} 
+
+}
+
+\caption{Histogram of library sizes for all cells}(\#fig:total-counts-hist-reads)
+\end{figure}
 
 
 ```r
@@ -123,10 +127,14 @@ hist(
 abline(v = 7000, col = "red")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="08-exprs-qc-reads_files/figure-html/total-features-hist-reads-1.png" alt="Histogram of the number of detected genes in all cells" width="90%" />
-<p class="caption">(\#fig:total-features-hist-reads)Histogram of the number of detected genes in all cells</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/total-features-hist-reads-1} 
+
+}
+
+\caption{Histogram of the number of detected genes in all cells}(\#fig:total-features-hist-reads)
+\end{figure}
 
 
 ```r
@@ -156,10 +164,14 @@ plotPhenoData(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="08-exprs-qc-reads_files/figure-html/mt-vs-counts-reads-1.png" alt="Percentage of counts in MT genes" width="90%" />
-<p class="caption">(\#fig:mt-vs-counts-reads)Percentage of counts in MT genes</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/mt-vs-counts-reads-1} 
+
+}
+
+\caption{Percentage of counts in MT genes}(\#fig:mt-vs-counts-reads)
+\end{figure}
 
 
 ```r
@@ -173,10 +185,14 @@ plotPhenoData(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="08-exprs-qc-reads_files/figure-html/ercc-vs-counts-reads-1.png" alt="Percentage of counts in ERCCs" width="90%" />
-<p class="caption">(\#fig:ercc-vs-counts-reads)Percentage of counts in ERCCs</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/ercc-vs-counts-reads-1} 
+
+}
+
+\caption{Percentage of counts in ERCCs}(\#fig:ercc-vs-counts-reads)
+\end{figure}
 
 
 ```r
@@ -239,10 +255,14 @@ reads <- plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="08-exprs-qc-reads_files/figure-html/auto-cell-filt-reads-1.png" alt="PCA plot used for automatic detection of cell outliers" width="90%" />
-<p class="caption">(\#fig:auto-cell-filt-reads)PCA plot used for automatic detection of cell outliers</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/auto-cell-filt-reads-1} 
+
+}
+
+\caption{PCA plot used for automatic detection of cell outliers}(\#fig:auto-cell-filt-reads)
+\end{figure}
 
 
 ```r
@@ -291,20 +311,28 @@ vennDiagram(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="08-exprs-qc-reads_files/figure-html/cell-filt-comp-reads-1.png" alt="Comparison of the default, automatic and manual cell filters" width="90%" />
-<p class="caption">(\#fig:cell-filt-comp-reads)Comparison of the default, automatic and manual cell filters</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/cell-filt-comp-reads-1} 
+
+}
+
+\caption{Comparison of the default, automatic and manual cell filters}(\#fig:cell-filt-comp-reads)
+\end{figure}
 
 
 ```r
 plotQC(reads, type = "highest-expression")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="08-exprs-qc-reads_files/figure-html/top50-gene-expr-reads-1.png" alt="Number of total counts consumed by the top 50 expressed genes" width="90%" />
-<p class="caption">(\#fig:top50-gene-expr-reads)Number of total counts consumed by the top 50 expressed genes</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/top50-gene-expr-reads-1} 
+
+}
+
+\caption{Number of total counts consumed by the top 50 expressed genes}(\#fig:top50-gene-expr-reads)
+\end{figure}
 
 
 ```r
@@ -412,32 +440,32 @@ sessionInfo()
 ##  [51] stringr_1.2.0           lme4_1.1-14            
 ##  [53] mime_0.5                XML_3.98-1.9           
 ##  [55] edgeR_3.18.1            DEoptimR_1.0-8         
-##  [57] zoo_1.8-0               zlibbioc_1.22.0        
-##  [59] MASS_7.3-45             scales_0.5.0           
+##  [57] zlibbioc_1.22.0         MASS_7.3-45            
+##  [59] zoo_1.8-0               scales_0.5.0           
 ##  [61] VIM_4.7.0               rhdf5_2.20.0           
 ##  [63] SparseM_1.77            RColorBrewer_1.1-2     
 ##  [65] yaml_2.1.14             memoise_1.1.0          
 ##  [67] gridExtra_2.3           biomaRt_2.32.1         
 ##  [69] reshape_0.8.7           stringi_1.1.5          
-##  [71] RSQLite_2.0             highr_0.6              
-##  [73] pcaPP_1.9-72            e1071_1.6-8            
-##  [75] boot_1.3-18             prabclus_2.2-6         
-##  [77] rlang_0.1.2             pkgconfig_2.0.1        
-##  [79] bitops_1.0-6            evaluate_0.10.1        
-##  [81] lattice_0.20-34         bindr_0.1              
-##  [83] labeling_0.3            cowplot_0.8.0          
-##  [85] bit_1.1-12              GGally_1.3.2           
-##  [87] plyr_1.8.4              magrittr_1.5           
-##  [89] bookdown_0.5            R6_2.2.2               
-##  [91] DBI_0.7                 mgcv_1.8-22            
-##  [93] RCurl_1.95-4.8          sp_1.2-5               
-##  [95] nnet_7.3-12             tibble_1.3.4           
-##  [97] car_2.1-5               rmarkdown_1.6          
-##  [99] viridis_0.4.0           locfit_1.5-9.1         
-## [101] grid_3.4.2              data.table_1.10.4-3    
-## [103] blob_1.1.0              diptest_0.75-7         
-## [105] vcd_1.4-3               digest_0.6.12          
-## [107] xtable_1.8-2            httpuv_1.3.5           
-## [109] munsell_0.4.3           beeswarm_0.2.3         
-## [111] viridisLite_0.2.0       vipor_0.4.5
+##  [71] RSQLite_2.0             pcaPP_1.9-72           
+##  [73] e1071_1.6-8             boot_1.3-18            
+##  [75] prabclus_2.2-6          rlang_0.1.2            
+##  [77] pkgconfig_2.0.1         bitops_1.0-6           
+##  [79] evaluate_0.10.1         lattice_0.20-34        
+##  [81] bindr_0.1               labeling_0.3           
+##  [83] cowplot_0.8.0           bit_1.1-12             
+##  [85] GGally_1.3.2            plyr_1.8.4             
+##  [87] magrittr_1.5            bookdown_0.5           
+##  [89] R6_2.2.2                DBI_0.7                
+##  [91] mgcv_1.8-22             RCurl_1.95-4.8         
+##  [93] sp_1.2-5                nnet_7.3-12            
+##  [95] tibble_1.3.4            car_2.1-5              
+##  [97] rmarkdown_1.6           viridis_0.4.0          
+##  [99] locfit_1.5-9.1          grid_3.4.2             
+## [101] data.table_1.10.4-3     blob_1.1.0             
+## [103] diptest_0.75-7          vcd_1.4-3              
+## [105] digest_0.6.12           xtable_1.8-2           
+## [107] httpuv_1.3.5            munsell_0.4.3          
+## [109] beeswarm_0.2.3          viridisLite_0.2.0      
+## [111] vipor_0.4.5
 ```
