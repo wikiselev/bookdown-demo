@@ -30,10 +30,14 @@ The easiest way to overview the data is by transforming it using the principal c
 
 Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. The eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html)).
 
-<div class="figure" style="text-align: center">
-<img src="figures/pca.png" alt="Schematic representation of PCA dimensionality reduction" width="100%" />
-<p class="caption">(\#fig:clust-pca)Schematic representation of PCA dimensionality reduction</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/pca} 
+
+}
+
+\caption{Schematic representation of PCA dimensionality reduction}(\#fig:clust-pca)
+\end{figure}
 
 #### Before QC
 
@@ -49,10 +53,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-before-qc1-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-before-qc1)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-before-qc1-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc1)
+\end{figure}
 
 With log-transformation:
 
@@ -66,10 +74,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-before-qc2-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-before-qc2)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-before-qc2-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc2)
+\end{figure}
 
 Clearly log-transformation is benefitial for our data - it reduces the variance on the first principal component and already separates some biological effects. Moreover, it makes the distribution of the expression values more normal. In the following analysis and chapters we will be using log-transformed raw counts by default.
 
@@ -88,10 +100,14 @@ plotPCA(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-after-qc)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-after-qc-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-after-qc)
+\end{figure}
 
 Comparing Figure \@ref(fig:expr-overview-pca-before-qc2) and Figure \@ref(fig:expr-overview-pca-after-qc), it is clear that after quality control the NA19098.r2 cells no longer form a group of outliers.
 
@@ -104,15 +120,23 @@ __Hint__ Use `ntop` argument of the `plotPCA` function.
 
 __Our answer__
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-exercise1-1-1.png" alt="PCA plot of the tung data (14214 genes)" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-after-qc-exercise1-1)PCA plot of the tung data (14214 genes)</p>
-</div>
+\begin{figure}
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-exercise1-2-1.png" alt="PCA plot of the tung data (50 genes)" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-after-qc-exercise1-2)PCA plot of the tung data (50 genes)</p>
-</div>
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-after-qc-exercise1-1-1} 
+
+}
+
+\caption{PCA plot of the tung data (14214 genes)}(\#fig:expr-overview-pca-after-qc-exercise1-1)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-after-qc-exercise1-2-1} 
+
+}
+
+\caption{PCA plot of the tung data (50 genes)}(\#fig:expr-overview-pca-after-qc-exercise1-2)
+\end{figure}
 
 If your answers are different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/07-exprs-overview.Rmd) (you need to search for this exercise in the opened file).
 
@@ -136,10 +160,14 @@ plotTSNE(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-before-qc-1.png" alt="tSNE map of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-before-qc)tSNE map of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-before-qc-1} 
+
+}
+
+\caption{tSNE map of the tung data}(\#fig:expr-overview-tsne-before-qc)
+\end{figure}
 
 #### After QC
 
@@ -156,10 +184,14 @@ plotTSNE(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-1.png" alt="tSNE map of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-after-qc)tSNE map of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-after-qc-1} 
+
+}
+
+\caption{tSNE map of the tung data}(\#fig:expr-overview-tsne-after-qc)
+\end{figure}
 
 Interpreting PCA and tSNE plots is often challenging and due to their stochastic and non-linear nature, they are less intuitive. However, in this case it is clear that they provide a similar picture of the data. Comparing Figure \@ref(fig:expr-overview-tsne-before-qc) and \@ref(fig:expr-overview-tsne-after-qc), it is again clear that the samples from NA19098.r2 are no longer outliers after the QC filtering.
 
@@ -172,15 +204,23 @@ How do the tSNE plots change when a perplexity of 10 or 200 is used? How does th
 
 __Our answer__
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-exercise2-1-1.png" alt="tSNE map of the tung data (perplexity = 10)" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-1)tSNE map of the tung data (perplexity = 10)</p>
-</div>
+\begin{figure}
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-exercise2-2-1.png" alt="tSNE map of the tung data (perplexity = 200)" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-2)tSNE map of the tung data (perplexity = 200)</p>
-</div>
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-after-qc-exercise2-1-1} 
+
+}
+
+\caption{tSNE map of the tung data (perplexity = 10)}(\#fig:expr-overview-tsne-after-qc-exercise2-1)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-after-qc-exercise2-2-1} 
+
+}
+
+\caption{tSNE map of the tung data (perplexity = 200)}(\#fig:expr-overview-tsne-after-qc-exercise2-2)
+\end{figure}
 
 ### Big Exercise
 
@@ -222,36 +262,35 @@ Perform the same analysis with read counts of the Blischak data. Use `tung/reads
 ##  [1] viridis_0.4.0           edgeR_3.18.1           
 ##  [3] bit64_0.9-7             viridisLite_0.2.0      
 ##  [5] shiny_1.0.5             assertthat_0.2.0       
-##  [7] highr_0.6               blob_1.1.0             
-##  [9] GenomeInfoDbData_0.99.0 vipor_0.4.5            
-## [11] yaml_2.1.14             RSQLite_2.0            
-## [13] backports_1.1.1         lattice_0.20-34        
-## [15] glue_1.1.1              limma_3.32.10          
-## [17] digest_0.6.12           XVector_0.16.0         
-## [19] colorspace_1.3-2        cowplot_0.8.0          
-## [21] htmltools_0.3.6         httpuv_1.3.5           
-## [23] Matrix_1.2-7.1          plyr_1.8.4             
-## [25] XML_3.98-1.9            pkgconfig_2.0.1        
-## [27] biomaRt_2.32.1          bookdown_0.5           
-## [29] zlibbioc_1.22.0         xtable_1.8-2           
-## [31] scales_0.5.0            Rtsne_0.13             
-## [33] tibble_1.3.4            lazyeval_0.2.0         
-## [35] magrittr_1.5            mime_0.5               
-## [37] memoise_1.1.0           evaluate_0.10.1        
-## [39] beeswarm_0.2.3          shinydashboard_0.6.1   
-## [41] tools_3.4.2             data.table_1.10.4-3    
-## [43] stringr_1.2.0           munsell_0.4.3          
-## [45] locfit_1.5-9.1          AnnotationDbi_1.38.2   
-## [47] bindrcpp_0.2            compiler_3.4.2         
-## [49] rlang_0.1.2             rhdf5_2.20.0           
-## [51] grid_3.4.2              RCurl_1.95-4.8         
-## [53] tximport_1.4.0          rjson_0.2.15           
-## [55] labeling_0.3            bitops_1.0-6           
-## [57] rmarkdown_1.6           gtable_0.2.0           
-## [59] DBI_0.7                 reshape2_1.4.2         
-## [61] R6_2.2.2                gridExtra_2.3          
-## [63] dplyr_0.7.4             bit_1.1-12             
-## [65] bindr_0.1               rprojroot_1.2          
-## [67] stringi_1.1.5           ggbeeswarm_0.6.0       
-## [69] Rcpp_0.12.13
+##  [7] blob_1.1.0              GenomeInfoDbData_0.99.0
+##  [9] vipor_0.4.5             yaml_2.1.14            
+## [11] RSQLite_2.0             backports_1.1.1        
+## [13] lattice_0.20-34         glue_1.1.1             
+## [15] limma_3.32.10           digest_0.6.12          
+## [17] XVector_0.16.0          colorspace_1.3-2       
+## [19] cowplot_0.8.0           htmltools_0.3.6        
+## [21] httpuv_1.3.5            Matrix_1.2-7.1         
+## [23] plyr_1.8.4              XML_3.98-1.9           
+## [25] pkgconfig_2.0.1         biomaRt_2.32.1         
+## [27] bookdown_0.5            zlibbioc_1.22.0        
+## [29] xtable_1.8-2            scales_0.5.0           
+## [31] Rtsne_0.13              tibble_1.3.4           
+## [33] lazyeval_0.2.0          magrittr_1.5           
+## [35] mime_0.5                memoise_1.1.0          
+## [37] evaluate_0.10.1         beeswarm_0.2.3         
+## [39] shinydashboard_0.6.1    tools_3.4.2            
+## [41] data.table_1.10.4-3     stringr_1.2.0          
+## [43] munsell_0.4.3           locfit_1.5-9.1         
+## [45] AnnotationDbi_1.38.2    bindrcpp_0.2           
+## [47] compiler_3.4.2          rlang_0.1.2            
+## [49] rhdf5_2.20.0            grid_3.4.2             
+## [51] RCurl_1.95-4.8          tximport_1.4.0         
+## [53] rjson_0.2.15            labeling_0.3           
+## [55] bitops_1.0-6            rmarkdown_1.6          
+## [57] gtable_0.2.0            DBI_0.7                
+## [59] reshape2_1.4.2          R6_2.2.2               
+## [61] gridExtra_2.3           dplyr_0.7.4            
+## [63] bit_1.1-12              bindr_0.1              
+## [65] rprojroot_1.2           stringi_1.1.5          
+## [67] ggbeeswarm_0.6.0        Rcpp_0.12.13
 ```

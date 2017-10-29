@@ -172,7 +172,53 @@ for(n in assayNames(reads.qc)) {
 }
 ```
 
-<img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-5.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-6.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-7.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-8.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-9.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-10.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-11.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-10-12.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-1} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-2} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-3} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-4} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-5} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-6} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-7} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-8} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-9} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-10} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-11} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-10-12} \end{center}
 
 
 ```r
@@ -184,7 +230,9 @@ par(mar=c(6,4,1,1))
 boxplot(res, las=2)
 ```
 
-<img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-11-1} \end{center}
 
 
 ```r
@@ -208,7 +256,53 @@ for(n in assayNames(reads.qc)) {
 }
 ```
 
-<img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-3.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-4.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-5.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-6.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-7.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-8.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-9.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-10.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-11.png" width="672" style="display: block; margin: auto;" /><img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-12-12.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-1} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-2} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-3} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-4} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-5} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-6} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-7} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-8} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-9} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-10} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-11} \end{center}
+
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-12-12} \end{center}
 
 
 ```r
@@ -265,7 +359,9 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
     ggtitle("Effect of batch regression methods per individual")
 ```
 
-<img src="16-remove-conf-reads_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{16-remove-conf-reads_files/figure-latex/unnamed-chunk-14-1} \end{center}
 
 
 ```
