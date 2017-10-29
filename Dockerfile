@@ -13,8 +13,8 @@ RUN apt-get update -y --no-install-recommends \
 #            python3.6 \
             python3-pip \
             python3-tk \
-            git
-#            texlive-full
+            git \
+            texlive-full
 
 # install MAGIC
 RUN git clone git://github.com/pkathail/magic.git \
