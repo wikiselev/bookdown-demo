@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# "Ideal" scRNAseq pipeline (as of Mar 2017)
+# "Ideal" scRNAseq pipeline (as of Oct 2017)
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -44,11 +44,11 @@ knitr::include_graphics("figures/Pipeline-batches.png")
     
 * Mapping
     * Small datasets or UMI datasets: align to genome/transcriptome using [STAR](https://github.com/alexdobin/STAR)
-    * Large datasets: pseudo-alignment with [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html)
+    * Large datasets: pseudo-alignment with [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html) or [kallisto](https://pachterlab.github.io/kallisto/about)
   
 * Quantification
     * Small dataset, no UMIs : [featureCounts](http://subread.sourceforge.net/)
-    * Large datasets, no UMIs: [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html)
+    * Large datasets, no UMIs: [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html), [kallisto](https://pachterlab.github.io/kallisto/about)
     * UMI dataset : [UMI-tools'](https://github.com/CGATOxford/UMI-tools) + [featureCounts](http://subread.sourceforge.net/)
 
 ## Preparing Expression Matrix
@@ -61,7 +61,9 @@ knitr::include_graphics("figures/Pipeline-batches.png")
     * [scran](http://bioconductor.org/packages/scran)
 
 * Batch correction (if appropriate)
-    * [RUVs](http://bioconductor.org/packages/RUVSeq)
+    * Replicates/Confounded [RUVs](http://bioconductor.org/packages/RUVSeq)
+    * Unknown or unbalanced biological groups [mnnCorrect] (https://bioconductor.org/packages/release/bioc/html/scran.html)
+    * Balanced design [ComBat] (https://bioconductor.org/packages/release/bioc/html/sva.html)
 
 ## Biological Interpretation
 
@@ -69,7 +71,8 @@ knitr::include_graphics("figures/Pipeline-batches.png")
     * [M3Drop](http://bioconductor.org/packages/M3Drop)
 
 * Clustering and Marker Gene Identification
-    * [SC3](http://bioconductor.org/packages/SC3)
+    * <5000 cells : [SC3](http://bioconductor.org/packages/SC3)
+    * >5000 cells : [Seurat](http://satijalab.org/seurat/)
 
 * Pseudotime
     * distinct timepoints: [TSCAN](http://bioconductor.org/packages/TSCAN)
