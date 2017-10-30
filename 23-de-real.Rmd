@@ -23,7 +23,7 @@ set.seed(1)
 To test different single-cell differential expression methods we will be using the Blischak dataset from Chapters 7-17.
 For this experiment bulk RNA-seq data for each cell-line was generated in addition to single-cell data. We will use the
 differentially expressed genes identified using standard methods on the respective bulk data as the ground truth for evaluating the
-accuracy of each single-cell method. To save time we have pre-computed these for you, run the commands below to load these data.
+accuracy of each single-cell method. To save time we have pre-computed these for you. You can run the commands below to load these data.
 
 ```{r}
 DE <- read.table("tung/TPs.txt")
