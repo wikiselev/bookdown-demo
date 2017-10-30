@@ -93,12 +93,14 @@ Compare the results of `SC3` clustering with the original publication cell type 
 adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$sc3_10_clusters)
 ```
 
-Note, that one can also run `SC3` in an interactive `Shiny` session:
+__Note__ `SC3` can also be run in an interactive `Shiny` session:
 ```{r, eval=FALSE}
 sc3_interactive(deng)
 ```
 
 This command will open `SC3` in a web browser.
+
+__Note__ Due to direct calculation of distances `SC3` becomes very slow when the number of cells is $>5000$. For large datasets containing up to $10^5$ cells we recomment using `Seurat` (see chapter \@ref(seurat-chapter)).
 
 * __Exercise 1__: Run `SC3` for $k$ from 8 to 12 and explore different clustering solutions in your web browser.
 
