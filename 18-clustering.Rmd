@@ -39,6 +39,7 @@ A simple PCA analysis already separates some strong cell types and provides some
 ```{r}
 plotPCA(deng, colour_by = "cell_type2")
 ```
+As you can see, the early cell types separate quite well, but the three blastocyst timepoints are more difficult to distinguish.
 
 ### SC3
 
@@ -142,7 +143,7 @@ colData(deng)$pcaReduce <- as.character(pca.red[,32 - 2])
 plotPCA(deng, colour_by = "pcaReduce")
 ```
 
-__Exercise 6__: Compare the results between `SC3` and the original publication cell types for $k=10$.
+__Exercise 6__: Compare the results between `pcaReduce` and the original publication cell types for $k=10$.
 
 __Our solution__:
 ```{r, echo=FALSE}
