@@ -11,7 +11,7 @@ opts_chunk$set(fig.align = "center")
 
 ### Bulk RNA-seq
 
-One of the most common types of analyses when analyzing bulk RNA-seq
+One of the most common types of analyses when working with bulk RNA-seq
 data is to identify differentially expressed genes. By comparing the
 genes that change between two conditions, e.g. mutant and wild-type or
 stimulated and unstimulated, it is possible to characterize the
@@ -24,7 +24,7 @@ have been developed for bulk RNA-seq. Moreover, there are also
 extensive
 [datasets](http://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-9-r95)
 available where the RNA-seq data has been validated using
-RT-qPCR. These data can be used to benchmark DE finding algorithms.
+RT-qPCR. These data can be used to benchmark DE finding algorithms and the available evidence suggests that the algorithms are performing quite well.
 
 ### Single cell RNA-seq
 
@@ -40,7 +40,7 @@ Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) fo
 
 There are two main approaches to comparing distributions. Firstly, we can use existing statistical models/distributions and fit the same type of model to the expression in each group then test for differences in the parameters for each model, or test whether the model fits better if a particular paramter is allowed to be different according to group. For instance in Chapter \@ref(dealing-with-confounders) we used edgeR to test whether allowing mean expression to be different in different batches significantly improved the fit of a negative binomial model of the data.
 
-Alternatively, we can use a non-parametric test which does not assume expression values follow any particular distribution, e.g. the [Kolmogorov-Smirnov test (KS-test)](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test). Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data. Moreover, if the conditions for a parametric test hold, then it will typically be more powerful than a non-parametric test.
+Alternatively, we can use a non-parametric test which does not assume that expression values follow any particular distribution, e.g. the [Kolmogorov-Smirnov test (KS-test)](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test). Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data. Moreover, if the conditions for a parametric test hold, then it will typically be more powerful than a non-parametric test.
 
 ### Models of single-cell RNASeq data
 
