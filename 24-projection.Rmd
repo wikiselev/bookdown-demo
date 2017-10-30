@@ -23,7 +23,7 @@ We recently developed `scmap` [@Kiselev2017-nb] - a method for projecting cells 
 
 ### Datasets
 
-We will run `scmap` on two human pancreas datasets: [@Muraro2016-yk] and [@Segerstolpe2016-wc]. These datasets are well annotated. As usual cell type labels are store in the `cell_type1` column of the `colData` slots.
+We will run `scmap` on two human pancreas datasets: [@Muraro2016-yk] and [@Segerstolpe2016-wc]. Since the pancreas has been widely studied, these datasets are well annotated. As usual cell type labels are stored in the `cell_type1` column of the `colData` slots.
 ```{r}
 muraro <- readRDS("pancreas/muraro.rds")
 segerstolpe <- readRDS("pancreas/segerstolpe.rds")
