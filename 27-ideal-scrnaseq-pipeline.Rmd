@@ -49,7 +49,7 @@ knitr::include_graphics("figures/Pipeline-batches.png")
 * Quantification
     * Small dataset, no UMIs : [featureCounts](http://subread.sourceforge.net/)
     * Large datasets, no UMIs: [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html), [kallisto](https://pachterlab.github.io/kallisto/about)
-    * UMI dataset : [UMI-tools'](https://github.com/CGATOxford/UMI-tools) + [featureCounts](http://subread.sourceforge.net/)
+    * UMI dataset : [UMI-tools](https://github.com/CGATOxford/UMI-tools) + [featureCounts](http://subread.sourceforge.net/)
 
 ## Preparing Expression Matrix
 
@@ -62,8 +62,8 @@ knitr::include_graphics("figures/Pipeline-batches.png")
 
 * Batch correction (if appropriate)
     * Replicates/Confounded [RUVs](http://bioconductor.org/packages/RUVSeq)
-    * Unknown or unbalanced biological groups [mnnCorrect] (https://bioconductor.org/packages/release/bioc/html/scran.html)
-    * Balanced design [ComBat] (https://bioconductor.org/packages/release/bioc/html/sva.html)
+    * Unknown or unbalanced biological groups [mnnCorrect](https://bioconductor.org/packages/release/bioc/html/scran.html)
+    * Balanced design [ComBat](https://bioconductor.org/packages/release/bioc/html/sva.html)
 
 ## Biological Interpretation
 
@@ -71,8 +71,8 @@ knitr::include_graphics("figures/Pipeline-batches.png")
     * [M3Drop](http://bioconductor.org/packages/M3Drop)
 
 * Clustering and Marker Gene Identification
-    * <5000 cells : [SC3](http://bioconductor.org/packages/SC3)
-    * >5000 cells : [Seurat](http://satijalab.org/seurat/)
+    * $\le 5000$ cells : [SC3](http://bioconductor.org/packages/SC3)
+    * $>5000$ cells : [Seurat](http://satijalab.org/seurat/)
 
 * Pseudotime
     * distinct timepoints: [TSCAN](http://bioconductor.org/packages/TSCAN)
