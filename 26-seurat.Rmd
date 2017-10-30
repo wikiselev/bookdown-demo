@@ -85,6 +85,8 @@ seuset <- FindVariableGenes(
 )
 length(x = seuset@var.genes)
 ```
+We are not entirely sure what is going on in the lower left hand corner of the plot above. A similar feature can be found in the Satija lab tutorial, so we do not believe that it is due to an error in how we used the method.
+
 
 ## Dealing with confounders
 
@@ -132,7 +134,7 @@ PCHeatmap(
 
 ## Significant PCs
 
-To overcome the extensive technical noise in any single gene for scRNA-seq data, `Seurat` clusters cells based on their `PCA` scores, with each PC essentially representing a _metagene_ that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step. `Seurat` randomly permute a subset of the data (1% by default) and rerun `PCA`, constructing a _null distribution_ of gene scores, and repeat this procedure. We identify _significant_ PCs as those who have a strong enrichment of low p-value genes:
+To overcome the extensive technical noise in any single gene for scRNA-seq data, `Seurat` clusters cells based on their `PCA` scores, with each PC essentially representing a _metagene_ that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step. `Seurat` randomly permutes a subset of the data (1% by default) and reruns `PCA`, constructing a _null distribution_ of gene scores by repeating this procedure. We identify _significant_ PCs as those who have a strong enrichment of low p-value genes:
 ```{r}
 seuset <- JackStraw(
     object = seuset, 
