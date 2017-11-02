@@ -65,6 +65,9 @@ cell_colors <- brewer.pal(max(3,length(unique(celltype_labs))), "Set3")
 ```
 
 __Exercise 1__: How many cells & genes have been removed by this filtering? 
+```{r, include=FALSE}
+ncol(counts(dent))-ncol(deng_list$data)
+```
 
 ### Identifying Genes vs a Null Model ##
 
@@ -151,7 +154,14 @@ points(S1*mix+S2*(1-mix), P1*mix+P2*(1-mix), pch=16, col="grey35", cex=3)
 __Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures.
 
 __Exercise 3__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
-
+```{r, include=FALSE}
+plot(S_sim, MM, type="l", lwd=3, xlab="Expression", ylab="Dropout Rate", xlim=c(1,1000), log="x")
+S1 = 100; P1 = 1-S1/(K+S1) # Expression & dropouts for cells in condition 1
+S2 = 1000; P2 = 1-S2/(K+S2) # Expression & dropouts for cells in condition 2
+points(c(S1,S2),c(P1,P2), pch=16, col="grey85", cex=3)
+mix = 0.75; # proportion of cells in condition 1
+points(S1*mix+S2*(1-mix), P1*mix+P2*(1-mix), pch=16, col="grey35", cex=3)
+```
 We use M3Drop to identify significant outliers to the right of the MM
 curve. We also apply 1% FDR multiple testing correction:
 
@@ -226,7 +236,14 @@ PCA_genes = names(score[1:1500])
 __Exercise 4__
 Consider the top 5 principal components. Which appear to be most biologically relevant? How does the top 1,500
 features change if you consider the loadings for those components?
-
+```{r, include=FALSE}
+plot(pca$rotation[,2], pca$rotation[,3], pch=16, col=cell_colors[as.factor(celltype_labs)]) # plot projection
+plot(pca$rotation[,3], pca$rotation[,4], pch=16, col=cell_colors[as.factor(celltype_labs)]) # plot projection
+score <- rowSums(abs(pca$x[,c(2,3,4)])) # calculate loadings for components 1 and 2
+names(score) <- rownames(expr_matrix)
+score <- score[order(-score)]
+PCA_genes2 = names(score[1:1500])
+```
 ### Comparing Methods
 
 We can check whether the identified features really do represent genes differentially expressed between
@@ -247,6 +264,44 @@ J <- sum(M3Drop_genes %in% HVG_genes)/length(unique(c(M3Drop_genes, HVG_genes)))
 
 __Exercise 5__
 Plot the expression of the features for each of the other methods. Which appear to be differentially expressed? How consistent are the different methods for this dataset?
+```{r, include=FALSE}
+M3DropExpressionHeatmap(
+    HVG_genes,
+    expr_matrix,
+    cell_labels = celltype_labs
+)
+
+M3DropExpressionHeatmap(
+    Cor_genes,
+    expr_matrix,
+    cell_labels = celltype_labs
+)
+
+M3DropExpressionHeatmap(
+    PCA_genes,
+    expr_matrix,
+    cell_labels = celltype_labs
+)
+
+M3DropExpressionHeatmap(
+    PCA_genes2,
+    expr_matrix,
+    cell_labels = celltype_labs
+)
+```
+
+```{r}
+list_of_features <- list(M3Drop_genes, HVG_genes, Cor_genes, PCA_genes, PCA_genes2)
+Out <- matrix(0, ncol=length(list_of_features), nrow=length(list_of_features))
+
+for( i in 1:length(list_of_features) ) {
+    for( j in 1:length(list_of_features) ) {
+        Out[i,j] <- sum(list_of_features[[i]] %in% list_of_features[[j]])/length(unique(c(list_of_features[[i]], list_of_features[[j]])))
+     }
+}
+colnames(Out) <- rownames(Out) <- c("M3Drop", "HVG", "Cor", "PCA", "PCA2")
+```
+
 
 ### sessionInfo()
 
