@@ -9,6 +9,7 @@ RUN apt-get update -y --no-install-recommends \
             pandoc \
             pandoc-citeproc \
             r-cran-rjava \
+            libmariadb-client-lgpl-dev \
             python \
 #            python3.6 \
             python3-pip \
@@ -43,7 +44,6 @@ RUN Rscript -e "install.packages('statmod')"
 RUN Rscript -e "install.packages('mvoutlier')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('scran')"
 # RUN Rscript -e "devtools::install_github('MarioniLab/scran')"
-RUN Rscript -e "install.packages('RMySQL')"
 RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')"
 
 RUN Rscript -e "install.packages('mclust')"
