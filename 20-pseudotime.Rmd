@@ -83,9 +83,9 @@ which is based on a mixture of normal distributions. Then it builds a minimum sp
 
 First we will try to use all genes to order the cells.
 ```{r tscan-all-genes}
-deng_counts <- readRDS("deng/deng-reads.rds")
-cellLabels <- colData(deng_counts)$cell_type2
-deng <- logcounts(deng_counts)
+deng_SCE <- readRDS("deng/deng-reads.rds")
+cellLabels <- colData(deng_SCE)$cell_type2
+deng <- counts(deng_SCE)
 colnames(deng) <- cellLabels
 procdeng <- TSCAN::preprocess(deng)
 colnames(procdeng) <- 1:ncol(deng)
@@ -131,7 +131,7 @@ Unfortunately, Monocle does not work when all the genes are used, so
 we must carry out feature selection. First, we use M3Drop:
 ```{r m3d-select-genes}
 m3dGenes <- as.character(
-    M3DropFeatureSelection(counts(deng_counts))$Gene
+    M3DropFeatureSelection(deng)$Gene
 )
 d <- deng[which(rownames(deng) %in% m3dGenes), ]
 d <- d[!duplicated(rownames(d)), ]
@@ -190,7 +190,9 @@ plot(
 [Haghverdi et al](http://biorxiv.org/content/biorxiv/early/2015/08/04/023309.full.pdf) have applied the diffusion maps concept to the analysis of single-cell RNA-seq data to create an R package called [destiny](http://bioconductor.org/packages/destiny).
 
 ```{r destiny-deng}
-dm <- DiffusionMap(t(log2(deng + 1)))
+deng <- logcounts(deng_SCE)
+colnames(deng) <- cellLabels
+dm <- DiffusionMap(t(deng))
 tmp <- factor(
     colnames(deng),
     levels = c(
