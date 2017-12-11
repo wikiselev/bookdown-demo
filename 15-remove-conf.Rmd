@@ -138,28 +138,38 @@ assay(umi.qc, "combat_tf") <- ComBat(
 Thus we will merge a replicate from each individual to form three batches. 
 ```{r}
 do_mnn <- function(data.qc) {
-    batch1 <- data.qc[, data.qc$replicate == "r1"]
-    batch2 <- data.qc[, data.qc$replicate == "r2"]
-    batch3 <- data.qc[, data.qc$replicate == "r3"]
+    batch1 <- logcounts(data.qc[, data.qc$replicate == "r1"])
+    batch2 <- logcounts(data.qc[, data.qc$replicate == "r2"])
+    batch3 <- logcounts(data.qc[, data.qc$replicate == "r3"])
     
     if (ncol(batch2) > 0) {
         x = mnnCorrect(
-          logcounts(batch1), logcounts(batch2), logcounts(batch3),  
+          batch1, batch2, batch3,  
           k = 20,
           sigma = 0.1,
-          cos.norm = TRUE,
+          cos.norm.in = TRUE,
           svd.dim = 2
         )
-        return(cbind(x$corrected[[1]], x$corrected[[2]], x$corrected[[3]]))
+        res1 <- x$corrected[[1]]
+        res2 <- x$corrected[[2]]
+        res3 <- x$corrected[[3]]
+        dimnames(res1) <- dimnames(batch1)
+        dimnames(res2) <- dimnames(batch2)
+        dimnames(res3) <- dimnames(batch3)
+        return(cbind(res1, res2, res3))
     } else {
         x = mnnCorrect(
-          logcounts(batch1), logcounts(batch3),  
+          batch1, batch3,  
           k = 20,
           sigma = 0.1,
-          cos.norm = TRUE,
+          cos.norm.in = TRUE,
           svd.dim = 2
         )
-        return(cbind(x$corrected[[1]], x$corrected[[2]]))
+        res1 <- x$corrected[[1]]
+        res3 <- x$corrected[[2]]
+        dimnames(res1) <- dimnames(batch1)
+        dimnames(res3) <- dimnames(batch3)
+        return(cbind(res1, res3))
     }
 }
 
@@ -167,7 +177,7 @@ indi1 <- do_mnn(umi.qc[, umi.qc$individual == "NA19098"])
 indi2 <- do_mnn(umi.qc[, umi.qc$individual == "NA19101"])
 indi3 <- do_mnn(umi.qc[, umi.qc$individual == "NA19239"])
 
-assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3);
+assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3)
 
 # For a balanced design: 
 #assay(umi.qc, "mnn") <- mnnCorrect(
