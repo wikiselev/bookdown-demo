@@ -158,7 +158,7 @@ plotRLE(
 )
 ```
 
-```{r}
+```{r, eval=FALSE}
 reads.qc <- getBMFeatureAnnos(
     reads.qc,
     filters = "ensembl_gene_id", 
@@ -177,20 +177,20 @@ reads.qc <- getBMFeatureAnnos(
 )
 ```
 
-```{r}
+```{r, eval=FALSE}
 reads.qc.ann <- reads.qc[!is.na(rowData(reads.qc)$ensembl_gene_id), ]
 ```
 
-```{r}
+```{r, eval=FALSE}
 eff_length <- 
     abs(rowData(reads.qc.ann)$end_position - rowData(reads.qc.ann)$start_position) / 1000
 ```
 
-```{r}
+```{r, eval=FALSE}
 tpm(reads.qc.ann) <- log2(calculateTPM(reads.qc.ann, eff_length) + 1)
 ```
 
-```{r norm-pca-tpm-reads, fig.cap = "PCA plot of the tung data after TPM normalisation"}
+```{r norm-pca-tpm-reads, fig.cap = "PCA plot of the tung data after TPM normalisation", eval=FALSE}
 plotPCA(
     reads.qc.ann,
     exprs_values = "tpm",
@@ -200,11 +200,11 @@ plotPCA(
 )
 ```
 
-```{r}
+```{r, eval=FALSE}
 tpm(reads.qc.ann) <- log2(calculateFPKM(reads.qc.ann, eff_length) + 1)
 ```
 
-```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the tung data after FPKM normalisation"}
+```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the tung data after FPKM normalisation", eval=FALSE}
 plotPCA(
     reads.qc.ann,
     exprs_values = "tpm",
