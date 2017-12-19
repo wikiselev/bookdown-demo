@@ -341,7 +341,7 @@ But we will demonstrate them anyway.
 __Note__ Here calculate the total gene length instead of the total exon length. Many genes will contain lots of introns so their `eff_length` will be very different from what we have calculated. Please consider our calculation as approximation. If you want to use the total exon lengths, please refer to [this page](https://www.biostars.org/p/83901/).
 
 Now we are ready to perform the normalisations:
-```{r}
+```{r, eval=FALSE}
 tpm(umi.qc.ann) <- log2(calculateTPM(umi.qc.ann, eff_length) + 1)
 ```
 
