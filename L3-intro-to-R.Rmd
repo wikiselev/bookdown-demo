@@ -295,18 +295,3 @@ Lists are most commonly used when returning a large number of results from a fun
 ### Plotting cells (PCA scatterplot overlayed with metadata)
 
 ### Gene expression heatmap
-
-
-
-```{r, message=FALSE, warning=FALSE}
-library(scater, quietly = TRUE)
-library(knitr)
-options(stringsAsFactors = FALSE)
-```
-
-Load the data and annotations:
-```{r}
-molecules <- read.table("blischak/molecules.txt", sep = "\t")
-anno <- read.table("blischak/annotation.txt", sep = "\t", header = TRUE)
-```
-
