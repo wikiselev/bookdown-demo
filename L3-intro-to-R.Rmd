@@ -140,6 +140,14 @@ Special characters are generally only used in pattern matching, and reading/writ
 dat = read.delim("file.tsv", sep="\t")
 ```
 
+Another special type of character data are colours. Colours can be specified in three main ways: by name from those [available](http://bxhorn.com/r-color-tables/), by red, green, blue values using the "rgb" function, and by hue (colour), saturation (colour vs white) and value (colour/white vs black) using the "hsv" function. By default rgb and hsv expect three values in 0-1 with an optional fourth value for transparency. Alternatively, sets of predetermined colours with useful properties can be loaded from many different packages with [RColorBrewer](http://colorbrewer2.org/) being one of the most popular.
+
+```{r}
+reds = c("red", rgb(1,0,0), hsv(0, 1, 1))
+reds
+barplot(c(1,1,1), col=reds, names=c("by_name", "by_rgb", "by_hsv"))
+```
+
 ### Logical
 
 The "logical" class stores boolean truth values, i.e. TRUE and FALSE. It is used for storing the results of logical operations and conditional statements will be coerced to this class. Most other data-types can be coerced to boolean without triggering (or "throwing") error messages, which may cause unexpected behaviour.
@@ -197,7 +205,14 @@ To make R read text as character data instead of factors set the environment opt
 ```{r}
 options(stringsAsFactors=FALSE)
 ```
-
+__Exercise__
+How would you use factors to create a vector of colours for an arbitrarily long vector of fruits like "str_vector" above?
+__Answer__
+```{r, eval=FALSE, echo=FALSE}
+long_str_vector = c(str_vector, str_vector, str_vector)
+fruit_cols = c("red", "yellow", "orange")
+fruit_colour_vec = fruit_cols[as.numeric(factor(long_str_vector, levels=c("Apple", "Banana", "Carrot"))]
+```
 
 ### Checking class/type
 We recommend checking your data is of the correct class after reading from files:
