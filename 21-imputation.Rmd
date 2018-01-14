@@ -54,6 +54,7 @@ res <- SingleCellExperiment(
     assays = list(logcounts = log2(as.matrix(res) + 1)), 
     colData = colData(deng)
 )
+rowData(res)$feature_symbol <- rowData(deng)$feature_symbol
 plotPCA(
     res, 
     colour_by = "cell_type2"
@@ -91,6 +92,7 @@ res <- SingleCellExperiment(
     assays = list(logcounts = res), 
     colData = colData(deng)
 )
+rowData(res)$feature_symbol <- rowData(deng)$feature_symbol
 plotPCA(
     res, 
     colour_by = "cell_type2"
