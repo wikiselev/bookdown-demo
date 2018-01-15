@@ -1,0 +1,145 @@
+---
+output: html_document
+---
+
+# Processing raw scRNA-Seq data
+
+## File formats
+
+### FastQ
+FastQ is the most raw form of scRNASeq data you will encounter. All scRNASeq 
+protocols are sequenced with paired-end sequencing. Barcode sequences may occur 
+in one or both reads depending on the protocol employed. However, protocols 
+using unique molecular identifiers (UMIs) will generally contain one read with 
+the cell and UMI barcodes plus adapters but without any transcript sequence. 
+Thus reads will be mapped as if they are single-end sequenced despite actually
+being paired end. 
+
+FastQ files have the format:
+```{eval=FALSE}
+>ReadID
+READ SEQUENCE
++
+SEQUENCING QUALITY SCORES
+```
+
+### BAM
+
+BAM file format stores mapped reads in a standard and efficient manner. The 
+human-readable version is called a SAM file, while the BAM file is the highly
+compressed version. BAM/SAM files contain a header which typically includes  
+information on the sample preparation, sequencing and mapping; and a tab-separated row for each individual alignment of each read. 
+
+Alignment rows employ a standard format with the following columns:
+(1) QNAME : read name (generally will include UMI barcode if applicable)
+(2) FLAG : number tag indicating the "type" of alignment, [link](https://broadinstitute.github.io/picard/explain-flags.html) to explanation of all possible "types"
+(3) RNAME : reference sequence name (i.e. chromosome read is mapped to).
+(4) POS : leftmost mapping position
+(5) MAPQ : Mapping quality
+(6) CIGAR : string indicating the matching/mismatching parts of the read (may include soft-clipping).
+(7) RNEXT : reference name of the mate/next read
+(8) PNEXT : POS for mate/next read
+(9) TLEN : Template length (length of reference region the read is mapped to)
+(10) SEQ : read sequence
+(11) QUAL : read quality
+
+Some sequencing facilities will automatically map your reads to the a standard 
+genome and deliver either BAM or CRAM formatted files. Generally they will not 
+have included ERCC sequences in the genome thus no ERCC reads will be mapped in
+the BAM/CRAM file. To quantify ERCCs (or any other genetic alterations) or if 
+you just want to use a different alignment algorithm than whatever is in the 
+generic pipeline (often outdated), then you will need to convert the BAM/CRAM 
+files back to FastQs:
+
+BAM files can be converted to FastQ using bedtools. To ensure a single copy for
+multi-mapping reads first sort by read name and remove secondary alignments
+using samtools. [Picard](https://broadinstitute.github.io/picard/index.html) 
+also contains a method for converting BAM to FastQ files. 
+
+```{bash, eval=FALSE}
+samtools sort -n original.bam -o sorted_by_name.bam
+samtools view -b -F 256 sorted_by_name.cam -o primary_alignment_only.bam
+bedtools2/bin/badtools bamtofastq -i primary_alignment_only.bam -fq read1.fq -fq2 read2.fq
+```
+### CRAM
+
+[CRAM](https://www.ebi.ac.uk/ena/software/cram-usage) files are similar to BAM files only they contain information in the header 
+to the reference genome used in the mapping in the header. This allow the bases
+in each read that are identical to the reference to be further compressed. CRAM
+also supports some lossy data compression approaches to further optimize storage
+compared to BAMs. CRAMs are mainly used by the Sanger/EBI sequencing facility.
+
+CRAM and BAM files can be interchanged using the lastest version of samtools (>=v1.0). 
+However, this conversion requires downloading the reference genome into cache.
+Thus we recommend setting a specific cache location prior to doing this:
+
+```{bash, eval=FALSE}
+export REF_CACHE=/path_to/cache_directory_for_reference_genome
+samtools view -b -h file.cram -o file.bam
+samtools view -C -h -T reference_genome.fasta file.bam -o file.cram
+```
+
+### Genome (FASTA, GTF)
+
+To map your reads you will also need the reference genome and in many cases 
+the genome annotation file (in either GTF or GFF format). These can be 
+downloaded for model organisms from any of the main genomics databases: 
+[Ensembl](http://www.ensembl.org/info/data/ftp/index.html), 
+[NCBI](ftp://ftp.ncbi.nih.gov/genomes/), or [UCSC Genome Browser](http://hgdownload.soe.ucsc.edu/downloads.html). 
+
+In our experience Ensembl is the easiest of these to use, and has the largest 
+set of annotations. NCBI tends to be more strict in including only high 
+confidence gene annotations. Whereas UCSC contains multiple geneset annotations
+that use different criteria.
+
+If you experimental system includes non-standard sequences these must be added 
+to both the genome fasta and gtf to quantify their expression. Most commonly
+this is done for the ERCC spike-ins, although the same must be done for CRISPR-
+related sequences or other overexpression/reporter constructs. 
+
+There is no standardized way to do this. So below is our custom perl script for creating a gtf and fasta file for ERCCs which can be appended to the genome.
+
+
+%This will probably cause an error, change language to "r" if it does
+```{perl, eval=FALSE}
+# Converts the Annotation file from https://www.thermofisher.com/order/catalog/product/4456740 to gtf and fasta files that can be added to existing genome fasta & gtf files.
+
+my @FASTAlines = ();
+my @GTFlines = ();
+open (my $ifh, "ERCC_Controls_Annotation.txt") or die $!;
+<$ifh>; #header
+while (<$ifh>) {
+	# Do all the important stuff
+	chomp;
+	my @record = split(/\t/);
+	my $sequence = $record[4];
+	$sequence =~ s/\s+//g; # get rid of any preceeding/tailing white space
+	$sequence = $sequence."NNNN";
+	my $name = $record[0];
+	my $genbank = $record[1];
+	push(@FASTAlines, ">$name\n$sequence\n");
+# is GTF 1 indexed or 0 indexed? -> it is 1 indexed
+# + or - strand?
+	push(@GTFlines, "$name\tERCC\tgene\t1\t".(length($sequence)-2)."\t.\t+\t.\tgene_id \"$name-$genbank\"; transcript_id \"$name-$genbank\"; exon_number \"1\"; gene_name \"ERCC $name-$genbank\"\n");
+	push(@GTFlines, "$name\tERCC\texon\t1\t".(length($sequence)-2)."\t.\t+\t.\tgene_id \"$name-$genbank\"; transcript_id \"$name-$genbank\"; exon_number \"1\"; gene_name \"ERCC $name-$genbank\"\n");
+} close($ifh);
+
+# Write output
+open(my $ofh, ">", "ERCC_Controls.fa") or die $!;
+foreach my $line (@FASTAlines) {
+	print $ofh $line;
+} close ($ofh);
+
+open($ofh, ">", "ERCC_Controls.gtf") or die $!;
+foreach my $line (@GTFlines) {
+	print $ofh $line;
+} close ($ofh);
+```
+
+## Demultiplexing
+
+## Reads QC
+
+## Read Trimming
+
+
