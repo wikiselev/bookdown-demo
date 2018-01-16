@@ -30,19 +30,19 @@ match in a database for a newly identified nucleotide or amino acid sequence. Th
 compare datasets of similar biological origin collected by different labs to ensure that the annotation and the analysis is
 consistent.
 
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="scmap can be used to compare the annotations of two different samples by providing a one to one mapping between the cells."}
-knitr::include_graphics("figures/scmap1.png")
+```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="Label-centric dataset comparison can be used to compare the annotations of two different samples."}
+knitr::include_graphics("figures/CourseCompareTypes.png")
 ```
 
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap=" scmap can also be used to project cells from a new experiment onto an annotated reference."}
-knitr::include_graphics("figures/scmap2.png")
+```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="Label-centric dataset comparison can project cells from a new experiment onto an annotated reference."}
+knitr::include_graphics("figures/CourseAtlasAssignment.png")
 ```
 
 The cross-dataset normalization approach can also be used to compare datasets of similar biological origin, unlike the label-centric approach it enables the join analysis of multiple datasets to facilitate the identification of rare cell-types which may to too sparsely sampled in each individual dataset to be reliably detected. However, cross-dataset normalization is not applicable to very large and diverse references since it assumes a significant portion of the biological variablility in each of the datasets overlaps with others.
 
 
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="cross-dataset normalization enables joint-analysis of 2+ scRNASeq datasets."}
-knitr::include_graphics("figures/cross-dataset-norm.png")
+```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="Cross-dataset normalization enables joint-analysis of 2+ scRNASeq datasets."}
+knitr::include_graphics("figures/CourseCrossNorm.png")
 ```
 ## Datasets
 
