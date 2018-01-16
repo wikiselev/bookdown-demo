@@ -39,53 +39,75 @@ knitr::include_graphics("figures/scmap1.png")
 knitr::include_graphics("figures/scmap2.png")
 ```
 
-### Run `scmap`
-
-#### Feature Selection
+### Feature Selection
 Once we have a `SingleCellExperiment` object we can run `scmap`. Firstly, we need to select the most informative features from our input dataset:
 ```{r}
-muraro <- getFeatures(muraro, suppress_plot = FALSE)
+muraro <- selectFeatures(muraro, suppress_plot = FALSE)
 ```
 
-Genes highlighted with the red colour will be used in the futher analysis (projection).
+Features highlighted with the red colour will be used in the futher analysis (projection).
+
+Features are stored in the `scmap_features` column of the `rowData` slot of the input object. By default scmap selects 500 features (it can also be controlled by setting `n_features` parameter):
+```{r}
+table(rowData(muraro)$scmap_features)
+```
+
+### `scmap-cluster`
+
+The `scmap-cluster` index of a reference dataset is created by finding the median gene expression for each cluster. By default scmap uses the `cell_type1` column of the `colData` slot in the reference to identify clusters. Other columns can be manually selected by adjusting `cluster_col` parameter:
+```{r}
+muraro <- indexCluster(muraro)
+```
+
+The function indexCluster automatically writes the scmap_cluster_index item of the metadata slot of the reference dataset.
+```{r}
+head(metadata(muraro)$scmap_cluster_index)
+```
+
+One can also visualise the index:
+```{r}
+heatmap(as.matrix(metadata(muraro)$scmap_cluster_index))
+```
 
 #### Projecting
 
-We will project the `segerstolpe` dataset to `muraro` dataset:
-```{r}
-segerstolpe <- projectData(projection = segerstolpe, reference = muraro)
-```
+Once the `scmap-cluster` index has been generated we can use it to project `segerstolpe` dataset to `muraro` dataset. This can be done with one index at a time, but `scmap` also allows for simultaneous projection to multiple indexes if they are provided as a list:
 
-In your own analysis you can choose any two scRNASeq datasets and project them to each other. Note that the `getFeatures` functions has to be run on the reference dataset before running the `projectData` function.
+```{r}
+scmapCluster_results <- scmapCluster(
+  projection = segerstolpe, 
+  index_list = list(
+    muraro = metadata(muraro)$scmap_cluster_index
+  )
+)
+```
 
 ### Results
 
-Let's look at the results. The labels produced by `scmap` are located in the `scmap_labs` column of the `colData` slot of the projection dataset. We will compare them to the original labels provided by the authors of the publication:
+`scmap-cluster` projects the query dataset to all projections defined in the index_list. The results of cell label assignements are merged into one matrix:
 ```{r}
-colData(segerstolpe)[,c("scmap_labs", "scmap_siml")]
+head(scmapCluster_results$scmap_cluster_labs)
+```
+
+Corresponding similarities are stored in the scmap_cluster_siml item:
+```{r}
+head(scmapCluster_results$scmap_cluster_siml)
+```
+
+`scmap` also provides combined results of all reference dataset (choose labels corresponding to the largest similarity across reference datasets):
+```{r}
+head(scmapCluster_results$combined_labs)
 ```
 
 Clearly the projection is almost perfect. With `scmap` one can also plot a [Sankey diagram](https://developers.google.com/chart/interactive/docs/gallery/sankey) (however, `cell_type1` columns have to be provided in the `colData` slots of both the reference and the projection datasets):
 ```{r results='asis', tidy=FALSE}
-plot(getSankey(colData(segerstolpe)$cell_type1, colData(segerstolpe)$scmap_labs))
-```
-
-### Creating a precomputed Reference
-
-The cell type centroids can be precomputed by using the `createReference` method:
-```{r}
-reference <- createReference(muraro[rowData(muraro)$scmap_features, ])
-```
-
-One can also visualise the cell type centroids, e.g.:
-```{r fig.height=7}
-heatmap(as.matrix(reference))
-```
-
-Exactly the same projection as above can be performed by providing the precomputed reference instead of the `SingleCellExperiment` object:
-```{r}
-segerstolpe <- projectData(projection = segerstolpe, reference = reference)
-colData(segerstolpe)[,c("scmap_labs", "scmap_siml")]
+plot(
+  getSankey(
+    colData(segerstolpe)$cell_type1, 
+    scmapCluster_results$scmap_cluster_labs[,'muraro'],
+    plot_height = 400
+  )
+)
 ```
 
 ### sessionInfo()

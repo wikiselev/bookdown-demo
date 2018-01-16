@@ -92,7 +92,7 @@ res <- SingleCellExperiment(
     assays = list(logcounts = res), 
     colData = colData(deng)
 )
-rowData(res)$feature_symbol <- rowData(deng)$feature_symbol
+rowData(res)$feature_symbol <- rownames(res)
 plotPCA(
     res, 
     colour_by = "cell_type2"
