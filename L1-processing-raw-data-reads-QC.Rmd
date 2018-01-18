@@ -17,7 +17,12 @@ This website contains links to download and install FastQC and documentation on 
 
 Now let's make a FastQC report ourselves.
 
-Today we will be performing our analysis using a single cell from an mESC dataset produced by (Kolodziejczyk et al. 2015). The cells were sequenced using the SMART-seq2 library preparation protocol and the reads are paired end. Explain where the cell is stored and where FastQC is installed.
+Today we will be performing our analysis using a single cell from an mESC dataset produced by (Kolodziejczyk et al. 2015). The cells were sequenced using the SMART-seq2 library preparation protocol and the reads are paired end. Execute the following commands to download the reads files:
+
+```{bash, eval=FALSE}
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR522/ERR522959/ERR522959_1.fastq.gz
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR522/ERR522959/ERR522959_2.fastq.gz
+```
 
 Task 1: Try to work out what command you should use to produce the FastQC report. Hint: Try executing
 
@@ -34,9 +39,10 @@ Kolodziejczyk, A.A., Kim, J.K., Tsang, J.C.H., Ilicic, T., Henriksson, J., Natar
 
 # Solution and Downloading the Report
 
-If you haven't done so already, generate the FastQC report using the command below:
+If you haven't done so already, generate the FastQC report using the commands below:
 
 ```{bash, eval=FALSE, echo = TRUE}
+mkdir fastqc_results
 ./FastQC/fastqc -o fastqc_results ERR522959_1.fastq.gz ERR522959_2.fastq.gz
 ```
 
@@ -73,9 +79,10 @@ Once you think you have successfully trimmed your reads and have confirmed this 
 
 # Solution
 
-You can use the command below to trim the Nextera sequencing adapters:
+You can use the command(s) below to trim the Nextera sequencing adapters:
 
 ```{bash, eval=FALSE}
+mkdir fastqc_trimmed_results
 ./trim_galore --nextera -o fastqc_trimmed_results ERR522959_1.fastq.gz raw_data/ERR522959_2.fastq.gz
 ```
 
