@@ -1,7 +1,7 @@
 FROM rocker/rstudio
 
-RUN apt-get update -y --no-install-recommends \ 
-    && apt-get -y install -f \
+RUN apt-get update -y --no-install-recommends && \ 
+    apt-get -y install -f \
         libssl-dev \
         libcurl4-openssl-dev \
         libxml2-dev \
@@ -14,7 +14,8 @@ RUN apt-get update -y --no-install-recommends \
 #       python3.6 \
         python3-pip \
         python3-tk \
-        git
+        git \
+        curl
 #       texlive-full
 
 # Install STAR
@@ -37,11 +38,11 @@ RUN curl -fsSL http://downloads.sourceforge.net/project/subread/subread-1.5.1/su
     rm /opt/subread-1.5.1-Linux-x86_64.tar.gz
 
 # install MAGIC
-RUN git clone git://github.com/pkathail/magic.git \
-    && cd magic \
-    && pip3 install numpy \
-    && pip3 install argparse \
-    && pip3 install .
+RUN git clone git://github.com/pkathail/magic.git && \
+    cd magic && \
+    pip3 install numpy && \
+    pip3 install argparse && \
+    pip3 install .
 
 # install R packages
 RUN echo 'install.packages(c("devtools", "bookdown", "knitr", "pheatmap", "statmod", "mvoutlier", "mclust", "dplyr", "penalized", "cluster", "Seurat", "KernSmooth", "mgcv", "ROCR", "googleVis"))' > /opt/packages.r && \
