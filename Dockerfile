@@ -15,8 +15,24 @@ RUN apt-get update -y --no-install-recommends && \
         python3-pip \
         python3-tk \
         git \
-        curl
+        curl \
+        cmake \
+        zlib1g-dev \
+        libhdf5-dev
 #       texlive-full
+
+# Install FastQC
+RUN curl -fsSL http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip -o /opt/fastqc_v0.11.5.zip && \
+    unzip /opt/fastqc_v0.11.5.zip -d /opt/ && \
+    chmod 755 /opt/FastQC/fastqc && \
+    ln -s /opt/FastQC/fastqc /usr/local/bin/fastqc && \
+    rm /opt/fastqc_v0.11.5.zip
+
+# Install Kallisto
+RUN curl -fsSL https://github.com/pachterlab/kallisto/releases/download/v0.43.1/kallisto_linux-v0.43.1.tar.gz -o /opt/kallisto_linux-v0.43.1.tar.gz && \
+    tar xvzf /opt/kallisto_linux-v0.43.1.tar.gz -C /opt/ && \
+    ln -s /opt/kallisto_linux-v0.43.1/bin/kallisto /usr/local/bin/kallisto && \
+    rm /opt/kallisto_linux-v0.43.1.tar.gz
 
 # Install STAR
 RUN git clone https://github.com/alexdobin/STAR.git /opt/STAR && \
@@ -36,6 +52,18 @@ RUN curl -fsSL http://downloads.sourceforge.net/project/subread/subread-1.5.1/su
     tar xvzf /opt/subread-1.5.1-Linux-x86_64.tar.gz -C /opt/ && \
     ln -s /opt/subread-1.5.1-Linux-x86_64/bin/featureCounts /usr/local/bin/featureCounts && \
     rm /opt/subread-1.5.1-Linux-x86_64.tar.gz
+
+# Install cutadapt
+RUN pip3 install cutadapt
+
+# Install bedtools2
+RUN curl -fsSL https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedtools-2.27.1.tar.gz -o /opt/bedtools-2.27.1.tar.gz && \
+    tar xvzf /opt/bedtools-2.27.1.tar.gz -C /opt/ && \
+    cd /opt/bedtools2 && \
+    make && \
+    cd - && \
+    ln -s /opt/bedtools-2.27.1/bin/bedtools2 /usr/local/bin/bedtools2 && \
+    rm /opt/bedtools-2.27.1.tar.gz
 
 # install MAGIC
 RUN git clone git://github.com/pkathail/magic.git && \
