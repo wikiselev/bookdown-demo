@@ -15,10 +15,7 @@ RUN apt-get update -y --no-install-recommends && \
         python3-pip \
         python3-tk \
         git \
-        curl \
-        cmake \
-        zlib1g-dev \
-        libhdf5-dev
+        curl
 #       texlive-full
 
 # Install FastQC
@@ -62,7 +59,7 @@ RUN curl -fsSL https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedt
     cd /opt/bedtools2 && \
     make && \
     cd - && \
-    ln -s /opt/bedtools-2.27.1/bin/bedtools2 /usr/local/bin/bedtools2 && \
+    cp /opt/bedtools-2.27.1/bin/* /usr/local/bin && \
     rm /opt/bedtools-2.27.1.tar.gz
 
 # install MAGIC
