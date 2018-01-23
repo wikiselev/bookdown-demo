@@ -59,7 +59,7 @@ RUN curl -fsSL https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedt
     cd /opt/bedtools2 && \
     make && \
     cd - && \
-    cp /opt/bedtools-2.27.1/bin/* /usr/local/bin && \
+    cp /opt/bedtools2/bin/* /usr/local/bin && \
     rm /opt/bedtools-2.27.1.tar.gz
 
 # install MAGIC
