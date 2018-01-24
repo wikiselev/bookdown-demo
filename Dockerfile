@@ -28,7 +28,7 @@ RUN curl -fsSL http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v
 # Install Kallisto
 RUN curl -fsSL https://github.com/pachterlab/kallisto/releases/download/v0.43.1/kallisto_linux-v0.43.1.tar.gz -o /opt/kallisto_linux-v0.43.1.tar.gz && \
     tar xvzf /opt/kallisto_linux-v0.43.1.tar.gz -C /opt/ && \
-    ln -s /opt/kallisto_linux-v0.43.1/bin/kallisto /usr/local/bin/kallisto && \
+    ln -s /opt/kallisto_linux-v0.43.1/kallisto /usr/local/bin/kallisto && \
     rm /opt/kallisto_linux-v0.43.1.tar.gz
 
 # Install STAR

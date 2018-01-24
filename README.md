@@ -1,7 +1,5 @@
 # About the course
 
-> <span style="color:red">__Important!__ The course will be run on the __31st October - 1st November 2017, both days 9:00-17:00 London, UK time__. It will also be __live broadcast__ at the [Bioinformatics Training channel](https://www.youtube.com/channel/UCsc6r6UKxb2qRcDQPix2L5A) on YouTube. Please join the broadcast!</span>
-
 Today it is possible to obtain genome-wide transcriptome data from single cells using high-throughput sequencing (scRNA-seq). The main advantage of scRNA-seq is that the cellular resolution and the genome wide scope makes it possible to address issues that are intractable using other methods, e.g. bulk RNA-seq or single-cell RT-qPCR. However, to analyze scRNA-seq data, novel methods are required and some of the underlying assumptions for the methods developed for bulk RNA-seq experiments are no longer valid.
 
 In this course we will discuss some of the questions that can be addressed using scRNA-seq as well as the available computational and statistical methods avialable. The course is taught through the University of Cambridge <a href="http://training.csx.cam.ac.uk/bioinformatics/" target="blank">Bioinformatics training unit</a>, but the material found on these pages is meant to be used for anyone interested in learning about computational analysis of scRNA-seq data. The course is taught twice per year and the material here is updated prior to each event.
@@ -40,7 +38,7 @@ Make sure Docker is installed on your system. If not, please follow [these instr
 docker run -d -p 8787:8787 quay.io/hemberg-group/scrna-seq-course-rstudio
 ```
 
-This download the docker image (may take some time) and start a new Rstudio session in a docker container with all packages installed and all data files available.
+This downloads the docker image (may take some time) and start a new Rstudio session in a docker container with all packages installed and all data files available.
 
 Then visit `localhost:8787` in your browser and log in with `username:password` as `rstudio:rstudio`. Now you are ready to go!
 
