@@ -70,7 +70,7 @@ RUN git clone git://github.com/pkathail/magic.git && \
     pip3 install .
 
 # install R packages
-RUN echo 'install.packages(c("devtools", "bookdown", "knitr", "pheatmap", "statmod", "mvoutlier", "mclust", "dplyr", "penalized", "cluster", "Seurat", "KernSmooth", "mgcv", "ROCR", "googleVis"))' > /opt/packages.r && \
+RUN echo 'install.packages(c("devtools", "bookdown", "knitr", "pheatmap", "statmod", "mvoutlier", "mclust", "dplyr", "penalized", "cluster", "Seurat", "KernSmooth", "mgcv", "ROCR", "googleVis", "tidyverse", "ggfortify"))' > /opt/packages.r && \
     echo 'source("https://bioconductor.org/biocLite.R")' >> /opt/packages.r && \
     echo 'biocLite()' >> /opt/packages.r && \
     echo 'biocLite(c("limma", "SingleCellExperiment", "Rhdf5lib", "beachmat", "scater", "scran", "RUVSeq", "sva", "SC3", "pcaMethods", "TSCAN", "monocle", "destiny", "DESeq2", "edgeR", "MAST", "scfind", "scmap", "MultiAssayExperiment", "SummarizedExperiment"))' >> /opt/packages.r && \
