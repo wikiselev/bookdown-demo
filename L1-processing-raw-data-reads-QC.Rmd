@@ -27,7 +27,7 @@ wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR522/ERR522959/ERR522959_2.fastq.gz
 Task 1: Try to work out what command you should use to produce the FastQC report. Hint: Try executing
 
 ```{bash, eval=FALSE, collapse=TRUE}
-./FastQC/fastqc -h
+fastqc -h
 ```
 
 This command will tell you what options are available to pass to FastQC. Feel free to ask for help if you get stuck! If you are successful, you should generate a .zip and a .html file for both the forwards and the reverse reads files. Once you have been successful, feel free to have a go at the next section.
@@ -43,7 +43,7 @@ If you haven't done so already, generate the FastQC report using the commands be
 
 ```{bash, eval=FALSE, echo = TRUE}
 mkdir fastqc_results
-./FastQC/fastqc -o fastqc_results ERR522959_1.fastq.gz ERR522959_2.fastq.gz
+fastqc -o fastqc_results ERR522959_1.fastq.gz ERR522959_2.fastq.gz
 ```
 
 Once the command has finished executing, you should have a total of four files - one zip file for each of the paired end reads, and one html file for each of the paired end reads. The report is in the html file. To view it, we will need to get it off AWS and onto your computer.
@@ -62,12 +62,18 @@ Read trimming software can be used to trim sequencing adapters and/or low qualit
 
 Task 2: What type of adapters were used in our data? Hint: Look at the FastQC report 'Adapter Content' plot.
 
+Let's download Trim Galore!
+```{bash, eval=FALSE}
+wget https://github.com/FelixKrueger/TrimGalore/archive/0.4.5.zip
+unzip 0.4.5.zip
+```
+
 Now let's try to use Trim Galore! to remove those problematic adapters. It's a good idea to check read quality again after trimming, so after you have trimmed your reads you should use FastQC to produce another report.
 
 Task 3: Work out the command you should use to trim the adapters from our data. Hint 1: You can use 
 
 ```{bash, eval=FALSE}
-./trim_galore -h
+./TrimGalore-0.4.5/trim_galore -h
 ```
 
 To find out what options you can pass to Trim Galore.
@@ -83,12 +89,11 @@ You can use the command(s) below to trim the Nextera sequencing adapters:
 
 ```{bash, eval=FALSE}
 mkdir fastqc_trimmed_results
-./trim_galore --nextera -o fastqc_trimmed_results ERR522959_1.fastq.gz raw_data/ERR522959_2.fastq.gz
+./TrimGalore-0.4.5/trim_galore --nextera -o fastqc_trimmed_results ERR522959_1.fastq.gz ERR522959_2.fastq.gz
 ```
 
 Remember to generate new FastQC reports for your trimmed reads files! FastQC should now show that your reads pass the 'Adaptor Content' plot. Feel free to ask one of the instructors if you have any questions.
 
 Congratulations! You have now generated reads quality reports and performed adaptor trimming. In the next lab, we will use STAR and Kallisto to align our trimmed and quality-checked reads to a reference transcriptome.
-
 
 
