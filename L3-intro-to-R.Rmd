@@ -41,7 +41,7 @@ Bioconductor is a repository of R-packages specifically for biological analyses.
 
 ```{r, eval=FALSE}
 source("https://bioconductor.org/biocLite.R")
-biocLite("DESeq2")
+biocLite("edgeR")
 ```
 
 Note: in some situations it is necessary to substitute "http://" for "https://" in the above depending on the security features of your internet connection/network. 
@@ -282,16 +282,6 @@ ll
 
 Lists are most commonly used when returning a large number of results from a function that do not fit into any of the previous data structures. 
 
-## Advanced data structures (tidy data, rich data objects)
+## More information
 
-## Bioconductor classes (ExpressionSet, SingleCellExperiment)
-
-## Plotting with ggplots2
-
-### pheatmap (is this built on ggplots?
-
-## Visualisation of scRNA-Seq data
-
-### Plotting cells (PCA scatterplot overlayed with metadata)
-
-### Gene expression heatmap
+You can get more information about any R commands relevant to these datatypes using by typing "?function" in an interactive session.
