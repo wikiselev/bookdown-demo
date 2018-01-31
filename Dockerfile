@@ -11,11 +11,11 @@ RUN apt-get update -y --no-install-recommends && \
         r-cran-rjava \
         libmariadb-client-lgpl-dev \
         python \
-#       python3.6 \
         python3-pip \
         python3-tk \
         git \
         curl
+
 #       texlive-full
 
 # Install FastQC
