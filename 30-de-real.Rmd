@@ -315,7 +315,6 @@ resSCDE <- scde::scde.expression.difference(
 )
 # Convert Z-scores into 2-tailed p-values
 pVals <- pnorm(abs(resSCDE$cZ), lower.tail = FALSE) * 2
-pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
