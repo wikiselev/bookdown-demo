@@ -134,11 +134,11 @@ by entering running the command "naked" - e.g. 'samtools view', 'bedtools'
 
 __Answer__
 ```{bash, eval=TRUE, include=FALSE}
-samtools view -H EXAMPLE.cram | more
-samtools view -f 4 EXAMPLE.cram | wc -l # unmapped
-samtools view -F 260 EXAMPLE.cram | wc -l # mapped
-samtools view -F 256 EXAMPLE.cram | wc -l # total
-samtools view -f 256 EXAMPLE.cram | wc -l # secondary alignments
+samtools view -T 2000_reference.transcripts.fa -H EXAMPLE.cram | more
+samtools view -T 2000_reference.transcripts.fa -f 4 EXAMPLE.cram | wc -l # unmapped
+samtools view -T 2000_reference.transcripts.fa -F 260 EXAMPLE.cram | wc -l # mapped
+samtools view -T 2000_reference.transcripts.fa -F 256 EXAMPLE.cram | wc -l # total
+samtools view -T 2000_reference.transcripts.fa -f 256 EXAMPLE.cram | wc -l # secondary alignments
 
 samtools view -b -h -T 2000_reference.transcripts.fa EXAMPLE.cram -o EXAMPLE.bam
 samtools sort -n EXAMPLE.bam -o sorted_EXAMPLE.bam
