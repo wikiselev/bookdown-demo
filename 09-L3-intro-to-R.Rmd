@@ -17,6 +17,7 @@ The Comprehensive R Archive Network [CRAN](https://cran.r-project.org/) is the b
 
 ```{r, eval=FALSE}
 install.packages("devtools")
+require("devtools")
 ```
 
 ### Github
@@ -134,7 +135,7 @@ paste("Hello", "World", sep= "\n")
 Single or double backslash is also used as an "escape" character to turn off special characters or allow quotation marks to be included in strings:
 
 ```{r}
-cat("This \"string\" contain quotation marks.")
+cat("This \"string\" contains quotation marks.")
 ```
 
 Special characters are generally only used in pattern matching, and reading/writing data to files. For instance this is how you would read a tab-separated file into R.
@@ -210,10 +211,10 @@ options(stringsAsFactors=FALSE)
 __Exercise__
 How would you use factors to create a vector of colours for an arbitrarily long vector of fruits like "str_vector" above?
 __Answer__
-```{r, eval=FALSE, echo=FALSE}
+```{r, include=FALSE}
 long_str_vector = c(str_vector, str_vector, str_vector)
 fruit_cols = c("red", "yellow", "orange")
-fruit_colour_vec = fruit_cols[as.numeric(factor(long_str_vector, levels=c("Apple", "Banana", "Carrot"))]
+fruit_colour_vec = fruit_cols[as.numeric(factor(long_str_vector, levels=c("Apple", "Banana", "Carrot")))]
 ```
 
 ### Checking class/type
