@@ -40,7 +40,7 @@ Note if you download the data by hand you should unzip & rename the files as abo
 
 You should now have two folders : "FACS" and "droplet" and one annotation and metadata file for each. To inspect these files you can use the 'less' to see the top few lines of the text files (Press "q" to exit):
 ```{bash}
-less droplet_metadta.csv
+less droplet_metadata.csv
 ```
 You can also check the number of rows in each file using:
 ```{bash}
@@ -198,6 +198,7 @@ mouseID <- "3_9_M"
 ann_subset <- ann[match(colnames(molecules), ann[,1]),]
 celltype <- ann_subset[,3]
 cell_anns <- data.frame(mouse = rep(mouseID, times=ncol(molecules)), type=celltype)
+rownames(cell_anns) <- colnames(molecules)
 
 molecules2 <- molecules
 cell_anns2 <- cell_anns
@@ -212,6 +213,7 @@ mouseID <- "3_57_F"
 ann_subset <- ann[match(colnames(molecules), ann[,1]),]
 celltype <- ann_subset[,3]
 cell_anns <- data.frame(mouse = rep(mouseID, times=ncol(molecules)), type=celltype)
+rownames(cell_anns) <- colnames(molecules)
 
 molecules3 <- molecules
 cell_anns3 <- cell_anns
@@ -255,6 +257,8 @@ Now build the SingleCellExperiment object. One of the advantages of the SingleCe
 ```{r}
 require("SingleCellExperiment")
 require("scater")
+all_molecules <- as.matrix(all_molecules)
+colnames(
 sceset <- SingleCellExperiment(assays = list(counts = as.matrix(all_molecules)), colData=all_cell_anns)
 ```
 
