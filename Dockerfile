@@ -55,7 +55,7 @@ RUN pip3 install cutadapt
 
 # Install TrimGalore
 RUN mkdir /opt/TrimGalore && \
-    curl -fsSL http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/trim_galore_v0.4.5.zip -o /opt/TrimGalore/trim_galore_v0.4.5.zip && \
+    curl -fsSL https://github.com/FelixKrueger/TrimGalore/archive/0.4.5.zip -o /opt/TrimGalore/trim_galore_v0.4.5.zip && \
     unzip /opt/TrimGalore/trim_galore_v0.4.5.zip -d /opt/TrimGalore && \
     ln -s /opt/TrimGalore/trim_galore /usr/local/bin/trim_galore && \
     rm /opt/TrimGalore/trim_galore_v0.4.5.zip
