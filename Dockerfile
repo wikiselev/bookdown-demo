@@ -53,6 +53,13 @@ RUN curl -fsSL http://downloads.sourceforge.net/project/subread/subread-1.5.1/su
 # Install cutadapt
 RUN pip3 install cutadapt
 
+# Install TrimGalore
+RUN mkdir /opt/TrimGalore && \
+    curl -fsSL http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/trim_galore_v0.4.5.zip -o /opt/TrimGalore/trim_galore_v0.4.5.zip && \
+    unzip /opt/TrimGalore/trim_galore_v0.4.5.zip -d /opt/TrimGalore && \
+    ln -s /opt/TrimGalore/trim_galore /usr/local/bin/trim_galore && \
+    rm /opt/TrimGalore/trim_galore_v0.4.5.zip
+
 # Install bedtools2
 RUN curl -fsSL https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedtools-2.27.1.tar.gz -o /opt/bedtools-2.27.1.tar.gz && \
     tar xvzf /opt/bedtools-2.27.1.tar.gz -C /opt/ && \

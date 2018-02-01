@@ -74,9 +74,12 @@ using samtools. [Picard](https://broadinstitute.github.io/picard/index.html)
 also contains a method for converting BAM to FastQ files. 
 
 ```{bash, eval=FALSE}
-samtools sort -n original.bam -o sorted_by_name.bam #sort reads by name
-samtools view -b -F 256 sorted_by_name.bam -o primary_alignment_only.bam # remove secondary alignments
-bedtools2/bin/badtools bamtofastq -i primary_alignment_only.bam -fq read1.fq -fq2 read2.fq # convert to fastq
+# sort reads by name
+samtools sort -n original.bam -o sorted_by_name.bam
+# remove secondary alignments
+samtools view -b -F 256 sorted_by_name.bam -o primary_alignment_only.bam
+# convert to fastq
+bedtools bamtofastq -i primary_alignment_only.bam -fq read1.fq -fq2 read2.fq
 ```
 ## CRAM
 
@@ -99,6 +102,7 @@ samtools view -C -h -T reference_genome.fasta file.bam -o file.cram
 ```
 
 ## Mannually Inspecting file
+
 At times it may be useful to mannual inspect files for example to check the metadata in headers that the files 
 are from the correct sample. 'less' and 'more' can be used to inspect any text files from the command line.
 By "pipe-ing" the output of samtools view into these commands using '|' we check each of these file types without having to save
@@ -107,9 +111,11 @@ multiple copies of each file.
 ```{bash, eval=FALSE}
 less file.txt
 more file.txt
-wc -l file.txt # counts the number of lines in file.txt
+# counts the number of lines in file.txt
+wc -l file.txt
 samtools view -h file.[cram/bam] | more
-samtools view -h file.[cram/bam] | wc -l # counts the number of lines in the samtools output
+# counts the number of lines in the samtools output
+samtools view -h file.[cram/bam] | wc -l
 ```
 
 __Exercises__
@@ -137,8 +143,8 @@ samtools view -f 256 EXAMPLE.cram | wc -l # secondary alignments
 samtools view -b -h -T 2000_reference.transcripts.fa EXAMPLE.cram -o EXAMPLE.bam
 samtools sort -n EXAMPLE.bam -o sorted_EXAMPLE.bam
 samtools view -b -F 256 sorted_EXAMPLE.bam -o primary_EXAMPLE.bam 
-bedtools bamtofastq -i primary_EXAMPLE.bam -fq 10cells_read1.fq -fq2 10cells_read2.fq # convert to fastq
-
+# convert to fastq
+bedtools bamtofastq -i primary_EXAMPLE.bam -fq 10cells_read1.fq -fq2 10cells_read2.fq
 ```
 
 ## Genome (FASTA, GTF)

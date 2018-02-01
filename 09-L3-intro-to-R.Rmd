@@ -30,8 +30,10 @@ devtools::install_github("tallulandrews/M3Drop")
 Github is also a version control system which stores multiple versions of any package. By default the most recent "master" version of the package is installed. If you want an older version or the development branch this can be specified using the "ref" parameter:
 
 ```{r, eval=FALSE}
-devtools::install_github("tallulandrews/M3D", ref="nbumi") # different branch
-devtools::install_github("tallulandrews/M3Drop", ref="434d2da28254acc8de4940c1dc3907ac72973135") # previous commit
+# different branch
+devtools::install_github("tallulandrews/M3D", ref="nbumi")
+# previous commit
+devtools::install_github("tallulandrews/M3Drop", ref="434d2da28254acc8de4940c1dc3907ac72973135")
 ```
 Note: make sure you re-install the M3Drop master branch for later in the course.
 

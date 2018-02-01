@@ -62,18 +62,12 @@ Read trimming software can be used to trim sequencing adapters and/or low qualit
 
 Task 2: What type of adapters were used in our data? Hint: Look at the FastQC report 'Adapter Content' plot.
 
-Let's download Trim Galore!
-```{bash, eval=FALSE}
-wget https://github.com/FelixKrueger/TrimGalore/archive/0.4.5.zip
-unzip 0.4.5.zip
-```
-
 Now let's try to use Trim Galore! to remove those problematic adapters. It's a good idea to check read quality again after trimming, so after you have trimmed your reads you should use FastQC to produce another report.
 
 Task 3: Work out the command you should use to trim the adapters from our data. Hint 1: You can use 
 
 ```{bash, eval=FALSE}
-./TrimGalore-0.4.5/trim_galore -h
+trim_galore -h
 ```
 
 To find out what options you can pass to Trim Galore.
@@ -89,7 +83,7 @@ You can use the command(s) below to trim the Nextera sequencing adapters:
 
 ```{bash, eval=FALSE}
 mkdir fastqc_trimmed_results
-./TrimGalore-0.4.5/trim_galore --nextera -o fastqc_trimmed_results ERR522959_1.fastq.gz ERR522959_2.fastq.gz
+trim_galore --nextera -o fastqc_trimmed_results ERR522959_1.fastq.gz ERR522959_2.fastq.gz
 ```
 
 Remember to generate new FastQC reports for your trimmed reads files! FastQC should now show that your reads pass the 'Adaptor Content' plot. Feel free to ask one of the instructors if you have any questions.
