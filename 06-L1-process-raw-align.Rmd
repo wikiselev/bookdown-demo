@@ -85,7 +85,7 @@ Task 6: Use the below command to produce the Kallisto index. Use the Kallisto ma
 
 ```{bash, eval=FALSE}
 mkdir indices/Kallisto
-kallisto index -i ../indices/Kallisto/transcripts.idx reference.transcripts.fa
+kallisto index -i ../indices/Kallisto/transcripts.idx 2000_reference.transcripts.fa
 ```
 
 Task 7: Use the Kallisto manual to work out what command to use to perform pseudo-alignment. One you think you know the answer, check whether it matches the solution in the next section and execute the pseudo-alignment.
