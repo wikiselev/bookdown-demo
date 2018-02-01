@@ -321,9 +321,10 @@ Recall <- sum(cells %in% truth[,1])/length(truth[,1])
 c(TPR, Recall)
 ```
 
-Another is to fix a mixture model and find where the higher and lower distributions intersect.
+Another is to fix a mixture model and find where the higher and lower distributions intersect. However, data may not fit the assumed distributions very well:
 
 ```{r}
+set.seed(-92497)
 # mixture model
 require("mixtools")
 mix <- normalmixEM(log_lib_size)
