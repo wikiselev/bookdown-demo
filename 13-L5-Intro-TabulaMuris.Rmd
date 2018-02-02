@@ -17,7 +17,7 @@ Unlike most single-cell RNASeq data Tabula Muris has release their data through 
 
 Terminal-based download of FACS data: 
 
-```{bash, message=FALSE, warning=FALSE}
+```{bash message=FALSE, warning=FALSE, results='hide'}
 wget https://ndownloader.figshare.com/files/10038307
 unzip 10038307
 wget https://ndownloader.figshare.com/files/10038310
@@ -27,7 +27,7 @@ mv 10039267 FACS_annotations.csv
 ```
 
 Terminal-based download of 10X data:
-```{bash, message=FALSE, warning=FALSE}
+```{bash, message=FALSE, warning=FALSE, results='hide'}
 wget https://ndownloader.figshare.com/files/10038325
 unzip 10038325
 wget https://ndownloader.figshare.com/files/10038328

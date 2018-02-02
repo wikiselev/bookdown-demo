@@ -181,7 +181,7 @@ table(colData(segerstolpe)$cell_type1, seger_to_muraro$scmap_cluster_labs)
 Again we see cell-types match each other and that all but one of the "PSCs" match the "mesenchymal" cells providing strong evidence that these two annotations should be considered synonymous.
 
 We can also visualize these tables using a [Sankey diagram](https://developers.google.com/chart/interactive/docs/gallery/sankey):
-```{r}
+```{r results='asis', tidy=FALSE}
 plot(getSankey(colData(muraro)$cell_type1,  muraro_to_seger$scmap_cluster_labs[,1], plot_height=400))
 ```
 
