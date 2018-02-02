@@ -7,17 +7,17 @@ output: html_document
 ## Introduction
 
 To give you hands-on experience analyzing from start to finish a single-cell RNASeq dataset we will be using as an example, data from the [Tabula Muris](https://www.biorxiv.org/content/early/2017/12/20/237446) initial release. The Tabula Muris 
-is an interactional collaboration with the aim to profile every cell-type in the mouse using a standardized method. They combine highthroughput but low-coverage 10X data with lowerthroughput
+is an international collaboration with the aim to profile every cell-type in the mouse using a standardized method. They combine highthroughput but low-coverage 10X data with lower throughput
 but high-coverage FACS-sorted cells + Smartseq2. 
 
-The initial release of the data (20 Dec 2017), contain almost 100,000 cells across 20 different tissues/organs. You have been assigned one of these tissues as an example to work on over this course, and on Friday each person will have 2-3 minutes to present the result for their tissue. 
+The initial release of the data (20 Dec 2017), contain almost 100,000 cells across 20 different tissues/organs. You have been assigned one of these tissues as an example to work on over this course, and on Friday each person will have 3 minutes to present the result for their tissue. 
 
 ## Downloading the data
 Unlike most single-cell RNASeq data Tabula Muris has release their data through the [figshare](https://figshare.com/) platform rather than uploading it to [GEO](https://www.ncbi.nlm.nih.gov/geo/) or [ArrayExpress](https://www.ebi.ac.uk/arrayexpress/). You can find the data by using the doi's in their paper : [10.6084/m9.figshare.5715040](https://figshare.com/articles/Single-cell_RNA-seq_data_from_Smart-seq2_sequencing_of_FACS_sorted_cells/5715040) for FACS/Smartseq2 and [10.6084/m9.figshare.5715025](https://figshare.com/articles/Single-cell_RNA-seq_data_from_microfluidic_emulsion/5715025) for 10X data. The data can be downloaded manually by clinking the doi links or by using the command-line commands below:
 
 Terminal-based download of FACS data: 
 
-```{bash}
+```{bash, message=FALSE, warning=FALSE}
 wget https://ndownloader.figshare.com/files/10038307
 unzip 10038307
 wget https://ndownloader.figshare.com/files/10038310
@@ -27,7 +27,7 @@ mv 10039267 FACS_annotations.csv
 ```
 
 Terminal-based download of 10X data:
-```{bash}
+```{bash, message=FALSE, warning=FALSE}
 wget https://ndownloader.figshare.com/files/10038325
 unzip 10038325
 wget https://ndownloader.figshare.com/files/10038328
