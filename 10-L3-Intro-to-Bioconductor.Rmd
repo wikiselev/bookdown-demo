@@ -6,7 +6,7 @@ output: html_document
 
 ## What is Tidy Data?
 
-Tidy data is a concept largely defined by Hadley Wickham (Wickham, 2014). Tidy data has the following three characteristics:
+Tidy data is a concept largely defined by Hadley Wickham [@wickham_2014]. Tidy data has the following three characteristics:
 
 1. Each variable has its own column.
 2. Each observation has its own row.
@@ -129,10 +129,4 @@ As illustrated in the figure below, `scater` will help you with quality control,
 
 ![](figures/scater_qc_workflow.png)
 
-## References
 
-Wickham, H. 2014. Tidy Data. Journal of statistical software 59(10).
-
-Aaron Lun and Davide Risso (2017). SingleCellExperiment: S4 Classes for Single Cell Data. R package version 1.0.0.
-
-McCarthy, D.J., Campbell, K.R., Lun, A.T.L. and Wills, Q.F. 2017. Scater: pre-processing, quality control, normalization and visualization of single-cell RNA-seq data in R. Bioinformatics 33(8), pp. 1179–1186.
