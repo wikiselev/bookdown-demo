@@ -5,7 +5,7 @@ output: html_document
 
 Now we have trimmed our reads and established that they are of good quality, we would like to map them to a reference genome. This process is known as alignment. Some form of alignment is generally required if we want to quantify gene expression or find genes which are differentially expressed between samples.
 
-Many tools have been developed for read alignment, but today we will focus on two. The first tool we will consider is STAR (Dobin et al. 2013). For each read in our reads data, STAR tries to find the longest possible sequence which matches one or more sequences in the reference genome. For example, in the figure below, we have a read (blue) which spans two exons and an alternative splicing junction (purple). STAR finds that the first part of the read is the same as the sequence of the first exon, whilst the second part of the read matches the sequence in the second exon. Because STAR is able to recognise splicing events in this way, it is described as a 'splice aware' aligner.
+Many tools have been developed for read alignment, but today we will focus on two. The first tool we will consider is STAR [@dobin]. For each read in our reads data, STAR tries to find the longest possible sequence which matches one or more sequences in the reference genome. For example, in the figure below, we have a read (blue) which spans two exons and an alternative splicing junction (purple). STAR finds that the first part of the read is the same as the sequence of the first exon, whilst the second part of the read matches the sequence in the second exon. Because STAR is able to recognise splicing events in this way, it is described as a 'splice aware' aligner.
 
 ![Figure 1: Diagram of how STAR performs alignments, taken from Dobin et al.](L1-images/STAR_explanation.png)
 
@@ -19,7 +19,7 @@ Task 1: Execute the commands below to create the index:
 ```{bash, eval=FALSE}
 mkdir indices
 mkdir indices/STAR
-STAR --runThreadN 4 --runMode genomeGenerate --genomeDir indices/STAR --genomeFastaFiles 2000_reference.transcripts.fa
+STAR --runThreadN 4 --runMode genomeGenerate --genomeDir indices/STAR --genomeFastaFiles Share/2000_reference.transcripts.fa
 ```
 
 Task 2: What does each of the options we used do? Hint: Use the STAR manual to help you (https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf)
@@ -32,25 +32,19 @@ Task 4: Try to work out what command you should use to map our trimmed reads (fr
 
 Task 5: Try to understand the output of your alignment. Talk to one of the instructors if you need help!
 
-## References
-
-Dobin, A., Davis, C.A., Schlesinger, F., Drenkow, J., Zaleski, C., Jha, S., Batut, P., Chaisson, M. and Gingeras, T.R. 2013. STAR: ultrafast universal RNA-seq aligner. Bioinformatics 29(1), pp. 15–21.
-
 # Solution for STAR Alignment
 
 You can use the folowing commands to perform the mapping step:
 ```{bash,eval=FALSE}
-gunzip ERR522959_1.fastq.gz
-gunzip ERR522959_2.fastq.gz
 mkdir results
 mkdir results/STAR
 
-STAR --runThreadN 4 --genomeDir indices/STAR --readFilesIn ERR1211475_1.fastq ERR1211475_2.fastq --outFileNamePrefix results/STAR/
+STAR --runThreadN 4 --genomeDir indices/STAR --readFilesIn Share/ERR522959_1.fastq Share/ERR522959_2.fastq --outFileNamePrefix results/STAR/
 ```
 
 # Kallisto and Pseudo-Alignment
 
-STAR is a reads aligner, whereas Kallisto is a pseudo-aligner (Bray et al. 2016). The main difference between aligners and pseudo-aligners is that whereas aligners map reads to a reference, pseudo-aligners map k-mers to a reference.
+STAR is a reads aligner, whereas Kallisto is a pseudo-aligner [@bray_2016]. The main difference between aligners and pseudo-aligners is that whereas aligners map reads to a reference, pseudo-aligners map k-mers to a reference.
 
 ## What is a k-mer?
 
@@ -61,7 +55,7 @@ A k-mer is a sequence of length k derived from a read. For example, imagine we h
 ## Why map k-mers rather than reads?
 There are two main reasons:
 
-1. Pseudo-aligners use k-mers and a computational trick to make pseudo-alignment much faster than traditional aligners. If you are interested in how this is acheived, see CITE KALLISTO PAPER for details.
+1. Pseudo-aligners use k-mers and a computational trick to make pseudo-alignment much faster than traditional aligners. If you are interested in how this is acheived, see (Bray et al., 2017) for details.
 
 2. Under some circumstances, pseudo-aligners may be able to cope better with sequencing errors than traditional aligners. For example, imagine there was a sequencing error in the first base of the read above and the A was actually a T. This would impact on the pseudo-aligners ability to map the first 7-mer but none of the following 7-mers.
 
@@ -85,14 +79,10 @@ Task 6: Use the below command to produce the Kallisto index. Use the Kallisto ma
 
 ```{bash, eval=FALSE}
 mkdir indices/Kallisto
-kallisto index -i ../indices/Kallisto/transcripts.idx 2000_reference.transcripts.fa
+kallisto index -i indices/Kallisto/transcripts.idx Share/2000_reference.transcripts.fa
 ```
 
 Task 7: Use the Kallisto manual to work out what command to use to perform pseudo-alignment. One you think you know the answer, check whether it matches the solution in the next section and execute the pseudo-alignment.
-
-## References
-
-Bray, N.L., Pimentel, H., Melsted, P. and Pachter, L. 2016. Near-optimal probabilistic RNA-seq quantification. Nature Biotechnology 34(5), pp. 525–527.
 
 # Solution to Kallisto Pseudo-Alignment
 
@@ -109,8 +99,8 @@ See https://pachterlab.github.io/kallisto/manual for instructions on creating ba
 
 The command above should produce 4 files - matrix.cells, matrix.ec, matrix.tsv and run_info.json.
 
-* matrix.cells contains a list of cell IDs. As we only used one cell, this file should just contain "ERR1211475"
-* matrix.ec contains information about the equivalence classes used. The first number in each row is the equivalence class ID. The second number(s) correspond to the transcript ID(s) in that equivalence class. For example "10 1,2,3" would mean that equivalence class 10 contains transcript IDs 1,2 and 3. The ID numbers correspond to the order that the transcripts appear in reference.transcripts.fa. Zero indexing is used, meaning transcript IDs 1,2 and 3 correspond to the second, third and fourth transcripts in reference.transcripts.fa.
+* matrix.cells contains a list of cell IDs. As we only used one cell, this file should just contain "ERR522959"
+* matrix.ec contains information about the equivalence classes used. The first number in each row is the equivalence class ID. The second number(s) correspond to the transcript ID(s) in that equivalence class. For example "10 1,2,3" would mean that equivalence class 10 contains transcript IDs 1,2 and 3. The ID numbers correspond to the order that the transcripts appear in reference.transcripts.fa. Zero indexing is used, meaning transcript IDs 1,2 and 3 correspond to the second, third and fourth transcripts in 2000_reference.transcripts.fa.
 * matrix.tsv contains information about how many reads in each cell map to each equivalence class. The first number is the equivalence class ID, as defined in matrix.ec. The second number is the cell ID, where the cell ID corresponds to the order that the cell came in the matrix.cells file. The third number is the number of reads which fall into that equivalence class. For example, "5 1 3" means that 3 reads from cell 1 map to equivalence class 5. Note that zero indexing is used, so cell 1 corresponds to the second line of matrix.cells.
 * run_info.json contains information about how Kallisto was executed and can be ignored.
 
