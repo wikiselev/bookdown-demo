@@ -2,20 +2,20 @@
 output: html_document
 ---
 
-# An Introduction to ggplot2
+## An Introduction to ggplot2
 
-## What is ggplot2?
+### What is ggplot2?
 
 ggplot2 is an R package designed by Hadley Wickham which facilitates data plotting. In this lab, we will touch briefly on some of the features of the package. If you would like to learn more about how to use ggplot2, we would recommend reading "ggplot2 Elegant graphics for data analysis", by Hadley Wickham.
 
 
-## Principles of ggplot2
+### Principles of ggplot2
 
 * Your data must be a dataframe if you want to plot it using ggplot2. 
 * Use the `aes` mapping function to specify how variables in the dataframe map to features on your plot
 * Use geoms to specify how your data should be represented on your graph eg. as a scatterplot, a barplot, a boxplot etc.
 
-## Using the `aes` mapping function
+### Using the `aes` mapping function
 
 The `aes` function specifies how variables in your dataframe map to features on your plot. To understand how this works, let's look at an example:
 
@@ -37,7 +37,7 @@ Task 1: Modify the command above to initialise a ggplot object where cell10 is t
 
 Clearly, the plots we have just created are not very informative because no data is displayed on them. To display data, we will need to use geoms.
 
-## Geoms
+### Geoms
 
 We can use geoms to specify how we would like data to be displayed on our graphs. For example, our choice of geom could specify that we would like our data to be displayed as a scatterplot, a barplot or a boxplot.
 
@@ -51,7 +51,7 @@ Now we can see that there doesn't seem to be any correlation between gene expres
 
 Task 2: Modify the command above to create a line plot. Hint: execute `?ggplot` and scroll down the help page. At the bottom is a link to the ggplot package index. Scroll through the index until you find the geom options.
 
-## Plotting data from more than 2 cells
+### Plotting data from more than 2 cells
 
 So far we've been considering the gene counts from 2 of the cells in our dataframe. But there are actually 10 cells in our dataframe and it would be nice to compare all of them. What if we wanted to plot data from all 10 cells at the same time?
 
@@ -72,7 +72,7 @@ Task 3: Use the updated `counts` dataframe to plot a barplot with Cell_ID as the
 
 Task 4: Use the updated `counts` dataframe to plot a scatterplot with Gene_ids as the x variable and Counts as the y variable.
 
-## Plotting heatmaps
+### Plotting heatmaps
 
 A common method for visualising gene expression data is with a heatmap. Here we will use the R package `pheatmap` to perform this analysis with some gene expression data we will name `test`.
 
@@ -102,7 +102,7 @@ Now we can see that the genes fall into two clusters - a cluster of 8 genes whic
 
 Task 5: Try setting the number of clusters to 3. Which number of clusters do you think is more informative?
 
-## Principle Component Analysis
+### Principle Component Analysis
 
 Principal component analysis (PCA) is a statistical procedure that uses a transformation to convert a set of observations into a set of values of linearly uncorrelated variables called principal components. The transformation is carried out so that the first principle component accounts for as much of the variability in the data as possible, and each following principle component accounts for the greatest amount of variance possible under the contraint that it must be orthogonal to the previous components.
 

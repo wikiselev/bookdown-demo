@@ -1,7 +1,8 @@
 ---
 output: html_document
 ---
-# Using STAR to Align Reads
+
+## Using STAR to Align Reads
 
 Now we have trimmed our reads and established that they are of good quality, we would like to map them to a reference genome. This process is known as alignment. Some form of alignment is generally required if we want to quantify gene expression or find genes which are differentially expressed between samples.
 
@@ -32,7 +33,7 @@ Task 4: Try to work out what command you should use to map our trimmed reads (fr
 
 Task 5: Try to understand the output of your alignment. Talk to one of the instructors if you need help!
 
-# Solution for STAR Alignment
+### Solution for STAR Alignment
 
 You can use the folowing commands to perform the mapping step:
 ```{bash,eval=FALSE}
@@ -42,24 +43,24 @@ mkdir results/STAR
 STAR --runThreadN 4 --genomeDir indices/STAR --readFilesIn Share/ERR522959_1.fastq Share/ERR522959_2.fastq --outFileNamePrefix results/STAR/
 ```
 
-# Kallisto and Pseudo-Alignment
+## Kallisto and Pseudo-Alignment
 
 STAR is a reads aligner, whereas Kallisto is a pseudo-aligner [@bray_2016]. The main difference between aligners and pseudo-aligners is that whereas aligners map reads to a reference, pseudo-aligners map k-mers to a reference.
 
-## What is a k-mer?
+### What is a k-mer?
 
 A k-mer is a sequence of length k derived from a read. For example, imagine we have a read with the sequence ATCCCGGGTTAT and we want to make 7-mers from it. To do this, we would find the first 7-mer by counting the first seven bases of the read. We would find the second 7-mer by moving one base along, then counting the next seven bases. Figure 2 shows all the 7-mers that could be derived from our read:
 
 ![Figure 2: The 7-mers derived from an example read](L1-images/Kmers.png)
 
-## Why map k-mers rather than reads?
+### Why map k-mers rather than reads?
 There are two main reasons:
 
 1. Pseudo-aligners use k-mers and a computational trick to make pseudo-alignment much faster than traditional aligners. If you are interested in how this is acheived, see (Bray et al., 2017) for details.
 
 2. Under some circumstances, pseudo-aligners may be able to cope better with sequencing errors than traditional aligners. For example, imagine there was a sequencing error in the first base of the read above and the A was actually a T. This would impact on the pseudo-aligners ability to map the first 7-mer but none of the following 7-mers.
 
-## Kallisto's pseudo mode
+### Kallisto's pseudo mode
 
 Kallisto has a specially designed mode for pseudo-aligning reads from single-cell RNA-seq experiments. Unlike STAR, Kallisto psuedo-aligns to a reference transcriptome rather than a reference genome. This means Kallisto maps reads to splice isoforms rather than genes. Mapping reads to isoforms rather than genes is especially challenging for single-cell RNA-seq for the following reasons:
 
@@ -84,7 +85,7 @@ kallisto index -i indices/Kallisto/transcripts.idx Share/2000_reference.transcri
 
 Task 7: Use the Kallisto manual to work out what command to use to perform pseudo-alignment. One you think you know the answer, check whether it matches the solution in the next section and execute the pseudo-alignment.
 
-# Solution to Kallisto Pseudo-Alignment
+### Solution to Kallisto Pseudo-Alignment
 
 Use the below command to perform pseudo-alignment
 
@@ -95,7 +96,7 @@ kallisto pseudo -i indices/Kallisto/transcripts.idx -o results/Kallisto -b batch
 
 See https://pachterlab.github.io/kallisto/manual for instructions on creating batch.txt, or ask an instructor if you get stuck.
 
-## Understanding the Output of Kallisto Pseudo-Alignment
+### Understanding the Output of Kallisto Pseudo-Alignment
 
 The command above should produce 4 files - matrix.cells, matrix.ec, matrix.tsv and run_info.json.
 

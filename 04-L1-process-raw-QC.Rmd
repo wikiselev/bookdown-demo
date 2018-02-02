@@ -9,6 +9,8 @@ library('bookdown')
 
 # Processing Raw scRNA-seq Data
 
+## FastQC
+
 Once you've obtained your single-cell RNA-seq data, the first thing you need to do with it is check the quality of the reads you have sequenced. For this task, today we will be using a tool called FastQC. FastQC is a quality control tool for sequencing data, which can be used for both bulk and single-cell RNA-seq data. FastQC takes sequencing data as input and returns a report on read quality. Copy and paste this link into your browser to visit the FastQC website:
 
 https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
@@ -33,7 +35,7 @@ fastqc -h
 This command will tell you what options are available to pass to FastQC. Feel free to ask for help if you get stuck! If you are successful, you should generate a .zip and a .html file for both the forwards and the reverse reads files. Once you have been successful, feel free to have a go at the next section.
 
 
-# Solution and Downloading the Report
+### Solution and Downloading the Report
 
 If you haven't done so already, generate the FastQC report using the commands below:
 
@@ -48,7 +50,7 @@ Once the file is on you computer, click on it. Your FastQC report should open. H
 
 Feel free to chat to one of the instructors about your ideas.
 
-# Trimming Reads
+## Trimming Reads
 
 Fortunately there is software available for read trimming. Today we will be using Trim Galore!. Trim Galore! is a wrapper for the reads trimming software cutadapt.
 
@@ -71,7 +73,7 @@ Task 3: Produce a FastQC report for your trimmed reads files. Is the adapter con
 
 Once you think you have successfully trimmed your reads and have confirmed this by checking the FastQC report, feel free to check your results using the next section.
 
-# Solution
+### Solution
 
 You can use the command(s) below to trim the Nextera sequencing adapters:
 
