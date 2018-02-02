@@ -191,7 +191,7 @@ How many of the previously unclassified cells would be be able to assign to cell
 __Answer__
 ```{r, include=FALSE}
 t2 <- table(colData(segerstolpe)$cell_type1, seger_to_muraro$scmap_cluster_labs)
-seger_assigned <- rowSums(t2[c("unclassified endocrine"), 1:9])
+seger_assigned <- sum(t2[c("unclassified endocrine"), 1:9])
 ```
 ### Cell-to-Cell mapping
 
@@ -363,6 +363,22 @@ The Seurat package contains another correction method for combining multiple dat
 Seurat uses gene-gene correlations to identify the biological structure in the dataset with a method called canonical correlation analysis (CCA). Seurat learns the shared structure to the gene-gene correlations and then evaluates how well each cell fits this structure. Cells which must better described by a data-specific dimensionality reduction method than by the shared correlation structure are assumed to represent dataset-specific cell-types/states and are discarded before aligning the two datasets. Finally the two datasets are aligned using 'warping' algorithms which normalize the low-dimensional representations of each dataset in a way that is robust to differences in population density.
 
 Note because Seurat uses up a lot of library space you will have to restart your R-session to load it, and the plots/merged_seuratput won't be automatically generated on this page.
+
+Reload the data:
+```{r, eval=FALSE}
+muraro <- readRDS("pancreas/muraro.rds")
+segerstolpe <- readRDS("pancreas/segerstolpe.rds")
+segerstolpe <- segerstolpe[,colData(segerstolpe)$cell_type1 != "unclassified"]
+segerstolpe <- segerstolpe[,colData(segerstolpe)$cell_type1 != "not applicable",]
+muraro <- muraro[,colData(muraro)$cell_type1 != "unclear"]
+is.common <- rowData(muraro)$feature_symbol %in% rowData(segerstolpe)$feature_symbol
+muraro <- muraro[is.common,]
+segerstolpe <- segerstolpe[match(rowData(muraro)$feature_symbol, rowData(segerstolpe)$feature_symbol),]
+rownames(segerstolpe) <- rowData(segerstolpe)$feature_symbol
+rownames(muraro) <- rowData(muraro)$feature_symbol
+identical(rownames(segerstolpe), rownames(muraro))
+```
+
 
 First we will reformat our data into Seurat objects:
 
