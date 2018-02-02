@@ -1,145 +1,87 @@
 ---
 output: html_document
+code_folding: hide
 ---
 
-# Processing raw scRNA-Seq data
-
-## File formats
-
-### FastQ
-FastQ is the most raw form of scRNASeq data you will encounter. All scRNASeq 
-protocols are sequenced with paired-end sequencing. Barcode sequences may occur 
-in one or both reads depending on the protocol employed. However, protocols 
-using unique molecular identifiers (UMIs) will generally contain one read with 
-the cell and UMI barcodes plus adapters but without any transcript sequence. 
-Thus reads will be mapped as if they are single-end sequenced despite actually
-being paired end. 
-
-FastQ files have the format:
-```{eval=FALSE}
->ReadID
-READ SEQUENCE
-+
-SEQUENCING QUALITY SCORES
+```{r include=FALSE}
+library('bookdown')
 ```
 
-### BAM
+# Processing Raw scRNA-seq Data
 
-BAM file format stores mapped reads in a standard and efficient manner. The 
-human-readable version is called a SAM file, while the BAM file is the highly
-compressed version. BAM/SAM files contain a header which typically includes  
-information on the sample preparation, sequencing and mapping; and a tab-separated row for each individual alignment of each read. 
+Once you've obtained your single-cell RNA-seq data, the first thing you need to do with it is check the quality of the reads you have sequenced. For this task, today we will be using a tool called FastQC. FastQC is a quality control tool for sequencing data, which can be used for both bulk and single-cell RNA-seq data. FastQC takes sequencing data as input and returns a report on read quality. Copy and paste this link into your browser to visit the FastQC website:
 
-Alignment rows employ a standard format with the following columns:
-(1) QNAME : read name (generally will include UMI barcode if applicable)
-(2) FLAG : number tag indicating the "type" of alignment, [link](https://broadinstitute.github.io/picard/explain-flags.html) to explanation of all possible "types"
-(3) RNAME : reference sequence name (i.e. chromosome read is mapped to).
-(4) POS : leftmost mapping position
-(5) MAPQ : Mapping quality
-(6) CIGAR : string indicating the matching/mismatching parts of the read (may include soft-clipping).
-(7) RNEXT : reference name of the mate/next read
-(8) PNEXT : POS for mate/next read
-(9) TLEN : Template length (length of reference region the read is mapped to)
-(10) SEQ : read sequence
-(11) QUAL : read quality
+https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 
-Some sequencing facilities will automatically map your reads to the a standard 
-genome and deliver either BAM or CRAM formatted files. Generally they will not 
-have included ERCC sequences in the genome thus no ERCC reads will be mapped in
-the BAM/CRAM file. To quantify ERCCs (or any other genetic alterations) or if 
-you just want to use a different alignment algorithm than whatever is in the 
-generic pipeline (often outdated), then you will need to convert the BAM/CRAM 
-files back to FastQs:
+This website contains links to download and install FastQC and documentation on the reports produced. Fortunately we have already installed FastQC for you today, so instead we will take a look at the documentation. Scroll down the webpage to 'Example Reports' and click 'Good Illumina Data'. This gives an example of what an ideal report should look like for high quality Illumina reads data.
 
-BAM files can be converted to FastQ using bedtools. To ensure a single copy for
-multi-mapping reads first sort by read name and remove secondary alignments
-using samtools. [Picard](https://broadinstitute.github.io/picard/index.html) 
-also contains a method for converting BAM to FastQ files. 
+Now let's make a FastQC report ourselves.
+
+Today we will be performing our analysis using a single cell from an mESC dataset produced by [@Kolodziejczyk2015-xy]. The cells were sequenced using the SMART-seq2 library preparation protocol and the reads are paired end. The files are located in `Share`. Let's take a look at them:
 
 ```{bash, eval=FALSE}
-samtools sort -n original.bam -o sorted_by_name.bam
-samtools view -b -F 256 sorted_by_name.cam -o primary_alignment_only.bam
-bedtools2/bin/badtools bamtofastq -i primary_alignment_only.bam -fq read1.fq -fq2 read2.fq
+less Share/ERR522959_1.fastq
+less Share/ERR522959_2.fastq
 ```
-### CRAM
 
-[CRAM](https://www.ebi.ac.uk/ena/software/cram-usage) files are similar to BAM files only they contain information in the header 
-to the reference genome used in the mapping in the header. This allow the bases
-in each read that are identical to the reference to be further compressed. CRAM
-also supports some lossy data compression approaches to further optimize storage
-compared to BAMs. CRAMs are mainly used by the Sanger/EBI sequencing facility.
+Task 1: Try to work out what command you should use to produce the FastQC report. Hint: Try executing
 
-CRAM and BAM files can be interchanged using the lastest version of samtools (>=v1.0). 
-However, this conversion requires downloading the reference genome into cache.
-Thus we recommend setting a specific cache location prior to doing this:
+```{bash, eval=FALSE, collapse=TRUE}
+fastqc -h
+```
+
+This command will tell you what options are available to pass to FastQC. Feel free to ask for help if you get stuck! If you are successful, you should generate a .zip and a .html file for both the forwards and the reverse reads files. Once you have been successful, feel free to have a go at the next section.
+
+
+# Solution and Downloading the Report
+
+If you haven't done so already, generate the FastQC report using the commands below:
+
+```{bash, eval=FALSE, echo = TRUE}
+mkdir fastqc_results
+fastqc -o fastqc_results Share/ERR522959_1.fastq Share/ERR522959_2.fastq
+```
+
+Once the command has finished executing, you should have a total of four files - one zip file for each of the paired end reads, and one html file for each of the paired end reads. The report is in the html file. To view it, we will need to get it off AWS and onto your computer using either filezilla or scp. Ask an instructor if you are having difficulties.
+
+Once the file is on you computer, click on it. Your FastQC report should open. Have a look through the file. Remember to look at both the forwards and the reverse end read reports! How good quality are the reads? Is there anything we should be concerned about? How might we address those concerns?
+
+Feel free to chat to one of the instructors about your ideas.
+
+# Trimming Reads
+
+Fortunately there is software available for read trimming. Today we will be using Trim Galore!. Trim Galore! is a wrapper for the reads trimming software cutadapt.
+
+Read trimming software can be used to trim sequencing adapters and/or low quality reads from the ends of reads. Given we noticed there was some adaptor contamination in our FastQC report, it is a good idea to trim adaptors from our data.
+
+Task 2: What type of adapters were used in our data? Hint: Look at the FastQC report 'Adapter Content' plot.
+
+Now let's try to use Trim Galore! to remove those problematic adapters. It's a good idea to check read quality again after trimming, so after you have trimmed your reads you should use FastQC to produce another report.
+
+Task 3: Work out the command you should use to trim the adapters from our data. Hint 1: You can use 
 
 ```{bash, eval=FALSE}
-export REF_CACHE=/path_to/cache_directory_for_reference_genome
-samtools view -b -h file.cram -o file.bam
-samtools view -C -h -T reference_genome.fasta file.bam -o file.cram
+trim_galore -h
 ```
 
-### Genome (FASTA, GTF)
+To find out what options you can pass to Trim Galore.
+Hint 2: Read through the output of the above command carefully. The adaptor used in this experiment is quite common. Do you need to know the actual sequence of the adaptor to remove it?
 
-To map your reads you will also need the reference genome and in many cases 
-the genome annotation file (in either GTF or GFF format). These can be 
-downloaded for model organisms from any of the main genomics databases: 
-[Ensembl](http://www.ensembl.org/info/data/ftp/index.html), 
-[NCBI](ftp://ftp.ncbi.nih.gov/genomes/), or [UCSC Genome Browser](http://hgdownload.soe.ucsc.edu/downloads.html). 
+Task 3: Produce a FastQC report for your trimmed reads files. Is the adapter contamination gone?
 
-In our experience Ensembl is the easiest of these to use, and has the largest 
-set of annotations. NCBI tends to be more strict in including only high 
-confidence gene annotations. Whereas UCSC contains multiple geneset annotations
-that use different criteria.
+Once you think you have successfully trimmed your reads and have confirmed this by checking the FastQC report, feel free to check your results using the next section.
 
-If you experimental system includes non-standard sequences these must be added 
-to both the genome fasta and gtf to quantify their expression. Most commonly
-this is done for the ERCC spike-ins, although the same must be done for CRISPR-
-related sequences or other overexpression/reporter constructs. 
+# Solution
 
-There is no standardized way to do this. So below is our custom perl script for creating a gtf and fasta file for ERCCs which can be appended to the genome.
+You can use the command(s) below to trim the Nextera sequencing adapters:
 
-
-%This will probably cause an error, change language to "r" if it does
-```{perl, eval=FALSE}
-# Converts the Annotation file from https://www.thermofisher.com/order/catalog/product/4456740 to gtf and fasta files that can be added to existing genome fasta & gtf files.
-
-my @FASTAlines = ();
-my @GTFlines = ();
-open (my $ifh, "ERCC_Controls_Annotation.txt") or die $!;
-<$ifh>; #header
-while (<$ifh>) {
-	# Do all the important stuff
-	chomp;
-	my @record = split(/\t/);
-	my $sequence = $record[4];
-	$sequence =~ s/\s+//g; # get rid of any preceeding/tailing white space
-	$sequence = $sequence."NNNN";
-	my $name = $record[0];
-	my $genbank = $record[1];
-	push(@FASTAlines, ">$name\n$sequence\n");
-# is GTF 1 indexed or 0 indexed? -> it is 1 indexed
-# + or - strand?
-	push(@GTFlines, "$name\tERCC\tgene\t1\t".(length($sequence)-2)."\t.\t+\t.\tgene_id \"$name-$genbank\"; transcript_id \"$name-$genbank\"; exon_number \"1\"; gene_name \"ERCC $name-$genbank\"\n");
-	push(@GTFlines, "$name\tERCC\texon\t1\t".(length($sequence)-2)."\t.\t+\t.\tgene_id \"$name-$genbank\"; transcript_id \"$name-$genbank\"; exon_number \"1\"; gene_name \"ERCC $name-$genbank\"\n");
-} close($ifh);
-
-# Write output
-open(my $ofh, ">", "ERCC_Controls.fa") or die $!;
-foreach my $line (@FASTAlines) {
-	print $ofh $line;
-} close ($ofh);
-
-open($ofh, ">", "ERCC_Controls.gtf") or die $!;
-foreach my $line (@GTFlines) {
-	print $ofh $line;
-} close ($ofh);
+```{bash, eval=FALSE}
+mkdir fastqc_trimmed_results
+trim_galore --nextera -o fastqc_trimmed_results Share/ERR522959_1.fastq Share/ERR522959_2.fastq
 ```
 
-## Demultiplexing
+Remember to generate new FastQC reports for your trimmed reads files! FastQC should now show that your reads pass the 'Adaptor Content' plot. Feel free to ask one of the instructors if you have any questions.
 
-## Reads QC
-
-## Read Trimming
+Congratulations! You have now generated reads quality reports and performed adaptor trimming. In the next lab, we will use STAR and Kallisto to align our trimmed and quality-checked reads to a reference transcriptome.
 
 
