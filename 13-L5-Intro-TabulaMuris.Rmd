@@ -38,13 +38,13 @@ mv 10039264 droplet_annotation.csv
 
 Note if you download the data by hand you should unzip & rename the files as above before continuing.
 
-You should now have two folders : "FACS" and "droplet" and one annotation and metadata file for each. To inspect these files you can use the 'less' to see the top few lines of the text files (Press "q" to exit):
+You should now have two folders : "FACS" and "droplet" and one annotation and metadata file for each. To inspect these files you can use the `head` to see the top few lines of the text files (Press "q" to exit):
 ```{bash}
-less droplet_metadata.csv
+head -n 10 droplet_metadata.csv
 ```
 You can also check the number of rows in each file using:
 ```{bash}
-less droplet_annotation.csv | wc -l
+wc -l droplet_annotation.csv
 ```
 
 __Exercise__
@@ -128,7 +128,7 @@ isSpike(sceset, "ERCC") <- grepl("ERCC-", rownames(sceset))
 Due to the large size and sparsity of 10X data (upto 90% of the expression matrix may be 0s) it is typically 
 stored as a sparse matrix. The default output format for CellRanger is an .mtx file which stores this sparse 
 matrix as a column of row coordinates, a column of column corodinates, and a column of expression values > 0. 
-Note if you look at the .mtx file using "less" you will see two header lines followed by a line detailing the 
+Note if you look at the .mtx file you will see two header lines followed by a line detailing the 
 total number of rows, columns and counts for the full matrix. Since only the coordinates are stored in the .mtx 
 file, the names of each row & column must be stored separately in the "genes.tsv" and "barcodes.tsv" files 
 respectively.
@@ -258,7 +258,6 @@ Now build the SingleCellExperiment object. One of the advantages of the SingleCe
 require("SingleCellExperiment")
 require("scater")
 all_molecules <- as.matrix(all_molecules)
-colnames(
 sceset <- SingleCellExperiment(assays = list(counts = as.matrix(all_molecules)), colData=all_cell_anns)
 ```
 
