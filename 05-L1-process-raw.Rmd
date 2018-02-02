@@ -3,9 +3,9 @@ output: html_document
 ---
 
 
-# File formats
+## File formats
 
-## FastQ
+### FastQ
 FastQ is the most raw form of scRNASeq data you will encounter. All scRNASeq 
 protocols are sequenced with paired-end sequencing. Barcode sequences may occur 
 in one or both reads depending on the protocol employed. However, protocols 
@@ -22,7 +22,7 @@ READ SEQUENCE
 SEQUENCING QUALITY SCORES
 ```
 
-## BAM
+### BAM
 
 BAM file format stores mapped reads in a standard and efficient manner. The 
 human-readable version is called a SAM file, while the BAM file is the highly
@@ -81,7 +81,7 @@ samtools view -b -F 256 sorted_by_name.bam -o primary_alignment_only.bam
 # convert to fastq
 bedtools bamtofastq -i primary_alignment_only.bam -fq read1.fq -fq2 read2.fq
 ```
-## CRAM
+### CRAM
 
 [CRAM](https://www.ebi.ac.uk/ena/software/cram-usage) files are similar to BAM files only they contain information in the header 
 to the reference genome used in the mapping in the header. This allow the bases
@@ -101,7 +101,7 @@ samtools view -b -h -T reference_genome.fasta file.cram -o file.bam
 samtools view -C -h -T reference_genome.fasta file.bam -o file.cram
 ```
 
-## Mannually Inspecting file
+### Mannually Inspecting files
 
 At times it may be useful to mannual inspect files for example to check the metadata in headers that the files 
 are from the correct sample. 'less' and 'more' can be used to inspect any text files from the command line.
@@ -147,7 +147,7 @@ samtools view -b -F 256 sorted_EXAMPLE.bam -o primary_EXAMPLE.bam
 bedtools bamtofastq -i primary_EXAMPLE.bam -fq 10cells_read1.fq -fq2 10cells_read2.fq
 ```
 
-## Genome (FASTA, GTF)
+### Genome (FASTA, GTF)
 
 To map your reads you will also need the reference genome and in many cases 
 the genome annotation file (in either GTF or GFF format). These can be 
@@ -185,7 +185,9 @@ There is no standardized way to do this. So below is our custom perl script for 
 
 
 ```{bash, eval=FALSE}
-# Converts the Annotation file from https://www.thermofisher.com/order/catalog/product/4456740 to gtf and fasta files that can be added to existing genome fasta & gtf files.
+# Converts the Annotation file from 
+# https://www.thermofisher.com/order/catalog/product/4456740 to 
+# gtf and fasta files that can be added to existing genome fasta & gtf files.
 
 my @FASTAlines = ();
 my @GTFlines = ();
@@ -221,7 +223,7 @@ foreach my $line (@GTFlines) {
 ```
 
 
-# Demultiplexing
+## Demultiplexing
 
 Demultiplexing is done differently depending on the protocol used and the particular pipeline you are using a full pipeline. The most
 flexible demultiplexing pipeline we are aware of is [zUMIs](https://github.com/sdparekh/zUMIs/wiki/Usage) which can be used to demultiplex and 
@@ -250,7 +252,7 @@ For UMI containing data, demultiplexing includes attaching the UMI code to the r
 droplet-based protocol or SeqWell where the number of expected barcodes is much higher than the expected number of cell, then usually the cell-barcode will also be attached to the read name to avoid generating a very large number of files. In these cases, demultiplexing will happen during the 
 quantification step to facilitate the identification of cell-barcodes which correspond to intact cells rather than background noise.
 
-## Identifying cell-containing droplets/microwells
+### Identifying cell-containing droplets/microwells
 For droplet based methods only  a fraction of droplets contain both beads 
 and an intact cell. However, biology experiments are messy and some RNA will 
 leak out of dead/damaged cells. So droplets without an intact cell are likely to capture a small amount of the ambient RNA which will end up in the sequencing 
