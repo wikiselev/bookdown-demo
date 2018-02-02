@@ -12,6 +12,8 @@ __[http://hemberg-lab.github.io/scRNA.seq.course](http://hemberg-lab.github.io/s
 
 ## Video
 
+This video was recorded in November 2017, at that time the course contained less chapters than the current version.
+
 __[https://www.youtube.com/embed/IrlNcJwPClQ?list=PLEyKDyF1qdObdFBc3JncwXAnMUHlcd0ap](https://www.youtube.com/embed/IrlNcJwPClQ?list=PLEyKDyF1qdObdFBc3JncwXAnMUHlcd0ap)__
 
 ## Registration  
@@ -21,10 +23,6 @@ Please follow this link and register for the __"Analysis of single cell RNA-seq 
 
 ## GitHub
 <a href="https://github.com/hemberg-lab/scRNA.seq.course" target="blank">https://github.com/hemberg-lab/scRNA.seq.course</a>
-
-## R-based
-
-[R](https://www.r-project.org/) is one of the most popular programming languages for Bioinformatics. We aimed to only use R packages in this course. However, a few tools that we describe ([SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/) and [MAGIC](https://github.com/pkathail/magic)) are Python-based.
 
 ## Docker image
 
@@ -46,7 +44,7 @@ More details on how ot run RStudio docker with different options can be found [h
 
 ## Manual installation
 
-If you are not using a docker image of the course, then to be able to run all code chunks of the course you need to clone or download the [course GitHub repository](https://github.com/hemberg-lab/scRNA.seq.course) and start an R session in the cloned folder. You will also need to install all packages listed in the course [Dockerfile](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/Dockerfile).
+If you are not using a docker image of the course, then to be able to run all code chunks of the course you need to clone or download the [course GitHub repository](https://github.com/hemberg-lab/scRNA.seq.course) and start an R session in the cloned folder. You will also need to install all packages listed in the course docker files: [Dockerfile1](https://github.com/hemberg-lab/scRNA.seq.course-base/blob/master/Dockerfile) and [Dockerfile2](https://github.com/hemberg-lab/scRNA.seq.course-R/blob/master/Dockerfile).
 
 Alternatively, you can just install packages listed in a chapter of interest.
 
