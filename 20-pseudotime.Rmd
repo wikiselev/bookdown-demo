@@ -16,6 +16,12 @@ library(M3Drop)
 library(monocle)
 library(destiny)
 library(SLICER)
+library(ouija)
+library(scater)
+library(ggplot2)
+library(ggthemes)
+library(ggbeeswarm)
+library(corrplot)
 set.seed(1)
 ```
 
@@ -35,8 +41,8 @@ progression. We use statistical methods to order the cells along one
 or more trajectories which represent the underlying developmental
 trajectories, this ordering is referred to as "pseudotime".
 
-In this chapter we will consider four different tools: Monocle, TSCAN,
-destiny and SLICER for ordering cells according to their pseudotime
+In this chapter we will consider five different tools: Monocle, TSCAN,
+destiny, SLICER and ouija for ordering cells according to their pseudotime
 development. To illustrate the methods we will be using a dataset on
 mouse embryonic development [@Deng2014-mx]. The dataset consists of
 268 cells from 10 different time-points of early mouse development. In this case, there is no need for pseudotime alignment since the cell labels provide information about the development trajectory. Thus, the labels allow us to establish a ground truth so that we can evaluate and compare the different methods.
@@ -76,44 +82,78 @@ knitr::include_graphics("figures/cannoodt_pseudotime_methods.png")
 ```
 
 
-### TSCAN
+### First look at Deng data
 
-TSCAN combines clustering with pseudotime analysis. First it clusters the cells using `mclust`,
-which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters. The branch of this tree that connects the largest number of clusters is the main branch which is used to determine pseudotime.
+Let us take a first look at the Deng data, without yet applying sophisticated pseudotime methods. As the plot below shows, simple PCA does a very good job of displaying the structure in these data. It is only once we reach the blast cell types ("earlyblast", "midblast", "lateblast") that PCA struggles to separate the distinct cell types.
 
-First we will try to use all genes to order the cells.
-```{r tscan-all-genes}
+```{r data-overview}
 deng_SCE <- readRDS("deng/deng-reads.rds")
-cellLabels <- colData(deng_SCE)$cell_type2
+deng_SCE$cell_type2 <- factor(
+    deng_SCE$cell_type2,
+    levels = c("zy", "early2cell", "mid2cell", "late2cell",
+                        "4cell", "8cell", "16cell", "earlyblast",
+                        "midblast", "lateblast")
+)
+cellLabels <- deng_SCE$cell_type2
 deng <- counts(deng_SCE)
 colnames(deng) <- cellLabels
+deng_SCE <- plotPCA(deng_SCE, colour_by = "cell_type2", 
+                    return_SCE = TRUE)
+```
+
+PCA, here, provides a useful baseline for assessing different pseudotime methods. For a very naive pseudotime we can just take the co-ordinates of the first principal component.
+
+```{r pca-pseudotime}
+deng_SCE$PC1 <- reducedDim(deng_SCE, "PCA")[,1]
+ggplot(as.data.frame(colData(deng_SCE)), aes(x = PC1, y = cell_type2, 
+                              colour = cell_type2)) +
+    geom_quasirandom(groupOnX = FALSE) +
+    scale_color_tableau() + theme_classic() +
+    xlab("First principal component") + ylab("Timepoint") +
+    ggtitle("Cells ordered by first principal component")
+```
+
+As the plot above shows, PC1 struggles to correctly order cells early and late in the developmental timecourse, but overall does a relatively good job of ordering cells by developmental time.   
+
+Can bespoke pseudotime methods do better than naive application of PCA?
+ 
+
+### TSCAN
+
+TSCAN combines clustering with pseudotime analysis. First it clusters the cells using `mclust`, which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters. The branch of this tree that connects the largest number of clusters is the main branch which is used to determine pseudotime.
+
+First we will try to use all genes to order the cells.
+
+```{r tscan-all-genes}
 procdeng <- TSCAN::preprocess(deng)
 colnames(procdeng) <- 1:ncol(deng)
 dengclust <- TSCAN::exprmclust(procdeng, clusternum = 10)
 TSCAN::plotmclust(dengclust)
-dengorderTSCAN <- TSCAN::TSCANorder(dengclust, orderonly = F)
+dengorderTSCAN <- TSCAN::TSCANorder(dengclust, orderonly = FALSE)
 pseudotime_order_tscan <- as.character(dengorderTSCAN$sample_name)
+deng_SCE$pseudotime_order_tscan <- NA
+deng_SCE$pseudotime_order_tscan[as.numeric(dengorderTSCAN$sample_name)] <- 
+    dengorderTSCAN$Pseudotime
 ```
 
-We can also examine which timepoints have been assigned to each state:
+Frustratingly, TSCAN only provides pseudotime values for 221 of 268 cells, silently returning missing values for non-assigned cells.
+
+Again, we examine which timepoints have been assigned to each state:
 
 ```{r tscan-vs-truth}
 cellLabels[dengclust$clusterid == 10]
-colours <- rainbow(n = 10) # red = early, violet = late
-tmp <-
-    factor(
-        cellLabels[as.numeric(pseudotime_order_tscan)],
-        levels = c("early2cell", "mid2cell", "late2cell", "4cell", "8cell",
-                   "16cell", "earlyblast", "midblast", "lateblast")
-    )
-plot(
-    as.numeric(tmp),
-    xlab = "Pseudotime Order",
-    ylab = "Timepoint",
-    col = colours[tmp],
-    pch = 16
-)
+ggplot(as.data.frame(colData(deng_SCE)), 
+       aes(x = pseudotime_order_tscan, 
+           y = cell_type2, colour = cell_type2)) +
+    geom_quasirandom(groupOnX = FALSE) +
+    scale_color_tableau() + theme_classic() +
+    xlab("TSCAN pseudotime") + ylab("Timepoint") +
+    ggtitle("Cells ordered by TSCAN pseudotime")
+
 ```
+
+TSCAN gets the development trajectory the "wrong way around", in the sense that later pseudotime values correspond to early timepoints and vice versa. This is not inherently a problem (it is easy enough to reverse the ordering to get the intuitive interpretation of pseudotime), but overall it would be a stretch to suggest that TSCAN performs better than PCA on this dataset. (As it is a PCA-based method, perhaps this is not entirely surprising.)
+
 
 __Exercise 1__ Compare results for different numbers of clusters (`clusternum`).
 
@@ -158,7 +198,7 @@ pseudotime_monocle <-
     data.frame(
         Timepoint = phenoData(dCellDataSet)$timepoint,
         pseudotime = phenoData(dCellDataSet)$Pseudotime,
-        State=phenoData(dCellDataSet)$State
+        State = phenoData(dCellDataSet)$State
     )
 rownames(pseudotime_monocle) <- 1:ncol(d)
 pseudotime_order_monocle <-
@@ -167,21 +207,19 @@ pseudotime_order_monocle <-
 
 We can again compare the inferred pseudotime to the known sampling timepoints.
 ```{r monocle-vs-truth}
-monocle_time_point <- factor(
-     pseudotime_monocle$Timepoint,
-     levels = c("early2cell", "mid2cell", "late2cell", "4cell", "8cell",
-                   "16cell", "earlyblast", "midblast", "lateblast")
-)
+deng_SCE$pseudotime_monocle <- pseudotime_monocle$pseudotime
+ggplot(as.data.frame(colData(deng_SCE)), 
+       aes(x = pseudotime_monocle, 
+           y = cell_type2, colour = cell_type2)) +
+    geom_quasirandom(groupOnX = FALSE) +
+    scale_color_tableau() + theme_classic() +
+    xlab("monocle pseudotime") + ylab("Timepoint") +
+    ggtitle("Cells ordered by monocle pseudotime")
 
-plot(
-    pseudotime_monocle$pseudotime,
-    monocle_time_point,
-    xlab = "Pseudotime",
-    ylab = "Timepoint",
-    col = colours[monocle_time_point],
-    pch = 16
-)
 ```
+
+Monocle - at least with its default settings - performs poorly on these data. The "late2cell" group is completely separated from the "zy", "early2cell" and "mid2cell" cells (though these are correctly ordered), and there is no separation at all of "4cell", "8cell", "16cell" or any blast cell groups.
+
 
 ### Diffusion maps
 
@@ -189,35 +227,35 @@ plot(
 
 [Haghverdi et al](http://biorxiv.org/content/biorxiv/early/2015/08/04/023309.full.pdf) have applied the diffusion maps concept to the analysis of single-cell RNA-seq data to create an R package called [destiny](http://bioconductor.org/packages/destiny).
 
+We will take the ranko prder of cells in the first diffusion map component as "diffusion map pseudotime" here.
+
 ```{r destiny-deng}
 deng <- logcounts(deng_SCE)
 colnames(deng) <- cellLabels
 dm <- DiffusionMap(t(deng))
-tmp <- factor(
-    colnames(deng),
-    levels = c(
-        "early2cell",
-        "mid2cell",
-        "late2cell",
-        "4cell",
-        "8cell",
-        "16cell",
-        "earlyblast",
-        "midblast",
-        "lateblast"
-    )
-)
-plot(
-    eigenvectors(dm)[,1],
-    eigenvectors(dm)[,2],
-    xlab = "Diffusion component 1",
-    ylab = "Diffusion component 2",
-    col = colours[tmp],
-    pch = 16
-)
+
+tmp <- data.frame(DC1 = eigenvectors(dm)[,1],
+                  DC2 = eigenvectors(dm)[,2],
+                  Timepoint = deng_SCE$cell_type2)
+ggplot(tmp, aes(x = DC1, y = DC2, colour = Timepoint)) +
+    geom_point() + scale_color_tableau() + 
+    xlab("Diffusion component 1") + 
+    ylab("Diffusion component 2") +
+    theme_classic()
+
+deng_SCE$pseudotime_diffusionmap <- rank(eigenvectors(dm)[,1])
+ggplot(as.data.frame(colData(deng_SCE)), 
+       aes(x = pseudotime_diffusionmap, 
+           y = cell_type2, colour = cell_type2)) +
+    geom_quasirandom(groupOnX = FALSE) +
+    scale_color_tableau() + theme_classic() +
+    xlab("Diffusion map pseudotime (first diffusion map component)") +
+    ylab("Timepoint") +
+    ggtitle("Cells ordered by diffusion map pseudotime")
+
 ```
 
-Like the other methods, destiny does a good job at ordering the early time-points, but it is unable to distinguish the later ones.
+Like the other methods, using the first diffusion map component from destiny as pseudotime does a good job at ordering the early time-points (if we take high values as "earlier" in developement), but it is unable to distinguish the later ones.
 
 __Exercise 2__ Do you get a better resolution between the later time points by considering additional eigenvectors?
 
@@ -244,13 +282,14 @@ most resembles a trajectory. Then we estimate the [locally linear
 embedding](https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction) of the cells.
 
 ```{r slicer-analyis, message=FALSE, warning=FALSE}
-require("lle")
+library("lle")
 slicer_genes <- select_genes(t(deng))
 k <- select_k(t(deng[slicer_genes,]), kmin = 30, kmax=60)
 slicer_traj_lle <- lle(t(deng[slicer_genes,]), m = 2, k)$Y
-plot(slicer_traj_lle, xlab = "LLE Comp 1", ylab = "LLE Comp 2",
-     main = "Locally linear embedding of cells from SLICER", 
-     col=colours[tmp], pch=16)
+reducedDim(deng_SCE, "LLE") <- slicer_traj_lle
+plotReducedDim(deng_SCE, use_dimred = "LLE", colour_by = "cell_type2") +
+    xlab("LLE component 1") + ylab("LLE component 2") +
+    ggtitle("Locally linear embedding of cells from SLICER")
 ```
 
 With the locally linear embedding computed we can construct a
@@ -287,6 +326,7 @@ pseudotime_slicer <-
     )
 pseudotime_slicer$pseudotime[pseudotime_order_slicer] <-
     1:length(pseudotime_order_slicer)
+deng_SCE$pseudotime_slicer <- pseudotime_slicer$pseudotime
 ```
 
 We can again compare the inferred pseudotime to the known sampling
@@ -294,24 +334,18 @@ timepoints. SLICER does not provide a pseudotime value per se, just an
 ordering of cells.
 
 ```{r slicer-vs-truth}
-slicer_time_point <- factor(
-     pseudotime_slicer$Timepoint,
-     levels = c("early2cell", "mid2cell", "late2cell", "4cell", "8cell",
-                   "16cell", "earlyblast", "midblast", "lateblast")
-)
-
-plot(
-    pseudotime_slicer$pseudotime,
-    slicer_time_point,
-    xlab = "Pseudotime",
-    ylab = "Timepoint",
-    col = colours[slicer_time_point],
-    pch = 16
-)
+ggplot(as.data.frame(colData(deng_SCE)), 
+       aes(x = pseudotime_slicer, 
+           y = cell_type2, colour = cell_type2)) +
+    geom_quasirandom(groupOnX = FALSE) +
+    scale_color_tableau() + theme_classic() +
+    xlab("SLICER pseudotime (cell ordering)") +
+    ylab("Timepoint") +
+    theme_classic()
 ```
 
 Like the previous method, SLICER here provides a good ordering for the
-early time points and struggles for later time points.
+early time points. It places "16cell" cells before "8cell" cells, but provides better ordering for blast cells than many of the earlier methods.
 
 __Exercise 4__ How do the results change for different k? (e.g. k = 5) What about changing the number of nearest neighbours in
 the call to `conn_knn_graph`?
@@ -319,57 +353,231 @@ the call to `conn_knn_graph`?
 __Exercise 5__ How does the ordering change if you use a different set
 of genes from those chosen by SLICER (e.g. the genes identified by M3Drop)?
 
+### Ouija
+
+Ouija (http://kieranrcampbell.github.io/ouija/) takes a different approach from the pseudotime estimation methods we have looked at so far. Earlier methods have all been "unsupervised", which is to say that apart from perhaps selecting informative genes we do not supply the method with any prior information about how we expect certain genes or the trajectory as a whole to behave. 
+
+Ouija, in contrast, is a probabilistic framework that allows for interpretable learning of single-cell pseudotimes using only small panels of marker genes. This method:
+
+* infers pseudotimes from a small number of marker genes letting you understand why the pseudotimes have been learned in terms of those genes;
+* provides parameter estimates (with uncertainty) for interpretable gene regulation behaviour (such as the peak time or the upregulation time); 
+* has a Bayesian hypothesis test to find genes regulated before others along the trajectory; 
+* identifies metastable states, ie discrete cell types along the continuous trajectory.
+
+We will supply the following marker genes to Ouija (with timepoints where they are expected to be highly expressed):
+
+* Early timepoints: Dazl, Rnf17, Sycp3, Nanog, Pou5f1, Fgf8, Egfr, Bmp5, Bmp15
+* Mid timepoints: Zscan4b, Foxa1, Prdm14, Sox21
+* Late timepoints: Creb3, Gpx4, Krt8, Elf5, Eomes, Cdx2, Tdgf1, Gdf3
+
+With Ouija we can model genes as either exhibiting monotonic up or down regulation (known as switch-like behaviour), or transient behaviour where the gene briefly peaks. By default, Ouija assumes all genes exhibit switch-like behaviour (the authors assure us not to worry if we get it wrong - the noise model means incorrectly specifying a transient gene as switch-like has minimal effect).
+
+Here we can "cheat" a little and check that our selected marker genes do actually identify different timepoints of the differentiation process.
+
+```{r ouija-response-type, fig.height=11}
+ouija_markers_down <- c("Dazl", "Rnf17", "Sycp3", "Fgf8", 
+                        "Egfr", "Bmp5", "Bmp15", "Pou5f1")
+ouija_markers_up <- c("Creb3", "Gpx4", "Krt8", "Elf5", "Cdx2", 
+                      "Tdgf1", "Gdf3", "Eomes")
+ouija_markers_transient <- c("Zscan4b", "Foxa1", "Prdm14", "Sox21")
+ouija_markers <- c(ouija_markers_down, ouija_markers_up, 
+                   ouija_markers_transient)
+plotExpression(deng_SCE, ouija_markers, x = "cell_type2", colour_by = "cell_type2") +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+In order to fit the pseudotimes wesimply call `ouija`, passing in the expected response types. Note that if no response types are provided then they are all assumed to be switch-like by default, which we will do here. The input to Ouija can be a cell-by-gene matrix of non-negative expression values, or an ExpressionSet object, or, happily, by selecting the `logcounts` values from a SingleCellExperiment object.
+
+We can apply prior information about whether genes are up- or down-regulated across the differentiation process, and also provide prior information about when the switch in expression or a peak in expression is likely to occur. 
+
+We can fit the Ouija model using either:
+
+* Hamiltonian Monte Carlo (HMC) - full MCMC inference where gradient information of the log-posterior is used to “guide” the random walk through the parameter space, or
+* Automatic Differentiation Variational Bayes (ADVI or simply VI) - approximate inference where the KL divergence to an approximate distribution is minimised.
+
+In general, HMC will provide more accurate inference with approximately correct posterior variance for all parameters. However, VB is orders of magnitude quicker than HMC and while it may underestimate posterior variance, the Ouija authors suggest that anecdotally it often performs as well as HMC for discovering posterior pseudotimes.
+
+To help the Ouija model, we provide it with prior information about the strength of switches for up- and down-regulated genes. By setting switch strength to -10 for down-regulated genes and 10 for up-regulated genes with a prior strength standard deviation of 0.5 we are telling the model that we are confident about the expected behaviour of these genes across the differentiation process.
+
+
+```{r ouija-fit, warning=FALSE, message=FALSE, result='hide'}
+options(mc.cores = parallel::detectCores())
+response_type <- c(rep("switch", length(ouija_markers_down) + 
+                           length(ouija_markers_up)), 
+                   rep("transient", length(ouija_markers_transient)))
+switch_strengths <- c(rep(-10, length(ouija_markers_down)),
+                      rep(10, length(ouija_markers_up)))
+switch_strength_sd <- c(rep(0.5, length(ouija_markers_down)),
+                      rep(0.5, length(ouija_markers_up)))
+garbage <- capture.output(
+    oui_vb <- ouija(deng_SCE[ouija_markers,],
+                    single_cell_experiment_assay = "logcounts", 
+                    response_type = response_type,
+                    switch_strengths = switch_strengths,
+                    switch_strength_sd = switch_strength_sd,
+                    inference_type = "vb")
+)
+
+print(oui_vb)
+```
+
+We can plot the gene expression over pseudotime along with the maximum a posteriori (MAP) estimates of the mean function (the sigmoid or Gaussian transient function) using the plot_expression function. 
+
+```{r ouija-plot-exprs}
+plot_expression(oui_vb)
+```
+
+We can also visualise when in the trajectory gene regulation behaviour occurs, either in the form of the switch time or the peak time (for switch-like or transient genes) using the plot_switch_times and plot_transient_times functions:
+
+```{r ouija-plot-switch-times}
+plot_switch_times(oui_vb)
+plot_peak_times(oui_vb)
+```
+
+Identify metastable states using consistency matrices.
+
+```{r ouija-consistency}
+cmo <- consistency_matrix(oui_vb)
+plot_consistency(oui_vb)
+cell_classifications <- cluster_consistency(cmo)
+```
+
+```{r ouija-pseudotime}
+map_pst <- map_pseudotime(oui_vb)
+ouija_pseudotime <- data.frame(map_pst, cell_classifications)
+
+ggplot(ouija_pseudotime, aes(x = map_pst, y = cell_classifications)) +
+  geom_point() +
+  xlab("MAP pseudotime") +
+  ylab("Cell classification")
+
+deng_SCE$pseudotime_ouija <- ouija_pseudotime$map_pst
+deng_SCE$ouija_cell_class <- ouija_pseudotime$cell_classifications
+
+ggplot(as.data.frame(colData(deng_SCE)), 
+       aes(x = pseudotime_ouija, 
+           y = cell_type2, colour = cell_type2)) +
+    geom_quasirandom(groupOnX = FALSE) +
+    scale_color_tableau() + theme_classic() +
+    xlab("Ouija pseudotime") +
+    ylab("Timepoint") +
+    theme_classic()
+
+```
+
+Ouija does quite well in the ordering of the cells here, although it can be sensitive to the choice of marker genes and prior information supplied. How do the results change if you select different marker genes or change the priors?
+
+Ouija identifies four metastable states here, which we might annotate as  "zygote/2cell", "4/8/16 cell", "blast1" and "blast2".
+
+```{r ouija-states}
+ggplot(as.data.frame(colData(deng_SCE)), 
+       aes(x = as.factor(ouija_cell_class), 
+           y = pseudotime_ouija, colour = cell_type2)) +
+    geom_boxplot() + 
+    coord_flip() +
+    scale_color_tableau() + theme_classic() +
+    xlab("Ouija cell classification") +
+    ylab("Ouija pseudotime") +
+    theme_classic()
+```
+
+A common analysis is to work out the regulation orderings of genes. For example, is gene A upregulated before gene B? Does gene C peak before the downregulation of gene D? Ouija answers these questions in terms of a Bayesian hypothesis test of whether the difference in regulation timing (either switch time or peak time) is significantly different to 0. This is collated using the gene_regulation function.
+
+```{r ouija-regulation}
+gene_regs <- gene_regulation(oui_vb)
+head(gene_regs)
+
+```
+
+What conclusions can you draw from the gene regulation output from Ouija?
+
+If you have time, you might try the HMC inference method and see if that changes the Ouija results in any way.
 
 
 ### Comparison of the methods
 
-How do the trajectories inferred by TSCAN and Monocle compare?
-```{r tscan-monocle-compare}
-matched_ordering <-
-    match(
-        pseudotime_order_tscan,
-        pseudotime_order_monocle
-    )
-timepoint_ordered <-
-    monocle_time_point[order(pseudotime_monocle$pseudotime)]
-plot(
-    matched_ordering,
-    xlab = "Monocle Order",
-    ylab = "TSCAN Order",
-    col = colours[timepoint_ordered],
-    pch = 16
+How do the trajectories inferred by TSCAN, Monocle, Diffusion Map, SLICER and Ouija compare?
+
+TSCAN and Diffusion Map methods get the trajectory the "wrong way round", so we'll adjust that for these comparisons.
+
+```{r compare-results, fig.width=10}
+df_pseudotime <- as.data.frame(
+    colData(deng_SCE)[, grep("pseudotime", colnames(colData(deng_SCE)))]
 )
+colnames(df_pseudotime) <- gsub("pseudotime_", "", 
+                                colnames(df_pseudotime))
+df_pseudotime$PC1 <- deng_SCE$PC1
+df_pseudotime$order_tscan <- -df_pseudotime$order_tscan
+df_pseudotime$diffusionmap <- -df_pseudotime$diffusionmap
+
+corrplot.mixed(cor(df_pseudotime, use = "na.or.complete"), 
+               order = "hclust", tl.col = "black",
+               main = "Correlation matrix for pseudotime results",
+               mar = c(0, 0, 3.1, 0))
+
 ```
 
-__Exercise 6__: Compare destiny and SLICER to TSCAN and Monocle.
+We see here that Ouija, TSCAN and SLICER all give trajectories that are similar and strongly correlated with PC1. Diffusion Map is less strongly correlated with these methods, and Monocle gives very different results.
+
+
+__Exercise 6__: Compare destiny and SLICER to TSCAN, Monocle and Ouija in more depth. Where and how do they differ?
 
 ### Expression of genes through time
 
 Each package also enables the visualization of expression through pseudotime. Following individual genes is very helpful for identifying genes that play an important role in the differentiation process. We illustrate the procedure using the `Rhoa` gene.
 
-__TSCAN__
-```{r Rhoa-tscan}
-colnames(deng) <- 1:ncol(deng)
-TSCAN::singlegeneplot(
-    deng[rownames(deng) == "Rhoa", ],
-    dengorderTSCAN
-)
-```
-
-__Monocle__
-```{r Rhoa-monocle}
-monocle::plot_genes_in_pseudotime(
-    dCellDataSet[fData(dCellDataSet)$gene == "Rhoa",],
-    color_by = "timepoint"
-)
-```
-
-Of course, pseudotime values computed with any method can be added to
+We have added the pseudotime values computed with all methods here to
 the `colData` slot of an `SCE` object. Having done that, the full
 plotting capabilities of the `scater` package can be used to
 investigate relationships between gene expression, cell populations
-and pseudotime. This would be particularly useful for the SLICER
-results, as SLICER does not provide plotting functions.
+and pseudotime. This is particularly useful for the packages such as
+SLICER that do not provide plotting functions.
+
+
+__Principal components__
+```{r Rhoa-pc1, message=FALSE}
+plotExpression(deng_SCE, "Rhoa", x = "PC1", 
+               colour_by = "cell_type2", show_violin = FALSE,
+               show_smooth = TRUE)
+```
+
+__TSCAN__
+```{r Rhoa-tscan, message=FALSE, warning=FALSE}
+plotExpression(deng_SCE, "Rhoa", x = "pseudotime_order_tscan", 
+               colour_by = "cell_type2", show_violin = FALSE,
+               show_smooth = TRUE)
+```
+
+__Monocle__
+```{r Rhoa-monocle, message=FALSE}
+plotExpression(deng_SCE, "Rhoa", x = "pseudotime_monocle", 
+               colour_by = "cell_type2", show_violin = FALSE,
+               show_smooth = TRUE)
+```
+
+__Diffusion Map__
+```{r Rhoa-diff-map, message=FALSE}
+plotExpression(deng_SCE, "Rhoa", x = "pseudotime_diffusionmap", 
+               colour_by = "cell_type2", show_violin = FALSE,
+               show_smooth = TRUE)
+```
+
+
+__SLICER__
+```{r Rhoa-slicer, message=FALSE}
+plotExpression(deng_SCE, "Rhoa", x = "pseudotime_slicer", 
+               colour_by = "cell_type2", show_violin = FALSE,
+               show_smooth = TRUE)
+```
+
+__Ouija__
+```{r Rhoa-ouija, message=FALSE}
+plotExpression(deng_SCE, "Rhoa", x = "pseudotime_ouija", 
+               colour_by = "cell_type2", show_violin = FALSE,
+               show_smooth = TRUE)
+```
+
+How many of these methods outperform the naive approach of using the first principal component to represent pseudotime for these data?
 
 __Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using `Brennecke_getVariableGenes()`
 
