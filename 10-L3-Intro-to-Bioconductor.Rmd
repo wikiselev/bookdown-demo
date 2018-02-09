@@ -26,7 +26,7 @@ Task 1: In what ways is the untidy data not tidy? How could we make the untidy d
 
 Tidy data is generally easier to work with than untidy data, especially if you are working with packages such as ggplot. Fortunately, packages are available to make untidy data tidy. Today we will explore a few of the functions available in the tidyr package which can be used to make untidy data tidy. If you are interested in finding out more about tidying data, we recommend reading "R for Data Science", by Garrett Grolemund and Hadley Wickham. An electronic copy is available here: http://r4ds.had.co.nz/
 
-The untidy data above is untidy because two variables ("Wins" and "Losses") are stored in one column ("Category"). This is a common way in which data can be untidy. To tidy this data, we need to make "Wins" and "Losses" into columns, and store the values in "Counts" in these columns. Fortunately, there is a function from the tidyverse packages to perform this operation. The function is called `spread`, and it takes two arguments, `key` and `value`. You should pass the name of the column which contains multiple variables to `key`, and pass the name of the column which contains values from multiple variables to `value`. For example:
+The untidy data above is untidy because two variables (`Wins` and `Losses`) are stored in one column (`Category`). This is a common way in which data can be untidy. To tidy this data, we need to make `Wins` and `Losses` into columns, and store the values in `Counts` in these columns. Fortunately, there is a function from the tidyverse packages to perform this operation. The function is called `spread`, and it takes two arguments, `key` and `value`. You should pass the name of the column which contains multiple variables to `key`, and pass the name of the column which contains values from multiple variables to `value`. For example:
 
 ```{R, echo=TRUE, eval=TRUE, message=FALSE}
 library(tidyverse)
@@ -42,7 +42,7 @@ Task 2: The dataframe `foods` defined below is untidy. Work out why and use `spr
 foods<-data.frame(student=c("Antoinette","Antoinette","Taylor", "Taylor", "Alexa", "Alexa"), Category=c("Dinner", "Dessert", "Dinner", "Dessert", "Dinner","Dessert"), Frequency=c(3,1,4,5,2,1))
 ```
 
-The other common way in which data can be untidy is if the columns are values instead of variables. For example, the dataframe below shows the percentages some students got in tests they did in May and June. The data is untidy because the columns "May" and "June" are values, not variables.
+The other common way in which data can be untidy is if the columns are values instead of variables. For example, the dataframe below shows the percentages some students got in tests they did in May and June. The data is untidy because the columns `May` and `June` are values, not variables.
 
 ```{R}
 percentages<-data.frame(student=c("Alejandro", "Pietro", "Jane"), "May"=c(90,12,45), "June"=c(80,30,100))
