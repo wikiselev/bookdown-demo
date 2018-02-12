@@ -242,7 +242,12 @@ plotRLE(
     colour_by = "batch"
 )
 ```
-
+scran sometimes calculates negative or zero size factors. These will completely distort the normalized expression matrix. 
+We can check the size factors scran has computed like so:
+```{r}
+summary(sizeFactors(umi.qc))
+```
+For this dataset all the size factors are reasonable so we are done. If you find scran has calculated negative size factors try increasing the cluster and pool sizes until they are all positive.
 
 ### Downsampling 
 
