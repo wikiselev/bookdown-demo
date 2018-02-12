@@ -27,6 +27,7 @@ cp -r tmp1/* docs'''
         sh '''# commit changes
 git add docs/*
 git commit -m "update the course website"
+git push origin master
 '''
       }
     }
