@@ -1,7 +1,5 @@
 #!/bin/bash
 
-WORKSPACE=$1
-
 # Delete every Docker containers
 # Must be run first because images are attached to containers
 docker rm -f $(docker ps -a -q)
