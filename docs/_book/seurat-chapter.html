@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Analysis of single cell RNA-seq data</title>
+  <meta name="description" content="Analysis of single cell RNA-seq data">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Analysis of single cell RNA-seq data" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Analysis of single cell RNA-seq data" />
+  
+  
+  
+
+<meta name="author" content="Vladimir Kiselev (wikiselev), Tallulah Andrews, Jennifer Westoby (Jenni_Westoby), Davis McCarthy (davisjmcc), Maren Büttner (marenbuettner) and Martin Hemberg (m_hemberg)">
+
+
+<meta name="date" content="2018-03-06">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="biological-analysis.html">
+<link rel="next" href="ideal-scrnaseq-pipeline-as-of-oct-2017.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<!-- for Facebook -->  
+<meta property="og:url" content="http://hemberg-lab.github.io/scRNA.seq.course/" />
+<meta property="og:description" content="In this course we will be surveying the existing problems as well as the available computational and statistical frameworks available for the analysis of scRNA-seq. The course is taught through the University of Cambridge Bioinformatics training unit, but the material found on these pages is meant to be used for anyone interested in learning about computational analysis of scRNA-seq data." />
+<meta property="og:image" content="http://hemberg-lab.github.io/scRNA.seq.course/figures/RNA-Seq_workflow-5.pdf.jpg" />
+
+<!-- for Twitter -->          
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Analysis of single-cell RNA-seq data" />
+<meta name="twitter:description" content="In this course we will be surveying the existing problems as well as the available computational and statistical frameworks available for the analysis of scRNA-seq. The course is taught through the University of Cambridge Bioinformatics training unit, but the material found on these pages is meant to be used for anyone interested in learning about computational analysis of scRNA-seq data." />
+<meta name="twitter:image" content="http://hemberg-lab.github.io/scRNA.seq.course/figures/RNA-Seq_workflow-5.pdf.jpg" />
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-71525309-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html">Table of Contents</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About the course</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#video"><i class="fa fa-check"></i><b>1.1</b> Video</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#registration"><i class="fa fa-check"></i><b>1.2</b> Registration</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#github"><i class="fa fa-check"></i><b>1.3</b> GitHub</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#docker-image-rstudio"><i class="fa fa-check"></i><b>1.4</b> Docker image (RStudio)</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#manual-installation"><i class="fa fa-check"></i><b>1.5</b> Manual installation</a></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i><b>1.6</b> License</a></li>
+<li class="chapter" data-level="1.7" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.7</b> Prerequisites</a></li>
+<li class="chapter" data-level="1.8" data-path="index.html"><a href="index.html#contact"><i class="fa fa-check"></i><b>1.8</b> Contact</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html"><i class="fa fa-check"></i><b>2</b> Introduction to single-cell RNA-seq</a><ul>
+<li class="chapter" data-level="2.1" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#bulk-rna-seq"><i class="fa fa-check"></i><b>2.1</b> Bulk RNA-seq</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#scrna-seq"><i class="fa fa-check"></i><b>2.2</b> scRNA-seq</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#workflow"><i class="fa fa-check"></i><b>2.3</b> Workflow</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#computational-analysis"><i class="fa fa-check"></i><b>2.4</b> Computational Analysis</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#challenges"><i class="fa fa-check"></i><b>2.5</b> Challenges</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#experimental-methods"><i class="fa fa-check"></i><b>2.6</b> Experimental methods</a></li>
+<li class="chapter" data-level="2.7" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#what-platform-to-use-for-my-experiment"><i class="fa fa-check"></i><b>2.7</b> What platform to use for my experiment?</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html"><i class="fa fa-check"></i><b>3</b> Processing Raw scRNA-seq Data</a><ul>
+<li class="chapter" data-level="3.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#fastqc"><i class="fa fa-check"></i><b>3.1</b> FastQC</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#solution-and-downloading-the-report"><i class="fa fa-check"></i><b>3.1.1</b> Solution and Downloading the Report</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#trimming-reads"><i class="fa fa-check"></i><b>3.2</b> Trimming Reads</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#solution"><i class="fa fa-check"></i><b>3.2.1</b> Solution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#file-formats"><i class="fa fa-check"></i><b>3.3</b> File formats</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#fastq"><i class="fa fa-check"></i><b>3.3.1</b> FastQ</a></li>
+<li class="chapter" data-level="3.3.2" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#bam"><i class="fa fa-check"></i><b>3.3.2</b> BAM</a></li>
+<li class="chapter" data-level="3.3.3" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#cram"><i class="fa fa-check"></i><b>3.3.3</b> CRAM</a></li>
+<li class="chapter" data-level="3.3.4" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#mannually-inspecting-files"><i class="fa fa-check"></i><b>3.3.4</b> Mannually Inspecting files</a></li>
+<li class="chapter" data-level="3.3.5" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#genome-fasta-gtf"><i class="fa fa-check"></i><b>3.3.5</b> Genome (FASTA, GTF)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#demultiplexing"><i class="fa fa-check"></i><b>3.4</b> Demultiplexing</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#identifying-cell-containing-dropletsmicrowells"><i class="fa fa-check"></i><b>3.4.1</b> Identifying cell-containing droplets/microwells</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#using-star-to-align-reads"><i class="fa fa-check"></i><b>3.5</b> Using STAR to Align Reads</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#solution-for-star-alignment"><i class="fa fa-check"></i><b>3.5.1</b> Solution for STAR Alignment</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#kallisto-and-pseudo-alignment"><i class="fa fa-check"></i><b>3.6</b> Kallisto and Pseudo-Alignment</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#what-is-a-k-mer"><i class="fa fa-check"></i><b>3.6.1</b> What is a k-mer?</a></li>
+<li class="chapter" data-level="3.6.2" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#why-map-k-mers-rather-than-reads"><i class="fa fa-check"></i><b>3.6.2</b> Why map k-mers rather than reads?</a></li>
+<li class="chapter" data-level="3.6.3" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#kallistos-pseudo-mode"><i class="fa fa-check"></i><b>3.6.3</b> Kallisto’s pseudo mode</a></li>
+<li class="chapter" data-level="3.6.4" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#solution-to-kallisto-pseudo-alignment"><i class="fa fa-check"></i><b>3.6.4</b> Solution to Kallisto Pseudo-Alignment</a></li>
+<li class="chapter" data-level="3.6.5" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#understanding-the-output-of-kallisto-pseudo-alignment"><i class="fa fa-check"></i><b>3.6.5</b> Understanding the Output of Kallisto Pseudo-Alignment</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html"><i class="fa fa-check"></i><b>4</b> Construction of expression matrix</a><ul>
+<li class="chapter" data-level="4.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-qc"><i class="fa fa-check"></i><b>4.1</b> Reads QC</a></li>
+<li class="chapter" data-level="4.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-alignment"><i class="fa fa-check"></i><b>4.2</b> Reads alignment</a></li>
+<li class="chapter" data-level="4.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#alignment-example"><i class="fa fa-check"></i><b>4.3</b> Alignment example</a></li>
+<li class="chapter" data-level="4.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-qc"><i class="fa fa-check"></i><b>4.4</b> Mapping QC</a></li>
+<li class="chapter" data-level="4.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-quantification"><i class="fa fa-check"></i><b>4.5</b> Reads quantification</a></li>
+<li class="chapter" data-level="4.6" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#umichapter"><i class="fa fa-check"></i><b>4.6</b> Unique Molecular Identifiers (UMIs)</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#introduction"><i class="fa fa-check"></i><b>4.6.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.6.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-barcodes"><i class="fa fa-check"></i><b>4.6.2</b> Mapping Barcodes</a></li>
+<li class="chapter" data-level="4.6.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#counting-barcodes"><i class="fa fa-check"></i><b>4.6.3</b> Counting Barcodes</a></li>
+<li class="chapter" data-level="4.6.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#correcting-for-errors"><i class="fa fa-check"></i><b>4.6.4</b> Correcting for Errors</a></li>
+<li class="chapter" data-level="4.6.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#downstream-analysis"><i class="fa fa-check"></i><b>4.6.5</b> Downstream Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html"><i class="fa fa-check"></i><b>5</b> Introduction to R/Bioconductor</a><ul>
+<li class="chapter" data-level="5.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#installing-packages"><i class="fa fa-check"></i><b>5.1</b> Installing packages</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#cran"><i class="fa fa-check"></i><b>5.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="5.1.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#github-1"><i class="fa fa-check"></i><b>5.1.2</b> Github</a></li>
+<li class="chapter" data-level="5.1.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#bioconductor"><i class="fa fa-check"></i><b>5.1.3</b> Bioconductor</a></li>
+<li class="chapter" data-level="5.1.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#source"><i class="fa fa-check"></i><b>5.1.4</b> Source</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#installation-instructions"><i class="fa fa-check"></i><b>5.2</b> Installation instructions:</a></li>
+<li class="chapter" data-level="5.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#data-typesclasses"><i class="fa fa-check"></i><b>5.3</b> Data-types/classes</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#numeric"><i class="fa fa-check"></i><b>5.3.1</b> Numeric</a></li>
+<li class="chapter" data-level="5.3.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#characterstring"><i class="fa fa-check"></i><b>5.3.2</b> Character/String</a></li>
+<li class="chapter" data-level="5.3.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#logical"><i class="fa fa-check"></i><b>5.3.3</b> Logical</a></li>
+<li class="chapter" data-level="5.3.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#factors"><i class="fa fa-check"></i><b>5.3.4</b> Factors</a></li>
+<li class="chapter" data-level="5.3.5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#checking-classtype"><i class="fa fa-check"></i><b>5.3.5</b> Checking class/type</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#basic-data-structures"><i class="fa fa-check"></i><b>5.4</b> Basic data structures</a></li>
+<li class="chapter" data-level="5.5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#more-information"><i class="fa fa-check"></i><b>5.5</b> More information</a></li>
+<li class="chapter" data-level="5.6" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#data-types"><i class="fa fa-check"></i><b>5.6</b> Data Types</a><ul>
+<li class="chapter" data-level="5.6.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#what-is-tidy-data"><i class="fa fa-check"></i><b>5.6.1</b> What is Tidy Data?</a></li>
+<li class="chapter" data-level="5.6.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#what-is-rich-data"><i class="fa fa-check"></i><b>5.6.2</b> What is Rich Data?</a></li>
+<li class="chapter" data-level="5.6.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#what-is-bioconductor"><i class="fa fa-check"></i><b>5.6.3</b> What is Bioconductor?</a></li>
+<li class="chapter" data-level="5.6.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#singlecellexperiment-class"><i class="fa fa-check"></i><b>5.6.4</b> <code>SingleCellExperiment</code> class</a></li>
+<li class="chapter" data-level="5.6.5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#scater-package"><i class="fa fa-check"></i><b>5.6.5</b> <code>scater</code> package</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#bioconductor-singlecellexperiment-and-scater"><i class="fa fa-check"></i><b>5.7</b> Bioconductor, <code>SingleCellExperiment</code> and <code>scater</code></a><ul>
+<li class="chapter" data-level="5.7.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#bioconductor-1"><i class="fa fa-check"></i><b>5.7.1</b> Bioconductor</a></li>
+<li class="chapter" data-level="5.7.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#singlecellexperiment-class-1"><i class="fa fa-check"></i><b>5.7.2</b> <code>SingleCellExperiment</code> class</a></li>
+<li class="chapter" data-level="5.7.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#scater-package-1"><i class="fa fa-check"></i><b>5.7.3</b> <code>scater</code> package</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#an-introduction-to-ggplot2"><i class="fa fa-check"></i><b>5.8</b> An Introduction to ggplot2</a><ul>
+<li class="chapter" data-level="5.8.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#what-is-ggplot2"><i class="fa fa-check"></i><b>5.8.1</b> What is ggplot2?</a></li>
+<li class="chapter" data-level="5.8.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#principles-of-ggplot2"><i class="fa fa-check"></i><b>5.8.2</b> Principles of ggplot2</a></li>
+<li class="chapter" data-level="5.8.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#using-the-aes-mapping-function"><i class="fa fa-check"></i><b>5.8.3</b> Using the <code>aes</code> mapping function</a></li>
+<li class="chapter" data-level="5.8.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#geoms"><i class="fa fa-check"></i><b>5.8.4</b> Geoms</a></li>
+<li class="chapter" data-level="5.8.5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#plotting-data-from-more-than-2-cells"><i class="fa fa-check"></i><b>5.8.5</b> Plotting data from more than 2 cells</a></li>
+<li class="chapter" data-level="5.8.6" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#plotting-heatmaps"><i class="fa fa-check"></i><b>5.8.6</b> Plotting heatmaps</a></li>
+<li class="chapter" data-level="5.8.7" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#principle-component-analysis"><i class="fa fa-check"></i><b>5.8.7</b> Principle Component Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="tabula-muris.html"><a href="tabula-muris.html"><i class="fa fa-check"></i><b>6</b> Tabula Muris</a><ul>
+<li class="chapter" data-level="6.1" data-path="tabula-muris.html"><a href="tabula-muris.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="tabula-muris.html"><a href="tabula-muris.html#downloading-the-data"><i class="fa fa-check"></i><b>6.2</b> Downloading the data</a></li>
+<li class="chapter" data-level="6.3" data-path="tabula-muris.html"><a href="tabula-muris.html#reading-the-data-smartseq2"><i class="fa fa-check"></i><b>6.3</b> Reading the data (Smartseq2)</a></li>
+<li class="chapter" data-level="6.4" data-path="tabula-muris.html"><a href="tabula-muris.html#building-a-scater-object"><i class="fa fa-check"></i><b>6.4</b> Building a scater object</a></li>
+<li class="chapter" data-level="6.5" data-path="tabula-muris.html"><a href="tabula-muris.html#reading-the-data-10x"><i class="fa fa-check"></i><b>6.5</b> Reading the data (10X)</a></li>
+<li class="chapter" data-level="6.6" data-path="tabula-muris.html"><a href="tabula-muris.html#building-a-scater-object-1"><i class="fa fa-check"></i><b>6.6</b> Building a scater object</a></li>
+<li class="chapter" data-level="6.7" data-path="tabula-muris.html"><a href="tabula-muris.html#advanced-exercise"><i class="fa fa-check"></i><b>6.7</b> Advanced Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html"><i class="fa fa-check"></i><b>7</b> Cleaning the Expression Matrix</a><ul>
+<li class="chapter" data-level="7.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#exprs-qc"><i class="fa fa-check"></i><b>7.1</b> Expression QC (UMI)</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-2"><i class="fa fa-check"></i><b>7.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.1.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#tung-dataset"><i class="fa fa-check"></i><b>7.1.2</b> Tung dataset</a></li>
+<li class="chapter" data-level="7.1.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#cell-qc"><i class="fa fa-check"></i><b>7.1.3</b> Cell QC</a></li>
+<li class="chapter" data-level="7.1.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#cell-filtering"><i class="fa fa-check"></i><b>7.1.4</b> Cell filtering</a></li>
+<li class="chapter" data-level="7.1.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#compare-filterings"><i class="fa fa-check"></i><b>7.1.5</b> Compare filterings</a></li>
+<li class="chapter" data-level="7.1.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#gene-analysis"><i class="fa fa-check"></i><b>7.1.6</b> Gene analysis</a></li>
+<li class="chapter" data-level="7.1.7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#save-the-data"><i class="fa fa-check"></i><b>7.1.7</b> Save the data</a></li>
+<li class="chapter" data-level="7.1.8" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#big-exercise"><i class="fa fa-check"></i><b>7.1.8</b> Big Exercise</a></li>
+<li class="chapter" data-level="7.1.9" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo"><i class="fa fa-check"></i><b>7.1.9</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#expression-qc-reads"><i class="fa fa-check"></i><b>7.2</b> Expression QC (Reads)</a></li>
+<li class="chapter" data-level="7.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#data-visualization"><i class="fa fa-check"></i><b>7.3</b> Data visualization</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-3"><i class="fa fa-check"></i><b>7.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.3.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#visual-pca"><i class="fa fa-check"></i><b>7.3.2</b> PCA plot</a></li>
+<li class="chapter" data-level="7.3.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#visual-tsne"><i class="fa fa-check"></i><b>7.3.3</b> tSNE map</a></li>
+<li class="chapter" data-level="7.3.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#big-exercise-1"><i class="fa fa-check"></i><b>7.3.4</b> Big Exercise</a></li>
+<li class="chapter" data-level="7.3.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo-1"><i class="fa fa-check"></i><b>7.3.5</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#data-visualization-reads"><i class="fa fa-check"></i><b>7.4</b> Data visualization (Reads)</a></li>
+<li class="chapter" data-level="7.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#identifying-confounding-factors"><i class="fa fa-check"></i><b>7.5</b> Identifying confounding factors</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-4"><i class="fa fa-check"></i><b>7.5.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.5.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#correlations-with-pcs"><i class="fa fa-check"></i><b>7.5.2</b> Correlations with PCs</a></li>
+<li class="chapter" data-level="7.5.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#explanatory-variables"><i class="fa fa-check"></i><b>7.5.3</b> Explanatory variables</a></li>
+<li class="chapter" data-level="7.5.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#other-confounders"><i class="fa fa-check"></i><b>7.5.4</b> Other confounders</a></li>
+<li class="chapter" data-level="7.5.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#exercise"><i class="fa fa-check"></i><b>7.5.5</b> Exercise</a></li>
+<li class="chapter" data-level="7.5.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo-2"><i class="fa fa-check"></i><b>7.5.6</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#identifying-confounding-factors-reads"><i class="fa fa-check"></i><b>7.6</b> Identifying confounding factors (Reads)</a></li>
+<li class="chapter" data-level="7.7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalization-theory"><i class="fa fa-check"></i><b>7.7</b> Normalization theory</a><ul>
+<li class="chapter" data-level="7.7.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-5"><i class="fa fa-check"></i><b>7.7.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.7.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#library-size-1"><i class="fa fa-check"></i><b>7.7.2</b> Library size</a></li>
+<li class="chapter" data-level="7.7.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalisations"><i class="fa fa-check"></i><b>7.7.3</b> Normalisations</a></li>
+<li class="chapter" data-level="7.7.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#effectiveness"><i class="fa fa-check"></i><b>7.7.4</b> Effectiveness</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalization-practice-umi"><i class="fa fa-check"></i><b>7.8</b> Normalization practice (UMI)</a><ul>
+<li class="chapter" data-level="7.8.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#raw"><i class="fa fa-check"></i><b>7.8.1</b> Raw</a></li>
+<li class="chapter" data-level="7.8.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#cpm-1"><i class="fa fa-check"></i><b>7.8.2</b> CPM</a></li>
+<li class="chapter" data-level="7.8.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#size-factor-rle"><i class="fa fa-check"></i><b>7.8.3</b> Size-factor (RLE)</a></li>
+<li class="chapter" data-level="7.8.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#upperquantile"><i class="fa fa-check"></i><b>7.8.4</b> Upperquantile</a></li>
+<li class="chapter" data-level="7.8.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#tmm-1"><i class="fa fa-check"></i><b>7.8.5</b> TMM</a></li>
+<li class="chapter" data-level="7.8.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#scran-1"><i class="fa fa-check"></i><b>7.8.6</b> scran</a></li>
+<li class="chapter" data-level="7.8.7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#downsampling-1"><i class="fa fa-check"></i><b>7.8.7</b> Downsampling</a></li>
+<li class="chapter" data-level="7.8.8" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalisation-for-genetranscript-length"><i class="fa fa-check"></i><b>7.8.8</b> Normalisation for gene/transcript length</a></li>
+<li class="chapter" data-level="7.8.9" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#exercise-1"><i class="fa fa-check"></i><b>7.8.9</b> Exercise</a></li>
+<li class="chapter" data-level="7.8.10" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo-3"><i class="fa fa-check"></i><b>7.8.10</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.9" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalization-practice-reads"><i class="fa fa-check"></i><b>7.9</b> Normalization practice (Reads)</a></li>
+<li class="chapter" data-level="7.10" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#dealing-with-confounders"><i class="fa fa-check"></i><b>7.10</b> Dealing with confounders</a><ul>
+<li class="chapter" data-level="7.10.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-6"><i class="fa fa-check"></i><b>7.10.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.10.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#remove-unwanted-variation"><i class="fa fa-check"></i><b>7.10.2</b> Remove Unwanted Variation</a></li>
+<li class="chapter" data-level="7.10.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#combat"><i class="fa fa-check"></i><b>7.10.3</b> Combat</a></li>
+<li class="chapter" data-level="7.10.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#mnncorrect"><i class="fa fa-check"></i><b>7.10.4</b> mnnCorrect</a></li>
+<li class="chapter" data-level="7.10.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#glm"><i class="fa fa-check"></i><b>7.10.5</b> GLM</a></li>
+<li class="chapter" data-level="7.10.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#how-to-evaluate-and-compare-confounder-removal-strategies"><i class="fa fa-check"></i><b>7.10.6</b> How to evaluate and compare confounder removal strategies</a></li>
+<li class="chapter" data-level="7.10.7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#big-exercise-2"><i class="fa fa-check"></i><b>7.10.7</b> Big Exercise</a></li>
+<li class="chapter" data-level="7.10.8" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo-4"><i class="fa fa-check"></i><b>7.10.8</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.11" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#dealing-with-confounders-reads"><i class="fa fa-check"></i><b>7.11</b> Dealing with confounders (Reads)</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="biological-analysis.html"><a href="biological-analysis.html"><i class="fa fa-check"></i><b>8</b> Biological Analysis</a><ul>
+<li class="chapter" data-level="8.1" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-introduction"><i class="fa fa-check"></i><b>8.1</b> Clustering Introduction</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-7"><i class="fa fa-check"></i><b>8.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.1.2" data-path="biological-analysis.html"><a href="biological-analysis.html#dimensionality-reductions"><i class="fa fa-check"></i><b>8.1.2</b> Dimensionality reductions</a></li>
+<li class="chapter" data-level="8.1.3" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-methods"><i class="fa fa-check"></i><b>8.1.3</b> Clustering methods</a></li>
+<li class="chapter" data-level="8.1.4" data-path="biological-analysis.html"><a href="biological-analysis.html#challenges-in-clustering"><i class="fa fa-check"></i><b>8.1.4</b> Challenges in clustering</a></li>
+<li class="chapter" data-level="8.1.5" data-path="biological-analysis.html"><a href="biological-analysis.html#tools-for-scrna-seq-data"><i class="fa fa-check"></i><b>8.1.5</b> Tools for scRNA-seq data</a></li>
+<li class="chapter" data-level="8.1.6" data-path="biological-analysis.html"><a href="biological-analysis.html#comparing-clustering"><i class="fa fa-check"></i><b>8.1.6</b> Comparing clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="biological-analysis.html"><a href="biological-analysis.html#clust-methods"><i class="fa fa-check"></i><b>8.2</b> Clustering example</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="biological-analysis.html"><a href="biological-analysis.html#deng-dataset"><i class="fa fa-check"></i><b>8.2.1</b> Deng dataset</a></li>
+<li class="chapter" data-level="8.2.2" data-path="biological-analysis.html"><a href="biological-analysis.html#sc3-1"><i class="fa fa-check"></i><b>8.2.2</b> SC3</a></li>
+<li class="chapter" data-level="8.2.3" data-path="biological-analysis.html"><a href="biological-analysis.html#pcareduce-1"><i class="fa fa-check"></i><b>8.2.3</b> pcaReduce</a></li>
+<li class="chapter" data-level="8.2.4" data-path="biological-analysis.html"><a href="biological-analysis.html#tsne-kmeans"><i class="fa fa-check"></i><b>8.2.4</b> tSNE + kmeans</a></li>
+<li class="chapter" data-level="8.2.5" data-path="biological-analysis.html"><a href="biological-analysis.html#snn-cliq-1"><i class="fa fa-check"></i><b>8.2.5</b> SNN-Cliq</a></li>
+<li class="chapter" data-level="8.2.6" data-path="biological-analysis.html"><a href="biological-analysis.html#sincera-1"><i class="fa fa-check"></i><b>8.2.6</b> SINCERA</a></li>
+<li class="chapter" data-level="8.2.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-5"><i class="fa fa-check"></i><b>8.2.7</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="biological-analysis.html"><a href="biological-analysis.html#feature-selection"><i class="fa fa-check"></i><b>8.3</b> Feature Selection</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="biological-analysis.html"><a href="biological-analysis.html#identifying-genes-vs-a-null-model"><i class="fa fa-check"></i><b>8.3.1</b> Identifying Genes vs a Null Model</a></li>
+<li class="chapter" data-level="8.3.2" data-path="biological-analysis.html"><a href="biological-analysis.html#correlated-expression"><i class="fa fa-check"></i><b>8.3.2</b> Correlated Expression</a></li>
+<li class="chapter" data-level="8.3.3" data-path="biological-analysis.html"><a href="biological-analysis.html#comparing-methods"><i class="fa fa-check"></i><b>8.3.3</b> Comparing Methods</a></li>
+<li class="chapter" data-level="8.3.4" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-6"><i class="fa fa-check"></i><b>8.3.4</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="biological-analysis.html"><a href="biological-analysis.html#pseudotime-analysis"><i class="fa fa-check"></i><b>8.4</b> Pseudotime analysis</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="biological-analysis.html"><a href="biological-analysis.html#first-look-at-deng-data"><i class="fa fa-check"></i><b>8.4.1</b> First look at Deng data</a></li>
+<li class="chapter" data-level="8.4.2" data-path="biological-analysis.html"><a href="biological-analysis.html#tscan"><i class="fa fa-check"></i><b>8.4.2</b> TSCAN</a></li>
+<li class="chapter" data-level="8.4.3" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle"><i class="fa fa-check"></i><b>8.4.3</b> monocle</a></li>
+<li class="chapter" data-level="8.4.4" data-path="biological-analysis.html"><a href="biological-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>8.4.4</b> Diffusion maps</a></li>
+<li class="chapter" data-level="8.4.5" data-path="biological-analysis.html"><a href="biological-analysis.html#slicer"><i class="fa fa-check"></i><b>8.4.5</b> SLICER</a></li>
+<li class="chapter" data-level="8.4.6" data-path="biological-analysis.html"><a href="biological-analysis.html#ouija"><i class="fa fa-check"></i><b>8.4.6</b> Ouija</a></li>
+<li class="chapter" data-level="8.4.7" data-path="biological-analysis.html"><a href="biological-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>8.4.7</b> Comparison of the methods</a></li>
+<li class="chapter" data-level="8.4.8" data-path="biological-analysis.html"><a href="biological-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>8.4.8</b> Expression of genes through time</a></li>
+<li class="chapter" data-level="8.4.9" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-7"><i class="fa fa-check"></i><b>8.4.9</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="biological-analysis.html"><a href="biological-analysis.html#imputation"><i class="fa fa-check"></i><b>8.5</b> Imputation</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="biological-analysis.html"><a href="biological-analysis.html#scimpute"><i class="fa fa-check"></i><b>8.5.1</b> scImpute</a></li>
+<li class="chapter" data-level="8.5.2" data-path="biological-analysis.html"><a href="biological-analysis.html#magic"><i class="fa fa-check"></i><b>8.5.2</b> MAGIC</a></li>
+<li class="chapter" data-level="8.5.3" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-8"><i class="fa fa-check"></i><b>8.5.3</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="biological-analysis.html"><a href="biological-analysis.html#dechapter"><i class="fa fa-check"></i><b>8.6</b> Differential Expression (DE) analysis</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>8.6.1</b> Bulk RNA-seq</a></li>
+<li class="chapter" data-level="8.6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>8.6.2</b> Single cell RNA-seq</a></li>
+<li class="chapter" data-level="8.6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>8.6.3</b> Differences in Distribution</a></li>
+<li class="chapter" data-level="8.6.4" data-path="biological-analysis.html"><a href="biological-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>8.6.4</b> Models of single-cell RNASeq data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="biological-analysis.html"><a href="biological-analysis.html#de-in-a-real-dataset"><i class="fa fa-check"></i><b>8.7</b> DE in a real dataset</a><ul>
+<li class="chapter" data-level="8.7.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-8"><i class="fa fa-check"></i><b>8.7.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.7.2" data-path="biological-analysis.html"><a href="biological-analysis.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>8.7.2</b> Kolmogorov-Smirnov test</a></li>
+<li class="chapter" data-level="8.7.3" data-path="biological-analysis.html"><a href="biological-analysis.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>8.7.3</b> Wilcox/Mann-Whitney-U Test</a></li>
+<li class="chapter" data-level="8.7.4" data-path="biological-analysis.html"><a href="biological-analysis.html#edger"><i class="fa fa-check"></i><b>8.7.4</b> edgeR</a></li>
+<li class="chapter" data-level="8.7.5" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle-1"><i class="fa fa-check"></i><b>8.7.5</b> Monocle</a></li>
+<li class="chapter" data-level="8.7.6" data-path="biological-analysis.html"><a href="biological-analysis.html#mast"><i class="fa fa-check"></i><b>8.7.6</b> MAST</a></li>
+<li class="chapter" data-level="8.7.7" data-path="biological-analysis.html"><a href="biological-analysis.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>8.7.7</b> Slow Methods (&gt;1h to run)</a></li>
+<li class="chapter" data-level="8.7.8" data-path="biological-analysis.html"><a href="biological-analysis.html#bpsc"><i class="fa fa-check"></i><b>8.7.8</b> BPSC</a></li>
+<li class="chapter" data-level="8.7.9" data-path="biological-analysis.html"><a href="biological-analysis.html#scde"><i class="fa fa-check"></i><b>8.7.9</b> SCDE</a></li>
+<li class="chapter" data-level="8.7.10" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-9"><i class="fa fa-check"></i><b>8.7.10</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="biological-analysis.html"><a href="biological-analysis.html#comparingcombining-scrnaseq-datasets"><i class="fa fa-check"></i><b>8.8</b> Comparing/Combining scRNASeq datasets</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-9"><i class="fa fa-check"></i><b>8.8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.8.2" data-path="biological-analysis.html"><a href="biological-analysis.html#datasets"><i class="fa fa-check"></i><b>8.8.2</b> Datasets</a></li>
+<li class="chapter" data-level="8.8.3" data-path="biological-analysis.html"><a href="biological-analysis.html#projecting-cells-onto-annotated-cell-types-scmap"><i class="fa fa-check"></i><b>8.8.3</b> Projecting cells onto annotated cell-types (scmap)</a></li>
+<li class="chapter" data-level="8.8.4" data-path="biological-analysis.html"><a href="biological-analysis.html#cell-to-cell-mapping"><i class="fa fa-check"></i><b>8.8.4</b> Cell-to-Cell mapping</a></li>
+<li class="chapter" data-level="8.8.5" data-path="biological-analysis.html"><a href="biological-analysis.html#metaneighbour"><i class="fa fa-check"></i><b>8.8.5</b> Metaneighbour</a></li>
+<li class="chapter" data-level="8.8.6" data-path="biological-analysis.html"><a href="biological-analysis.html#mnncorrect-1"><i class="fa fa-check"></i><b>8.8.6</b> mnnCorrect</a></li>
+<li class="chapter" data-level="8.8.7" data-path="biological-analysis.html"><a href="biological-analysis.html#cannonical-correlation-analysis-seurat"><i class="fa fa-check"></i><b>8.8.7</b> Cannonical Correlation Analysis (Seurat)</a></li>
+<li class="chapter" data-level="8.8.8" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-10"><i class="fa fa-check"></i><b>8.8.8</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="biological-analysis.html"><a href="biological-analysis.html#search-scrna-seq-data"><i class="fa fa-check"></i><b>8.9</b> Search scRNA-Seq data</a><ul>
+<li class="chapter" data-level="8.9.1" data-path="biological-analysis.html"><a href="biological-analysis.html#about"><i class="fa fa-check"></i><b>8.9.1</b> About</a></li>
+<li class="chapter" data-level="8.9.2" data-path="biological-analysis.html"><a href="biological-analysis.html#dataset"><i class="fa fa-check"></i><b>8.9.2</b> Dataset</a></li>
+<li class="chapter" data-level="8.9.3" data-path="biological-analysis.html"><a href="biological-analysis.html#gene-index"><i class="fa fa-check"></i><b>8.9.3</b> Gene Index</a></li>
+<li class="chapter" data-level="8.9.4" data-path="biological-analysis.html"><a href="biological-analysis.html#marker-genes"><i class="fa fa-check"></i><b>8.9.4</b> Marker genes</a></li>
+<li class="chapter" data-level="8.9.5" data-path="biological-analysis.html"><a href="biological-analysis.html#search-cells-by-a-gene-list"><i class="fa fa-check"></i><b>8.9.5</b> Search cells by a gene list</a></li>
+<li class="chapter" data-level="8.9.6" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-11"><i class="fa fa-check"></i><b>8.9.6</b> sessionInfo()</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="seurat-chapter.html"><a href="seurat-chapter.html"><i class="fa fa-check"></i><b>9</b> Seurat</a><ul>
+<li class="chapter" data-level="9.1" data-path="seurat-chapter.html"><a href="seurat-chapter.html#seurat-object-class"><i class="fa fa-check"></i><b>9.1</b> <code>Seurat</code> object class</a></li>
+<li class="chapter" data-level="9.2" data-path="seurat-chapter.html"><a href="seurat-chapter.html#expression-qc"><i class="fa fa-check"></i><b>9.2</b> Expression QC</a></li>
+<li class="chapter" data-level="9.3" data-path="seurat-chapter.html"><a href="seurat-chapter.html#normalization"><i class="fa fa-check"></i><b>9.3</b> Normalization</a></li>
+<li class="chapter" data-level="9.4" data-path="seurat-chapter.html"><a href="seurat-chapter.html#highly-variable-genes-1"><i class="fa fa-check"></i><b>9.4</b> Highly variable genes</a></li>
+<li class="chapter" data-level="9.5" data-path="seurat-chapter.html"><a href="seurat-chapter.html#dealing-with-confounders-1"><i class="fa fa-check"></i><b>9.5</b> Dealing with confounders</a></li>
+<li class="chapter" data-level="9.6" data-path="seurat-chapter.html"><a href="seurat-chapter.html#linear-dimensionality-reduction"><i class="fa fa-check"></i><b>9.6</b> Linear dimensionality reduction</a></li>
+<li class="chapter" data-level="9.7" data-path="seurat-chapter.html"><a href="seurat-chapter.html#significant-pcs"><i class="fa fa-check"></i><b>9.7</b> Significant PCs</a></li>
+<li class="chapter" data-level="9.8" data-path="seurat-chapter.html"><a href="seurat-chapter.html#clustering-cells"><i class="fa fa-check"></i><b>9.8</b> Clustering cells</a></li>
+<li class="chapter" data-level="9.9" data-path="seurat-chapter.html"><a href="seurat-chapter.html#marker-genes-1"><i class="fa fa-check"></i><b>9.9</b> Marker genes</a></li>
+<li class="chapter" data-level="9.10" data-path="seurat-chapter.html"><a href="seurat-chapter.html#sessioninfo-12"><i class="fa fa-check"></i><b>9.10</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><i class="fa fa-check"></i><b>10</b> “Ideal” scRNAseq pipeline (as of Oct 2017)</a><ul>
+<li class="chapter" data-level="10.1" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html#experimental-design"><i class="fa fa-check"></i><b>10.1</b> Experimental Design</a></li>
+<li class="chapter" data-level="10.2" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html#processing-reads"><i class="fa fa-check"></i><b>10.2</b> Processing Reads</a></li>
+<li class="chapter" data-level="10.3" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>10.3</b> Preparing Expression Matrix</a></li>
+<li class="chapter" data-level="10.4" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html#biological-interpretation"><i class="fa fa-check"></i><b>10.4</b> Biological Interpretation</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>11</b> Advanced exercises</a></li>
+<li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources</a><ul>
+<li class="chapter" data-level="12.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>12.1</b> scRNA-seq protocols</a></li>
+<li class="chapter" data-level="12.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>12.2</b> External RNA Control Consortium (ERCC)</a></li>
+<li class="chapter" data-level="12.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>12.3</b> scRNA-seq analysis tools</a></li>
+<li class="chapter" data-level="12.4" data-path="resources.html"><a href="resources.html#scrna-seq-public-datasets"><i class="fa fa-check"></i><b>12.4</b> scRNA-seq public datasets</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+<li class="divider"></li>
+<li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Analysis of single cell RNA-seq data</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="seurat-chapter" class="section level1">
+<h1><span class="header-section-number">9</span> Seurat</h1>
+<p><a href="http://satijalab.org/seurat/">Seurat</a> was originally developed as a clustering tool for scRNA-seq data, however in the last few years the focus of the package has become less specific and at the moment <code>Seurat</code> is a popular R package that can perform QC, analysis, and exploration of scRNA-seq data, i.e. many of the tasks covered in this course. Although the authors provide several <a href="http://satijalab.org/seurat/get_started.html">tutorials</a>, here we provide a brief overview by following an <a href="http://satijalab.org/seurat/pbmc3k_tutorial.html">example</a> created by the authors of <code>Seurat</code> (2,800 Peripheral Blood Mononuclear Cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors. For course purpose will use a small <code>Deng</code> dataset described in the previous chapters:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">deng &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;deng/deng-reads.rds&quot;</span>)</code></pre></div>
+<p><strong>Note</strong> Thanks to <em>community detection</em> approach used in <code>Seurat</code> clustering, it allows one to work on datasets containing up to <span class="math inline">\(10^5\)</span> cells. We recommend using <code>Seurat</code> for datasets with more than <span class="math inline">\(5000\)</span> cells. For smaller dataset a good alternative will be <code>SC3</code>.</p>
+<div id="seurat-object-class" class="section level2">
+<h2><span class="header-section-number">9.1</span> <code>Seurat</code> object class</h2>
+<p><code>Seurat</code> does not integrate <code>SingleCellExperiment</code> Bioconductor class described above, but instead introduces its own object class - <code>seurat</code>. All calculations in this chapter are performed on an object of this class. To begin the analysis we first need to initialize the object with the raw (non-normalized) data. We will keep all genes expressed in <span class="math inline">\(&gt;= 3\)</span> cells and all cells with at least 200 detected genes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(SingleCellExperiment)
+<span class="kw">library</span>(Seurat)
+<span class="kw">library</span>(mclust)
+<span class="kw">library</span>(dplyr)
+seuset &lt;-<span class="st"> </span><span class="kw">CreateSeuratObject</span>(
+    <span class="dt">raw.data =</span> <span class="kw">counts</span>(deng),
+    <span class="dt">min.cells =</span> <span class="dv">3</span>, 
+    <span class="dt">min.genes =</span> <span class="dv">200</span>
+)</code></pre></div>
+</div>
+<div id="expression-qc" class="section level2">
+<h2><span class="header-section-number">9.2</span> Expression QC</h2>
+<p><code>Seurat</code> allows you to easily explore QC metrics and filter cells based on any user-defined criteria. We can visualize gene and molecule counts and plot their relationship:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">VlnPlot</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">features.plot =</span> <span class="kw">c</span>(<span class="st">&quot;nGene&quot;</span>, <span class="st">&quot;nUMI&quot;</span>), 
+    <span class="dt">nCol =</span> <span class="dv">2</span>
+)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">GenePlot</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">gene1 =</span> <span class="st">&quot;nUMI&quot;</span>, 
+    <span class="dt">gene2 =</span> <span class="st">&quot;nGene&quot;</span>
+)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now we will exclude cells with a clear outlier number of read counts:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">FilterCells</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">subset.names =</span> <span class="kw">c</span>(<span class="st">&quot;nUMI&quot;</span>), 
+    <span class="dt">high.thresholds =</span> <span class="kw">c</span>(<span class="fl">2e7</span>)
+)</code></pre></div>
+</div>
+<div id="normalization" class="section level2">
+<h2><span class="header-section-number">9.3</span> Normalization</h2>
+<p>After removing unwanted cells from the dataset, the next step is to normalize the data. By default, we employ a global-scaling normalization method <code>LogNormalize</code> that normalizes the gene expression measurements for each cell by the total expression, multiplies this by a scale factor (10,000 by default), and log-transforms the result:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">NormalizeData</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">normalization.method =</span> <span class="st">&quot;LogNormalize&quot;</span>, 
+    <span class="dt">scale.factor =</span> <span class="dv">10000</span>
+)</code></pre></div>
+</div>
+<div id="highly-variable-genes-1" class="section level2">
+<h2><span class="header-section-number">9.4</span> Highly variable genes</h2>
+<p>Seurat calculates highly variable genes and focuses on these for downstream analysis. <code>FindVariableGenes</code> calculates the average expression and dispersion for each gene, places these genes into bins, and then calculates a z-score for dispersion within each bin. This helps control for the relationship between variability and average expression:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">FindVariableGenes</span>(
+    <span class="dt">object =</span> seuset,
+    <span class="dt">mean.function =</span> ExpMean, 
+    <span class="dt">dispersion.function =</span> LogVMR, 
+    <span class="dt">x.low.cutoff =</span> <span class="fl">0.0125</span>, 
+    <span class="dt">x.high.cutoff =</span> <span class="dv">3</span>, 
+    <span class="dt">y.cutoff =</span> <span class="fl">0.5</span>
+)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(<span class="dt">x =</span> seuset<span class="op">@</span>var.genes)</code></pre></div>
+<pre><code>## [1] 6127</code></pre>
+<p>We are not entirely sure what is going on in the lower left hand corner of the plot above. A similar feature can be found in the Satija lab tutorial, so we do not believe that it is due to an error in how we used the method.</p>
+</div>
+<div id="dealing-with-confounders-1" class="section level2">
+<h2><span class="header-section-number">9.5</span> Dealing with confounders</h2>
+<p>To mitigate the effect of confounding factors, <code>Seurat</code> constructs linear models to predict gene expression based on user-defined variables. The scaled z-scored residuals of these models are stored in the <code>scale.data</code> slot, and are used for dimensionality reduction and clustering.</p>
+<p><code>Seurat</code> can regress out cell-cell variation in gene expression driven by batch, cell alignment rate (as provided by Drop-seq tools for Drop-seq data), the number of detected molecules, mitochondrial gene expression and cell cycle. Here we regress on the number of detected molecules per cell.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">ScaleData</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">vars.to.regress =</span> <span class="kw">c</span>(<span class="st">&quot;nUMI&quot;</span>)
+)</code></pre></div>
+<pre><code>## [1] &quot;Regressing out nUMI&quot;
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=                                                                |   1%
+  |                                                                       
+  |=                                                                |   2%
+  |                                                                       
+  |==                                                               |   2%
+  |                                                                       
+  |==                                                               |   3%
+  |                                                                       
+  |==                                                               |   4%
+  |                                                                       
+  |===                                                              |   4%
+  |                                                                       
+  |===                                                              |   5%
+  |                                                                       
+  |====                                                             |   6%
+  |                                                                       
+  |=====                                                            |   7%
+  |                                                                       
+  |=====                                                            |   8%
+  |                                                                       
+  |======                                                           |   8%
+  |                                                                       
+  |======                                                           |   9%
+  |                                                                       
+  |======                                                           |  10%
+  |                                                                       
+  |=======                                                          |  10%
+  |                                                                       
+  |=======                                                          |  11%
+  |                                                                       
+  |=======                                                          |  12%
+  |                                                                       
+  |========                                                         |  12%
+  |                                                                       
+  |========                                                         |  13%
+  |                                                                       
+  |=========                                                        |  14%
+  |                                                                       
+  |==========                                                       |  15%
+  |                                                                       
+  |==========                                                       |  16%
+  |                                                                       
+  |===========                                                      |  16%
+  |                                                                       
+  |===========                                                      |  17%
+  |                                                                       
+  |===========                                                      |  18%
+  |                                                                       
+  |============                                                     |  18%
+  |                                                                       
+  |============                                                     |  19%
+  |                                                                       
+  |=============                                                    |  20%
+  |                                                                       
+  |==============                                                   |  21%
+  |                                                                       
+  |==============                                                   |  22%
+  |                                                                       
+  |===============                                                  |  22%
+  |                                                                       
+  |===============                                                  |  23%
+  |                                                                       
+  |===============                                                  |  24%
+  |                                                                       
+  |================                                                 |  24%
+  |                                                                       
+  |================                                                 |  25%
+  |                                                                       
+  |=================                                                |  26%
+  |                                                                       
+  |==================                                               |  27%
+  |                                                                       
+  |==================                                               |  28%
+  |                                                                       
+  |===================                                              |  28%
+  |                                                                       
+  |===================                                              |  29%
+  |                                                                       
+  |===================                                              |  30%
+  |                                                                       
+  |====================                                             |  30%
+  |                                                                       
+  |====================                                             |  31%
+  |                                                                       
+  |====================                                             |  32%
+  |                                                                       
+  |=====================                                            |  32%
+  |                                                                       
+  |=====================                                            |  33%
+  |                                                                       
+  |======================                                           |  34%
+  |                                                                       
+  |=======================                                          |  35%
+  |                                                                       
+  |=======================                                          |  36%
+  |                                                                       
+  |========================                                         |  36%
+  |                                                                       
+  |========================                                         |  37%
+  |                                                                       
+  |========================                                         |  38%
+  |                                                                       
+  |=========================                                        |  38%
+  |                                                                       
+  |=========================                                        |  39%
+  |                                                                       
+  |==========================                                       |  40%
+  |                                                                       
+  |===========================                                      |  41%
+  |                                                                       
+  |===========================                                      |  42%
+  |                                                                       
+  |============================                                     |  42%
+  |                                                                       
+  |============================                                     |  43%
+  |                                                                       
+  |============================                                     |  44%
+  |                                                                       
+  |=============================                                    |  44%
+  |                                                                       
+  |=============================                                    |  45%
+  |                                                                       
+  |==============================                                   |  46%
+  |                                                                       
+  |===============================                                  |  47%
+  |                                                                       
+  |===============================                                  |  48%
+  |                                                                       
+  |================================                                 |  48%
+  |                                                                       
+  |================================                                 |  49%
+  |                                                                       
+  |================================                                 |  50%
+  |                                                                       
+  |=================================                                |  50%
+  |                                                                       
+  |=================================                                |  51%
+  |                                                                       
+  |=================================                                |  52%
+  |                                                                       
+  |==================================                               |  52%
+  |                                                                       
+  |==================================                               |  53%
+  |                                                                       
+  |===================================                              |  54%
+  |                                                                       
+  |====================================                             |  55%
+  |                                                                       
+  |====================================                             |  56%
+  |                                                                       
+  |=====================================                            |  56%
+  |                                                                       
+  |=====================================                            |  57%
+  |                                                                       
+  |=====================================                            |  58%
+  |                                                                       
+  |======================================                           |  58%
+  |                                                                       
+  |======================================                           |  59%
+  |                                                                       
+  |=======================================                          |  60%
+  |                                                                       
+  |========================================                         |  61%
+  |                                                                       
+  |========================================                         |  62%
+  |                                                                       
+  |=========================================                        |  62%
+  |                                                                       
+  |=========================================                        |  63%
+  |                                                                       
+  |=========================================                        |  64%
+  |                                                                       
+  |==========================================                       |  64%
+  |                                                                       
+  |==========================================                       |  65%
+  |                                                                       
+  |===========================================                      |  66%
+  |                                                                       
+  |============================================                     |  67%
+  |                                                                       
+  |============================================                     |  68%
+  |                                                                       
+  |=============================================                    |  68%
+  |                                                                       
+  |=============================================                    |  69%
+  |                                                                       
+  |=============================================                    |  70%
+  |                                                                       
+  |==============================================                   |  70%
+  |                                                                       
+  |==============================================                   |  71%
+  |                                                                       
+  |==============================================                   |  72%
+  |                                                                       
+  |===============================================                  |  72%
+  |                                                                       
+  |===============================================                  |  73%
+  |                                                                       
+  |================================================                 |  74%
+  |                                                                       
+  |=================================================                |  75%
+  |                                                                       
+  |=================================================                |  76%
+  |                                                                       
+  |==================================================               |  76%
+  |                                                                       
+  |==================================================               |  77%
+  |                                                                       
+  |==================================================               |  78%
+  |                                                                       
+  |===================================================              |  78%
+  |                                                                       
+  |===================================================              |  79%
+  |                                                                       
+  |====================================================             |  80%
+  |                                                                       
+  |=====================================================            |  81%
+  |                                                                       
+  |=====================================================            |  82%
+  |                                                                       
+  |======================================================           |  82%
+  |                                                                       
+  |======================================================           |  83%
+  |                                                                       
+  |======================================================           |  84%
+  |                                                                       
+  |=======================================================          |  84%
+  |                                                                       
+  |=======================================================          |  85%
+  |                                                                       
+  |========================================================         |  86%
+  |                                                                       
+  |=========================================================        |  87%
+  |                                                                       
+  |=========================================================        |  88%
+  |                                                                       
+  |==========================================================       |  88%
+  |                                                                       
+  |==========================================================       |  89%
+  |                                                                       
+  |==========================================================       |  90%
+  |                                                                       
+  |===========================================================      |  90%
+  |                                                                       
+  |===========================================================      |  91%
+  |                                                                       
+  |===========================================================      |  92%
+  |                                                                       
+  |============================================================     |  92%
+  |                                                                       
+  |============================================================     |  93%
+  |                                                                       
+  |=============================================================    |  94%
+  |                                                                       
+  |==============================================================   |  95%
+  |                                                                       
+  |==============================================================   |  96%
+  |                                                                       
+  |===============================================================  |  96%
+  |                                                                       
+  |===============================================================  |  97%
+  |                                                                       
+  |===============================================================  |  98%
+  |                                                                       
+  |================================================================ |  98%
+  |                                                                       
+  |================================================================ |  99%
+  |                                                                       
+  |=================================================================| 100%
+## [1] &quot;Scaling data matrix&quot;
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%</code></pre>
+</div>
+<div id="linear-dimensionality-reduction" class="section level2">
+<h2><span class="header-section-number">9.6</span> Linear dimensionality reduction</h2>
+<p>Next we perform <code>PCA</code> on the scaled data. By default, the genes in <code>object@var.genes</code> are used as input, but can be alternatively defined using <code>pc.genes</code>. Running dimensionality reduction on highly variable genes can improve performance. However, with some types of data (UMI) - particularly after regressing out technical variables, <code>PCA</code> returns similar (albeit slower) results when run on much larger subsets of genes, including the whole transcriptome.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">RunPCA</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">pc.genes =</span> seuset<span class="op">@</span>var.genes, 
+    <span class="dt">do.print =</span> <span class="ot">TRUE</span>, 
+    <span class="dt">pcs.print =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, 
+    <span class="dt">genes.print =</span> <span class="dv">5</span>
+)</code></pre></div>
+<pre><code>## [1] &quot;PC1&quot;
+## [1] &quot;Gm10436&quot; &quot;Zbed3&quot;   &quot;Gm13023&quot; &quot;Oog1&quot;    &quot;C86187&quot; 
+## [1] &quot;&quot;
+## [1] &quot;Fbp2&quot;   &quot;Fam96a&quot; &quot;Cstb&quot;   &quot;Lrpap1&quot; &quot;Ctsd&quot;  
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC2&quot;
+## [1] &quot;Gsta4&quot;    &quot;Id2&quot;      &quot;Ptgr1&quot;    &quot;AA467197&quot; &quot;Myh9&quot;    
+## [1] &quot;&quot;
+## [1] &quot;Gm11517&quot;  &quot;Obox6&quot;    &quot;Pdxk&quot;     &quot;Map1lc3a&quot; &quot;Cited1&quot;  
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC3&quot;
+## [1] &quot;Psrc1&quot;  &quot;Ninj2&quot;  &quot;Gja4&quot;   &quot;Tdrd12&quot; &quot;Wdr76&quot; 
+## [1] &quot;&quot;
+## [1] &quot;Efnb2&quot;         &quot;Gm9125&quot;        &quot;Pabpn1&quot;        &quot;Mad2l1bp&quot;     
+## [5] &quot;1600025M17Rik&quot;
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC4&quot;
+## [1] &quot;Upp1&quot;   &quot;Tdgf1&quot;  &quot;Baz2b&quot;  &quot;Rnd3&quot;   &quot;Col4a1&quot;
+## [1] &quot;&quot;
+## [1] &quot;Rragd&quot;   &quot;Ppfibp2&quot; &quot;Smpdl3a&quot; &quot;Cldn4&quot;   &quot;Amotl2&quot; 
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC5&quot;
+## [1] &quot;Snhg8&quot;   &quot;Trappc2&quot; &quot;Acsm2&quot;   &quot;Angptl2&quot; &quot;Nlgn1&quot;  
+## [1] &quot;&quot;
+## [1] &quot;Akap1&quot;  &quot;Stub1&quot;  &quot;Apoe&quot;   &quot;Scand1&quot; &quot;Hjurp&quot; 
+## [1] &quot;&quot;
+## [1] &quot;&quot;</code></pre>
+<p><code>Seurat</code> provides several useful ways of visualizing both cells and genes that define the <code>PCA</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PrintPCA</span>(<span class="dt">object =</span> seuset, <span class="dt">pcs.print =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">genes.print =</span> <span class="dv">5</span>, <span class="dt">use.full =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>## [1] &quot;PC1&quot;
+## [1] &quot;Gm10436&quot; &quot;Zbed3&quot;   &quot;Gm13023&quot; &quot;Oog1&quot;    &quot;C86187&quot; 
+## [1] &quot;&quot;
+## [1] &quot;Fbp2&quot;   &quot;Fam96a&quot; &quot;Cstb&quot;   &quot;Lrpap1&quot; &quot;Ctsd&quot;  
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC2&quot;
+## [1] &quot;Gsta4&quot;    &quot;Id2&quot;      &quot;Ptgr1&quot;    &quot;AA467197&quot; &quot;Myh9&quot;    
+## [1] &quot;&quot;
+## [1] &quot;Gm11517&quot;  &quot;Obox6&quot;    &quot;Pdxk&quot;     &quot;Map1lc3a&quot; &quot;Cited1&quot;  
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC3&quot;
+## [1] &quot;Psrc1&quot;  &quot;Ninj2&quot;  &quot;Gja4&quot;   &quot;Tdrd12&quot; &quot;Wdr76&quot; 
+## [1] &quot;&quot;
+## [1] &quot;Efnb2&quot;         &quot;Gm9125&quot;        &quot;Pabpn1&quot;        &quot;Mad2l1bp&quot;     
+## [5] &quot;1600025M17Rik&quot;
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC4&quot;
+## [1] &quot;Upp1&quot;   &quot;Tdgf1&quot;  &quot;Baz2b&quot;  &quot;Rnd3&quot;   &quot;Col4a1&quot;
+## [1] &quot;&quot;
+## [1] &quot;Rragd&quot;   &quot;Ppfibp2&quot; &quot;Smpdl3a&quot; &quot;Cldn4&quot;   &quot;Amotl2&quot; 
+## [1] &quot;&quot;
+## [1] &quot;&quot;
+## [1] &quot;PC5&quot;
+## [1] &quot;Snhg8&quot;   &quot;Trappc2&quot; &quot;Acsm2&quot;   &quot;Angptl2&quot; &quot;Nlgn1&quot;  
+## [1] &quot;&quot;
+## [1] &quot;Akap1&quot;  &quot;Stub1&quot;  &quot;Apoe&quot;   &quot;Scand1&quot; &quot;Hjurp&quot; 
+## [1] &quot;&quot;
+## [1] &quot;&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">VizPCA</span>(<span class="dt">object =</span> seuset, <span class="dt">pcs.use =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PCAPlot</span>(<span class="dt">object =</span> seuset, <span class="dt">dim.1 =</span> <span class="dv">1</span>, <span class="dt">dim.2 =</span> <span class="dv">2</span>)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In particular, <code>PCHeatmap</code> allows for easy exploration of the primary sources of heterogeneity in a dataset, and can be useful when trying to decide which PCs to include for further downstream analyses. Both cells and genes are ordered according to their <code>PCA</code> scores. Setting <code>cells.use</code> to a number plots the <em>extreme</em> cells on both ends of the spectrum, which dramatically speeds plotting for large datasets:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PCHeatmap</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">pc.use =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, 
+    <span class="dt">cells.use =</span> <span class="dv">500</span>, 
+    <span class="dt">do.balanced =</span> <span class="ot">TRUE</span>, 
+    <span class="dt">label.columns =</span> <span class="ot">FALSE</span>,
+    <span class="dt">use.full =</span> <span class="ot">FALSE</span>
+)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="significant-pcs" class="section level2">
+<h2><span class="header-section-number">9.7</span> Significant PCs</h2>
+<p>To overcome the extensive technical noise in any single gene for scRNA-seq data, <code>Seurat</code> clusters cells based on their <code>PCA</code> scores, with each PC essentially representing a <em>metagene</em> that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step. <code>Seurat</code> randomly permutes a subset of the data (1% by default) and reruns <code>PCA</code>, constructing a <em>null distribution</em> of gene scores by repeating this procedure. We identify <em>significant</em> PCs as those who have a strong enrichment of low p-value genes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">JackStraw</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">num.replicate =</span> <span class="dv">100</span>, 
+    <span class="dt">do.print =</span> <span class="ot">FALSE</span>
+)</code></pre></div>
+<p>The <code>JackStrawPlot</code> function provides a visualization tool for comparing the distribution of p-values for each PC with a uniform distribution (dashed line). <em>Significant</em> PCs will show a strong enrichment of genes with low p-values (solid curve above the dashed line). In this case it appears that PCs 1-8 are significant.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">JackStrawPlot</span>(<span class="dt">object =</span> seuset, <span class="dt">PCs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">9</span>)</code></pre></div>
+<pre><code>## Warning: Removed 39410 rows containing missing values (geom_point).</code></pre>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>A more ad hoc method for determining which PCs to use is to look at a plot of the standard deviations of the principle components and draw your cutoff where there is a clear elbow in the graph. This can be done with <code>PCElbowPlot</code>. In this example, it looks like the elbow would fall around PC 5.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PCElbowPlot</span>(<span class="dt">object =</span> seuset)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="clustering-cells" class="section level2">
+<h2><span class="header-section-number">9.8</span> Clustering cells</h2>
+<p><code>Seurat</code> implements an graph-based clustering approach. Distances between the cells are calculated based on previously identified PCs. <code>Seurat</code> approach was heavily inspired by recent manuscripts which applied graph-based clustering approaches to scRNA-seq data - SNN-Cliq (<span class="citation">(C. Xu and Su <a href="#ref-Xu2015-vf">2015</a>)</span>) and CyTOF data - PhenoGraph (<span class="citation">(Levine et al. <a href="#ref-Levine2015-fk">2015</a>)</span>). Briefly, these methods embed cells in a graph structure - for example a K-nearest neighbor (<em>KNN</em>) graph, with edges drawn between cells with similar gene expression patterns, and then attempt to partition this graph into highly interconnected <em>quasi-cliques</em> or <em>communities</em>. As in PhenoGraph, we first construct a <em>KNN</em> graph based on the euclidean distance in PCA space, and refine the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccard distance). To cluster the cells, we apply modularity optimization techniques - SLM (<span class="citation">(Blondel et al. <a href="#ref-Blondel2008-px">2008</a>)</span>), to iteratively group cells together, with the goal of optimizing the standard modularity function.</p>
+<p>The <code>FindClusters</code> function implements the procedure, and contains a resolution parameter that sets the <code>granularity</code> of the downstream clustering, with increased values leading to a greater number of clusters. We find that setting this parameter between <span class="math inline">\(0.6-1.2\)</span> typically returns good results for single cell datasets of around <span class="math inline">\(3,000\)</span> cells. Optimal resolution often increases for larger datasets. The clusters are saved in the <a href="mailto:object@ident">object@ident</a> slot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">FindClusters</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">reduction.type =</span> <span class="st">&quot;pca&quot;</span>, 
+    <span class="dt">dims.use =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>, 
+    <span class="dt">resolution =</span> <span class="fl">1.0</span>, 
+    <span class="dt">print.output =</span> <span class="dv">0</span>, 
+    <span class="dt">save.SNN =</span> <span class="ot">TRUE</span>
+)</code></pre></div>
+<p>A useful feature in <code>Seurat</code> is the ability to recall the parameters that were used in the latest function calls for commonly used functions. For <code>FindClusters</code>, there is the function <code>PrintFindClustersParams</code> to print a nicely formatted summary of the parameters that were chosen:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PrintFindClustersParams</span>(<span class="dt">object =</span> seuset)</code></pre></div>
+<pre><code>## Parameters used in latest FindClusters calculation run on: 2018-03-06 15:21:33
+## =============================================================================
+## Resolution: 1
+## -----------------------------------------------------------------------------
+## Modularity Function    Algorithm         n.start         n.iter
+##      1                   1                 100             10
+## -----------------------------------------------------------------------------
+## Reduction used          k.param          k.scale          prune.SNN
+##      pca                 30                25              0.0667
+## -----------------------------------------------------------------------------
+## Dims used in calculation
+## =============================================================================
+## 1 2 3 4 5 6 7 8</code></pre>
+<p>We can look at the clustering results and compare them to the original cell labels:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(seuset<span class="op">@</span>ident)</code></pre></div>
+<pre><code>## 
+##  0  1  2  3 
+## 85 75 59 34</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">adjustedRandIndex</span>(<span class="kw">colData</span>(deng)[seuset<span class="op">@</span>cell.names, ]<span class="op">$</span>cell_type2, seuset<span class="op">@</span>ident)</code></pre></div>
+<pre><code>## [1] 0.3981315</code></pre>
+<p><code>Seurat</code> also utilises tSNE plot to visulise clustering results. As input to the tSNE, we suggest using the same PCs as input to the clustering analysis, although computing the tSNE based on scaled gene expression is also supported using the <code>genes.use</code> argument.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seuset &lt;-<span class="st"> </span><span class="kw">RunTSNE</span>(
+    <span class="dt">object =</span> seuset,
+    <span class="dt">dims.use =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>,
+    <span class="dt">do.fast =</span> <span class="ot">TRUE</span>
+)
+<span class="kw">TSNEPlot</span>(<span class="dt">object =</span> seuset)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="marker-genes-1" class="section level2">
+<h2><span class="header-section-number">9.9</span> Marker genes</h2>
+<p>Seurat can help you find markers that define clusters via differential expression. By default, it identifes positive and negative markers of a single cluster, compared to all other cells. You can test groups of clusters vs. each other, or against all cells. For example, to find marker genes for cluster 2 we can run:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">markers2 &lt;-<span class="st"> </span><span class="kw">FindMarkers</span>(seuset, <span class="dv">2</span>)</code></pre></div>
+<p>Marker genes can then be visualised:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">VlnPlot</span>(<span class="dt">object =</span> seuset, <span class="dt">features.plot =</span> <span class="kw">rownames</span>(markers2)[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>])</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">FeaturePlot</span>(
+    seuset, 
+    <span class="kw">head</span>(<span class="kw">rownames</span>(markers2)), 
+    <span class="dt">cols.use =</span> <span class="kw">c</span>(<span class="st">&quot;lightgrey&quot;</span>, <span class="st">&quot;blue&quot;</span>), 
+    <span class="dt">nCol =</span> <span class="dv">3</span>
+)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-21-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><code>FindAllMarkers</code> automates this process and find markers for all clusters:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">markers &lt;-<span class="st"> </span><span class="kw">FindAllMarkers</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">only.pos =</span> <span class="ot">TRUE</span>, 
+    <span class="dt">min.pct =</span> <span class="fl">0.25</span>, 
+    <span class="dt">thresh.use =</span> <span class="fl">0.25</span>
+)</code></pre></div>
+<p><code>DoHeatmap</code> generates an expression heatmap for given cells and genes. In this case, we are plotting the top 10 markers (or all markers if less than 20) for each cluster:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top10 &lt;-<span class="st"> </span>markers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(cluster) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">top_n</span>(<span class="dv">10</span>, avg_logFC)
+<span class="kw">DoHeatmap</span>(
+    <span class="dt">object =</span> seuset, 
+    <span class="dt">genes.use =</span> top10<span class="op">$</span>gene, 
+    <span class="dt">slim.col.label =</span> <span class="ot">TRUE</span>, 
+    <span class="dt">remove.key =</span> <span class="ot">TRUE</span>
+)</code></pre></div>
+<p><img src="33-seurat_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><strong>Exercise</strong>: Compare marker genes provided by <code>Seurat</code> and <code>SC3</code>.</p>
+</div>
+<div id="sessioninfo-12" class="section level2">
+<h2><span class="header-section-number">9.10</span> sessionInfo()</h2>
+<pre><code>## R version 3.4.3 (2017-11-30)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Debian GNU/Linux 9 (stretch)
+## 
+## Matrix products: default
+## BLAS: /usr/lib/openblas-base/libblas.so.3
+## LAPACK: /usr/lib/libopenblasp-r0.2.19.so
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] parallel  stats4    methods   stats     graphics  grDevices utils    
+## [8] datasets  base     
+## 
+## other attached packages:
+##  [1] bindrcpp_0.2               dplyr_0.7.4               
+##  [3] mclust_5.4                 Seurat_2.2.1              
+##  [5] Matrix_1.2-7.1             cowplot_0.9.2             
+##  [7] ggplot2_2.2.1              SingleCellExperiment_1.0.0
+##  [9] SummarizedExperiment_1.8.1 DelayedArray_0.4.1        
+## [11] matrixStats_0.53.1         Biobase_2.38.0            
+## [13] GenomicRanges_1.30.3       GenomeInfoDb_1.14.0       
+## [15] IRanges_2.12.0             S4Vectors_0.16.0          
+## [17] BiocGenerics_0.24.0        knitr_1.20                
+## 
+## loaded via a namespace (and not attached):
+##   [1] backports_1.1.2        Hmisc_4.1-1            VGAM_1.0-5            
+##   [4] sn_1.5-1               plyr_1.8.4             igraph_1.1.2          
+##   [7] lazyeval_0.2.1         splines_3.4.3          digest_0.6.15         
+##  [10] foreach_1.4.4          htmltools_0.3.6        lars_1.2              
+##  [13] gdata_2.18.0           magrittr_1.5           checkmate_1.8.5       
+##  [16] cluster_2.0.6          mixtools_1.1.0         ROCR_1.0-7            
+##  [19] sfsmisc_1.1-1          recipes_0.1.2          gower_0.1.2           
+##  [22] dimRed_0.1.0           R.utils_2.6.0          colorspace_1.3-2      
+##  [25] xfun_0.1               RCurl_1.95-4.10        bindr_0.1             
+##  [28] survival_2.40-1        iterators_1.0.9        ape_5.0               
+##  [31] glue_1.2.0             DRR_0.0.3              gtable_0.2.0          
+##  [34] ipred_0.9-6            zlibbioc_1.24.0        XVector_0.18.0        
+##  [37] kernlab_0.9-25         ddalpha_1.3.1.1        prabclus_2.2-6        
+##  [40] DEoptimR_1.0-8         scales_0.5.0           mvtnorm_1.0-7         
+##  [43] Rcpp_0.12.15           metap_0.8              dtw_1.18-1            
+##  [46] htmlTable_1.11.2       tclust_1.3-1           foreign_0.8-67        
+##  [49] proxy_0.4-21           SDMTools_1.1-221       Formula_1.2-2         
+##  [52] tsne_0.1-3             lava_1.6               prodlim_1.6.1         
+##  [55] htmlwidgets_1.0        FNN_1.1                gplots_3.0.1          
+##  [58] RColorBrewer_1.1-2     fpc_2.1-11             acepack_1.4.1         
+##  [61] modeltools_0.2-21      ica_1.0-1              pkgconfig_2.0.1       
+##  [64] R.methodsS3_1.7.1      flexmix_2.3-14         nnet_7.3-12           
+##  [67] caret_6.0-78           labeling_0.3           tidyselect_0.2.4      
+##  [70] rlang_0.2.0            reshape2_1.4.3         munsell_0.4.3         
+##  [73] tools_3.4.3            ranger_0.9.0           broom_0.4.3           
+##  [76] ggridges_0.4.1         evaluate_0.10.1        stringr_1.3.0         
+##  [79] yaml_2.1.17            ModelMetrics_1.1.0     robustbase_0.92-8     
+##  [82] caTools_1.17.1         purrr_0.2.4            pbapply_1.3-4         
+##  [85] nlme_3.1-129           R.oo_1.21.0            RcppRoll_0.2.2        
+##  [88] compiler_3.4.3         rstudioapi_0.7         tibble_1.4.2          
+##  [91] stringi_1.1.6          lattice_0.20-34        trimcluster_0.1-2     
+##  [94] psych_1.7.8            diffusionMap_1.1-0     pillar_1.2.1          
+##  [97] data.table_1.10.4-3    bitops_1.0-6           irlba_2.3.2           
+## [100] R6_2.2.2               latticeExtra_0.6-28    bookdown_0.7          
+## [103] KernSmooth_2.23-15     gridExtra_2.3          codetools_0.2-15      
+## [106] MASS_7.3-45            gtools_3.5.0           assertthat_0.2.0      
+## [109] CVST_0.2-1             rprojroot_1.3-2        withr_2.1.1           
+## [112] mnormt_1.5-5           GenomeInfoDbData_1.0.0 diptest_0.75-7        
+## [115] grid_3.4.3             rpart_4.1-10           timeDate_3043.102     
+## [118] tidyr_0.8.0            class_7.3-14           rmarkdown_1.8         
+## [121] segmented_0.5-3.0      Rtsne_0.13             numDeriv_2016.8-1     
+## [124] scatterplot3d_0.3-40   lubridate_1.7.3        base64enc_0.1-3</code></pre>
+
+</div>
+</div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-Xu2015-vf">
+<p>Xu, Chen, and Zhengchang Su. 2015. “Identification of Cell Types from Single-Cell Transcriptomes Using a Novel Clustering Method.” <em>Bioinformatics</em> 31 (12). Oxford University Press (OUP): 1974–80. doi:<a href="https://doi.org/10.1093/bioinformatics/btv088">10.1093/bioinformatics/btv088</a>.</p>
+</div>
+<div id="ref-Levine2015-fk">
+<p>Levine, Jacob H., Erin F. Simonds, Sean C. Bendall, Kara L. Davis, El-ad D. Amir, Michelle D. Tadmor, Oren Litvin, et al. 2015. “Data-Driven Phenotypic Dissection of AML Reveals Progenitor-Like Cells That Correlate with Prognosis.” <em>Cell</em> 162 (1). Elsevier BV: 184–97. doi:<a href="https://doi.org/10.1016/j.cell.2015.05.047">10.1016/j.cell.2015.05.047</a>.</p>
+</div>
+<div id="ref-Blondel2008-px">
+<p>Blondel, Vincent D, Jean-Loup Guillaume, Renaud Lambiotte, and Etienne Lefebvre. 2008. “Fast Unfolding of Communities in Large Networks.” <em>J. Stat. Mech.</em> 2008 (10). IOP Publishing: P10008. doi:<a href="https://doi.org/10.1088/1742-5468/2008/10/p10008">10.1088/1742-5468/2008/10/p10008</a>.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="biological-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["scRNA-seq-course.pdf"],
+"toc": {
+"collapse": "section"
+},
+"search": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

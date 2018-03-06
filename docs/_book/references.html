@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Analysis of single cell RNA-seq data</title>
+  <meta name="description" content="Analysis of single cell RNA-seq data">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Analysis of single cell RNA-seq data" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Analysis of single cell RNA-seq data" />
+  
+  
+  
+
+<meta name="author" content="Vladimir Kiselev (wikiselev), Tallulah Andrews, Jennifer Westoby (Jenni_Westoby), Davis McCarthy (davisjmcc), Maren Büttner (marenbuettner) and Martin Hemberg (m_hemberg)">
+
+
+<meta name="date" content="2018-03-06">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="resources.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<!-- for Facebook -->  
+<meta property="og:url" content="http://hemberg-lab.github.io/scRNA.seq.course/" />
+<meta property="og:description" content="In this course we will be surveying the existing problems as well as the available computational and statistical frameworks available for the analysis of scRNA-seq. The course is taught through the University of Cambridge Bioinformatics training unit, but the material found on these pages is meant to be used for anyone interested in learning about computational analysis of scRNA-seq data." />
+<meta property="og:image" content="http://hemberg-lab.github.io/scRNA.seq.course/figures/RNA-Seq_workflow-5.pdf.jpg" />
+
+<!-- for Twitter -->          
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Analysis of single-cell RNA-seq data" />
+<meta name="twitter:description" content="In this course we will be surveying the existing problems as well as the available computational and statistical frameworks available for the analysis of scRNA-seq. The course is taught through the University of Cambridge Bioinformatics training unit, but the material found on these pages is meant to be used for anyone interested in learning about computational analysis of scRNA-seq data." />
+<meta name="twitter:image" content="http://hemberg-lab.github.io/scRNA.seq.course/figures/RNA-Seq_workflow-5.pdf.jpg" />
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-71525309-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html">Table of Contents</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About the course</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#video"><i class="fa fa-check"></i><b>1.1</b> Video</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#registration"><i class="fa fa-check"></i><b>1.2</b> Registration</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#github"><i class="fa fa-check"></i><b>1.3</b> GitHub</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#docker-image-rstudio"><i class="fa fa-check"></i><b>1.4</b> Docker image (RStudio)</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#manual-installation"><i class="fa fa-check"></i><b>1.5</b> Manual installation</a></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i><b>1.6</b> License</a></li>
+<li class="chapter" data-level="1.7" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.7</b> Prerequisites</a></li>
+<li class="chapter" data-level="1.8" data-path="index.html"><a href="index.html#contact"><i class="fa fa-check"></i><b>1.8</b> Contact</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html"><i class="fa fa-check"></i><b>2</b> Introduction to single-cell RNA-seq</a><ul>
+<li class="chapter" data-level="2.1" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#bulk-rna-seq"><i class="fa fa-check"></i><b>2.1</b> Bulk RNA-seq</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#scrna-seq"><i class="fa fa-check"></i><b>2.2</b> scRNA-seq</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#workflow"><i class="fa fa-check"></i><b>2.3</b> Workflow</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#computational-analysis"><i class="fa fa-check"></i><b>2.4</b> Computational Analysis</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#challenges"><i class="fa fa-check"></i><b>2.5</b> Challenges</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#experimental-methods"><i class="fa fa-check"></i><b>2.6</b> Experimental methods</a></li>
+<li class="chapter" data-level="2.7" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#what-platform-to-use-for-my-experiment"><i class="fa fa-check"></i><b>2.7</b> What platform to use for my experiment?</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html"><i class="fa fa-check"></i><b>3</b> Processing Raw scRNA-seq Data</a><ul>
+<li class="chapter" data-level="3.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#fastqc"><i class="fa fa-check"></i><b>3.1</b> FastQC</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#solution-and-downloading-the-report"><i class="fa fa-check"></i><b>3.1.1</b> Solution and Downloading the Report</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#trimming-reads"><i class="fa fa-check"></i><b>3.2</b> Trimming Reads</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#solution"><i class="fa fa-check"></i><b>3.2.1</b> Solution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#file-formats"><i class="fa fa-check"></i><b>3.3</b> File formats</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#fastq"><i class="fa fa-check"></i><b>3.3.1</b> FastQ</a></li>
+<li class="chapter" data-level="3.3.2" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#bam"><i class="fa fa-check"></i><b>3.3.2</b> BAM</a></li>
+<li class="chapter" data-level="3.3.3" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#cram"><i class="fa fa-check"></i><b>3.3.3</b> CRAM</a></li>
+<li class="chapter" data-level="3.3.4" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#mannually-inspecting-files"><i class="fa fa-check"></i><b>3.3.4</b> Mannually Inspecting files</a></li>
+<li class="chapter" data-level="3.3.5" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#genome-fasta-gtf"><i class="fa fa-check"></i><b>3.3.5</b> Genome (FASTA, GTF)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#demultiplexing"><i class="fa fa-check"></i><b>3.4</b> Demultiplexing</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#identifying-cell-containing-dropletsmicrowells"><i class="fa fa-check"></i><b>3.4.1</b> Identifying cell-containing droplets/microwells</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#using-star-to-align-reads"><i class="fa fa-check"></i><b>3.5</b> Using STAR to Align Reads</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#solution-for-star-alignment"><i class="fa fa-check"></i><b>3.5.1</b> Solution for STAR Alignment</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#kallisto-and-pseudo-alignment"><i class="fa fa-check"></i><b>3.6</b> Kallisto and Pseudo-Alignment</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#what-is-a-k-mer"><i class="fa fa-check"></i><b>3.6.1</b> What is a k-mer?</a></li>
+<li class="chapter" data-level="3.6.2" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#why-map-k-mers-rather-than-reads"><i class="fa fa-check"></i><b>3.6.2</b> Why map k-mers rather than reads?</a></li>
+<li class="chapter" data-level="3.6.3" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#kallistos-pseudo-mode"><i class="fa fa-check"></i><b>3.6.3</b> Kallisto’s pseudo mode</a></li>
+<li class="chapter" data-level="3.6.4" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#solution-to-kallisto-pseudo-alignment"><i class="fa fa-check"></i><b>3.6.4</b> Solution to Kallisto Pseudo-Alignment</a></li>
+<li class="chapter" data-level="3.6.5" data-path="processing-raw-scrna-seq-data.html"><a href="processing-raw-scrna-seq-data.html#understanding-the-output-of-kallisto-pseudo-alignment"><i class="fa fa-check"></i><b>3.6.5</b> Understanding the Output of Kallisto Pseudo-Alignment</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html"><i class="fa fa-check"></i><b>4</b> Construction of expression matrix</a><ul>
+<li class="chapter" data-level="4.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-qc"><i class="fa fa-check"></i><b>4.1</b> Reads QC</a></li>
+<li class="chapter" data-level="4.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-alignment"><i class="fa fa-check"></i><b>4.2</b> Reads alignment</a></li>
+<li class="chapter" data-level="4.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#alignment-example"><i class="fa fa-check"></i><b>4.3</b> Alignment example</a></li>
+<li class="chapter" data-level="4.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-qc"><i class="fa fa-check"></i><b>4.4</b> Mapping QC</a></li>
+<li class="chapter" data-level="4.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-quantification"><i class="fa fa-check"></i><b>4.5</b> Reads quantification</a></li>
+<li class="chapter" data-level="4.6" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#umichapter"><i class="fa fa-check"></i><b>4.6</b> Unique Molecular Identifiers (UMIs)</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#introduction"><i class="fa fa-check"></i><b>4.6.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.6.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-barcodes"><i class="fa fa-check"></i><b>4.6.2</b> Mapping Barcodes</a></li>
+<li class="chapter" data-level="4.6.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#counting-barcodes"><i class="fa fa-check"></i><b>4.6.3</b> Counting Barcodes</a></li>
+<li class="chapter" data-level="4.6.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#correcting-for-errors"><i class="fa fa-check"></i><b>4.6.4</b> Correcting for Errors</a></li>
+<li class="chapter" data-level="4.6.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#downstream-analysis"><i class="fa fa-check"></i><b>4.6.5</b> Downstream Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html"><i class="fa fa-check"></i><b>5</b> Introduction to R/Bioconductor</a><ul>
+<li class="chapter" data-level="5.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#installing-packages"><i class="fa fa-check"></i><b>5.1</b> Installing packages</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#cran"><i class="fa fa-check"></i><b>5.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="5.1.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#github-1"><i class="fa fa-check"></i><b>5.1.2</b> Github</a></li>
+<li class="chapter" data-level="5.1.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#bioconductor"><i class="fa fa-check"></i><b>5.1.3</b> Bioconductor</a></li>
+<li class="chapter" data-level="5.1.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#source"><i class="fa fa-check"></i><b>5.1.4</b> Source</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#installation-instructions"><i class="fa fa-check"></i><b>5.2</b> Installation instructions:</a></li>
+<li class="chapter" data-level="5.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#data-typesclasses"><i class="fa fa-check"></i><b>5.3</b> Data-types/classes</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#numeric"><i class="fa fa-check"></i><b>5.3.1</b> Numeric</a></li>
+<li class="chapter" data-level="5.3.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#characterstring"><i class="fa fa-check"></i><b>5.3.2</b> Character/String</a></li>
+<li class="chapter" data-level="5.3.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#logical"><i class="fa fa-check"></i><b>5.3.3</b> Logical</a></li>
+<li class="chapter" data-level="5.3.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#factors"><i class="fa fa-check"></i><b>5.3.4</b> Factors</a></li>
+<li class="chapter" data-level="5.3.5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#checking-classtype"><i class="fa fa-check"></i><b>5.3.5</b> Checking class/type</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#basic-data-structures"><i class="fa fa-check"></i><b>5.4</b> Basic data structures</a></li>
+<li class="chapter" data-level="5.5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#more-information"><i class="fa fa-check"></i><b>5.5</b> More information</a></li>
+<li class="chapter" data-level="5.6" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#data-types"><i class="fa fa-check"></i><b>5.6</b> Data Types</a><ul>
+<li class="chapter" data-level="5.6.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#what-is-tidy-data"><i class="fa fa-check"></i><b>5.6.1</b> What is Tidy Data?</a></li>
+<li class="chapter" data-level="5.6.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#what-is-rich-data"><i class="fa fa-check"></i><b>5.6.2</b> What is Rich Data?</a></li>
+<li class="chapter" data-level="5.6.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#what-is-bioconductor"><i class="fa fa-check"></i><b>5.6.3</b> What is Bioconductor?</a></li>
+<li class="chapter" data-level="5.6.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#singlecellexperiment-class"><i class="fa fa-check"></i><b>5.6.4</b> <code>SingleCellExperiment</code> class</a></li>
+<li class="chapter" data-level="5.6.5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#scater-package"><i class="fa fa-check"></i><b>5.6.5</b> <code>scater</code> package</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#bioconductor-singlecellexperiment-and-scater"><i class="fa fa-check"></i><b>5.7</b> Bioconductor, <code>SingleCellExperiment</code> and <code>scater</code></a><ul>
+<li class="chapter" data-level="5.7.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#bioconductor-1"><i class="fa fa-check"></i><b>5.7.1</b> Bioconductor</a></li>
+<li class="chapter" data-level="5.7.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#singlecellexperiment-class-1"><i class="fa fa-check"></i><b>5.7.2</b> <code>SingleCellExperiment</code> class</a></li>
+<li class="chapter" data-level="5.7.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#scater-package-1"><i class="fa fa-check"></i><b>5.7.3</b> <code>scater</code> package</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#an-introduction-to-ggplot2"><i class="fa fa-check"></i><b>5.8</b> An Introduction to ggplot2</a><ul>
+<li class="chapter" data-level="5.8.1" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#what-is-ggplot2"><i class="fa fa-check"></i><b>5.8.1</b> What is ggplot2?</a></li>
+<li class="chapter" data-level="5.8.2" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#principles-of-ggplot2"><i class="fa fa-check"></i><b>5.8.2</b> Principles of ggplot2</a></li>
+<li class="chapter" data-level="5.8.3" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#using-the-aes-mapping-function"><i class="fa fa-check"></i><b>5.8.3</b> Using the <code>aes</code> mapping function</a></li>
+<li class="chapter" data-level="5.8.4" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#geoms"><i class="fa fa-check"></i><b>5.8.4</b> Geoms</a></li>
+<li class="chapter" data-level="5.8.5" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#plotting-data-from-more-than-2-cells"><i class="fa fa-check"></i><b>5.8.5</b> Plotting data from more than 2 cells</a></li>
+<li class="chapter" data-level="5.8.6" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#plotting-heatmaps"><i class="fa fa-check"></i><b>5.8.6</b> Plotting heatmaps</a></li>
+<li class="chapter" data-level="5.8.7" data-path="introduction-to-rbioconductor.html"><a href="introduction-to-rbioconductor.html#principle-component-analysis"><i class="fa fa-check"></i><b>5.8.7</b> Principle Component Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="tabula-muris.html"><a href="tabula-muris.html"><i class="fa fa-check"></i><b>6</b> Tabula Muris</a><ul>
+<li class="chapter" data-level="6.1" data-path="tabula-muris.html"><a href="tabula-muris.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="tabula-muris.html"><a href="tabula-muris.html#downloading-the-data"><i class="fa fa-check"></i><b>6.2</b> Downloading the data</a></li>
+<li class="chapter" data-level="6.3" data-path="tabula-muris.html"><a href="tabula-muris.html#reading-the-data-smartseq2"><i class="fa fa-check"></i><b>6.3</b> Reading the data (Smartseq2)</a></li>
+<li class="chapter" data-level="6.4" data-path="tabula-muris.html"><a href="tabula-muris.html#building-a-scater-object"><i class="fa fa-check"></i><b>6.4</b> Building a scater object</a></li>
+<li class="chapter" data-level="6.5" data-path="tabula-muris.html"><a href="tabula-muris.html#reading-the-data-10x"><i class="fa fa-check"></i><b>6.5</b> Reading the data (10X)</a></li>
+<li class="chapter" data-level="6.6" data-path="tabula-muris.html"><a href="tabula-muris.html#building-a-scater-object-1"><i class="fa fa-check"></i><b>6.6</b> Building a scater object</a></li>
+<li class="chapter" data-level="6.7" data-path="tabula-muris.html"><a href="tabula-muris.html#advanced-exercise"><i class="fa fa-check"></i><b>6.7</b> Advanced Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html"><i class="fa fa-check"></i><b>7</b> Cleaning the Expression Matrix</a><ul>
+<li class="chapter" data-level="7.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#exprs-qc"><i class="fa fa-check"></i><b>7.1</b> Expression QC (UMI)</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-2"><i class="fa fa-check"></i><b>7.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.1.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#tung-dataset"><i class="fa fa-check"></i><b>7.1.2</b> Tung dataset</a></li>
+<li class="chapter" data-level="7.1.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#cell-qc"><i class="fa fa-check"></i><b>7.1.3</b> Cell QC</a></li>
+<li class="chapter" data-level="7.1.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#cell-filtering"><i class="fa fa-check"></i><b>7.1.4</b> Cell filtering</a></li>
+<li class="chapter" data-level="7.1.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#compare-filterings"><i class="fa fa-check"></i><b>7.1.5</b> Compare filterings</a></li>
+<li class="chapter" data-level="7.1.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#gene-analysis"><i class="fa fa-check"></i><b>7.1.6</b> Gene analysis</a></li>
+<li class="chapter" data-level="7.1.7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#save-the-data"><i class="fa fa-check"></i><b>7.1.7</b> Save the data</a></li>
+<li class="chapter" data-level="7.1.8" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#big-exercise"><i class="fa fa-check"></i><b>7.1.8</b> Big Exercise</a></li>
+<li class="chapter" data-level="7.1.9" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo"><i class="fa fa-check"></i><b>7.1.9</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#expression-qc-reads"><i class="fa fa-check"></i><b>7.2</b> Expression QC (Reads)</a></li>
+<li class="chapter" data-level="7.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#data-visualization"><i class="fa fa-check"></i><b>7.3</b> Data visualization</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-3"><i class="fa fa-check"></i><b>7.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.3.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#visual-pca"><i class="fa fa-check"></i><b>7.3.2</b> PCA plot</a></li>
+<li class="chapter" data-level="7.3.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#visual-tsne"><i class="fa fa-check"></i><b>7.3.3</b> tSNE map</a></li>
+<li class="chapter" data-level="7.3.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#big-exercise-1"><i class="fa fa-check"></i><b>7.3.4</b> Big Exercise</a></li>
+<li class="chapter" data-level="7.3.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo-1"><i class="fa fa-check"></i><b>7.3.5</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#data-visualization-reads"><i class="fa fa-check"></i><b>7.4</b> Data visualization (Reads)</a></li>
+<li class="chapter" data-level="7.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#identifying-confounding-factors"><i class="fa fa-check"></i><b>7.5</b> Identifying confounding factors</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-4"><i class="fa fa-check"></i><b>7.5.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.5.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#correlations-with-pcs"><i class="fa fa-check"></i><b>7.5.2</b> Correlations with PCs</a></li>
+<li class="chapter" data-level="7.5.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#explanatory-variables"><i class="fa fa-check"></i><b>7.5.3</b> Explanatory variables</a></li>
+<li class="chapter" data-level="7.5.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#other-confounders"><i class="fa fa-check"></i><b>7.5.4</b> Other confounders</a></li>
+<li class="chapter" data-level="7.5.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#exercise"><i class="fa fa-check"></i><b>7.5.5</b> Exercise</a></li>
+<li class="chapter" data-level="7.5.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo-2"><i class="fa fa-check"></i><b>7.5.6</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#identifying-confounding-factors-reads"><i class="fa fa-check"></i><b>7.6</b> Identifying confounding factors (Reads)</a></li>
+<li class="chapter" data-level="7.7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalization-theory"><i class="fa fa-check"></i><b>7.7</b> Normalization theory</a><ul>
+<li class="chapter" data-level="7.7.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-5"><i class="fa fa-check"></i><b>7.7.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.7.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#library-size-1"><i class="fa fa-check"></i><b>7.7.2</b> Library size</a></li>
+<li class="chapter" data-level="7.7.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalisations"><i class="fa fa-check"></i><b>7.7.3</b> Normalisations</a></li>
+<li class="chapter" data-level="7.7.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#effectiveness"><i class="fa fa-check"></i><b>7.7.4</b> Effectiveness</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalization-practice-umi"><i class="fa fa-check"></i><b>7.8</b> Normalization practice (UMI)</a><ul>
+<li class="chapter" data-level="7.8.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#raw"><i class="fa fa-check"></i><b>7.8.1</b> Raw</a></li>
+<li class="chapter" data-level="7.8.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#cpm-1"><i class="fa fa-check"></i><b>7.8.2</b> CPM</a></li>
+<li class="chapter" data-level="7.8.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#size-factor-rle"><i class="fa fa-check"></i><b>7.8.3</b> Size-factor (RLE)</a></li>
+<li class="chapter" data-level="7.8.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#upperquantile"><i class="fa fa-check"></i><b>7.8.4</b> Upperquantile</a></li>
+<li class="chapter" data-level="7.8.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#tmm-1"><i class="fa fa-check"></i><b>7.8.5</b> TMM</a></li>
+<li class="chapter" data-level="7.8.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#scran-1"><i class="fa fa-check"></i><b>7.8.6</b> scran</a></li>
+<li class="chapter" data-level="7.8.7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#downsampling-1"><i class="fa fa-check"></i><b>7.8.7</b> Downsampling</a></li>
+<li class="chapter" data-level="7.8.8" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalisation-for-genetranscript-length"><i class="fa fa-check"></i><b>7.8.8</b> Normalisation for gene/transcript length</a></li>
+<li class="chapter" data-level="7.8.9" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#exercise-1"><i class="fa fa-check"></i><b>7.8.9</b> Exercise</a></li>
+<li class="chapter" data-level="7.8.10" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo-3"><i class="fa fa-check"></i><b>7.8.10</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.9" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#normalization-practice-reads"><i class="fa fa-check"></i><b>7.9</b> Normalization practice (Reads)</a></li>
+<li class="chapter" data-level="7.10" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#dealing-with-confounders"><i class="fa fa-check"></i><b>7.10</b> Dealing with confounders</a><ul>
+<li class="chapter" data-level="7.10.1" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#introduction-6"><i class="fa fa-check"></i><b>7.10.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.10.2" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#remove-unwanted-variation"><i class="fa fa-check"></i><b>7.10.2</b> Remove Unwanted Variation</a></li>
+<li class="chapter" data-level="7.10.3" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#combat"><i class="fa fa-check"></i><b>7.10.3</b> Combat</a></li>
+<li class="chapter" data-level="7.10.4" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#mnncorrect"><i class="fa fa-check"></i><b>7.10.4</b> mnnCorrect</a></li>
+<li class="chapter" data-level="7.10.5" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#glm"><i class="fa fa-check"></i><b>7.10.5</b> GLM</a></li>
+<li class="chapter" data-level="7.10.6" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#how-to-evaluate-and-compare-confounder-removal-strategies"><i class="fa fa-check"></i><b>7.10.6</b> How to evaluate and compare confounder removal strategies</a></li>
+<li class="chapter" data-level="7.10.7" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#big-exercise-2"><i class="fa fa-check"></i><b>7.10.7</b> Big Exercise</a></li>
+<li class="chapter" data-level="7.10.8" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#sessioninfo-4"><i class="fa fa-check"></i><b>7.10.8</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="7.11" data-path="cleaning-the-expression-matrix.html"><a href="cleaning-the-expression-matrix.html#dealing-with-confounders-reads"><i class="fa fa-check"></i><b>7.11</b> Dealing with confounders (Reads)</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="biological-analysis.html"><a href="biological-analysis.html"><i class="fa fa-check"></i><b>8</b> Biological Analysis</a><ul>
+<li class="chapter" data-level="8.1" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-introduction"><i class="fa fa-check"></i><b>8.1</b> Clustering Introduction</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-7"><i class="fa fa-check"></i><b>8.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.1.2" data-path="biological-analysis.html"><a href="biological-analysis.html#dimensionality-reductions"><i class="fa fa-check"></i><b>8.1.2</b> Dimensionality reductions</a></li>
+<li class="chapter" data-level="8.1.3" data-path="biological-analysis.html"><a href="biological-analysis.html#clustering-methods"><i class="fa fa-check"></i><b>8.1.3</b> Clustering methods</a></li>
+<li class="chapter" data-level="8.1.4" data-path="biological-analysis.html"><a href="biological-analysis.html#challenges-in-clustering"><i class="fa fa-check"></i><b>8.1.4</b> Challenges in clustering</a></li>
+<li class="chapter" data-level="8.1.5" data-path="biological-analysis.html"><a href="biological-analysis.html#tools-for-scrna-seq-data"><i class="fa fa-check"></i><b>8.1.5</b> Tools for scRNA-seq data</a></li>
+<li class="chapter" data-level="8.1.6" data-path="biological-analysis.html"><a href="biological-analysis.html#comparing-clustering"><i class="fa fa-check"></i><b>8.1.6</b> Comparing clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="biological-analysis.html"><a href="biological-analysis.html#clust-methods"><i class="fa fa-check"></i><b>8.2</b> Clustering example</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="biological-analysis.html"><a href="biological-analysis.html#deng-dataset"><i class="fa fa-check"></i><b>8.2.1</b> Deng dataset</a></li>
+<li class="chapter" data-level="8.2.2" data-path="biological-analysis.html"><a href="biological-analysis.html#sc3-1"><i class="fa fa-check"></i><b>8.2.2</b> SC3</a></li>
+<li class="chapter" data-level="8.2.3" data-path="biological-analysis.html"><a href="biological-analysis.html#pcareduce-1"><i class="fa fa-check"></i><b>8.2.3</b> pcaReduce</a></li>
+<li class="chapter" data-level="8.2.4" data-path="biological-analysis.html"><a href="biological-analysis.html#tsne-kmeans"><i class="fa fa-check"></i><b>8.2.4</b> tSNE + kmeans</a></li>
+<li class="chapter" data-level="8.2.5" data-path="biological-analysis.html"><a href="biological-analysis.html#snn-cliq-1"><i class="fa fa-check"></i><b>8.2.5</b> SNN-Cliq</a></li>
+<li class="chapter" data-level="8.2.6" data-path="biological-analysis.html"><a href="biological-analysis.html#sincera-1"><i class="fa fa-check"></i><b>8.2.6</b> SINCERA</a></li>
+<li class="chapter" data-level="8.2.7" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-5"><i class="fa fa-check"></i><b>8.2.7</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="biological-analysis.html"><a href="biological-analysis.html#feature-selection"><i class="fa fa-check"></i><b>8.3</b> Feature Selection</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="biological-analysis.html"><a href="biological-analysis.html#identifying-genes-vs-a-null-model"><i class="fa fa-check"></i><b>8.3.1</b> Identifying Genes vs a Null Model</a></li>
+<li class="chapter" data-level="8.3.2" data-path="biological-analysis.html"><a href="biological-analysis.html#correlated-expression"><i class="fa fa-check"></i><b>8.3.2</b> Correlated Expression</a></li>
+<li class="chapter" data-level="8.3.3" data-path="biological-analysis.html"><a href="biological-analysis.html#comparing-methods"><i class="fa fa-check"></i><b>8.3.3</b> Comparing Methods</a></li>
+<li class="chapter" data-level="8.3.4" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-6"><i class="fa fa-check"></i><b>8.3.4</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="biological-analysis.html"><a href="biological-analysis.html#pseudotime-analysis"><i class="fa fa-check"></i><b>8.4</b> Pseudotime analysis</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="biological-analysis.html"><a href="biological-analysis.html#first-look-at-deng-data"><i class="fa fa-check"></i><b>8.4.1</b> First look at Deng data</a></li>
+<li class="chapter" data-level="8.4.2" data-path="biological-analysis.html"><a href="biological-analysis.html#tscan"><i class="fa fa-check"></i><b>8.4.2</b> TSCAN</a></li>
+<li class="chapter" data-level="8.4.3" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle"><i class="fa fa-check"></i><b>8.4.3</b> monocle</a></li>
+<li class="chapter" data-level="8.4.4" data-path="biological-analysis.html"><a href="biological-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>8.4.4</b> Diffusion maps</a></li>
+<li class="chapter" data-level="8.4.5" data-path="biological-analysis.html"><a href="biological-analysis.html#slicer"><i class="fa fa-check"></i><b>8.4.5</b> SLICER</a></li>
+<li class="chapter" data-level="8.4.6" data-path="biological-analysis.html"><a href="biological-analysis.html#ouija"><i class="fa fa-check"></i><b>8.4.6</b> Ouija</a></li>
+<li class="chapter" data-level="8.4.7" data-path="biological-analysis.html"><a href="biological-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>8.4.7</b> Comparison of the methods</a></li>
+<li class="chapter" data-level="8.4.8" data-path="biological-analysis.html"><a href="biological-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>8.4.8</b> Expression of genes through time</a></li>
+<li class="chapter" data-level="8.4.9" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-7"><i class="fa fa-check"></i><b>8.4.9</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="biological-analysis.html"><a href="biological-analysis.html#imputation"><i class="fa fa-check"></i><b>8.5</b> Imputation</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="biological-analysis.html"><a href="biological-analysis.html#scimpute"><i class="fa fa-check"></i><b>8.5.1</b> scImpute</a></li>
+<li class="chapter" data-level="8.5.2" data-path="biological-analysis.html"><a href="biological-analysis.html#magic"><i class="fa fa-check"></i><b>8.5.2</b> MAGIC</a></li>
+<li class="chapter" data-level="8.5.3" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-8"><i class="fa fa-check"></i><b>8.5.3</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="biological-analysis.html"><a href="biological-analysis.html#dechapter"><i class="fa fa-check"></i><b>8.6</b> Differential Expression (DE) analysis</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="biological-analysis.html"><a href="biological-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>8.6.1</b> Bulk RNA-seq</a></li>
+<li class="chapter" data-level="8.6.2" data-path="biological-analysis.html"><a href="biological-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>8.6.2</b> Single cell RNA-seq</a></li>
+<li class="chapter" data-level="8.6.3" data-path="biological-analysis.html"><a href="biological-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>8.6.3</b> Differences in Distribution</a></li>
+<li class="chapter" data-level="8.6.4" data-path="biological-analysis.html"><a href="biological-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>8.6.4</b> Models of single-cell RNASeq data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="biological-analysis.html"><a href="biological-analysis.html#de-in-a-real-dataset"><i class="fa fa-check"></i><b>8.7</b> DE in a real dataset</a><ul>
+<li class="chapter" data-level="8.7.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-8"><i class="fa fa-check"></i><b>8.7.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.7.2" data-path="biological-analysis.html"><a href="biological-analysis.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>8.7.2</b> Kolmogorov-Smirnov test</a></li>
+<li class="chapter" data-level="8.7.3" data-path="biological-analysis.html"><a href="biological-analysis.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>8.7.3</b> Wilcox/Mann-Whitney-U Test</a></li>
+<li class="chapter" data-level="8.7.4" data-path="biological-analysis.html"><a href="biological-analysis.html#edger"><i class="fa fa-check"></i><b>8.7.4</b> edgeR</a></li>
+<li class="chapter" data-level="8.7.5" data-path="biological-analysis.html"><a href="biological-analysis.html#monocle-1"><i class="fa fa-check"></i><b>8.7.5</b> Monocle</a></li>
+<li class="chapter" data-level="8.7.6" data-path="biological-analysis.html"><a href="biological-analysis.html#mast"><i class="fa fa-check"></i><b>8.7.6</b> MAST</a></li>
+<li class="chapter" data-level="8.7.7" data-path="biological-analysis.html"><a href="biological-analysis.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>8.7.7</b> Slow Methods (&gt;1h to run)</a></li>
+<li class="chapter" data-level="8.7.8" data-path="biological-analysis.html"><a href="biological-analysis.html#bpsc"><i class="fa fa-check"></i><b>8.7.8</b> BPSC</a></li>
+<li class="chapter" data-level="8.7.9" data-path="biological-analysis.html"><a href="biological-analysis.html#scde"><i class="fa fa-check"></i><b>8.7.9</b> SCDE</a></li>
+<li class="chapter" data-level="8.7.10" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-9"><i class="fa fa-check"></i><b>8.7.10</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="biological-analysis.html"><a href="biological-analysis.html#comparingcombining-scrnaseq-datasets"><i class="fa fa-check"></i><b>8.8</b> Comparing/Combining scRNASeq datasets</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="biological-analysis.html"><a href="biological-analysis.html#introduction-9"><i class="fa fa-check"></i><b>8.8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.8.2" data-path="biological-analysis.html"><a href="biological-analysis.html#datasets"><i class="fa fa-check"></i><b>8.8.2</b> Datasets</a></li>
+<li class="chapter" data-level="8.8.3" data-path="biological-analysis.html"><a href="biological-analysis.html#projecting-cells-onto-annotated-cell-types-scmap"><i class="fa fa-check"></i><b>8.8.3</b> Projecting cells onto annotated cell-types (scmap)</a></li>
+<li class="chapter" data-level="8.8.4" data-path="biological-analysis.html"><a href="biological-analysis.html#cell-to-cell-mapping"><i class="fa fa-check"></i><b>8.8.4</b> Cell-to-Cell mapping</a></li>
+<li class="chapter" data-level="8.8.5" data-path="biological-analysis.html"><a href="biological-analysis.html#metaneighbour"><i class="fa fa-check"></i><b>8.8.5</b> Metaneighbour</a></li>
+<li class="chapter" data-level="8.8.6" data-path="biological-analysis.html"><a href="biological-analysis.html#mnncorrect-1"><i class="fa fa-check"></i><b>8.8.6</b> mnnCorrect</a></li>
+<li class="chapter" data-level="8.8.7" data-path="biological-analysis.html"><a href="biological-analysis.html#cannonical-correlation-analysis-seurat"><i class="fa fa-check"></i><b>8.8.7</b> Cannonical Correlation Analysis (Seurat)</a></li>
+<li class="chapter" data-level="8.8.8" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-10"><i class="fa fa-check"></i><b>8.8.8</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="biological-analysis.html"><a href="biological-analysis.html#search-scrna-seq-data"><i class="fa fa-check"></i><b>8.9</b> Search scRNA-Seq data</a><ul>
+<li class="chapter" data-level="8.9.1" data-path="biological-analysis.html"><a href="biological-analysis.html#about"><i class="fa fa-check"></i><b>8.9.1</b> About</a></li>
+<li class="chapter" data-level="8.9.2" data-path="biological-analysis.html"><a href="biological-analysis.html#dataset"><i class="fa fa-check"></i><b>8.9.2</b> Dataset</a></li>
+<li class="chapter" data-level="8.9.3" data-path="biological-analysis.html"><a href="biological-analysis.html#gene-index"><i class="fa fa-check"></i><b>8.9.3</b> Gene Index</a></li>
+<li class="chapter" data-level="8.9.4" data-path="biological-analysis.html"><a href="biological-analysis.html#marker-genes"><i class="fa fa-check"></i><b>8.9.4</b> Marker genes</a></li>
+<li class="chapter" data-level="8.9.5" data-path="biological-analysis.html"><a href="biological-analysis.html#search-cells-by-a-gene-list"><i class="fa fa-check"></i><b>8.9.5</b> Search cells by a gene list</a></li>
+<li class="chapter" data-level="8.9.6" data-path="biological-analysis.html"><a href="biological-analysis.html#sessioninfo-11"><i class="fa fa-check"></i><b>8.9.6</b> sessionInfo()</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="seurat-chapter.html"><a href="seurat-chapter.html"><i class="fa fa-check"></i><b>9</b> Seurat</a><ul>
+<li class="chapter" data-level="9.1" data-path="seurat-chapter.html"><a href="seurat-chapter.html#seurat-object-class"><i class="fa fa-check"></i><b>9.1</b> <code>Seurat</code> object class</a></li>
+<li class="chapter" data-level="9.2" data-path="seurat-chapter.html"><a href="seurat-chapter.html#expression-qc"><i class="fa fa-check"></i><b>9.2</b> Expression QC</a></li>
+<li class="chapter" data-level="9.3" data-path="seurat-chapter.html"><a href="seurat-chapter.html#normalization"><i class="fa fa-check"></i><b>9.3</b> Normalization</a></li>
+<li class="chapter" data-level="9.4" data-path="seurat-chapter.html"><a href="seurat-chapter.html#highly-variable-genes-1"><i class="fa fa-check"></i><b>9.4</b> Highly variable genes</a></li>
+<li class="chapter" data-level="9.5" data-path="seurat-chapter.html"><a href="seurat-chapter.html#dealing-with-confounders-1"><i class="fa fa-check"></i><b>9.5</b> Dealing with confounders</a></li>
+<li class="chapter" data-level="9.6" data-path="seurat-chapter.html"><a href="seurat-chapter.html#linear-dimensionality-reduction"><i class="fa fa-check"></i><b>9.6</b> Linear dimensionality reduction</a></li>
+<li class="chapter" data-level="9.7" data-path="seurat-chapter.html"><a href="seurat-chapter.html#significant-pcs"><i class="fa fa-check"></i><b>9.7</b> Significant PCs</a></li>
+<li class="chapter" data-level="9.8" data-path="seurat-chapter.html"><a href="seurat-chapter.html#clustering-cells"><i class="fa fa-check"></i><b>9.8</b> Clustering cells</a></li>
+<li class="chapter" data-level="9.9" data-path="seurat-chapter.html"><a href="seurat-chapter.html#marker-genes-1"><i class="fa fa-check"></i><b>9.9</b> Marker genes</a></li>
+<li class="chapter" data-level="9.10" data-path="seurat-chapter.html"><a href="seurat-chapter.html#sessioninfo-12"><i class="fa fa-check"></i><b>9.10</b> sessionInfo()</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><i class="fa fa-check"></i><b>10</b> “Ideal” scRNAseq pipeline (as of Oct 2017)</a><ul>
+<li class="chapter" data-level="10.1" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html#experimental-design"><i class="fa fa-check"></i><b>10.1</b> Experimental Design</a></li>
+<li class="chapter" data-level="10.2" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html#processing-reads"><i class="fa fa-check"></i><b>10.2</b> Processing Reads</a></li>
+<li class="chapter" data-level="10.3" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>10.3</b> Preparing Expression Matrix</a></li>
+<li class="chapter" data-level="10.4" data-path="ideal-scrnaseq-pipeline-as-of-oct-2017.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2017.html#biological-interpretation"><i class="fa fa-check"></i><b>10.4</b> Biological Interpretation</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>11</b> Advanced exercises</a></li>
+<li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources</a><ul>
+<li class="chapter" data-level="12.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>12.1</b> scRNA-seq protocols</a></li>
+<li class="chapter" data-level="12.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>12.2</b> External RNA Control Consortium (ERCC)</a></li>
+<li class="chapter" data-level="12.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>12.3</b> scRNA-seq analysis tools</a></li>
+<li class="chapter" data-level="12.4" data-path="resources.html"><a href="resources.html#scrna-seq-public-datasets"><i class="fa fa-check"></i><b>12.4</b> scRNA-seq public datasets</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+<li class="divider"></li>
+<li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Analysis of single cell RNA-seq data</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="references" class="section level1">
+<h1><span class="header-section-number">13</span> References</h1>
+
+<div id="refs" class="references">
+<div>
+<p>Altschul, Stephen F., Warren Gish, Webb Miller, Eugene W. Myers, and David J. Lipman. 1990. “Basic Local Alignment Search Tool.” <em>Journal of Molecular Biology</em> 215 (3). Elsevier BV: 403–10. doi:<a href="https://doi.org/10.1016/s0022-2836(05)80360-2">10.1016/s0022-2836(05)80360-2</a>.</p>
+</div>
+<div>
+<p>Anders, Simon, and Wolfgang Huber. 2010. “Differential Expression Analysis for Sequence Count Data.” <em>Genome Biol</em> 11 (10). Springer Nature: R106. doi:<a href="https://doi.org/10.1186/gb-2010-11-10-r106">10.1186/gb-2010-11-10-r106</a>.</p>
+</div>
+<div>
+<p>Archer, Nathan, Mark D. Walsh, Vahid Shahrezaei, and Daniel Hebenstreit. 2016. “Modeling Enzyme Processivity Reveals That RNA-Seq Libraries Are Biased in Characteristic and Correctable Ways.” <em>Cell Systems</em> 3 (5). Elsevier BV: 467–479.e12. doi:<a href="https://doi.org/10.1016/j.cels.2016.10.012">10.1016/j.cels.2016.10.012</a>.</p>
+</div>
+<div>
+<p>Blondel, Vincent D, Jean-Loup Guillaume, Renaud Lambiotte, and Etienne Lefebvre. 2008. “Fast Unfolding of Communities in Large Networks.” <em>J. Stat. Mech.</em> 2008 (10). IOP Publishing: P10008. doi:<a href="https://doi.org/10.1088/1742-5468/2008/10/p10008">10.1088/1742-5468/2008/10/p10008</a>.</p>
+</div>
+<div>
+<p>Bray, Nicolas L, Harold Pimentel, Páll Melsted, and Lior Pachter. 2016. “Near-Optimal Probabilistic Rna-Seq Quantification.” <em>Nat Biotechnol</em> 34 (5): 525–27. doi:<a href="https://doi.org/10.1038/nbt.3519">10.1038/nbt.3519</a>.</p>
+</div>
+<div>
+<p>Bullard, James H, Elizabeth Purdom, Kasper D Hansen, and Sandrine Dudoit. 2010. “Evaluation of Statistical Methods for Normalization and Differential Expression in mRNA-Seq Experiments.” <em>BMC Bioinformatics</em> 11 (1). Springer Nature: 94. doi:<a href="https://doi.org/10.1186/1471-2105-11-94">10.1186/1471-2105-11-94</a>.</p>
+</div>
+<div>
+<p>Buttner, Maren, Zhichao Miao, Alexander Wolf, Sarah A Teichmann, and Fabian J Theis. 2017. “Assessment of Batch-Correction Methods for scRNA-seq Data with a New Test Metric.” <em>bioRxiv</em>, October, 200345.</p>
+</div>
+<div>
+<p>Cannoodt, Robrecht, Wouter Saelens, and Yvan Saeys. 2016. “Computational Methods for Trajectory Inference from Single-Cell Transcriptomics.” <em>Eur. J. Immunol.</em> 46 (11). Wiley-Blackwell: 2496–2506. doi:<a href="https://doi.org/10.1002/eji.201646347">10.1002/eji.201646347</a>.</p>
+</div>
+<div>
+<p>Deng, Q., D. Ramskold, B. Reinius, and R. Sandberg. 2014. “Single-Cell RNA-Seq Reveals Dynamic, Random Monoallelic Gene Expression in Mammalian Cells.” <em>Science</em> 343 (6167). American Association for the Advancement of Science (AAAS): 193–96. doi:<a href="https://doi.org/10.1126/science.1245316">10.1126/science.1245316</a>.</p>
+</div>
+<div>
+<p>Dijk, David van, Juozas Nainys, Roshan Sharma, Pooja Kathail, Ambrose J Carr, Kevin R Moon, Linas Mazutis, Guy Wolf, Smita Krishnaswamy, and Dana Pe’er. 2017. “MAGIC: A Diffusion-Based Imputation Method Reveals Gene-Gene Interactions in Single-Cell RNA-sequencing Data.” <em>bioRxiv</em>, February, 111591.</p>
+</div>
+<div>
+<p>Gierahn, Todd M, Marc H Wadsworth 2nd, Travis K Hughes, Bryan D Bryson, Andrew Butler, Rahul Satija, Sarah Fortune, J Christopher Love, and Alex K Shalek. 2017. “Seq-Well: Portable, Low-Cost RNA Sequencing of Single Cells at High Throughput.” <em>Nat. Methods</em> 14 (4): 395–98.</p>
+</div>
+<div>
+<p>Guo, Minzhe, Hui Wang, S. Steven Potter, Jeffrey A. Whitsett, and Yan Xu. 2015. “SINCERA: A Pipeline for Single-Cell RNA-Seq Profiling Analysis.” <em>PLoS Comput Biol</em> 11 (11). Public Library of Science (PLoS): e1004575. doi:<a href="https://doi.org/10.1371/journal.pcbi.1004575">10.1371/journal.pcbi.1004575</a>.</p>
+</div>
+<div>
+<p>Haghverdi, Laleh, Aaron T L Lun, Michael D Morgan, and John C Marioni. 2017. “Correcting Batch Effects in Single-Cell RNA Sequencing Data by Matching Mutual Nearest Neighbours.” <em>bioRxiv</em>, July, 165118.</p>
+</div>
+<div>
+<p>Hashimshony, Tamar, Naftalie Senderovich, Gal Avital, Agnes Klochendler, Yaron de Leeuw, Leon Anavy, Dave Gennert, et al. 2016. “CEL-Seq2: Sensitive Highly-Multiplexed Single-Cell RNA-Seq.” <em>Genome Biol</em> 17 (1). Springer Nature. doi:<a href="https://doi.org/10.1186/s13059-016-0938-8">10.1186/s13059-016-0938-8</a>.</p>
+</div>
+<div>
+<p>Hashimshony, Tamar, Florian Wagner, Noa Sher, and Itai Yanai. 2012. “CEL-Seq: Single-cell RNA-Seq by Multiplexed Linear Amplification.” <em>Cell Reports</em> 2 (3). Elsevier BV: 666–73. doi:<a href="https://doi.org/10.1016/j.celrep.2012.08.003">10.1016/j.celrep.2012.08.003</a>.</p>
+</div>
+<div>
+<p>Islam, Saiful, Amit Zeisel, Simon Joost, Gioele La Manno, Pawel Zajac, Maria Kasper, Peter Lönnerberg, and Sten Linnarsson. 2013. “Quantitative Single-Cell RNA-Seq with Unique Molecular Identifiers.” <em>Nat Meth</em> 11 (2). Springer Nature: 163–66. doi:<a href="https://doi.org/10.1038/nmeth.2772">10.1038/nmeth.2772</a>.</p>
+</div>
+<div>
+<p>Jaitin, Diego Adhemar, Ephraim Kenigsberg, Hadas Keren-Shaul, Naama Elefant, Franziska Paul, Irina Zaretsky, Alexander Mildner, et al. 2014. “Massively Parallel Single-Cell RNA-seq for Marker-Free Decomposition of Tissues into Cell Types.” <em>Science</em> 343 (6172): 776–79.</p>
+</div>
+<div>
+<p>Kharchenko, Peter V, Lev Silberstein, and David T Scadden. 2014. “Bayesian Approach to Single-Cell Differential Expression Analysis.” <em>Nat Meth</em> 11 (7). Springer Nature: 740–42. doi:<a href="https://doi.org/10.1038/nmeth.2967">10.1038/nmeth.2967</a>.</p>
+</div>
+<div>
+<p>Kiselev, Vladimir Yu, and Martin Hemberg. 2017. “Scmap - a Tool for Unsupervised Projection of Single Cell RNA-seq Data.” <em>bioRxiv</em>, July, 150292.</p>
+</div>
+<div>
+<p>Kiselev, Vladimir Yu, Kristina Kirschner, Michael T Schaub, Tallulah Andrews, Andrew Yiu, Tamir Chandra, Kedar N Natarajan, et al. 2017. “SC3: Consensus Clustering of Single-Cell RNA-Seq Data.” <em>Nat Meth</em> 14 (5). Springer Nature: 483–86. doi:<a href="https://doi.org/10.1038/nmeth.4236">10.1038/nmeth.4236</a>.</p>
+</div>
+<div>
+<p>Klein, Allon M., Linas Mazutis, Ilke Akartuna, Naren Tallapragada, Adrian Veres, Victor Li, Leonid Peshkin, David A. Weitz, and Marc W. Kirschner. 2015. “Droplet Barcoding for Single-Cell Transcriptomics Applied to Embryonic Stem Cells.” <em>Cell</em> 161 (5). Elsevier BV: 1187–1201. doi:<a href="https://doi.org/10.1016/j.cell.2015.04.044">10.1016/j.cell.2015.04.044</a>.</p>
+</div>
+<div>
+<p>Kolodziejczyk, Aleksandra A., Jong Kyoung Kim, Valentine Svensson, John C. Marioni, and Sarah A. Teichmann. 2015. “The Technology and Biology of Single-Cell RNA Sequencing.” <em>Molecular Cell</em> 58 (4). Elsevier BV: 610–20. doi:<a href="https://doi.org/10.1016/j.molcel.2015.04.005">10.1016/j.molcel.2015.04.005</a>.</p>
+</div>
+<div>
+<p>L. Lun, Aaron T., Karsten Bach, and John C. Marioni. 2016. “Pooling Across Cells to Normalize Single-Cell RNA Sequencing Data with Many Zero Counts.” <em>Genome Biol</em> 17 (1). Springer Nature. doi:<a href="https://doi.org/10.1186/s13059-016-0947-7">10.1186/s13059-016-0947-7</a>.</p>
+</div>
+<div>
+<p>Levine, Jacob H., Erin F. Simonds, Sean C. Bendall, Kara L. Davis, El-ad D. Amir, Michelle D. Tadmor, Oren Litvin, et al. 2015. “Data-Driven Phenotypic Dissection of AML Reveals Progenitor-Like Cells That Correlate with Prognosis.” <em>Cell</em> 162 (1). Elsevier BV: 184–97. doi:<a href="https://doi.org/10.1016/j.cell.2015.05.047">10.1016/j.cell.2015.05.047</a>.</p>
+</div>
+<div>
+<p>Li, Wei Vivian, and Jingyi Jessica Li. 2017. “scImpute: Accurate and Robust Imputation for Single Cell RNA-Seq Data.” <em>bioRxiv</em>, June, 141598.</p>
+</div>
+<div>
+<p>Macosko, Evan Z., Anindita Basu, Rahul Satija, James Nemesh, Karthik Shekhar, Melissa Goldman, Itay Tirosh, et al. 2015. “Highly Parallel Genome-Wide Expression Profiling of Individual Cells Using Nanoliter Droplets.” <em>Cell</em> 161 (5). Elsevier BV: 1202–14. doi:<a href="https://doi.org/10.1016/j.cell.2015.05.002">10.1016/j.cell.2015.05.002</a>.</p>
+</div>
+<div>
+<p>McCarthy, Davis J., Kieran R. Campbell, Aaron T. L. Lun, and Quin F. Wills. 2017. “Scater: Pre-processing, Quality Control, Normalization and Visualization of Single-Cell RNA-Seq Data in R.” <em>Bioinformatics</em>, January. Oxford University Press (OUP), btw777. doi:<a href="https://doi.org/10.1093/bioinformatics/btw777">10.1093/bioinformatics/btw777</a>.</p>
+</div>
+<div>
+<p>Muraro, Mauro J., Gitanjali Dharmadhikari, Dominic Grün, Nathalie Groen, Tim Dielen, Erik Jansen, Leon van Gurp, et al. 2016. “A Single-Cell Transcriptome Atlas of the Human Pancreas.” <em>Cell Systems</em> 3 (4). Elsevier BV: 385–394.e3. doi:<a href="https://doi.org/10.1016/j.cels.2016.09.002">10.1016/j.cels.2016.09.002</a>.</p>
+</div>
+<div>
+<p>Picelli, Simone, Åsa K Björklund, Omid R Faridani, Sven Sagasser, Gösta Winberg, and Rickard Sandberg. 2013. “Smart-Seq2 for Sensitive Full-Length Transcriptome Profiling in Single Cells.” <em>Nat Meth</em> 10 (11). Springer Nature: 1096–8. doi:<a href="https://doi.org/10.1038/nmeth.2639">10.1038/nmeth.2639</a>.</p>
+</div>
+<div>
+<p>Picelli, Simone, Omid R Faridani, Asa K Björklund, Gösta Winberg, Sven Sagasser, and Rickard Sandberg. 2014. “Full-Length RNA-seq from Single Cells Using Smart-Seq2.” <em>Nat. Protoc.</em> 9 (1): 171–81.</p>
+</div>
+<div>
+<p>Regev, Aviv, Sarah Teichmann, Eric S Lander, Ido Amit, Christophe Benoist, Ewan Birney, Bernd Bodenmiller, et al. 2017. “The Human Cell Atlas.” <em>bioRxiv</em>, May, 121202.</p>
+</div>
+<div>
+<p>Robinson, Mark D, and Alicia Oshlack. 2010. “A Scaling Normalization Method for Differential Expression Analysis of RNA-Seq Data.” <em>Genome Biol</em> 11 (3). Springer Nature: R25. doi:<a href="https://doi.org/10.1186/gb-2010-11-3-r25">10.1186/gb-2010-11-3-r25</a>.</p>
+</div>
+<div>
+<p>Segerstolpe, Åsa, Athanasia Palasantza, Pernilla Eliasson, Eva-Marie Andersson, Anne-Christine Andréasson, Xiaoyan Sun, Simone Picelli, et al. 2016. “Single-Cell Transcriptome Profiling of Human Pancreatic Islets in Health and Type 2 Diabetes.” <em>Cell Metabolism</em> 24 (4). Elsevier BV: 593–607. doi:<a href="https://doi.org/10.1016/j.cmet.2016.08.020">10.1016/j.cmet.2016.08.020</a>.</p>
+</div>
+<div>
+<p>Soumillon, Magali, Davide Cacchiarelli, Stefan Semrau, Alexander van Oudenaarden, and Tarjei S Mikkelsen. 2014. “Characterization of Directed Differentiation by High-Throughput Single-Cell RNA-Seq.” <em>bioRxiv</em>, March, 003236.</p>
+</div>
+<div>
+<p>Stegle, Oliver, Sarah A. Teichmann, and John C. Marioni. 2015. “Computational and Analytical Challenges in Single-Cell Transcriptomics.” <em>Nat Rev Genet</em> 16 (3). Springer Nature: 133–45. doi:<a href="https://doi.org/10.1038/nrg3833">10.1038/nrg3833</a>.</p>
+</div>
+<div>
+<p>Svensson, Valentine, Kedar Nath Natarajan, Lam-Ha Ly, Ricardo J Miragaia, Charlotte Labalette, Iain C Macaulay, Ana Cvejic, and Sarah A Teichmann. 2017. “Power Analysis of Single-Cell RNA-Sequencing Experiments.” <em>Nat Meth</em> 14 (4). Springer Nature: 381–87. doi:<a href="https://doi.org/10.1038/nmeth.4220">10.1038/nmeth.4220</a>.</p>
+</div>
+<div>
+<p>Tang, Fuchou, Catalin Barbacioru, Yangzhou Wang, Ellen Nordman, Clarence Lee, Nanlan Xu, Xiaohui Wang, et al. 2009. “mRNA-Seq Whole-Transcriptome Analysis of a Single Cell.” <em>Nat Meth</em> 6 (5). Springer Nature: 377–82. doi:<a href="https://doi.org/10.1038/nmeth.1315">10.1038/nmeth.1315</a>.</p>
+</div>
+<div>
+<p>Tung, Po-Yuan, John D. Blischak, Chiaowen Joyce Hsiao, David A. Knowles, Jonathan E. Burnett, Jonathan K. Pritchard, and Yoav Gilad. 2017. “Batch Effects and the Effective Design of Single-Cell Gene Expression Studies.” <em>Sci. Rep.</em> 7 (January). Springer Nature: 39921. doi:<a href="https://doi.org/10.1038/srep39921">10.1038/srep39921</a>.</p>
+</div>
+<div>
+<p>Welch, Joshua D., Alexander J. Hartemink, and Jan F. Prins. 2016. “SLICER: Inferring Branched, Nonlinear Cellular Trajectories from Single Cell RNA-Seq Data.” <em>Genome Biol</em> 17 (1). Springer Nature. doi:<a href="https://doi.org/10.1186/s13059-016-0975-3">10.1186/s13059-016-0975-3</a>.</p>
+</div>
+<div>
+<p>Wickham, Hadley. 2014. “Tidy Data.” <em>J Stat Softw</em> 59 (10). doi:<a href="https://doi.org/10.18637/jss.v059.i10">10.18637/jss.v059.i10</a>.</p>
+</div>
+<div>
+<p>Xu, Chen, and Zhengchang Su. 2015. “Identification of Cell Types from Single-Cell Transcriptomes Using a Novel Clustering Method.” <em>Bioinformatics</em> 31 (12). Oxford University Press (OUP): 1974–80. doi:<a href="https://doi.org/10.1093/bioinformatics/btv088">10.1093/bioinformatics/btv088</a>.</p>
+</div>
+<div>
+<p>Ziegenhain, Christoph, Beate Vieth, Swati Parekh, Björn Reinius, Amy Guillaumet-Adkins, Martha Smets, Heinrich Leonhardt, Holger Heyn, Ines Hellmann, and Wolfgang Enard. 2017. “Comparative Analysis of Single-Cell RNA Sequencing Methods.” <em>Molecular Cell</em> 65 (4). Elsevier BV: 631–643.e4. doi:<a href="https://doi.org/10.1016/j.molcel.2017.01.023">10.1016/j.molcel.2017.01.023</a>.</p>
+</div>
+<div>
+<p>žurauskienė, Justina, and Christopher Yau. 2016. “pcaReduce: Hierarchical Clustering of Single Cell Transcriptional Profiles.” <em>BMC Bioinformatics</em> 17 (1). Springer Nature. doi:<a href="https://doi.org/10.1186/s12859-016-0984-y">10.1186/s12859-016-0984-y</a>.</p>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="resources.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["scRNA-seq-course.pdf"],
+"toc": {
+"collapse": "section"
+},
+"search": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
