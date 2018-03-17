@@ -14,13 +14,9 @@ docker run quay.io/hemberg-group/scrna-seq-course
 
 # copy files from the docker
 alias dl='docker ps -l -q'
-docker cp `dl`:/home/rstudio/_book $WORKSPACE/tmp1
-cp -r tmp1/* docs
-# docker cp `dl`:tung $WORKSPACE/tmp2
-# cp -r tmp2/* tung
+docker cp `dl`:/home/rstudio/_book tmp
+cp -r tmp/* docs
 
 # push changes to the website
 git add docs/*
-# git add tung/*
 git commit -m "update the course website"
-# git push origin master
