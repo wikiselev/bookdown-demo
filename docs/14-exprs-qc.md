@@ -129,14 +129,10 @@ hist(
 abline(v = 25000, col = "red")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{14-exprs-qc_files/figure-latex/total-counts-hist-1} 
-
-}
-
-\caption{Histogram of library sizes for all cells}(\#fig:total-counts-hist)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="14-exprs-qc_files/figure-html/total-counts-hist-1.png" alt="Histogram of library sizes for all cells" width="90%" />
+<p class="caption">(\#fig:total-counts-hist)Histogram of library sizes for all cells</p>
+</div>
 
 __Exercise 1__
 
@@ -167,14 +163,10 @@ hist(
 abline(v = 7000, col = "red")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{14-exprs-qc_files/figure-latex/total-features-hist-1} 
-
-}
-
-\caption{Histogram of the number of detected genes in all cells}(\#fig:total-features-hist)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="14-exprs-qc_files/figure-html/total-features-hist-1.png" alt="Histogram of the number of detected genes in all cells" width="90%" />
+<p class="caption">(\#fig:total-features-hist)Histogram of the number of detected genes in all cells</p>
+</div>
 
 From the plot we conclude that most cells have between 7,000-10,000 detected genes,
 which is normal for high-depth scRNA-seq. However, this varies by
@@ -217,14 +209,10 @@ plotPhenoData(
 )
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{14-exprs-qc_files/figure-latex/mt-vs-counts-1} 
-
-}
-
-\caption{Percentage of counts in MT genes}(\#fig:mt-vs-counts)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="14-exprs-qc_files/figure-html/mt-vs-counts-1.png" alt="Percentage of counts in MT genes" width="90%" />
+<p class="caption">(\#fig:mt-vs-counts)Percentage of counts in MT genes</p>
+</div>
 
 
 ```r
@@ -238,14 +226,10 @@ plotPhenoData(
 )
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{14-exprs-qc_files/figure-latex/ercc-vs-counts-1} 
-
-}
-
-\caption{Percentage of counts in ERCCs}(\#fig:ercc-vs-counts)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="14-exprs-qc_files/figure-html/ercc-vs-counts-1.png" alt="Percentage of counts in ERCCs" width="90%" />
+<p class="caption">(\#fig:ercc-vs-counts)Percentage of counts in ERCCs</p>
+</div>
 
 The above analysis shows that majority of the cells from NA19098.r2 batch have a very high ERCC/Endo ratio. Indeed, it has been shown by the authors that this batch contains cells of smaller size. 
 
@@ -334,14 +318,10 @@ umi <- plotPCA(
 )
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{14-exprs-qc_files/figure-latex/auto-cell-filt-1} 
-
-}
-
-\caption{PCA plot used for automatic detection of cell outliers}(\#fig:auto-cell-filt)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="14-exprs-qc_files/figure-html/auto-cell-filt-1.png" alt="PCA plot used for automatic detection of cell outliers" width="90%" />
+<p class="caption">(\#fig:auto-cell-filt)PCA plot used for automatic detection of cell outliers</p>
+</div>
 
 
 ```r
@@ -382,14 +362,10 @@ __Answer__
 ##     plotMA
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{14-exprs-qc_files/figure-latex/cell-filt-comp-1} 
-
-}
-
-\caption{Comparison of the default, automatic and manual cell filters}(\#fig:cell-filt-comp)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="14-exprs-qc_files/figure-html/cell-filt-comp-1.png" alt="Comparison of the default, automatic and manual cell filters" width="90%" />
+<p class="caption">(\#fig:cell-filt-comp)Comparison of the default, automatic and manual cell filters</p>
+</div>
 
 ### Gene analysis
 
@@ -404,14 +380,10 @@ It is often instructive to consider the number of reads consumed by the top 50 e
 plotQC(umi, type = "highest-expression")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{14-exprs-qc_files/figure-latex/top50-gene-expr-1} 
-
-}
-
-\caption{Number of total counts consumed by the top 50 expressed genes}(\#fig:top50-gene-expr)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="14-exprs-qc_files/figure-html/top50-gene-expr-1.png" alt="Number of total counts consumed by the top 50 expressed genes" width="90%" />
+<p class="caption">(\#fig:top50-gene-expr)Number of total counts consumed by the top 50 expressed genes</p>
+</div>
 
 The distributions are relatively flat indicating (but not guaranteeing!) good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
 
@@ -498,52 +470,52 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] limma_3.34.8               scater_1.6.2              
+##  [1] limma_3.34.9               scater_1.6.3              
 ##  [3] ggplot2_2.2.1              SingleCellExperiment_1.0.0
 ##  [5] SummarizedExperiment_1.8.1 DelayedArray_0.4.1        
-##  [7] matrixStats_0.53.0         Biobase_2.38.0            
-##  [9] GenomicRanges_1.30.1       GenomeInfoDb_1.14.0       
+##  [7] matrixStats_0.53.1         Biobase_2.38.0            
+##  [9] GenomicRanges_1.30.3       GenomeInfoDb_1.14.0       
 ## [11] IRanges_2.12.0             S4Vectors_0.16.0          
-## [13] BiocGenerics_0.24.0        knitr_1.19                
+## [13] BiocGenerics_0.24.0        knitr_1.20                
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] ggbeeswarm_0.6.0       minqa_1.2.4            colorspace_1.3-2      
-##   [4] mvoutlier_2.0.8        rjson_0.2.15           modeltools_0.2-21     
-##   [7] class_7.3-14           mclust_5.4             rprojroot_1.3-2       
-##  [10] XVector_0.18.0         pls_2.6-0              cvTools_0.3.2         
-##  [13] MatrixModels_0.4-1     flexmix_2.3-14         bit64_0.9-7           
-##  [16] AnnotationDbi_1.40.0   mvtnorm_1.0-7          sROC_0.1-2            
-##  [19] splines_3.4.3          tximport_1.6.0         robustbase_0.92-8     
-##  [22] nloptr_1.0.4           robCompositions_2.0.6  pbkrtest_0.4-7        
-##  [25] kernlab_0.9-25         cluster_2.0.6          shinydashboard_0.6.1  
-##  [28] shiny_1.0.5            rrcov_1.4-3            compiler_3.4.3        
-##  [31] httr_1.3.1             backports_1.1.2        assertthat_0.2.0      
-##  [34] Matrix_1.2-7.1         lazyeval_0.2.1         htmltools_0.3.6       
-##  [37] quantreg_5.35          prettyunits_1.0.2      tools_3.4.3           
-##  [40] bindrcpp_0.2           gtable_0.2.0           glue_1.2.0            
-##  [43] GenomeInfoDbData_1.0.0 reshape2_1.4.3         dplyr_0.7.4           
-##  [46] Rcpp_0.12.15           trimcluster_0.1-2      sgeostat_1.0-27       
-##  [49] nlme_3.1-129           fpc_2.1-11             lmtest_0.9-35         
-##  [52] laeken_0.4.6           xfun_0.1               stringr_1.2.0         
-##  [55] lme4_1.1-15            mime_0.5               XML_3.98-1.9          
-##  [58] edgeR_3.20.8           DEoptimR_1.0-8         zoo_1.8-1             
-##  [61] zlibbioc_1.24.0        MASS_7.3-45            scales_0.5.0          
-##  [64] VIM_4.7.0              SparseM_1.77           rhdf5_2.22.0          
-##  [67] RColorBrewer_1.1-2     yaml_2.1.16            memoise_1.1.0         
-##  [70] gridExtra_2.3          biomaRt_2.34.2         reshape_0.8.7         
-##  [73] stringi_1.1.6          RSQLite_2.0            pcaPP_1.9-73          
-##  [76] e1071_1.6-8            boot_1.3-18            prabclus_2.2-6        
-##  [79] rlang_0.1.6            pkgconfig_2.0.1        bitops_1.0-6          
-##  [82] evaluate_0.10.1        lattice_0.20-34        bindr_0.1             
-##  [85] labeling_0.3           cowplot_0.9.2          bit_1.1-12            
-##  [88] GGally_1.3.2           plyr_1.8.4             magrittr_1.5          
-##  [91] bookdown_0.6           R6_2.2.2               DBI_0.7               
-##  [94] pillar_1.1.0           mgcv_1.8-23            RCurl_1.95-4.10       
-##  [97] sp_1.2-7               nnet_7.3-12            tibble_1.4.2          
-## [100] car_2.1-6              rmarkdown_1.8          viridis_0.5.0         
-## [103] progress_1.1.2         locfit_1.5-9.1         grid_3.4.3            
-## [106] data.table_1.10.4-3    blob_1.1.0             diptest_0.75-7        
-## [109] vcd_1.4-4              digest_0.6.15          xtable_1.8-2          
-## [112] httpuv_1.3.5           munsell_0.4.3          beeswarm_0.2.3        
-## [115] viridisLite_0.3.0      vipor_0.4.5
+##   [1] backports_1.1.2        plyr_1.8.4             lazyeval_0.2.1        
+##   [4] sp_1.2-7               shinydashboard_0.6.1   splines_3.4.3         
+##   [7] digest_0.6.15          htmltools_0.3.6        viridis_0.5.0         
+##  [10] magrittr_1.5           memoise_1.1.0          cluster_2.0.6         
+##  [13] prettyunits_1.0.2      colorspace_1.3-2       blob_1.1.0            
+##  [16] rrcov_1.4-3            xfun_0.1               dplyr_0.7.4           
+##  [19] RCurl_1.95-4.10        tximport_1.6.0         lme4_1.1-15           
+##  [22] bindr_0.1              zoo_1.8-1              glue_1.2.0            
+##  [25] gtable_0.2.0           zlibbioc_1.24.0        XVector_0.18.0        
+##  [28] MatrixModels_0.4-1     car_2.1-6              kernlab_0.9-25        
+##  [31] prabclus_2.2-6         DEoptimR_1.0-8         SparseM_1.77          
+##  [34] VIM_4.7.0              scales_0.5.0           sgeostat_1.0-27       
+##  [37] mvtnorm_1.0-7          DBI_0.7                GGally_1.3.2          
+##  [40] edgeR_3.20.9           Rcpp_0.12.15           sROC_0.1-2            
+##  [43] viridisLite_0.3.0      xtable_1.8-2           progress_1.1.2        
+##  [46] laeken_0.4.6           bit_1.1-12             mclust_5.4            
+##  [49] vcd_1.4-4              httr_1.3.1             RColorBrewer_1.1-2    
+##  [52] fpc_2.1-11             modeltools_0.2-21      pkgconfig_2.0.1       
+##  [55] reshape_0.8.7          XML_3.98-1.10          flexmix_2.3-14        
+##  [58] nnet_7.3-12            locfit_1.5-9.1         labeling_0.3          
+##  [61] rlang_0.2.0            reshape2_1.4.3         AnnotationDbi_1.40.0  
+##  [64] munsell_0.4.3          tools_3.4.3            RSQLite_2.0           
+##  [67] pls_2.6-0              evaluate_0.10.1        stringr_1.3.0         
+##  [70] cvTools_0.3.2          yaml_2.1.17            bit64_0.9-7           
+##  [73] robustbase_0.92-8      bindrcpp_0.2           nlme_3.1-129          
+##  [76] mime_0.5               quantreg_5.35          biomaRt_2.34.2        
+##  [79] compiler_3.4.3         pbkrtest_0.4-7         beeswarm_0.2.3        
+##  [82] e1071_1.6-8            tibble_1.4.2           robCompositions_2.0.6 
+##  [85] pcaPP_1.9-73           stringi_1.1.6          highr_0.6             
+##  [88] lattice_0.20-34        trimcluster_0.1-2      Matrix_1.2-7.1        
+##  [91] nloptr_1.0.4           pillar_1.2.1           lmtest_0.9-35         
+##  [94] data.table_1.10.4-3    cowplot_0.9.2          bitops_1.0-6          
+##  [97] httpuv_1.3.6.1         R6_2.2.2               bookdown_0.7          
+## [100] gridExtra_2.3          vipor_0.4.5            boot_1.3-18           
+## [103] MASS_7.3-45            assertthat_0.2.0       rhdf5_2.22.0          
+## [106] rprojroot_1.3-2        rjson_0.2.15           GenomeInfoDbData_1.0.0
+## [109] diptest_0.75-7         mgcv_1.8-23            grid_3.4.3            
+## [112] class_7.3-14           minqa_1.2.4            rmarkdown_1.8         
+## [115] mvoutlier_2.0.9        shiny_1.0.5            ggbeeswarm_0.6.0
 ```

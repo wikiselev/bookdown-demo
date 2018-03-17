@@ -93,8 +93,7 @@ __Exercise 2__
 Using the functions rowMeans and rowVars to plot the relationship between mean expression
 and variance for all genes in this dataset. (Hint: use log="xy" to plot on a log-scale).
 
-
-\begin{center}\includegraphics{26-dropouts_files/figure-latex/unnamed-chunk-6-1} \end{center}
+<img src="26-dropouts_files/figure-html/unnamed-chunk-6-1.png" width="816" style="display: block; margin: auto;" />
 A popular method to correct for the relationship between variance and mean expression
 was proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html).
 To use the Brennecke method, we first normalize for library size then calculate
@@ -119,9 +118,7 @@ Brennecke_HVG <- BrenneckeGetVariableGenes(
 )
 ```
 
-
-
-\begin{center}\includegraphics{26-dropouts_files/figure-latex/unnamed-chunk-7-1} \end{center}
+<img src="26-dropouts_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 HVG_genes <- Brennecke_HVG$Gene
@@ -179,9 +176,7 @@ points(
 )
 ```
 
-
-
-\begin{center}\includegraphics{26-dropouts_files/figure-latex/unnamed-chunk-8-1} \end{center}
+<img src="26-dropouts_files/figure-html/unnamed-chunk-8-1.png" width="816" style="display: block; margin: auto;" />
 __Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures.
 
 __Exercise 3__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
@@ -199,9 +194,7 @@ M3Drop_genes <- M3DropFeatureSelection(
 )
 ```
 
-
-
-\begin{center}\includegraphics{26-dropouts_files/figure-latex/unnamed-chunk-10-1} \end{center}
+<img src="26-dropouts_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 M3Drop_genes <- M3Drop_genes$Gene
@@ -272,9 +265,7 @@ plot(
 ) 
 ```
 
-
-
-\begin{center}\includegraphics{26-dropouts_files/figure-latex/unnamed-chunk-13-1} \end{center}
+<img src="26-dropouts_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 # calculate loadings for components 1 and 2
@@ -301,9 +292,7 @@ M3DropExpressionHeatmap(
 )
 ```
 
-
-
-\begin{center}\includegraphics{26-dropouts_files/figure-latex/unnamed-chunk-15-1} \end{center}
+<img src="26-dropouts_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" />
 
 We can also consider how consistent each feature selection method is with the others using the Jaccard Index:
 
@@ -353,31 +342,31 @@ Plot the expression of the features for each of the other methods. Which appear 
 ## other attached packages:
 ##  [1] SingleCellExperiment_1.0.0 SummarizedExperiment_1.8.1
 ##  [3] DelayedArray_0.4.1         Biobase_2.38.0            
-##  [5] GenomicRanges_1.30.1       GenomeInfoDb_1.14.0       
+##  [5] GenomicRanges_1.30.3       GenomeInfoDb_1.14.0       
 ##  [7] IRanges_2.12.0             S4Vectors_0.16.0          
 ##  [9] BiocGenerics_0.24.0        RColorBrewer_1.1-2        
 ## [11] M3Drop_3.05.00             numDeriv_2016.8-1         
-## [13] matrixStats_0.53.0         scRNA.seq.funcs_0.1.0     
-## [15] knitr_1.19                
+## [13] matrixStats_0.53.1         scRNA.seq.funcs_0.1.0     
+## [15] knitr_1.20                
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] splines_3.4.3          elliptic_1.3-7         gtools_3.5.0          
 ##  [4] Formula_1.2-2          moments_0.14           statmod_1.4.30        
-##  [7] latticeExtra_0.6-28    GenomeInfoDbData_1.0.0 yaml_2.1.16           
-## [10] pillar_1.1.0           backports_1.1.2        lattice_0.20-34       
+##  [7] latticeExtra_0.6-28    GenomeInfoDbData_1.0.0 yaml_2.1.17           
+## [10] pillar_1.2.1           backports_1.1.2        lattice_0.20-34       
 ## [13] bbmle_1.0.20           digest_0.6.15          XVector_0.18.0        
 ## [16] checkmate_1.8.5        colorspace_1.3-2       htmltools_0.3.6       
-## [19] Matrix_1.2-7.1         plyr_1.8.4             bookdown_0.6          
+## [19] Matrix_1.2-7.1         plyr_1.8.4             bookdown_0.7          
 ## [22] zlibbioc_1.24.0        scales_0.5.0           gdata_2.18.0          
 ## [25] Rtsne_0.13             htmlTable_1.11.2       tibble_1.4.2          
 ## [28] mgcv_1.8-23            ggplot2_2.2.1          nnet_7.3-12           
 ## [31] lazyeval_0.2.1         survival_2.40-1        magrittr_1.5          
 ## [34] evaluate_0.10.1        nlme_3.1-129           MASS_7.3-45           
 ## [37] gplots_3.0.1           foreign_0.8-67         reldist_1.6-6         
-## [40] tools_3.4.3            data.table_1.10.4-3    stringr_1.2.0         
+## [40] tools_3.4.3            data.table_1.10.4-3    stringr_1.3.0         
 ## [43] munsell_0.4.3          cluster_2.0.6          irlba_2.3.2           
 ## [46] orthopolynom_1.0-5     compiler_3.4.3         caTools_1.17.1        
-## [49] contfrac_1.1-11        rlang_0.1.6            grid_3.4.3            
+## [49] contfrac_1.1-11        rlang_0.2.0            grid_3.4.3            
 ## [52] RCurl_1.95-4.10        rstudioapi_0.7         htmlwidgets_1.0       
 ## [55] bitops_1.0-6           base64enc_0.1-3        rmarkdown_1.8         
 ## [58] hypergeo_1.2-13        gtable_0.2.0           deSolve_1.20          

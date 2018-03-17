@@ -307,7 +307,7 @@ barcode_rank <- rank(-umi_per_barcode[,2])
 plot(barcode_rank, umi_per_barcode[,2], xlim=c(1,8000))
 ```
 
-![](05-L1-process-raw_files/figure-latex/unnamed-chunk-11-1.pdf)<!-- --> 
+<img src="05-L1-process-raw_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 Here we can see an roughly exponential curve of library sizes, so to make
 things simpler lets log-transform them.
@@ -318,7 +318,7 @@ log_lib_size <- log10(umi_per_barcode[,2])
 plot(barcode_rank, log_lib_size, xlim=c(1,8000))
 ```
 
-![](05-L1-process-raw_files/figure-latex/unnamed-chunk-12-1.pdf)<!-- --> 
+<img src="05-L1-process-raw_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 That's better, the "knee" in the distribution is much more pronounced. We 
 could manually estimate where the "knee" is but it much more reproducible to
 algorithmically identify this point.
@@ -337,7 +337,7 @@ plot(barcode_rank, log_lib_size, xlim=c(1,8000))
 abline(v=inflection, col="red", lwd=2)
 ```
 
-![](05-L1-process-raw_files/figure-latex/unnamed-chunk-13-1.pdf)<!-- --> 
+<img src="05-L1-process-raw_files/figure-html/unnamed-chunk-13-1.png" width="672" />
 
 ```r
 threshold <- 10^log_lib_size[inflection]
@@ -382,7 +382,7 @@ mix <- normalmixEM(log_lib_size)
 plot(mix, which=2, xlab2="log(mol per cell)")
 ```
 
-![](05-L1-process-raw_files/figure-latex/unnamed-chunk-14-1.pdf)<!-- --> 
+<img src="05-L1-process-raw_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 
 ```r
 p1 <- dnorm(log_lib_size, mean=mix$mu[1], sd=mix$sigma[1])
@@ -415,7 +415,7 @@ plot(totals, xlim=c(1,8000))
 abline(h=thresh, col="red", lwd=2)
 ```
 
-![](05-L1-process-raw_files/figure-latex/unnamed-chunk-16-1.pdf)<!-- --> 
+<img src="05-L1-process-raw_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 __Exercise__
 Identify cells using this threshodl and calculate the TPR and Recall.
 

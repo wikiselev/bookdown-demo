@@ -32,14 +32,10 @@ output: html_document
     * Transcription factor detection (regulatory networks) require high read depth and most sensitive protocols (i.e. Fluidigm C1)
     * Cell clustering & cell-type identification benefits from large number of cells and doesn't requireas high sequencing depth (~100,000 reads per cell).
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{figures/Pipeline-batches} 
-
-}
-
-\caption{Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction.}(\#fig:pipeline-batches)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/Pipeline-batches.png" alt="Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction." width="90%" />
+<p class="caption">(\#fig:pipeline-batches)Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction.</p>
+</div>
 ## Processing Reads
 * Read QC & Trimming
     * [FASTQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [cutadapt](http://cutadapt.readthedocs.io/en/stable/index.html)

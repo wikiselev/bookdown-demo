@@ -47,9 +47,7 @@ VlnPlot(
 )
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-5-1} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 GenePlot(
@@ -59,9 +57,7 @@ GenePlot(
 )
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-5-2} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" />
 
 Now we will exclude cells with a clear outlier number of read counts:
 
@@ -100,9 +96,7 @@ seuset <- FindVariableGenes(
 )
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-8-1} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 length(x = seuset@var.genes)
@@ -226,17 +220,13 @@ PrintPCA(object = seuset, pcs.print = 1:5, genes.print = 5, use.full = FALSE)
 VizPCA(object = seuset, pcs.use = 1:2)
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-11-1} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 PCAPlot(object = seuset, dim.1 = 1, dim.2 = 2)
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-11-2} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" />
 
 In particular, `PCHeatmap` allows for easy exploration of the primary sources of heterogeneity in a dataset, and can be useful when trying to decide which PCs to include for further downstream analyses. Both cells and genes are ordered according to their `PCA` scores. Setting `cells.use` to a number plots the _extreme_ cells on both ends of the spectrum, which dramatically speeds plotting for large datasets:
 
@@ -251,9 +241,7 @@ PCHeatmap(
 )
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-12-1} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
 
 ## Significant PCs
 
@@ -277,9 +265,7 @@ JackStrawPlot(object = seuset, PCs = 1:9)
 ## Warning: Removed 39410 rows containing missing values (geom_point).
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-14-1} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" />
 
 A more ad hoc method for determining which PCs to use is to look at a plot of the standard deviations of the principle components and draw your cutoff where there is a clear elbow in the graph. This can be done with `PCElbowPlot`. In this example, it looks like the elbow would fall around PC 5.
 
@@ -287,9 +273,7 @@ A more ad hoc method for determining which PCs to use is to look at a plot of th
 PCElbowPlot(object = seuset)
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-15-1} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" />
 
 ## Clustering cells
 
@@ -315,7 +299,7 @@ PrintFindClustersParams(object = seuset)
 ```
 
 ```
-## Parameters used in latest FindClusters calculation run on: 2018-02-27 21:15:36
+## Parameters used in latest FindClusters calculation run on: 2018-03-17 14:15:52
 ## =============================================================================
 ## Resolution: 1
 ## -----------------------------------------------------------------------------
@@ -361,9 +345,7 @@ seuset <- RunTSNE(
 TSNEPlot(object = seuset)
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-19-1} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" />
 
 ## Marker genes
 
@@ -379,9 +361,7 @@ Marker genes can then be visualised:
 VlnPlot(object = seuset, features.plot = rownames(markers2)[1:2])
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-21-1} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 FeaturePlot(
@@ -392,9 +372,7 @@ FeaturePlot(
 )
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-21-2} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-21-2.png" width="672" style="display: block; margin: auto;" />
 
 `FindAllMarkers` automates this process and find markers for all clusters:
 
@@ -419,9 +397,7 @@ DoHeatmap(
 )
 ```
 
-
-
-\begin{center}\includegraphics{33-seurat_files/figure-latex/unnamed-chunk-23-1} \end{center}
+<img src="33-seurat_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise__: Compare marker genes provided by `Seurat` and `SC3`.
 
@@ -451,58 +427,56 @@ __Exercise__: Compare marker genes provided by `Seurat` and `SC3`.
 ## 
 ## other attached packages:
 ##  [1] bindrcpp_0.2               dplyr_0.7.4               
-##  [3] mclust_5.4                 Seurat_2.2.0              
+##  [3] mclust_5.4                 Seurat_2.2.1              
 ##  [5] Matrix_1.2-7.1             cowplot_0.9.2             
 ##  [7] ggplot2_2.2.1              SingleCellExperiment_1.0.0
 ##  [9] SummarizedExperiment_1.8.1 DelayedArray_0.4.1        
-## [11] matrixStats_0.53.0         Biobase_2.38.0            
-## [13] GenomicRanges_1.30.1       GenomeInfoDb_1.14.0       
+## [11] matrixStats_0.53.1         Biobase_2.38.0            
+## [13] GenomicRanges_1.30.3       GenomeInfoDb_1.14.0       
 ## [15] IRanges_2.12.0             S4Vectors_0.16.0          
-## [17] BiocGenerics_0.24.0        knitr_1.19                
+## [17] BiocGenerics_0.24.0        knitr_1.20                
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] backports_1.1.2        Hmisc_4.1-1            VGAM_1.0-4            
-##   [4] NMF_0.20.6             sn_1.5-1               plyr_1.8.4            
-##   [7] igraph_1.1.2           lazyeval_0.2.1         splines_3.4.3         
-##  [10] gridBase_0.4-7         digest_0.6.15          foreach_1.4.4         
-##  [13] htmltools_0.3.6        lars_1.2               gdata_2.18.0          
-##  [16] magrittr_1.5           checkmate_1.8.5        cluster_2.0.6         
-##  [19] doParallel_1.0.11      mixtools_1.1.0         ROCR_1.0-7            
-##  [22] sfsmisc_1.1-1          recipes_0.1.2          gower_0.1.2           
-##  [25] dimRed_0.1.0           R.utils_2.6.0          colorspace_1.3-2      
-##  [28] xfun_0.1               RCurl_1.95-4.10        bindr_0.1             
-##  [31] survival_2.40-1        iterators_1.0.9        ape_5.0               
-##  [34] glue_1.2.0             DRR_0.0.3              registry_0.5          
-##  [37] gtable_0.2.0           ipred_0.9-6            zlibbioc_1.24.0       
-##  [40] XVector_0.18.0         kernlab_0.9-25         ddalpha_1.3.1.1       
-##  [43] prabclus_2.2-6         DEoptimR_1.0-8         scales_0.5.0          
-##  [46] mvtnorm_1.0-7          rngtools_1.2.4         Rcpp_0.12.15          
-##  [49] dtw_1.18-1             xtable_1.8-2           htmlTable_1.11.2      
-##  [52] tclust_1.3-1           foreign_0.8-67         proxy_0.4-21          
-##  [55] SDMTools_1.1-221       Formula_1.2-2          tsne_0.1-3            
-##  [58] lava_1.6               prodlim_1.6.1          htmlwidgets_1.0       
-##  [61] FNN_1.1                gplots_3.0.1           RColorBrewer_1.1-2    
-##  [64] fpc_2.1-11             acepack_1.4.1          modeltools_0.2-21     
-##  [67] ica_1.0-1              pkgconfig_2.0.1        R.methodsS3_1.7.1     
-##  [70] flexmix_2.3-14         nnet_7.3-12            caret_6.0-78          
-##  [73] labeling_0.3           tidyselect_0.2.3       rlang_0.1.6           
-##  [76] reshape2_1.4.3         munsell_0.4.3          tools_3.4.3           
-##  [79] ranger_0.9.0           broom_0.4.3            ggridges_0.4.1        
-##  [82] evaluate_0.10.1        stringr_1.2.0          yaml_2.1.16           
-##  [85] ModelMetrics_1.1.0     robustbase_0.92-8      caTools_1.17.1        
-##  [88] purrr_0.2.4            pbapply_1.3-4          nlme_3.1-129          
-##  [91] R.oo_1.21.0            RcppRoll_0.2.2         compiler_3.4.3        
-##  [94] rstudioapi_0.7         tibble_1.4.2           stringi_1.1.6         
-##  [97] lattice_0.20-34        trimcluster_0.1-2      psych_1.7.8           
-## [100] diffusionMap_1.1-0     pillar_1.1.0           irlba_2.3.2           
-## [103] data.table_1.10.4-3    bitops_1.0-6           R6_2.2.2              
-## [106] latticeExtra_0.6-28    bookdown_0.6           KernSmooth_2.23-15    
-## [109] gridExtra_2.3          codetools_0.2-15       MASS_7.3-45           
-## [112] gtools_3.5.0           assertthat_0.2.0       CVST_0.2-1            
-## [115] pkgmaker_0.22          rprojroot_1.3-2        withr_2.1.1           
-## [118] mnormt_1.5-5           GenomeInfoDbData_1.0.0 diptest_0.75-7        
-## [121] grid_3.4.3             rpart_4.1-10           timeDate_3042.101     
-## [124] tidyr_0.8.0            class_7.3-14           rmarkdown_1.8         
-## [127] segmented_0.5-3.0      Rtsne_0.13             numDeriv_2016.8-1     
-## [130] scatterplot3d_0.3-40   lubridate_1.7.2        base64enc_0.1-3
+##   [1] backports_1.1.2        Hmisc_4.1-1            VGAM_1.0-5            
+##   [4] sn_1.5-1               plyr_1.8.4             igraph_1.1.2          
+##   [7] lazyeval_0.2.1         splines_3.4.3          digest_0.6.15         
+##  [10] foreach_1.4.4          htmltools_0.3.6        lars_1.2              
+##  [13] gdata_2.18.0           magrittr_1.5           checkmate_1.8.5       
+##  [16] cluster_2.0.6          mixtools_1.1.0         ROCR_1.0-7            
+##  [19] sfsmisc_1.1-1          recipes_0.1.2          gower_0.1.2           
+##  [22] dimRed_0.1.0           R.utils_2.6.0          colorspace_1.3-2      
+##  [25] xfun_0.1               RCurl_1.95-4.10        bindr_0.1             
+##  [28] survival_2.40-1        iterators_1.0.9        ape_5.0               
+##  [31] glue_1.2.0             DRR_0.0.3              gtable_0.2.0          
+##  [34] ipred_0.9-6            zlibbioc_1.24.0        XVector_0.18.0        
+##  [37] kernlab_0.9-25         ddalpha_1.3.1.1        prabclus_2.2-6        
+##  [40] DEoptimR_1.0-8         scales_0.5.0           mvtnorm_1.0-7         
+##  [43] Rcpp_0.12.15           metap_0.8              dtw_1.18-1            
+##  [46] htmlTable_1.11.2       tclust_1.3-1           foreign_0.8-67        
+##  [49] proxy_0.4-21           SDMTools_1.1-221       Formula_1.2-2         
+##  [52] tsne_0.1-3             lava_1.6               prodlim_1.6.1         
+##  [55] htmlwidgets_1.0        FNN_1.1                gplots_3.0.1          
+##  [58] RColorBrewer_1.1-2     fpc_2.1-11             acepack_1.4.1         
+##  [61] modeltools_0.2-21      ica_1.0-1              pkgconfig_2.0.1       
+##  [64] R.methodsS3_1.7.1      flexmix_2.3-14         nnet_7.3-12           
+##  [67] caret_6.0-78           labeling_0.3           tidyselect_0.2.4      
+##  [70] rlang_0.2.0            reshape2_1.4.3         munsell_0.4.3         
+##  [73] tools_3.4.3            ranger_0.9.0           broom_0.4.3           
+##  [76] ggridges_0.4.1         evaluate_0.10.1        stringr_1.3.0         
+##  [79] yaml_2.1.17            ModelMetrics_1.1.0     robustbase_0.92-8     
+##  [82] caTools_1.17.1         purrr_0.2.4            pbapply_1.3-4         
+##  [85] nlme_3.1-129           R.oo_1.21.0            RcppRoll_0.2.2        
+##  [88] compiler_3.4.3         rstudioapi_0.7         tibble_1.4.2          
+##  [91] stringi_1.1.6          lattice_0.20-34        trimcluster_0.1-2     
+##  [94] psych_1.7.8            diffusionMap_1.1-0     pillar_1.2.1          
+##  [97] data.table_1.10.4-3    bitops_1.0-6           irlba_2.3.2           
+## [100] R6_2.2.2               latticeExtra_0.6-28    bookdown_0.7          
+## [103] KernSmooth_2.23-15     gridExtra_2.3          codetools_0.2-15      
+## [106] MASS_7.3-45            gtools_3.5.0           assertthat_0.2.0      
+## [109] CVST_0.2-1             rprojroot_1.3-2        withr_2.1.1           
+## [112] mnormt_1.5-5           GenomeInfoDbData_1.0.0 diptest_0.75-7        
+## [115] grid_3.4.3             rpart_4.1-10           timeDate_3043.102     
+## [118] tidyr_0.8.0            class_7.3-14           rmarkdown_1.8         
+## [121] segmented_0.5-3.0      Rtsne_0.13             numDeriv_2016.8-1     
+## [124] scatterplot3d_0.3-40   lubridate_1.7.3        base64enc_0.1-3
 ```

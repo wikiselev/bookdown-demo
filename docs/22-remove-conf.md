@@ -245,53 +245,7 @@ for(n in assayNames(umi.qc)) {
 }
 ```
 
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-1} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-2} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-3} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-4} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-5} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-6} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-7} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-8} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-9} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-10} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-11} \end{center}
-
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-10-12} \end{center}
+<img src="22-remove-conf_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-5.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-6.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-7.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-8.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-9.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-10.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-11.png" width="672" style="display: block; margin: auto;" /><img src="22-remove-conf_files/figure-html/unnamed-chunk-10-12.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise 3__
 
@@ -311,9 +265,7 @@ par(mar=c(6,4,1,1))
 boxplot(res, las=2)
 ```
 
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-11-1} \end{center}
+<img src="22-remove-conf_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
 
 #### Effectiveness 3
 
@@ -340,102 +292,43 @@ for(n in assayNames(umi.qc)) {
 }
 ```
 
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-1} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm1)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-2} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm2)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-3} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm3)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-4} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm4)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-5} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm5)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-6} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm6)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-7} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm7)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-8} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm8)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-9} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm9)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-10} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm10)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-11} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm11)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{22-remove-conf_files/figure-latex/confound-cpm-12} 
-
-}
-
-\caption{Explanatory variables (mnn)}(\#fig:confound-cpm12)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-1.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-2.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-3.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-4.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-5.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-6.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-7.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-8.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-9.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-10.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-11.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div><div class="figure" style="text-align: center">
+<img src="22-remove-conf_files/figure-html/confound-cpm-12.png" alt="Explanatory variables (mnn)" width="672" />
+<p class="caption">(\#fig:confound-cpm)Explanatory variables (mnn)</p>
+</div>
 
 __Exercise 4__
 
@@ -502,9 +395,7 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
     ggtitle("Effect of batch regression methods per individual")
 ```
 
-
-
-\begin{center}\includegraphics{22-remove-conf_files/figure-latex/unnamed-chunk-13-1} \end{center}
+<img src="22-remove-conf_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise 5__
 
@@ -542,19 +433,19 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ##  [1] RColorBrewer_1.1-2         reshape2_1.4.3            
 ##  [3] sva_3.26.0                 genefilter_1.60.0         
 ##  [5] mgcv_1.8-23                nlme_3.1-129              
-##  [7] kBET_0.99.5                scran_1.6.7               
-##  [9] scater_1.6.2               SingleCellExperiment_1.0.0
+##  [7] kBET_0.99.5                scran_1.6.8               
+##  [9] scater_1.6.3               SingleCellExperiment_1.0.0
 ## [11] ggplot2_2.2.1              RUVSeq_1.12.0             
-## [13] edgeR_3.20.8               limma_3.34.8              
-## [15] EDASeq_2.12.0              ShortRead_1.36.0          
+## [13] edgeR_3.20.9               limma_3.34.9              
+## [15] EDASeq_2.12.0              ShortRead_1.36.1          
 ## [17] GenomicAlignments_1.14.1   SummarizedExperiment_1.8.1
-## [19] DelayedArray_0.4.1         matrixStats_0.53.0        
-## [21] Rsamtools_1.30.0           GenomicRanges_1.30.1      
+## [19] DelayedArray_0.4.1         matrixStats_0.53.1        
+## [21] Rsamtools_1.30.0           GenomicRanges_1.30.3      
 ## [23] GenomeInfoDb_1.14.0        Biostrings_2.46.0         
 ## [25] XVector_0.18.0             IRanges_2.12.0            
 ## [27] S4Vectors_0.16.0           BiocParallel_1.12.0       
 ## [29] Biobase_2.38.0             BiocGenerics_0.24.0       
-## [31] scRNA.seq.funcs_0.1.0      knitr_1.19                
+## [31] scRNA.seq.funcs_0.1.0      knitr_1.20                
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rtsne_0.13             ggbeeswarm_0.6.0       colorspace_1.3-2      
@@ -569,26 +460,26 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 ## [28] prettyunits_1.0.2      tools_3.4.3            igraph_1.1.2          
 ## [31] bindrcpp_0.2           gtable_0.2.0           glue_1.2.0            
 ## [34] GenomeInfoDbData_1.0.0 dplyr_0.7.4            Rcpp_0.12.15          
-## [37] rtracklayer_1.38.3     xfun_0.1               stringr_1.2.0         
+## [37] rtracklayer_1.38.3     xfun_0.1               stringr_1.3.0         
 ## [40] mime_0.5               hypergeo_1.2-13        statmod_1.4.30        
-## [43] XML_3.98-1.9           zoo_1.8-1              zlibbioc_1.24.0       
+## [43] XML_3.98-1.10          zoo_1.8-1              zlibbioc_1.24.0       
 ## [46] MASS_7.3-45            scales_0.5.0           aroma.light_3.8.0     
-## [49] rhdf5_2.22.0           yaml_2.1.16            memoise_1.1.0         
+## [49] rhdf5_2.22.0           yaml_2.1.17            memoise_1.1.0         
 ## [52] gridExtra_2.3          biomaRt_2.34.2         latticeExtra_0.6-28   
-## [55] stringi_1.1.6          RSQLite_2.0            RMySQL_0.10.13        
-## [58] orthopolynom_1.0-5     GenomicFeatures_1.30.3 contfrac_1.1-11       
-## [61] rlang_0.1.6            pkgconfig_2.0.1        moments_0.14          
-## [64] bitops_1.0-6           evaluate_0.10.1        lattice_0.20-34       
-## [67] bindr_0.1              labeling_0.3           htmlwidgets_1.0       
-## [70] cowplot_0.9.2          bit_1.1-12             deSolve_1.20          
-## [73] plyr_1.8.4             magrittr_1.5           bookdown_0.6          
-## [76] R6_2.2.2               DBI_0.7                pillar_1.1.0          
-## [79] survival_2.40-1        RCurl_1.95-4.10        tibble_1.4.2          
-## [82] rmarkdown_1.8          viridis_0.5.0          progress_1.1.2        
-## [85] locfit_1.5-9.1         grid_3.4.3             data.table_1.10.4-3   
-## [88] FNN_1.1                blob_1.1.0             digest_0.6.15         
-## [91] xtable_1.8-2           httpuv_1.3.5           elliptic_1.3-7        
-## [94] R.utils_2.6.0          munsell_0.4.3          beeswarm_0.2.3        
-## [97] viridisLite_0.3.0      vipor_0.4.5
+## [55] stringi_1.1.6          RSQLite_2.0            highr_0.6             
+## [58] RMySQL_0.10.14         orthopolynom_1.0-5     GenomicFeatures_1.30.3
+## [61] contfrac_1.1-11        rlang_0.2.0            pkgconfig_2.0.1       
+## [64] moments_0.14           bitops_1.0-6           evaluate_0.10.1       
+## [67] lattice_0.20-34        bindr_0.1              labeling_0.3          
+## [70] htmlwidgets_1.0        cowplot_0.9.2          bit_1.1-12            
+## [73] deSolve_1.20           plyr_1.8.4             magrittr_1.5          
+## [76] bookdown_0.7           R6_2.2.2               DBI_0.7               
+## [79] pillar_1.2.1           survival_2.40-1        RCurl_1.95-4.10       
+## [82] tibble_1.4.2           rmarkdown_1.8          viridis_0.5.0         
+## [85] progress_1.1.2         locfit_1.5-9.1         grid_3.4.3            
+## [88] data.table_1.10.4-3    FNN_1.1                blob_1.1.0            
+## [91] digest_0.6.15          xtable_1.8-2           httpuv_1.3.6.1        
+## [94] elliptic_1.3-7         R.utils_2.6.0          munsell_0.4.3         
+## [97] beeswarm_0.2.3         viridisLite_0.3.0      vipor_0.4.5
 ```
 

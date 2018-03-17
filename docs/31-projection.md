@@ -26,35 +26,23 @@ match in a database for a newly identified nucleotide or amino acid sequence. Th
 compare datasets of similar biological origin collected by different labs to ensure that the annotation and the analysis is
 consistent.
 
-\begin{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/CourseCompareTypes.png" alt="Label-centric dataset comparison can be used to compare the annotations of two different samples."  />
+<p class="caption">(\#fig:unnamed-chunk-3)Label-centric dataset comparison can be used to compare the annotations of two different samples.</p>
+</div>
 
-{\centering \includegraphics{figures/CourseCompareTypes} 
-
-}
-
-\caption{Label-centric dataset comparison can be used to compare the annotations of two different samples.}(\#fig:unnamed-chunk-3)
-\end{figure}
-
-\begin{figure}
-
-{\centering \includegraphics{figures/CourseAtlasAssignment} 
-
-}
-
-\caption{Label-centric dataset comparison can project cells from a new experiment onto an annotated reference.}(\#fig:unnamed-chunk-4)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/CourseAtlasAssignment.png" alt="Label-centric dataset comparison can project cells from a new experiment onto an annotated reference."  />
+<p class="caption">(\#fig:unnamed-chunk-4)Label-centric dataset comparison can project cells from a new experiment onto an annotated reference.</p>
+</div>
 
 The cross-dataset normalization approach can also be used to compare datasets of similar biological origin, unlike the label-centric approach it enables the join analysis of multiple datasets to facilitate the identification of rare cell-types which may to too sparsely sampled in each individual dataset to be reliably detected. However, cross-dataset normalization is not applicable to very large and diverse references since it assumes a significant portion of the biological variablility in each of the datasets overlaps with others.
 
 
-\begin{figure}
-
-{\centering \includegraphics{figures/CourseCrossNorm} 
-
-}
-
-\caption{Cross-dataset normalization enables joint-analysis of 2+ scRNASeq datasets.}(\#fig:unnamed-chunk-5)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/CourseCrossNorm.png" alt="Cross-dataset normalization enables joint-analysis of 2+ scRNASeq datasets."  />
+<p class="caption">(\#fig:unnamed-chunk-5)Cross-dataset normalization enables joint-analysis of 2+ scRNASeq datasets.</p>
+</div>
 ### Datasets
 
 We will running these methods on two human pancreas datasets: [@Muraro2016-yk] and [@Segerstolpe2016-wc]. Since the pancreas has been widely studied, these datasets are well annotated.
@@ -182,9 +170,7 @@ muraro <- selectFeatures(muraro, suppress_plot = FALSE)
 ## counts() slot. Dropouts were calculated using logcounts() slot...
 ```
 
-
-
-\begin{center}\includegraphics{31-projection_files/figure-latex/unnamed-chunk-12-1} \end{center}
+<img src="31-projection_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
 
 Genes highlighted with the red colour will be used in the futher analysis (projection).
 
@@ -193,9 +179,7 @@ Genes highlighted with the red colour will be used in the futher analysis (proje
 segerstolpe <- selectFeatures(segerstolpe, suppress_plot = FALSE)
 ```
 
-
-
-\begin{center}\includegraphics{31-projection_files/figure-latex/unnamed-chunk-13-1} \end{center}
+<img src="31-projection_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" />
 From the y-axis of these plots we can see that scmap uses a dropmerged_seurat-based feature selection method.
 
 Now calculate the cell-type index:
@@ -211,9 +195,7 @@ We can also visualize the index:
 heatmap(as.matrix(metadata(muraro)$scmap_cluster_index))
 ```
 
-
-
-\begin{center}\includegraphics{31-projection_files/figure-latex/unnamed-chunk-15-1} \end{center}
+<img src="31-projection_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" />
 
 You may want to adjust your features using the `setFeatures` function if features are too heavily concentrated in only a few cell-types. In this case the dropmerged_seurat-based features look good so we will just them.
 
@@ -329,14 +311,14 @@ plot(getSankey(colData(muraro)$cell_type1,  muraro_to_seger$scmap_cluster_labs[,
 ```
 
 <!-- Sankey generated in R 3.4.3 by googleVis 0.6.2 package -->
-<!-- Tue Feb 27 21:08:14 2018 -->
+<!-- Sat Mar 17 14:08:42 2018 -->
 
 
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataSankeyID2159efdae0f () {
+function gvisDataSankeyIDdd75db0b295 () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -534,8 +516,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartSankeyID2159efdae0f() {
-var data = gvisDataSankeyID2159efdae0f();
+function drawChartSankeyIDdd75db0b295() {
+var data = gvisDataSankeyIDdd75db0b295();
 var options = {};
 options["width"] = 400;
 options["height"] = 400;
@@ -554,7 +536,7 @@ options["sankey"] = {
             };
 
     var chart = new google.visualization.Sankey(
-    document.getElementById('SankeyID2159efdae0f')
+    document.getElementById('SankeyIDdd75db0b295')
     );
     chart.draw(data,options);
     
@@ -578,9 +560,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartSankeyID2159efdae0f);
+callbacks.push(drawChartSankeyIDdd75db0b295);
 })();
-function displayChartSankeyID2159efdae0f() {
+function displayChartSankeyIDdd75db0b295() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -604,11 +586,11 @@ callbacks.shift()();
 </script>
  
 <!-- jsChart -->  
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyID2159efdae0f"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyIDdd75db0b295"></script>
  
 <!-- divChart -->
   
-<div id="SankeyID2159efdae0f" 
+<div id="SankeyIDdd75db0b295" 
   style="width: 400; height: 400;">
 </div>
 
@@ -776,9 +758,7 @@ unsup <- run_MetaNeighbor_US(var.genes, combined_logcounts, unique(pheno$Celltyp
 heatmap(unsup)
 ```
 
-
-
-\begin{center}\includegraphics{31-projection_files/figure-latex/unnamed-chunk-32-1} \end{center}
+<img src="31-projection_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" />
 
 ### mnnCorrect
 [mnnCorrect](https://www.biorxiv.org/content/early/2017/07/18/165118) corrects datasets to facilitate joint analysis. It order to account for differences in composition between two replicates or two different experiments it first matches invidual cells across experiments to find the overlaping biologicial structure. Using that overlap it learns which dimensions of expression correspond to the biological state and which dimensions correspond to batch/experiment effect; mnnCorrect assumes these dimensions are orthologal to each other in high dimensional expression space. Finally it removes the batch/experiment effects from the entire expression matrix to return the corrected matrix.
@@ -789,14 +769,10 @@ Learning the biological/techncial effects is done with either singular value dec
 
 mnnCorrect also assumes you've already subset your expression matricies so that they contain identical genes in the same order, fortunately we have already done with for our datasets when we set up our data for Metaneighbor.
 
-\begin{figure}
-
-{\centering \includegraphics{figures/mnnCorrectDiagramCropped} 
-
-}
-
-\caption{mnnCorrect batch/dataset effect correction. From Haghverdi et al. 2017}(\#fig:unnamed-chunk-33)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/mnnCorrectDiagramCropped.png" alt="mnnCorrect batch/dataset effect correction. From Haghverdi et al. 2017"  />
+<p class="caption">(\#fig:unnamed-chunk-33)mnnCorrect batch/dataset effect correction. From Haghverdi et al. 2017</p>
+</div>
 
 ```r
 require("scran")
@@ -886,9 +862,7 @@ cell_type_labels <- factor(c(colData(muraro)$cell_type1, colData(segerstolpe)$ce
 plot(joint_tsne$Y[,1], joint_tsne$Y[,2], pch=c(16,1)[dataset_labels], col=rainbow(length(levels(cell_type_labels)))[cell_type_labels])
 ```
 
-
-
-\begin{center}\includegraphics{31-projection_files/figure-latex/unnamed-chunk-38-1} \end{center}
+<img src="31-projection_files/figure-html/unnamed-chunk-38-1.png" width="672" style="display: block; margin: auto;" />
 
 ### Cannonical Correlation Analysis (Seurat)
 
@@ -941,22 +915,14 @@ seger_seurat <- ScaleData(object=seger_seurat)
 seger_seurat <- FindVariableGenes(object=seger_seurat, do.plot=TRUE)
 ```
 
-\begin{figure}
-
-{\centering \includegraphics{figures/muraro_seurat_hvg} 
-
-}
-
-\caption{muraro variable genes}(\#fig:unnamed-chunk-42)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics{figures/seger_seurat_hvg} 
-
-}
-
-\caption{segerstolpe variable genes}(\#fig:unnamed-chunk-43)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/muraro_seurat_hvg.png" alt="muraro variable genes"  />
+<p class="caption">(\#fig:unnamed-chunk-42)muraro variable genes</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="figures/seger_seurat_hvg.png" alt="segerstolpe variable genes"  />
+<p class="caption">(\#fig:unnamed-chunk-43)segerstolpe variable genes</p>
+</div>
 Eventhough Seurat corrects for the relationship between dispersion and mean expression, it doesn't use the corrected value when ranking features. Compare the results of the command below with the results in the plots above:
 
 
@@ -988,14 +954,10 @@ Note to speed up the calculations we will be using only the top 5 dimensions but
 merged_seurat <- RunCCA(object=muraro_seurat, object2=seger_seurat, genes.use=gene.use, add.cell.id1="m", add.cell.id2="s", num.cc = 5)
 DimPlot(object = merged_seurat, reduction.use = "cca", group.by = "dataset", pt.size = 0.5) # Before correcting
 ```
-\begin{figure}
-
-{\centering \includegraphics{figures/cca_before} 
-
-}
-
-\caption{Before Aligning}(\#fig:unnamed-chunk-48)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/cca_before.png" alt="Before Aligning"  />
+<p class="caption">(\#fig:unnamed-chunk-48)Before Aligning</p>
+</div>
 To identify dataset specific cell-types we compare how well cells are 'explained' by CCA vs dataset-specific principal component analysis.
 
 
@@ -1015,28 +977,20 @@ merged_seurat <- AlignSubspace(object = merged_seurat, reduction.type = "cca", g
 DimPlot(object = merged_seurat, reduction.use = "cca.aligned", group.by = "dataset", pt.size = 0.5) # After aligning subspaces
 ```
 
-\begin{figure}
-
-{\centering \includegraphics{figures/cca_after} 
-
-}
-
-\caption{After Aligning}(\#fig:unnamed-chunk-51)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/cca_after.png" alt="After Aligning"  />
+<p class="caption">(\#fig:unnamed-chunk-51)After Aligning</p>
+</div>
 
 __Exercise__
 Compare the results for if you use the features after scaling dispersions.
 
 __Answer__
 
-\begin{figure}
-
-{\centering \includegraphics{figures/cca_after2} 
-
-}
-
-\caption{After Aligning}(\#fig:unnamed-chunk-53)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/cca_after2.png" alt="After Aligning"  />
+<p class="caption">(\#fig:unnamed-chunk-53)After Aligning</p>
+</div>
 
 
 __Advanced Exercise__
@@ -1069,16 +1023,16 @@ Use the clustering methods we previously covered on the combined datasets. Do yo
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-##  [1] Rtsne_0.13                 scran_1.6.7               
+##  [1] Rtsne_0.13                 scran_1.6.8               
 ##  [3] BiocParallel_1.12.0        bindrcpp_0.2              
-##  [5] scmap_1.1.5                scater_1.6.2              
+##  [5] scmap_1.1.5                scater_1.6.3              
 ##  [7] SingleCellExperiment_1.0.0 SummarizedExperiment_1.8.1
-##  [9] DelayedArray_0.4.1         matrixStats_0.53.0        
-## [11] GenomicRanges_1.30.1       GenomeInfoDb_1.14.0       
+##  [9] DelayedArray_0.4.1         matrixStats_0.53.1        
+## [11] GenomicRanges_1.30.3       GenomeInfoDb_1.14.0       
 ## [13] IRanges_2.12.0             S4Vectors_0.16.0          
 ## [15] ggplot2_2.2.1              Biobase_2.38.0            
 ## [17] BiocGenerics_0.24.0        googleVis_0.6.2           
-## [19] knitr_1.19                
+## [19] knitr_1.20                
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] bitops_1.0-6           bit64_0.9-7            progress_1.1.2        
@@ -1087,26 +1041,27 @@ Use the clustering methods we previously covered on the combined datasets. Do yo
 ## [10] DT_0.4                 R6_2.2.2               vipor_0.4.5           
 ## [13] DBI_0.7                lazyeval_0.2.1         colorspace_1.3-2      
 ## [16] gridExtra_2.3          prettyunits_1.0.2      bit_1.1-12            
-## [19] compiler_3.4.3         labeling_0.3           bookdown_0.6          
+## [19] compiler_3.4.3         labeling_0.3           bookdown_0.7          
 ## [22] scales_0.5.0           randomForest_4.6-12    proxy_0.4-21          
-## [25] stringr_1.2.0          digest_0.6.15          rmarkdown_1.8         
+## [25] stringr_1.3.0          digest_0.6.15          rmarkdown_1.8         
 ## [28] XVector_0.18.0         pkgconfig_2.0.1        htmltools_0.3.6       
-## [31] limma_3.34.8           htmlwidgets_1.0        rlang_0.1.6           
-## [34] RSQLite_2.0            FNN_1.1                shiny_1.0.5           
-## [37] bindr_0.1              zoo_1.8-1              jsonlite_1.5          
-## [40] dplyr_0.7.4            RCurl_1.95-4.10        magrittr_1.5          
-## [43] GenomeInfoDbData_1.0.0 Matrix_1.2-7.1         Rcpp_0.12.15          
-## [46] ggbeeswarm_0.6.0       munsell_0.4.3          viridis_0.5.0         
-## [49] stringi_1.1.6          yaml_2.1.16            edgeR_3.20.8          
-## [52] zlibbioc_1.24.0        rhdf5_2.22.0           plyr_1.8.4            
-## [55] grid_3.4.3             blob_1.1.0             shinydashboard_0.6.1  
-## [58] lattice_0.20-34        locfit_1.5-9.1         pillar_1.1.0          
-## [61] igraph_1.1.2           rjson_0.2.15           reshape2_1.4.3        
-## [64] codetools_0.2-15       biomaRt_2.34.2         XML_3.98-1.9          
-## [67] glue_1.2.0             evaluate_0.10.1        data.table_1.10.4-3   
-## [70] httpuv_1.3.5           gtable_0.2.0           assertthat_0.2.0      
-## [73] xfun_0.1               mime_0.5               xtable_1.8-2          
-## [76] e1071_1.6-8            class_7.3-14           viridisLite_0.3.0     
-## [79] tibble_1.4.2           AnnotationDbi_1.40.0   beeswarm_0.2.3        
-## [82] memoise_1.1.0          tximport_1.6.0         statmod_1.4.30
+## [31] limma_3.34.9           highr_0.6              htmlwidgets_1.0       
+## [34] rlang_0.2.0            RSQLite_2.0            FNN_1.1               
+## [37] shiny_1.0.5            bindr_0.1              zoo_1.8-1             
+## [40] jsonlite_1.5           dplyr_0.7.4            RCurl_1.95-4.10       
+## [43] magrittr_1.5           GenomeInfoDbData_1.0.0 Matrix_1.2-7.1        
+## [46] Rcpp_0.12.15           ggbeeswarm_0.6.0       munsell_0.4.3         
+## [49] viridis_0.5.0          stringi_1.1.6          yaml_2.1.17           
+## [52] edgeR_3.20.9           zlibbioc_1.24.0        rhdf5_2.22.0          
+## [55] plyr_1.8.4             grid_3.4.3             blob_1.1.0            
+## [58] shinydashboard_0.6.1   lattice_0.20-34        locfit_1.5-9.1        
+## [61] pillar_1.2.1           igraph_1.1.2           rjson_0.2.15          
+## [64] reshape2_1.4.3         codetools_0.2-15       biomaRt_2.34.2        
+## [67] XML_3.98-1.10          glue_1.2.0             evaluate_0.10.1       
+## [70] data.table_1.10.4-3    httpuv_1.3.6.1         gtable_0.2.0          
+## [73] assertthat_0.2.0       xfun_0.1               mime_0.5              
+## [76] xtable_1.8-2           e1071_1.6-8            class_7.3-14          
+## [79] viridisLite_0.3.0      tibble_1.4.2           AnnotationDbi_1.40.0  
+## [82] beeswarm_0.2.3         memoise_1.1.0          tximport_1.6.0        
+## [85] statmod_1.4.30
 ```

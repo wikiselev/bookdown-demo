@@ -49,7 +49,7 @@ counts
 ggplot(data = counts, mapping = aes(x = cell1, y = cell2))
 ```
 
-![](12-L4-ggplot2-pheatmap-PCA_files/figure-latex/unnamed-chunk-1-1.pdf)<!-- --> 
+<img src="12-L4-ggplot2-pheatmap-PCA_files/figure-html/unnamed-chunk-1-1.png" width="672" />
 
 Let's take a closer look at the final command, `ggplot(data = counts, mapping = aes(x = cell1, y = cell2))`. `ggplot()` initialises a ggplot object and takes the arguments `data` and `mapping`. We pass our dataframe of counts to `data` and use the `aes()` function to specify that we would like to use the variable cell1 as our x variable and the variable cell2 as our y variable.
 
@@ -68,7 +68,7 @@ Let's see how our graph would look as a scatterplot.
 ggplot(data = counts, mapping = aes(x = cell1, y = cell2)) + geom_point()
 ```
 
-![](12-L4-ggplot2-pheatmap-PCA_files/figure-latex/unnamed-chunk-2-1.pdf)<!-- --> 
+<img src="12-L4-ggplot2-pheatmap-PCA_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 
 Now we can see that there doesn't seem to be any correlation between gene expression in cell1 and cell2. Given we generated `counts` randomly, this isn't too surprising.
 
@@ -103,7 +103,7 @@ Essentially, the problem before was that our data was not tidy because one varia
 ggplot(counts,aes(x=Cell_ID, y=Counts)) + geom_boxplot()
 ```
 
-![](12-L4-ggplot2-pheatmap-PCA_files/figure-latex/unnamed-chunk-4-1.pdf)<!-- --> 
+<img src="12-L4-ggplot2-pheatmap-PCA_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 Task 3: Use the updated `counts` dataframe to plot a barplot with Cell_ID as the x variable and Counts as the y variable. Hint: you may find it helpful to read `?geom_bar`.
 
@@ -126,7 +126,7 @@ rownames(test) = paste("Gene", 1:20, sep = "")
 pheatmap(test)
 ```
 
-![](12-L4-ggplot2-pheatmap-PCA_files/figure-latex/unnamed-chunk-5-1.pdf)<!-- --> 
+<img src="12-L4-ggplot2-pheatmap-PCA_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 Let's take a moment to work out what this graphic is showing us. Each row represents a gene and each column represents a cell. How highly expressed each gene is in each cell is represented by the colour of the corresponding box. For example, we can tell from this plot that gene18 is highly expressed in cell10 but lowly expressed in cell1.
 
@@ -139,7 +139,7 @@ If we look closely at the trees, we can see that eventually they have the same n
 pheatmap(test, kmeans_k = 2)
 ```
 
-![](12-L4-ggplot2-pheatmap-PCA_files/figure-latex/unnamed-chunk-6-1.pdf)<!-- --> 
+<img src="12-L4-ggplot2-pheatmap-PCA_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
 Now we can see that the genes fall into two clusters - a cluster of 8 genes which are upregulated in cells 2, 10, 6, 4 and 8 relative to the other cells and a cluster of 12 genes which are downregulated in cells 2, 10, 6, 4 and 8 relative to the other cells.
 
@@ -160,7 +160,7 @@ Principle_Components<-prcomp(test)
 autoplot(Principle_Components, label=TRUE)
 ```
 
-![](12-L4-ggplot2-pheatmap-PCA_files/figure-latex/unnamed-chunk-7-1.pdf)<!-- --> 
+<img src="12-L4-ggplot2-pheatmap-PCA_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
 Task 6: Compare your clusters to the pheatmap clusters. Are they related? (Hint: have a look at the gene tree for the first pheatmap we plotted)
 
