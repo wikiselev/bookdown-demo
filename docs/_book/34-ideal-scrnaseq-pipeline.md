@@ -1,0 +1,84 @@
+---
+output: html_document
+---
+
+# "Ideal" scRNAseq pipeline (as of Oct 2017)
+
+
+
+## Experimental Design
+
+* Avoid confounding biological and batch effects (Figure \@ref(fig:pipeline-batches))
+    * Multiple conditions should be captured on the same chip if possible
+    * Perform multiple replicates of each condition where replicates of different conditions should be performed together if possible
+    * Statistics cannot correct a completely confounded experiment!
+
+* Unique molecular identifiers
+    * Greatly reduce noise in data
+    * May reduce gene detection rates (unclear if it is UMIs or other protocol differences)
+    * Lose splicing information
+    * Use longer UMIs (~10bp)
+    * Correct for sequencing errors in UMIs using [UMI-tools](https://github.com/CGATOxford/UMI-tools)
+
+* Spike-ins
+    * Useful for quality control
+    * May be useful for normalizing read counts
+    * Can be used to approximate cell-size/RNA content (if relevant to biological question)
+    * Often exhibit higher noise than endogenous genes (pipetting errors, mixture quality)
+    * Requires more sequencing to get enough endogenous reads per cell
+
+* Cell number vs Read depth
+    * Gene detection plateaus starting from 1 million reads per cell
+    * Transcription factor detection (regulatory networks) require high read depth and most sensitive protocols (i.e. Fluidigm C1)
+    * Cell clustering & cell-type identification benefits from large number of cells and doesn't requireas high sequencing depth (~100,000 reads per cell).
+
+<div class="figure" style="text-align: center">
+<img src="figures/Pipeline-batches.png" alt="Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction." width="90%" />
+<p class="caption">(\#fig:pipeline-batches)Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction.</p>
+</div>
+## Processing Reads
+* Read QC & Trimming
+    * [FASTQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [cutadapt](http://cutadapt.readthedocs.io/en/stable/index.html)
+    
+* Mapping
+    * Small datasets or UMI datasets: align to genome/transcriptome using [STAR](https://github.com/alexdobin/STAR)
+    * Large datasets: pseudo-alignment with [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html) or [kallisto](https://pachterlab.github.io/kallisto/about)
+  
+* Quantification
+    * Small dataset, no UMIs : [featureCounts](http://subread.sourceforge.net/)
+    * Large datasets, no UMIs: [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html), [kallisto](https://pachterlab.github.io/kallisto/about)
+    * UMI dataset : [UMI-tools](https://github.com/CGATOxford/UMI-tools) + [featureCounts](http://subread.sourceforge.net/)
+
+## Preparing Expression Matrix
+
+* Cell QC
+    * [scater](http://bioconductor.org/packages/scater)
+    * consider: mtRNA, rRNA, spike-ins (if available), number of detected genes per cell, total reads/molecules per cell
+
+* Library Size Normalization
+    * [scran](http://bioconductor.org/packages/scran)
+
+* Batch correction (if appropriate)
+    * Replicates/Confounded [RUVs](http://bioconductor.org/packages/RUVSeq)
+    * Unknown or unbalanced biological groups [mnnCorrect](https://bioconductor.org/packages/release/bioc/html/scran.html)
+    * Balanced design [ComBat](https://bioconductor.org/packages/release/bioc/html/sva.html)
+
+## Biological Interpretation
+
+* Feature Selection
+    * [M3Drop](http://bioconductor.org/packages/M3Drop)
+
+* Clustering and Marker Gene Identification
+    * $\le 5000$ cells : [SC3](http://bioconductor.org/packages/SC3)
+    * $>5000$ cells : [Seurat](http://satijalab.org/seurat/)
+
+* Pseudotime
+    * distinct timepoints: [TSCAN](http://bioconductor.org/packages/TSCAN)
+    * small dataset/unknown number of branches: [Monocle2](https://bioconductor.org/packages/release/bioc/html/monocle.html)
+    * large continuous dataset: [destiny](http://bioconductor.org/packages/destiny)
+
+* Differential Expression
+    * Small number of cells and few groups : [scde](http://hms-dbmi.github.io/scde/)
+    * Replicates with batch effects : mixture/linear models
+    * Balanced batches: [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html) or [MAST](https://bioconductor.org/packages/release/bioc/html/MAST.html)
+    * Large datasets: Kruskal-Wallis test (all groups at once), or Wilcox-test (compare 2-groups at a time).
