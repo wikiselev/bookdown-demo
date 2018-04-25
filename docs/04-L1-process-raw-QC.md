@@ -17,11 +17,8 @@ This website contains links to download and install FastQC and documentation on 
 
 Now let's make a FastQC report ourselves.
 
-Today we will be performing our analysis using a single cell from an mESC dataset produced by [@Kolodziejczyk2015-xy]. The cells were sequenced using the SMART-seq2 library preparation protocol and the reads are paired end. The files are located in `Share`. 
+Today we will be performing our analysis using a single cell from an mESC dataset produced by [@Kolodziejczyk2015-xy]. The cells were sequenced using the SMART-seq2 library preparation protocol and the reads are paired end. The files are located in `Share`. Let's take a look at them:
 
-__Note__ The current text of the course is written for an AWS server for people who attend our course in person. You will have to download the files (both `ERR522959_1.fastq` and `ERR522959_2.fastq`) and create `Share` directory yourself to run the commands. You can find the files here: https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-2600/samples/
-
-Let's take a look at the files:
 
 ```bash
 less Share/ERR522959_1.fastq
