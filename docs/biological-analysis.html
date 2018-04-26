@@ -2365,12 +2365,12 @@ segerstolpe &lt;-<span class="st"> </span><span class="kw">indexCluster</span>(s
 <p>We can also visualize these tables using a <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey">Sankey diagram</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">getSankey</span>(<span class="kw">colData</span>(muraro)<span class="op">$</span>cell_type1,  muraro_to_seger<span class="op">$</span>scmap_cluster_labs[,<span class="dv">1</span>], <span class="dt">plot_height=</span><span class="dv">400</span>))</code></pre></div>
 <!-- Sankey generated in R 3.4.3 by googleVis 0.6.2 package -->
-<!-- Thu Apr 26 10:57:15 2018 -->
+<!-- Thu Apr 26 16:48:20 2018 -->
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataSankeyIDdd71f14d611 () {
+function gvisDataSankeyIDdd712c0435d () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -2568,8 +2568,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartSankeyIDdd71f14d611() {
-var data = gvisDataSankeyIDdd71f14d611();
+function drawChartSankeyIDdd712c0435d() {
+var data = gvisDataSankeyIDdd712c0435d();
 var options = {};
 options["width"] = 400;
 options["height"] = 400;
@@ -2588,7 +2588,7 @@ options["sankey"] = {
             };
 
     var chart = new google.visualization.Sankey(
-    document.getElementById('SankeyIDdd71f14d611')
+    document.getElementById('SankeyIDdd712c0435d')
     );
     chart.draw(data,options);
     
@@ -2612,9 +2612,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartSankeyIDdd71f14d611);
+callbacks.push(drawChartSankeyIDdd712c0435d);
 })();
-function displayChartSankeyIDdd71f14d611() {
+function displayChartSankeyIDdd712c0435d() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -2637,9 +2637,9 @@ callbacks.shift()();
 // jsFooter
 </script>
 <!-- jsChart -->
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyIDdd71f14d611"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartSankeyIDdd712c0435d"></script>
 <!-- divChart -->
-<div id="SankeyIDdd71f14d611" style="width: 400; height: 400;">
+<div id="SankeyIDdd712c0435d" style="width: 400; height: 400;">
 
 </div>
 <p><strong>Exercise</strong> How many of the previously unclassified cells would be be able to assign to cell-types using scmap?</p>
