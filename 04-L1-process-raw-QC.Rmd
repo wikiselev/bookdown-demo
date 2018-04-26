@@ -23,8 +23,7 @@ Today we will be performing our analysis using a single cell from an mESC datase
 
 __Note__ The current text of the course is written for an AWS server for people who attend our course in person. You will have to download the files (both `ERR522959_1.fastq` and `ERR522959_2.fastq`) and create `Share` directory yourself to run the commands. You can find the files here: https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-2600/samples/
 
-
-
+Now let's look at the files:
 ```{bash, eval=FALSE}
 less Share/ERR522959_1.fastq
 less Share/ERR522959_2.fastq
