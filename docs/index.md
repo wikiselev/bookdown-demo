@@ -1,7 +1,7 @@
 --- 
 title: "Analysis of single cell RNA-seq data"
 author: "Vladimir Kiselev (<a href = 'https://twitter.com/wikiselev'>wikiselev</a>), Tallulah Andrews, Jennifer Westoby (<a href = 'https://twitter.com/Jenni_Westoby'>Jenni_Westoby</a>), Davis McCarthy (<a href = 'https://twitter.com/davisjmcc'>davisjmcc</a>), Maren Büttner (<a href = 'https://twitter.com/marenbuettner'>marenbuettner</a>) and Martin Hemberg (<a href = 'https://twitter.com/m_hemberg'>m_hemberg</a>)"
-date: "2018-05-15"
+date: "2018-05-22"
 knit: "bookdown::render_book"
 documentclass: book
 bibliography: [book.bib]
