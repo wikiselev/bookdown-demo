@@ -41,7 +41,7 @@ Overall, experimental scRNA-seq protocols are similar to the methods used for bu
 ## Computational Analysis
 
 This course is concerned with the computational analysis of the data
-obtained from scRNA-seq experiments. The first steps (yellow) are general for any highthroughput sequencing data. Later steps (orange) require a mix of existing RNASeq analysis methods and novel methods to address the technical difference of scRNASeq. Finally the biological interpretatio (blue) __should__ be analyzed with methods specifically developed for scRNASeq.
+obtained from scRNA-seq experiments. The first steps (yellow) are general for any highthroughput sequencing data. Later steps (orange) require a mix of existing RNASeq analysis methods and novel methods to address the technical difference of scRNASeq. Finally the biological interpretation (blue) __should__ be analyzed with methods specifically developed for scRNASeq.
 
 ```{r intro-flowchart, out.width = '65%', fig.cap="Flowchart of the scRNA-seq analysis"}
 knitr::include_graphics("figures/flowchart.png")
