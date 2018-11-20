@@ -102,7 +102,7 @@ Now we can see that the genes fall into two clusters - a cluster of 8 genes whic
 
 Task 5: Try setting the number of clusters to 3. Which number of clusters do you think is more informative?
 
-### Principle Component Analysis
+### Principal Component Analysis
 
 Principal component analysis (PCA) is a statistical procedure that uses a transformation to convert a set of observations into a set of values of linearly uncorrelated variables called principal components. The transformation is carried out so that the first principle component accounts for as much of the variability in the data as possible, and each following principle component accounts for the greatest amount of variance possible under the contraint that it must be orthogonal to the previous components.
 
@@ -112,8 +112,8 @@ Let's make a PCA plot for our `test` data. We can use the  `ggfortify` package t
 
 ```{R,eval=TRUE, message=FALSE}
 library(ggfortify)
-Principle_Components<-prcomp(test)
-autoplot(Principle_Components, label=TRUE)
+Principal_Components<-prcomp(test)
+autoplot(Principal_Components, label=TRUE)
 ```
 
 Task 6: Compare your clusters to the pheatmap clusters. Are they related? (Hint: have a look at the gene tree for the first pheatmap we plotted)
