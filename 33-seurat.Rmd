@@ -96,7 +96,8 @@ To mitigate the effect of confounding factors, `Seurat` constructs linear models
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 seuset <- ScaleData(
     object = seuset, 
-    vars.to.regress = c("nUMI")
+    vars.to.regress = c("nUMI"),
+    display.progress = F
 )
 ```
 
