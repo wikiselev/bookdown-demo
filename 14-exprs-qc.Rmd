@@ -155,24 +155,20 @@ had low starting amounts of RNA, likely due to the cell being
 dead or stressed which may result in the RNA being degraded.
 
 ```{r mt-vs-counts, fig.cap = "Percentage of counts in MT genes"}
-plotPhenoData(
+plotColData(
     umi,
-    aes_string(
-        x = "total_features",
-        y = "pct_counts_MT",
-        colour = "batch"
-    )
+    x = "total_features",
+    y = "pct_counts_MT",
+    colour = "batch"
 )
 ```
 
 ```{r ercc-vs-counts, fig.cap = "Percentage of counts in ERCCs"}
-plotPhenoData(
+plotColData(
     umi,
-    aes_string(
-        x = "total_features",
-        y = "pct_counts_ERCC",
-        colour = "batch"
-    )
+    x = "total_features",
+    y = "pct_counts_ERCC",
+    colour = "batch"
 )
 ```
 
@@ -235,21 +231,38 @@ By default, the following metrics are used for PCA-based outlier detection:
 * __log10_counts_endogenous_features__
 * __log10_counts_feature_controls__
 
-`scater` first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package. 
+`scater` first creates a matrix where the rows represent cells and
+the columns represent the different QC metrics. Then, outlier cells 
+can also be identified by using the `mvoutlier` package
+on the QC metrics for all cells. This will identify cells that have 
+substantially different QC metrics from the others, possibly corresponding 
+to low-quality cells. We can visualize any outliers using a 
+principal components plot as shown below:
 
 ```{r auto-cell-filt, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
-umi <- plotPCA(
-    umi,
-    size_by = "total_features", 
-    shape_by = "use",
-    pca_data_input = "pdata",
-    detect_outliers = TRUE,
-    return_SCE = TRUE
-)
+umi <- runPCA(umi, use_coldata = TRUE, 
+              detect_outliers = TRUE)
+reducedDimNames(umi)
 ```
+
+Column subsetting can then be performed based on the `$outlier` 
+slot, which indicates whether or not each cell has been 
+designated as an outlier. Automatic outlier detection can 
+be informative, but a close inspection of QC metrics and 
+tailored filtering for the specifics of the dataset at 
+hand is strongly recommended.
 
 ```{r}
 table(umi$outlier)
+```
+
+Then, we can use a PCA plot to see a 2D representation 
+of the cells ordered by their quality metrics.
+
+```{r}
+plotReducedDim(umi, use_dimred = "PCA_coldata",
+               size_by = "total_features", shape_by = "use", 
+               colour_by="outlier")
 ```
 
 ### Compare filterings
@@ -286,7 +299,7 @@ In addition to removing cells with poor quality, it is usually a good idea to ex
 It is often instructive to consider the number of reads consumed by the top 50 expressed genes.
 
 ```{r top50-gene-expr, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
-plotQC(umi, type = "highest-expression")
+plotHighestExprs(umi, exprs_values = "counts")
 ```
 
 The distributions are relatively flat indicating (but not guaranteeing!) good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
@@ -297,16 +310,14 @@ The distributions are relatively flat indicating (but not guaranteeing!) good co
 It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells (__note__ `colData(umi)$use` filter applied to the `umi` dataset).
 
 ```{r}
-filter_genes <- apply(
-    counts(umi[ , colData(umi)$use]), 
-    1, 
-    function(x) length(x[x > 1]) >= 2
-)
-rowData(umi)$use <- filter_genes
+keep_feature <- nexprs(umi[,colData(umi)$use], byrow=TRUE, 
+                       detection_limit=1) >= 2
+rowData(umi)$use <- keep_feature
+
 ```
 
 ```{r}
-table(filter_genes)
+table(keep_feature)
 ```
 
 Depending on the cell-type, protocol and sequencing depth, other cut-offs may be appropriate.
