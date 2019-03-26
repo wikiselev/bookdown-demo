@@ -1,2 +1,4 @@
 # do not copy git directory
-    .git
+.git
+docs
+figures
