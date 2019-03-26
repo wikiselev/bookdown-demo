@@ -3,3 +3,4 @@ nextflow_output
 .DS_*
 */.DS_*
 .nextflow*
+course_files/*.md
