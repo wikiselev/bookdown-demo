@@ -10,15 +10,14 @@
 //   """
 // }
 
-Channel
-    .fromPath('*')
-    .set { ch_course_files }
+ch_course_files = Channel.fromPath('course_files', type: 'dir')
 
 process foo {
   input: 
-    file fs from ch_course_files.collect()
+    file fs from ch_course_files
   script:
   """
+  ln -s course_files/* .
   Rscript -e "bookdown::render_book('index.html', 'bookdown::gitbook')"
   """
 }

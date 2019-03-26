@@ -1,0 +1,95 @@
+---
+output: html_document
+code_folding: hide
+---
+
+
+
+# Processing Raw scRNA-seq Data
+
+## FastQC
+
+Once you've obtained your single-cell RNA-seq data, the first thing you need to do with it is check the quality of the reads you have sequenced. For this task, today we will be using a tool called FastQC. FastQC is a quality control tool for sequencing data, which can be used for both bulk and single-cell RNA-seq data. FastQC takes sequencing data as input and returns a report on read quality. Copy and paste this link into your browser to visit the FastQC website:
+
+https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+
+This website contains links to download and install FastQC and documentation on the reports produced. Fortunately we have already installed FastQC for you today, so instead we will take a look at the documentation. Scroll down the webpage to 'Example Reports' and click 'Good Illumina Data'. This gives an example of what an ideal report should look like for high quality Illumina reads data.
+
+Now let's make a FastQC report ourselves.
+
+Today we will be performing our analysis using a single cell from an mESC dataset produced by [@Kolodziejczyk2015-xy]. The cells were sequenced using the SMART-seq2 library preparation protocol and the reads are paired end. The files are located in `Share`. 
+
+__Note__ The current text of the course is written for an AWS server for people who attend our course in person. You will have to download the files (both `ERR522959_1.fastq` and `ERR522959_2.fastq`) and create `Share` directory yourself to run the commands. You can find the files here: https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-2600/samples/
+
+Now let's look at the files:
+
+```bash
+less Share/ERR522959_1.fastq
+less Share/ERR522959_2.fastq
+```
+
+Task 1: Try to work out what command you should use to produce the FastQC report. Hint: Try executing
+
+
+```bash
+fastqc -h
+```
+
+This command will tell you what options are available to pass to FastQC. Feel free to ask for help if you get stuck! If you are successful, you should generate a .zip and a .html file for both the forwards and the reverse reads files. Once you have been successful, feel free to have a go at the next section.
+
+
+### Solution and Downloading the Report
+
+If you haven't done so already, generate the FastQC report using the commands below:
+
+
+```bash
+mkdir fastqc_results
+fastqc -o fastqc_results Share/ERR522959_1.fastq Share/ERR522959_2.fastq
+```
+
+Once the command has finished executing, you should have a total of four files - one zip file for each of the paired end reads, and one html file for each of the paired end reads. The report is in the html file. To view it, we will need to get it off AWS and onto your computer using either filezilla or scp. Ask an instructor if you are having difficulties.
+
+Once the file is on you computer, click on it. Your FastQC report should open. Have a look through the file. Remember to look at both the forwards and the reverse end read reports! How good quality are the reads? Is there anything we should be concerned about? How might we address those concerns?
+
+Feel free to chat to one of the instructors about your ideas.
+
+## Trimming Reads
+
+Fortunately there is software available for read trimming. Today we will be using Trim Galore!. Trim Galore! is a wrapper for the reads trimming software cutadapt.
+
+Read trimming software can be used to trim sequencing adapters and/or low quality reads from the ends of reads. Given we noticed there was some adaptor contamination in our FastQC report, it is a good idea to trim adaptors from our data.
+
+Task 2: What type of adapters were used in our data? Hint: Look at the FastQC report 'Adapter Content' plot.
+
+Now let's try to use Trim Galore! to remove those problematic adapters. It's a good idea to check read quality again after trimming, so after you have trimmed your reads you should use FastQC to produce another report.
+
+Task 3: Work out the command you should use to trim the adapters from our data. Hint 1: You can use 
+
+
+```bash
+trim_galore -h
+```
+
+To find out what options you can pass to Trim Galore.
+Hint 2: Read through the output of the above command carefully. The adaptor used in this experiment is quite common. Do you need to know the actual sequence of the adaptor to remove it?
+
+Task 3: Produce a FastQC report for your trimmed reads files. Is the adapter contamination gone?
+
+Once you think you have successfully trimmed your reads and have confirmed this by checking the FastQC report, feel free to check your results using the next section.
+
+### Solution
+
+You can use the command(s) below to trim the Nextera sequencing adapters:
+
+
+```bash
+mkdir fastqc_trimmed_results
+trim_galore --nextera -o fastqc_trimmed_results Share/ERR522959_1.fastq Share/ERR522959_2.fastq
+```
+
+Remember to generate new FastQC reports for your trimmed reads files! FastQC should now show that your reads pass the 'Adaptor Content' plot. Feel free to ask one of the instructors if you have any questions.
+
+Congratulations! You have now generated reads quality reports and performed adaptor trimming. In the next lab, we will use STAR and Kallisto to align our trimmed and quality-checked reads to a reference transcriptome.
+
+
