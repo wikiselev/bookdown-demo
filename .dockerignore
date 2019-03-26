@@ -1,7 +1,6 @@
 # do not copy git directory
 .git
 docs
-course_files/figures
 course_files/*.yml
 course_files/book.bib
 course_files/*.html
