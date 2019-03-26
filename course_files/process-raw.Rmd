@@ -241,11 +241,11 @@ the expected barcodes and assign the associated reads to the closest cell-barcod
 We have [publicly available](https://github.com/tallulandrews/scRNASeqPipeline) perl scripts capable of demultiplexing any scRNASeq data with a single cell-barcode with or without UMIs for plate-based protocols. These can be used as so:
 
 ```{bash, eval=TRUE}
-perl 1_Flexible_UMI_Demultiplexing.pl 10cells_read1.fq 10cells_read2.fq "C12U8" 10cells_barcodes.txt 2 Ex
+perl utils/1_Flexible_UMI_Demultiplexing.pl 10cells_read1.fq 10cells_read2.fq "C12U8" 10cells_barcodes.txt 2 Ex
 ```
 
 ```{bash, eval=TRUE}
-perl 1_Flexible_FullTranscript_Demultiplexing.pl 10cells_read1.fq 10cells_read2.fq "start" 12 10cells_barcodes.txt 2 Ex
+perl utils/1_Flexible_FullTranscript_Demultiplexing.pl 10cells_read1.fq 10cells_read2.fq "start" 12 10cells_barcodes.txt 2 Ex
 ```
 
 For UMI containing data, demultiplexing includes attaching the UMI code to the read name of the gene-body containing read. If the data are from a 

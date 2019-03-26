@@ -248,7 +248,7 @@ Metaneighbour compares cell-types across datasets by building a cell-cell spearm
 
 Metanighbour is just a couple of R functions not a complete package so we have to load them using `source`
 ```{r}
-source("2017-08-28-runMN-US.R")
+source("utils/2017-08-28-runMN-US.R")
 ```
 #### Prepare Data
 
