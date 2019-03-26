@@ -134,17 +134,17 @@ by entering running the command "naked" - e.g. 'samtools view', 'bedtools'
 
 __Answer__
 ```{bash, eval=TRUE, include=FALSE}
-samtools view -T 2000_reference.transcripts.fa -H EXAMPLE.cram | more
-samtools view -T 2000_reference.transcripts.fa -f 4 EXAMPLE.cram | wc -l # unmapped
-samtools view -T 2000_reference.transcripts.fa -F 260 EXAMPLE.cram | wc -l # mapped
-samtools view -T 2000_reference.transcripts.fa -F 256 EXAMPLE.cram | wc -l # total
-samtools view -T 2000_reference.transcripts.fa -f 256 EXAMPLE.cram | wc -l # secondary alignments
+samtools view -T data/2000_reference.transcripts.fa -H data/EXAMPLE.cram | more
+samtools view -T data/2000_reference.transcripts.fa -f 4 data/EXAMPLE.cram | wc -l # unmapped
+samtools view -T data/2000_reference.transcripts.fa -F 260 data/EXAMPLE.cram | wc -l # mapped
+samtools view -T data/2000_reference.transcripts.fa -F 256 data/EXAMPLE.cram | wc -l # total
+samtools view -T data/2000_reference.transcripts.fa -f 256 data/EXAMPLE.cram | wc -l # secondary alignments
 
-samtools view -b -h -T 2000_reference.transcripts.fa EXAMPLE.cram -o EXAMPLE.bam
-samtools sort -n EXAMPLE.bam -o sorted_EXAMPLE.bam
-samtools view -b -F 256 sorted_EXAMPLE.bam -o primary_EXAMPLE.bam 
+samtools view -b -h -T data/2000_reference.transcripts.fa data/EXAMPLE.cram -o data/EXAMPLE.bam
+samtools sort -n data/EXAMPLE.bam -o data/sorted_EXAMPLE.bam
+samtools view -b -F 256 data/sorted_EXAMPLE.bam -o data/primary_EXAMPLE.bam 
 # convert to fastq
-bedtools bamtofastq -i primary_EXAMPLE.bam -fq 10cells_read1.fq -fq2 10cells_read2.fq
+bedtools bamtofastq -i data/primary_EXAMPLE.bam -fq data/10cells_read1.fq -fq2 data/10cells_read2.fq
 ```
 
 ### Genome (FASTA, GTF)
