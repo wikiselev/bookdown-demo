@@ -20,7 +20,7 @@ library(sva) # Combat
 library(edgeR)
 set.seed(1234567)
 options(stringsAsFactors = FALSE)
-reads <- readRDS("tung/reads.rds")
+reads <- readRDS("data/tung/reads.rds")
 reads.qc <- reads[rowData(reads)$use, colData(reads)$use]
 endog_genes <- !rowData(reads.qc)$is_feature_control
 erccs <- rowData(reads.qc)$is_feature_control

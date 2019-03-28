@@ -94,8 +94,8 @@ This variability can introduce strong biases and it needs to be considered in do
 __Exercise 1__ We have provided you with UMI counts and read counts from induced pluripotent stem cells generated from three different individuals [@Tung2017-ba] (see: Chapter \@ref(exprs-qc) for details of this dataset).
 
 ```{r, echo=TRUE, include=TRUE}
-umi_counts <- read.table("tung/molecules.txt", sep = "\t")
-read_counts <- read.table("tung/reads.txt", sep = "\t")
+umi_counts <- read.table("data/tung/molecules.txt", sep = "\t")
+read_counts <- read.table("data/tung/reads.txt", sep = "\t")
 ```
 Using this data:
 

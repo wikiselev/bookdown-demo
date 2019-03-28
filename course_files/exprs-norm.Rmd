@@ -110,7 +110,7 @@ library(scater)
 library(scran)
 options(stringsAsFactors = FALSE)
 set.seed(1234567)
-umi <- readRDS("tung/umi.rds")
+umi <- readRDS("data/tung/umi.rds")
 umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
 endog_genes <- !rowData(umi.qc)$is_feature_control
 ```

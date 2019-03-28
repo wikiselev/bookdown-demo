@@ -7,7 +7,7 @@ output: html_document
 ```{r, message=FALSE, warning=FALSE}
 library(scater)
 options(stringsAsFactors = FALSE)
-reads <- readRDS("tung/reads.rds")
+reads <- readRDS("data/tung/reads.rds")
 reads.qc <- reads[rowData(reads)$use, colData(reads)$use]
 endog_genes <- !rowData(reads.qc)$is_feature_control
 ```

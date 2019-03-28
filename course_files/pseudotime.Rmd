@@ -87,7 +87,7 @@ knitr::include_graphics("figures/cannoodt_pseudotime_methods.png")
 Let us take a first look at the Deng data, without yet applying sophisticated pseudotime methods. As the plot below shows, simple PCA does a very good job of displaying the structure in these data. It is only once we reach the blast cell types ("earlyblast", "midblast", "lateblast") that PCA struggles to separate the distinct cell types.
 
 ```{r data-overview}
-deng_SCE <- readRDS("deng/deng-reads.rds")
+deng_SCE <- readRDS("data/deng/deng-reads.rds")
 deng_SCE$cell_type2 <- factor(
     deng_SCE$cell_type2,
     levels = c("zy", "early2cell", "mid2cell", "late2cell",

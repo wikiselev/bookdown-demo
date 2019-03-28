@@ -26,8 +26,8 @@ differentially expressed genes identified using standard methods on the respecti
 accuracy of each single-cell method. To save time we have pre-computed these for you. You can run the commands below to load these data.
 
 ```{r}
-DE <- read.table("tung/TPs.txt")
-notDE <- read.table("tung/TNs.txt")
+DE <- read.table("data/tung/TPs.txt")
+notDE <- read.table("data/tung/TNs.txt")
 GroundTruth <- list(
     DE = as.character(unlist(DE)), 
     notDE = as.character(unlist(notDE))
@@ -37,8 +37,8 @@ GroundTruth <- list(
 This ground truth has been produce for the comparison of individual NA19101 to NA19239. Now load the respective single-cell data:
 
 ```{r}
-molecules <- read.table("tung/molecules.txt", sep = "\t")
-anno <- read.table("tung/annotation.txt", sep = "\t", header = TRUE)
+molecules <- read.table("data/tung/molecules.txt", sep = "\t")
+anno <- read.table("data/tung/annotation.txt", sep = "\t", header = TRUE)
 keep <- anno[,1] == "NA19101" | anno[,1] == "NA19239"
 data <- molecules[,keep]
 group <- anno[keep,1]

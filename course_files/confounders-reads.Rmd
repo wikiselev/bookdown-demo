@@ -9,7 +9,7 @@ library(scater, quietly = TRUE)
 library(knitr)
 options(stringsAsFactors = FALSE)
 opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
-reads <- readRDS("tung/reads.rds")
+reads <- readRDS("data/tung/reads.rds")
 reads.qc <- reads[rowData(reads)$use, colData(reads)$use]
 endog_genes <- !rowData(reads.qc)$is_feature_control
 ```

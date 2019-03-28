@@ -16,8 +16,8 @@ options(stringsAsFactors = FALSE)
 ```
 
 ```{r}
-reads <- read.table("tung/reads.txt", sep = "\t")
-anno <- read.table("tung/annotation.txt", sep = "\t", header = TRUE)
+reads <- read.table("data/tung/reads.txt", sep = "\t")
+anno <- read.table("data/tung/annotation.txt", sep = "\t", header = TRUE)
 ```
 
 ```{r}
@@ -193,7 +193,7 @@ reducedDim(reads) <- NULL
 ```
 
 ```{r}
-saveRDS(reads, file = "tung/reads.rds")
+saveRDS(reads, file = "data/tung/reads.rds")
 ```
 
 By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-comp-reads), it is clear that the reads based filtering removed more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.

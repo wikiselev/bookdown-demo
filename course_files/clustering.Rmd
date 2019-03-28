@@ -26,7 +26,7 @@ To illustrate clustering of scRNA-seq data, we consider the `Deng` dataset of ce
 
 Let's load the data and look at it:
 ```{r}
-deng <- readRDS("deng/deng-reads.rds")
+deng <- readRDS("data/deng/deng-reads.rds")
 deng
 ```
 

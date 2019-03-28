@@ -34,7 +34,7 @@ library(sva) # Combat
 library(edgeR)
 set.seed(1234567)
 options(stringsAsFactors = FALSE)
-umi <- readRDS("tung/umi.rds")
+umi <- readRDS("data/tung/umi.rds")
 umi.qc <- umi[rowData(umi)$use, colData(umi)$use]
 endog_genes <- !rowData(umi.qc)$is_feature_control
 erccs <- rowData(umi.qc)$is_feature_control

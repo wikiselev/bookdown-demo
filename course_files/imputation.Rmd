@@ -33,7 +33,7 @@ To the best of our knowledge, there are currently two different imputation metho
 To test `scImpute`, we use the default parameters and we apply it to the Deng dataset that we have worked with before. scImpute takes a .csv or .txt file as an input:
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
-deng <- readRDS("deng/deng-reads.rds")
+deng <- readRDS("data/deng/deng-reads.rds")
 write.csv(counts(deng), "deng.csv")
 scimpute(
     count_path = "deng.csv",

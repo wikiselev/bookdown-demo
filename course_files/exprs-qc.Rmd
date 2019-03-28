@@ -36,8 +36,8 @@ options(stringsAsFactors = FALSE)
 
 Load the data and annotations:
 ```{r}
-molecules <- read.table("tung/molecules.txt", sep = "\t")
-anno <- read.table("tung/annotation.txt", sep = "\t", header = TRUE)
+molecules <- read.table("data/tung/molecules.txt", sep = "\t")
+anno <- read.table("data/tung/annotation.txt", sep = "\t", header = TRUE)
 ```
 
 Inspect a small portion of the expression matrix
@@ -338,7 +338,7 @@ reducedDim(umi) <- NULL
 
 Save the data:
 ```{r}
-saveRDS(umi, file = "tung/umi.rds")
+saveRDS(umi, file = "data/tung/umi.rds")
 ```
 
 ### Big Exercise

@@ -44,7 +44,7 @@ are expressed at different levels across groups.
 For this section we will continue working with the Deng data. 
 
 ```{r}
-deng <- readRDS("deng/deng-reads.rds")
+deng <- readRDS("data/deng/deng-reads.rds")
 cellLabels <- colData(deng)$cell_type2
 ```
 

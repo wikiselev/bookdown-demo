@@ -26,7 +26,7 @@ knitr::include_graphics("figures/scfind.png")
 
 We will run `scfind` on the same human pancreas dataset as in the previous chapter. `scfind` also operates on `SingleCellExperiment` class:
 ```{r, message=FALSE, warning=FALSE}
-muraro <- readRDS("pancreas/muraro.rds")
+muraro <- readRDS("data/pancreas/muraro.rds")
 ```
 
 ### Gene Index
@@ -86,7 +86,7 @@ __Exercise 2__
 Load the `segerstolpe` and search it using _alpha_, _beta_, _delta_ and _gamma_ gene lists identified in `muraro` dataset.
 
 ```{r, echo=FALSE}
-segerstolpe <- readRDS("pancreas/segerstolpe.rds")
+segerstolpe <- readRDS("data/pancreas/segerstolpe.rds")
 cellIndex <- buildCellIndex(segerstolpe)
 res <- findCell(cellIndex, muraro_alpha)
 barplot(-log10(res$p_values), ylab = "-log10(pval)", las = 2)

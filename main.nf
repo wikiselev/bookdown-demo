@@ -4,7 +4,7 @@ Channel
     .into { ch_course_files1; ch_course_files2 }
 
 Channel
-    .fromPath('s3://scrnaseq-course.cog.sanger.ac.uk/data', type: 'dir')
+    .fromPath('s3://scrnaseq-course/data', checkIfExists: false)
     .into { ch_data1; ch_data2 }
 
 process html {
@@ -21,6 +21,7 @@ process html {
 process latex {
   input: 
     file fs from ch_course_files2
+    file dat from ch_data2
   script:
   """
   cp -r course_files/* .
