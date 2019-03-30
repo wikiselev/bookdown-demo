@@ -75,14 +75,14 @@ table(filter_by_total_counts)
 
 ```{r total-features-hist-reads, fig.cap = "Histogram of the number of detected genes in all cells"}
 hist(
-    reads$total_features,
+    reads$total_features_by_counts,
     breaks = 100
 )
 abline(v = 7000, col = "red")
 ```
 
 ```{r}
-filter_by_expr_features <- (reads$total_features > 7000)
+filter_by_expr_features <- (reads$total_features_by_counts > 7000)
 ```
 
 ```{r}
@@ -90,24 +90,20 @@ table(filter_by_expr_features)
 ```
 
 ```{r mt-vs-counts-reads, fig.cap = "Percentage of counts in MT genes"}
-plotPhenoData(
+plotColData(
     reads,
-    aes_string(
-        x = "total_features",
-        y = "pct_counts_MT",
-        colour = "batch"
-    )
+    x = "total_features_by_counts",
+    y = "pct_counts_MT",
+    colour = "batch"
 )
 ```
 
 ```{r ercc-vs-counts-reads, fig.cap = "Percentage of counts in ERCCs"}
-plotPhenoData(
+plotColData(
     reads,
-    aes_string(
-        x = "total_features",
-        y = "pct_counts_ERCC",
-        colour = "batch"
-    )
+    x = "total_features_by_counts",
+    y = "pct_counts_ERCC",
+    colour = "batch"
 )
 ```
 
@@ -137,18 +133,26 @@ table(reads$use)
 ```
 
 ```{r auto-cell-filt-reads, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
-reads <- plotPCA(
+reads <- runPCA(
     reads,
-    size_by = "total_features", 
-    shape_by = "use",
-    pca_data_input = "pdata",
-    detect_outliers = TRUE,
-    return_SCE = TRUE
+    use_coldata = TRUE, 
+    detect_outliers = TRUE
 )
+reducedDimNames(reads)
 ```
 
 ```{r}
 table(reads$outlier)
+```
+
+```{r}
+plotReducedDim(
+    reads,
+    use_dimred = "PCA_coldata",
+    size_by = "total_features_by_counts", 
+    shape_by = "use", 
+    colour_by = "outlier"
+)
 ```
 
 ```{r cell-filt-comp-reads, fig.cap = "Comparison of the default, automatic and manual cell filters"}
@@ -171,16 +175,16 @@ plotQC(reads, type = "highest-expression")
 ```
 
 ```{r}
-filter_genes <- apply(
-    counts(reads[, colData(reads)$use]), 
-    1, 
-    function(x) length(x[x > 1]) >= 2
-)
-rowData(reads)$use <- filter_genes
+keep_feature <- nexprs(
+  reads[,colData(reads)$use], 
+  byrow = TRUE, 
+  detection_limit = 1
+) >= 2
+rowData(reads)$use <- keep_feature
 ```
 
 ```{r}
-table(filter_genes)
+table(keep_feature)
 ```
 
 ```{r}

@@ -80,11 +80,10 @@ RUN Rscript -e 'withr::with_libpaths(new = "/usr/lib/R/site-library/", devtools:
 # Install Bioconductor packages
 RUN Rscript -e 'BiocManager::install(c("MultiAssayExperiment", "SummarizedExperiment"), version = "3.8")'
 
+USER $NB_UID
+
 # add our scripts
 ADD course_files /home/jovyan
 
-USER $NB_UID
-
-# container entry point (download data and extra files from S3)
+# download data and extra files from S3
 COPY ./poststart.sh /
-ENTRYPOINT ["/poststart.sh"]
