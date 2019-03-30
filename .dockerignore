@@ -5,3 +5,4 @@ course_files/*.yml
 course_files/book.bib
 course_files/*.html
 course_files/*.tex
+course_files/*.css

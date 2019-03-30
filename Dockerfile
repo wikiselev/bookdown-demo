@@ -5,7 +5,8 @@ USER root
 # pre-requisites
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     libncurses5-dev \
-    libncursesw5-dev
+    libncursesw5-dev \
+    procps
 
 # Install FastQC
 RUN curl -fsSL http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip -o /opt/fastqc_v0.11.5.zip && \
@@ -39,8 +40,8 @@ RUN curl -fsSL http://downloads.sourceforge.net/project/subread/subread-1.5.1/su
     ln -s /opt/subread-1.5.1-Linux-x86_64/bin/featureCounts /usr/local/bin/featureCounts && \
     rm /opt/subread-1.5.1-Linux-x86_64.tar.gz
 
-# Install cutadapt and MAGIC
-RUN pip install cutadapt magic-impute
+# Install cutadapt and MAGIC and awscli (to download data)
+RUN pip install cutadapt magic-impute awscli
 
 # Install TrimGalore
 RUN mkdir /opt/TrimGalore && \
@@ -83,3 +84,7 @@ RUN Rscript -e 'BiocManager::install(c("MultiAssayExperiment", "SummarizedExperi
 ADD course_files /home/jovyan
 
 USER $NB_UID
+
+# container entry point (download data and extra files from S3)
+COPY ./poststart.sh /
+ENTRYPOINT ["/poststart.sh"]
