@@ -2,6 +2,11 @@ FROM quay.io/cellgeni/cellgeni-jupyter:v0.4.9
 
 USER root
 
+# pre-requisites
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+    libncurses5-dev \
+    libncursesw5-dev
+
 # Install FastQC
 RUN curl -fsSL http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip -o /opt/fastqc_v0.11.5.zip && \
     unzip /opt/fastqc_v0.11.5.zip -d /opt/ && \
