@@ -80,6 +80,6 @@ RUN Rscript -e 'withr::with_libpaths(new = "/usr/lib/R/site-library/", devtools:
 RUN Rscript -e 'BiocManager::install(c("MultiAssayExperiment", "SummarizedExperiment"), version = "3.8")'
 
 # add our scripts
-ADD couse_files /home/jovyan
+ADD course_files /home/jovyan
 
 USER $NB_UID
