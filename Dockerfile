@@ -1,5 +1,7 @@
 FROM quay.io/cellgeni/cellgeni-jupyter:v0.4.9
 
+USER root
+
 # Install FastQC
 RUN curl -fsSL http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip -o /opt/fastqc_v0.11.5.zip && \
     unzip /opt/fastqc_v0.11.5.zip -d /opt/ && \
@@ -82,3 +84,5 @@ RUN Rscript -e 'BiocManager::install(c("MultiAssayExperiment", "SummarizedExperi
 
 # add our scripts
 ADD couse_files /home/jovyan
+
+USER $NB_UID
