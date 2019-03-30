@@ -63,13 +63,12 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     r-cran-knitr \
     r-cran-statmod \
     r-cran-mvoutlier \
-    r-cran-mclust \
     r-cran-penalized \
     r-cran-mgcv \
     r-cran-corrplot
 
 # Install other CRAN
-RUN Rscript -e 'install.packages(c("bookdown", "cluster", "KernSmooth", "ROCR", "googleVis", "ggbeeswarm", "SLICER", "ggfortify"))'
+RUN Rscript -e 'install.packages(c("bookdown", "cluster", "KernSmooth", "ROCR", "googleVis", "ggbeeswarm", "SLICER", "ggfortify", "mclust"))'
 
 # install github packages
 # see here for with_libpaths description:
