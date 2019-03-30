@@ -40,7 +40,7 @@ RUN curl -fsSL http://downloads.sourceforge.net/project/subread/subread-1.5.1/su
     rm /opt/subread-1.5.1-Linux-x86_64.tar.gz
 
 # Install cutadapt
-RUN pip3 install cutadapt
+RUN pip install cutadapt
 
 # Install TrimGalore
 RUN mkdir /opt/TrimGalore && \
@@ -61,9 +61,9 @@ RUN curl -fsSL https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedt
 # install MAGIC
 RUN git clone git://github.com/pkathail/magic.git && \
     cd magic && \
-    pip3 install numpy && \
-    pip3 install argparse && \
-    pip3 install .
+    pip install numpy && \
+    pip install argparse && \
+    pip install .
 
 # install CRAN packages
 RUN apt-get update && apt-get install -yq --no-install-recommends \
