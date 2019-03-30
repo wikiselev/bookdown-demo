@@ -21,12 +21,12 @@ RUN git clone https://github.com/alexdobin/STAR.git /opt/STAR && \
     ln -s /opt/STAR/bin/Linux_x86_64/STARlong /usr/local/bin/STARlong
 
 # Install SAMTools
-RUN curl -fsSL https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 -o /opt/samtools-1.3.1.tar.bz2 && \
-    tar xvjf /opt/samtools-1.3.1.tar.bz2 -C /opt/ && \
-    cd /opt/samtools-1.3.1 && \
+RUN curl -fsSL https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 -o /opt/samtools-1.9.tar.bz2 && \
+    tar xvjf /opt/samtools-1.9.tar.bz2 -C /opt/ && \
+    cd /opt/samtools-1.9 && \
     make && \
     make install && \
-    rm /opt/samtools-1.3.1.tar.bz2
+    rm /opt/samtools-1.9.tar.bz2
 
 # Install featureCounts
 RUN curl -fsSL http://downloads.sourceforge.net/project/subread/subread-1.5.1/subread-1.5.1-Linux-x86_64.tar.gz -o /opt/subread-1.5.1-Linux-x86_64.tar.gz && \
