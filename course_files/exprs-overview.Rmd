@@ -44,7 +44,7 @@ plotPCA(
     umi[endog_genes, ],
     exprs_values = "counts",
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
@@ -55,7 +55,7 @@ plotPCA(
     umi[endog_genes, ],
     exprs_values = "logcounts_raw",
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
@@ -71,7 +71,7 @@ plotPCA(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
@@ -93,7 +93,7 @@ plotPCA(
     ntop = 14214,
     exprs_values = "logcounts_raw",
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
@@ -104,7 +104,7 @@ plotPCA(
     ntop = 50,
     exprs_values = "logcounts_raw",
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
@@ -124,7 +124,7 @@ plotTSNE(
     exprs_values = "logcounts_raw",
     perplexity = 130,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual",
     rand_seed = 123456
 )
@@ -138,7 +138,7 @@ plotTSNE(
     exprs_values = "logcounts_raw",
     perplexity = 130,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual",
     rand_seed = 123456
 )
@@ -161,7 +161,7 @@ plotTSNE(
     exprs_values = "logcounts_raw",
     perplexity = 10,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual",
     rand_seed = 123456
 )
@@ -173,7 +173,7 @@ plotTSNE(
     exprs_values = "logcounts_raw",
     perplexity = 200,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual",
     rand_seed = 123456
 )
