@@ -15,30 +15,31 @@ endog_genes <- !rowData(reads.qc)$is_feature_control
 ```
 
 ```{r confound-pca-reads, fig.cap = "PCA plot of the tung data"}
+tmp <- runPCA(
+  reads.qc[endog_genes, ],
+  exprs_values = "logcounts_raw"
+)
 plotPCA(
-    reads.qc[endog_genes, ],
-    exprs_values = "logcounts_raw",
+    tmp,
     colour_by = "batch",
-    size_by = "total_features"
+    size_by = "total_features_by_counts"
 )
 ```
 
 ```{r confound-find-pcs-total-features-reads, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
-plotQC(
-    reads.qc[endog_genes, ],
-    type = "find-pcs",
-    exprs_values = "logcounts_raw",
-    variable = "total_features"
+plotExplanatoryPCs(
+  reads.qc[endog_genes, ],
+  exprs_values = "logcounts_raw",
+  variables = "total_features_by_counts"
 )
 ```
 
 ```{r confound-find-expl-vars-reads, fig.cap = "Explanatory variables"}
-plotQC(
+plotExplanatoryVariables(
     reads.qc[endog_genes, ],
-    type = "expl",
     exprs_values = "logcounts_raw",
     variables = c(
-        "total_features",
+        "total_features_by_counts",
         "total_counts",
         "batch",
         "individual",

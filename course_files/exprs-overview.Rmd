@@ -40,12 +40,12 @@ knitr::include_graphics("figures/pca.png")
 
 Without log-transformation:
 ```{r expr-overview-pca-before-qc1, fig.cap = "PCA plot of the tung data"}
-umi <- runPCA(
+tmp <- runPCA(
   umi[endog_genes, ],
   exprs_values = "counts"
 )
 plotPCA(
-    umi,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -54,12 +54,12 @@ plotPCA(
 
 With log-transformation:
 ```{r expr-overview-pca-before-qc2, fig.cap = "PCA plot of the tung data"}
-umi <- runPCA(
+tmp <- runPCA(
   umi[endog_genes, ],
   exprs_values = "logcounts_raw"
 )
 plotPCA(
-    umi,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -73,12 +73,12 @@ __However, note that just a log-transformation is not enough to account for diff
 #### After QC
 
 ```{r expr-overview-pca-after-qc, fig.cap = "PCA plot of the tung data"}
-umi.qc <- runPCA(
+tmp <- runPCA(
   umi.qc[endog_genes, ],
   exprs_values = "logcounts_raw"
 )
 plotPCA(
-    umi.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -90,20 +90,20 @@ Comparing Figure \@ref(fig:expr-overview-pca-before-qc2) and Figure \@ref(fig:ex
 By default only the top 500 most variable genes are used by scater to calculate the PCA. This can be adjusted by changing the `ntop` argument. 
 
 __Exercise 1__
-How do the PCA plots change if when all 14,214 genes are used? Or when only top 50 genes are used? Why does the fraction of variance accounted for by the first PC change so dramatically?
+How do the PCA plots change if when all 14,066 genes are used? Or when only top 50 genes are used? Why does the fraction of variance accounted for by the first PC change so dramatically?
 
 __Hint__ Use `ntop` argument of the `plotPCA` function.
 
 __Our answer__
 
 ```{r expr-overview-pca-after-qc-exercise1-1, fig.cap = "PCA plot of the tung data (14214 genes)", echo=FALSE}
-umi.qc <- runPCA(
+tmp <- runPCA(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
-    ntop = 14214
+    ntop = 14066
 )
 plotPCA(
-    umi.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -111,13 +111,13 @@ plotPCA(
 ```
 
 ```{r expr-overview-pca-after-qc-exercise1-2, fig.cap = "PCA plot of the tung data (50 genes)", echo=FALSE}
-umi.qc <- runPCA(
+tmp <- runPCA(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
     ntop = 50
 )
 plotPCA(
-    umi.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -135,13 +135,13 @@ An alternative to PCA for visualizing scRNASeq data is a tSNE plot. [tSNE](https
 
 ```{r expr-overview-tsne-before-qc, fig.cap = "tSNE map of the tung data"}
 set.seed(123456)
-umi <- runTSNE(
+tmp <- runTSNE(
     umi[endog_genes, ],
     exprs_values = "logcounts_raw",
     perplexity = 130
 )
 plotTSNE(
-    umi,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -152,13 +152,13 @@ plotTSNE(
 
 ```{r expr-overview-tsne-after-qc, fig.cap = "tSNE map of the tung data"}
 set.seed(123456)
-umi.qc <- runTSNE(
+tmp <- runTSNE(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
     perplexity = 130
 )
 plotTSNE(
-    umi.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -178,13 +178,13 @@ __Our answer__
 
 ```{r expr-overview-tsne-after-qc-exercise2-1, fig.cap = "tSNE map of the tung data (perplexity = 10)", echo=FALSE}
 set.seed(123456)
-umi.qc <- runTSNE(
+tmp <- runTSNE(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
     perplexity = 10
 )
 plotTSNE(
-    umi.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -193,13 +193,13 @@ plotTSNE(
 
 ```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the tung data (perplexity = 200)", echo=FALSE}
 set.seed(123456)
-umi.qc <- runTSNE(
+tmp <- runTSNE(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
     perplexity = 200
 )
 plotTSNE(
-    umi.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"

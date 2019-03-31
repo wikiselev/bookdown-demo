@@ -18,103 +18,36 @@ endog_genes <- !rowData(reads.qc)$is_feature_control
 ```
 
 ```{r norm-pca-raw-reads, fig.cap = "PCA plot of the tung data"}
+tmp <- runPCA(
+  reads.qc[endog_genes, ],
+  exprs_values = "logcounts_raw"
+)
 plotPCA(
-    reads.qc[endog_genes, ],
-    exprs_values = "logcounts_raw",
+    tmp,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
 
 ```{r norm-pca-cpm-reads, fig.cap = "PCA plot of the tung data after CPM normalisation"}
-logcounts(reads.qc) <- log2(calculateCPM(reads.qc, use.size.factors = FALSE) + 1)
+logcounts(umi.qc) <- log2(calculateCPM(umi.qc, use_size_factors = FALSE) + 1)
 plotPCA(
     reads.qc[endog_genes, ],
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-cpm-reads, fig.cap = "Cell-wise RLE of the tung data", warning=FALSE}
 plotRLE(
     reads.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", CPM = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
+    exprs_values = "logcounts_raw",
     colour_by = "batch"
 )
-```
-
-```{r norm-pca-rle-reads, fig.cap = "PCA plot of the tung data after RLE normalisation"}
-reads.qc <- normaliseExprs(
-    reads.qc,
-    method = "RLE",
-    feature_set = endog_genes,
-    return_log = TRUE,
-    return_norm_as_exprs = TRUE
-)
-plotPCA(
-    reads.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual"
-)
-```
-
-```{r norm-ours-rle-rle-reads, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     reads.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", RLE = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
-    colour_by = "batch"
-)
-```
-
-```{r norm-pca-uq-reads, fig.cap = "PCA plot of the tung data after UQ normalisation"}
-reads.qc <- normaliseExprs(
-    reads.qc,
-    method = "upperquartile", 
-    feature_set = endog_genes,
-    p = 0.99,
-    return_log = TRUE,
-    return_norm_as_exprs = TRUE
-)
-plotPCA(
-    reads.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual"
-)
-```
-```{r norm-ours-rle-uq-reads, fig.cap = "Cell-wise RLE of the tung data"}
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", UQ = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
-    colour_by = "batch"
-)
-```
-
-```{r norm-pca-tmm-reads, fig.cap = "PCA plot of the tung data after TMM normalisation"}
-reads.qc <- normaliseExprs(
-    reads.qc,
-    method = "TMM",
-    feature_set = endog_genes,
-    return_log = TRUE,
-    return_norm_as_exprs = TRUE
-)
-plotPCA(
-    reads.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual"
-)
-```
-```{r norm-ours-rle-tmm-reads, fig.cap = "Cell-wise RLE of the tung data"}
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", TMM = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
+    exprs_values = "logcounts",
     colour_by = "batch"
 )
 ```
@@ -126,7 +59,7 @@ reads.qc <- normalize(reads.qc)
 plotPCA(
     reads.qc[endog_genes, ],
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
@@ -134,8 +67,12 @@ plotPCA(
 ```{r norm-ours-rle-scran-reads, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     reads.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", scran = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
+    exprs_values = "logcounts_raw",
+    colour_by = "batch"
+)
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_values = "logcounts",
     colour_by = "batch"
 )
 ```
@@ -145,20 +82,24 @@ logcounts(reads.qc) <- log2(Down_Sample_Matrix(counts(reads.qc)) + 1)
 plotPCA(
     reads.qc[endog_genes, ],
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-downsample-reads, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     reads.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", DownSample = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
+    exprs_values = "logcounts_raw",
+    colour_by = "batch"
+)
+plotRLE(
+    reads.qc[endog_genes, ], 
+    exprs_values = "logcounts",
     colour_by = "batch"
 )
 ```
 
-```{r, eval=FALSE}
+```{r}
 reads.qc <- getBMFeatureAnnos(
     reads.qc,
     filters = "ensembl_gene_id", 
@@ -169,47 +110,51 @@ reads.qc <- getBMFeatureAnnos(
         "start_position",
         "end_position"
     ), 
-    feature_symbol = "hgnc_symbol",
-    feature_id = "ensembl_gene_id",
     biomart = "ENSEMBL_MART_ENSEMBL", 
     dataset = "hsapiens_gene_ensembl",
     host = "www.ensembl.org"
 )
 ```
 
-```{r, eval=FALSE}
+```{r}
 reads.qc.ann <- reads.qc[!is.na(rowData(reads.qc)$ensembl_gene_id), ]
 ```
 
-```{r, eval=FALSE}
+```{r}
 eff_length <- 
     abs(rowData(reads.qc.ann)$end_position - rowData(reads.qc.ann)$start_position) / 1000
 ```
 
-```{r, eval=FALSE}
+```{r}
 tpm(reads.qc.ann) <- log2(calculateTPM(reads.qc.ann, eff_length) + 1)
 ```
 
-```{r norm-pca-tpm-reads, fig.cap = "PCA plot of the tung data after TPM normalisation", eval=FALSE}
+```{r norm-pca-tpm-reads, fig.cap = "PCA plot of the tung data after TPM normalisation"}
+tmp <- runPCA(
+  reads.qc.ann,
+  exprs_values = "tpm",
+)
 plotPCA(
-    reads.qc.ann,
-    exprs_values = "tpm",
+    tmp,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
 
-```{r, eval=FALSE}
+```{r}
 tpm(reads.qc.ann) <- log2(calculateFPKM(reads.qc.ann, eff_length) + 1)
 ```
 
 ```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the tung data after FPKM normalisation", eval=FALSE}
+tmp <- runPCA(
+  reads.qc.ann,
+  exprs_values = "tpm",
+)
 plotPCA(
-    reads.qc.ann,
-    exprs_values = "tpm",
+    tmp,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```

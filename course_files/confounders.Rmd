@@ -27,11 +27,14 @@ The `umi.qc` dataset contains filtered cells and genes. Our next step is to expl
 
 Let's first look again at the PCA plot of the QCed dataset:
 ```{r confound-pca, fig.cap = "PCA plot of the tung data"}
+tmp <- runPCA(
+  umi.qc[endog_genes, ],
+  exprs_values = "logcounts_raw"
+)
 plotPCA(
-    umi.qc[endog_genes, ],
-    exprs_values = "logcounts_raw",
+    tmp,
     colour_by = "batch",
-    size_by = "total_features"
+    size_by = "total_features_by_counts"
 )
 ```
 
@@ -42,11 +45,10 @@ Let's test whether some of the variables correlate with any of the PCs.
 #### Detected genes
 
 ```{r confound-find-pcs-total-features, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
-plotQC(
-    umi.qc[endog_genes, ],
-    type = "find-pcs",
-    exprs_values = "logcounts_raw",
-    variable = "total_features"
+plotExplanatoryPCs(
+  umi.qc[endog_genes, ],
+  exprs_values = "logcounts_raw",
+  variables = "total_features_by_counts"
 )
 ```
 
@@ -57,12 +59,11 @@ Indeed, we can see that `PC1` can be almost completely explained by the number o
 `scater` can also compute the marginal $R^2$ for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal $R^2$ values for the variables.
 
 ```{r confound-find-expl-vars, fig.cap = "Explanatory variables"}
-plotQC(
+plotExplanatoryVariables(
     umi.qc[endog_genes, ],
-    type = "expl",
     exprs_values = "logcounts_raw",
     variables = c(
-        "total_features",
+        "total_features_by_counts",
         "total_counts",
         "batch",
         "individual",

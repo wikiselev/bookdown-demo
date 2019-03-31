@@ -18,12 +18,12 @@ opts_chunk$set(out.width='90%', fig.align = 'center')
 ```
 
 ```{r expr-overview-pca-before-qc-reads1, fig.cap = "PCA plot of the tung data"}
-reads <- runPCA(
+tmp <- runPCA(
   reads[endog_genes, ],
   exprs_values = "counts"
 )
 plotPCA(
-    reads,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -31,12 +31,12 @@ plotPCA(
 ```
 
 ```{r expr-overview-pca-before-qc-reads2, fig.cap = "PCA plot of the tung data"}
-reads <- runPCA(
+tmp <- runPCA(
   reads[endog_genes, ],
   exprs_values = "logcounts_raw"
 )
 plotPCA(
-    reads,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -44,12 +44,12 @@ plotPCA(
 ```
 
 ```{r expr-overview-pca-after-qc-reads, fig.cap = "PCA plot of the tung data"}
-reads.qc <- runPCA(
+tmp <- runPCA(
   reads.qc[endog_genes, ],
   exprs_values = "logcounts_raw"
 )
 plotPCA(
-    reads.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -58,13 +58,13 @@ plotPCA(
 
 ```{r expr-overview-tsne-before-qc-reads, fig.cap = "tSNE map of the tung data"}
 set.seed(123456)
-reads <- runTSNE(
+tmp <- runTSNE(
     reads[endog_genes, ],
     exprs_values = "logcounts_raw",
     perplexity = 130
 )
 plotTSNE(
-    reads,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -73,13 +73,13 @@ plotTSNE(
 
 ```{r expr-overview-tsne-after-qc-reads, fig.cap = "tSNE map of the tung data"}
 set.seed(123456)
-reads.qc <- runTSNE(
+tmp <- runTSNE(
     reads.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
     perplexity = 130
 )
 plotTSNE(
-    reads.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -88,13 +88,13 @@ plotTSNE(
 
 ```{r expr-overview-tsne-after-qc-exercise2-1, fig.cap = "tSNE map of the tung data (perplexity = 10)", echo=FALSE}
 set.seed(123456)
-reads.qc <- runTSNE(
+tmp <- runTSNE(
     reads.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
     perplexity = 10
 )
 plotTSNE(
-    reads.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -103,13 +103,13 @@ plotTSNE(
 
 ```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the tung data (perplexity = 200)", echo=FALSE}
 set.seed(123456)
-reads.qc <- runTSNE(
+tmp <- runTSNE(
     reads.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
     perplexity = 200
 )
 plotTSNE(
-    reads.qc,
+    tmp,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"

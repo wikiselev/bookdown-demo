@@ -171,7 +171,7 @@ vennDiagram(
 ```
 
 ```{r top50-gene-expr-reads, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
-plotQC(reads, type = "highest-expression")
+plotHighestExprs(reads, exprs_values = "counts")
 ```
 
 ```{r}

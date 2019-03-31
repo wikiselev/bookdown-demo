@@ -109,9 +109,9 @@ celltype <- ann[,3]
 ## Building a scater object
 To create a SingleCellExperiment object we must put together all the cell annotations into a single dataframe, since the experimental batch (pcr plate) is completely confounded with donor mouse we will only keep one of them.
 
-```{r}
-require("SingleCellExperiment")
-require("scater")
+```{r, message=FALSE, warning=FALSE}
+library("SingleCellExperiment")
+library("scater")
 cell_anns <- data.frame(mouse = Mouse, well=Well, type=celltype)
 rownames(cell_anns) <- colnames(dat)
 sceset <- SingleCellExperiment(assays = list(counts = as.matrix(dat)), colData=cell_anns)
@@ -122,7 +122,6 @@ Finally if the dataset contains spike-ins we a hidden variable in the SingleCell
 isSpike(sceset, "ERCC") <- grepl("ERCC-", rownames(sceset))
 
 ```
-
 
 ## Reading the data (10X)
 Due to the large size and sparsity of 10X data (upto 90% of the expression matrix may be 0s) it is typically 
@@ -136,10 +135,10 @@ respectively.
 We will be using the "Matrix" package to store matrices in sparse-matrix format in R.
 
 ```{r}
-require("Matrix")
+library("Matrix")
 cellbarcodes <- read.table("droplet/Kidney-10X_P4_5/barcodes.tsv")
 genenames <- read.table("droplet/Kidney-10X_P4_5/genes.tsv")
-molecules <- Matrix::readMM("droplet/Kidney-10X_P4_5/matrix.mtx")
+molecules <- readMM("droplet/Kidney-10X_P4_5/matrix.mtx")
 ```
 Now we will add the appropriate row and column names. However, if you inspect the read cellbarcodes you will see that they are just the barcode sequence associated with each cell. This is a problem since each batch of 10X data uses the same pool of barcodes so if we need to combine data from multiple 10X batches the cellbarcodes will not be unique. Hence we will attach the batch ID to each cell barcode:
 ```{r}
@@ -153,7 +152,7 @@ colnames(molecules) <- paste("10X_P4_5", cellbarcodes[,1], sep="_")
 Now lets get the metadata and computational annotations for this data:
 
 ```{r}
-meta <- read.delim("droplet_metadata.csv", sep=",", header=TRUE)
+meta <- read.delim("droplet_metadata.csv", sep=",", header = TRUE)
 head(meta)
 ```
 Here we can see that we need to use "10X_P4_5" to find the metadata for this batch, also note that the format of the mouse ID is different in this metadata table with hyphens instead of underscores and with the gender in the middle of the ID. From checking the methods section of the accompanying paper we know that the same 8 mice were used for both droplet and plate-based techniques. So we need to fix the mouse IDs to be consistent with those used in the FACS experiments. 
@@ -203,7 +202,6 @@ rownames(cell_anns) <- colnames(molecules)
 molecules2 <- molecules
 cell_anns2 <- cell_anns
 
-
 cellbarcodes <- read.table("droplet/Kidney-10X_P7_5/barcodes.tsv")
 genenames <- read.table("droplet/Kidney-10X_P7_5/genes.tsv")
 molecules <- Matrix::readMM("droplet/Kidney-10X_P7_5/matrix.mtx")
@@ -218,7 +216,6 @@ rownames(cell_anns) <- colnames(molecules)
 molecules3 <- molecules
 cell_anns3 <- cell_anns
 ```
-
 
 ## Building a scater object
 
@@ -255,10 +252,11 @@ dim(all_molecules)[2]
 Now build the SingleCellExperiment object. One of the advantages of the SingleCellExperiment class is that it is capable of storing data in normal matrix or sparse matrix format, as well as HDF5 format which allows large non-sparse matrices to be stored & accessed on disk in an efficient manner rather than loading the whole thing into RAM.
 
 ```{r}
-require("SingleCellExperiment")
-require("scater")
 all_molecules <- as.matrix(all_molecules)
-sceset <- SingleCellExperiment(assays = list(counts = as.matrix(all_molecules)), colData=all_cell_anns)
+sceset <- SingleCellExperiment(
+    assays = list(counts = as.matrix(all_molecules)),
+    colData = all_cell_anns
+)
 ```
 
 Since this is 10X data it will not contain spike-ins, so we just save the data:

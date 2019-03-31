@@ -98,7 +98,7 @@ __Note__ `scater` acts as a wrapper for the `calcNormFactors` function from `edg
 
 __Note__ `edgeR` makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/DESeq) may give different results to the `estimateSizeFactorsForMatrix` method in the `DESeq`/`DESeq2` packages. In addition, some versions of `edgeR` will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
 
-__Note__ For __CPM__ normalisation we use `scater`'s `calculateCPM()` function. For __RLE__, __UQ__ and __TMM__ we use `scater`'s `normaliseExprs()` function. For __scran__ we use `scran` package to calculate size factors (it also operates on `SingleCellExperiment` class) and `scater`'s `normalize()` to normalise the data. All these normalization functions save the results to the `logcounts` slot of the `SCE` object. For __downsampling__ we use our own functions shown above.
+__Note__ For __CPM__ normalisation we use `scater`'s `calculateCPM()` function. For __RLE__, __UQ__ and __TMM__ we used to use `scater`'s `normaliseExprs()` function (it is deprecated now and therefore we removed the corresponding subchapters). For __scran__ we use `scran` package to calculate size factors (it also operates on `SingleCellExperiment` class) and `scater`'s `normalize()` to normalise the data. All these normalization functions save the results to the `logcounts` slot of the `SCE` object. For __downsampling__ we use our own functions shown above.
 
 ## Normalization practice (UMI)
 
@@ -117,107 +117,37 @@ endog_genes <- !rowData(umi.qc)$is_feature_control
 
 ### Raw
 ```{r norm-pca-raw, fig.cap = "PCA plot of the tung data"}
+tmp <- runPCA(
+  umi.qc[endog_genes, ],
+  exprs_values = "logcounts_raw"
+)
 plotPCA(
-    umi.qc[endog_genes, ],
-    exprs_values = "logcounts_raw",
+    tmp,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
 
 ### CPM
 ```{r norm-pca-cpm, fig.cap = "PCA plot of the tung data after CPM normalisation"}
-logcounts(umi.qc) <- log2(calculateCPM(umi.qc, use.size.factors = FALSE) + 1)
+logcounts(umi.qc) <- log2(calculateCPM(umi.qc, use_size_factors = FALSE) + 1)
 plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-cpm, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", CPM = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
+    exprs_values = "logcounts_raw",
     colour_by = "batch"
 )
-```
-
-### Size-factor (RLE)
-```{r norm-pca-rle, fig.cap = "PCA plot of the tung data after RLE normalisation"}
-umi.qc <- normaliseExprs(
-    umi.qc,
-    method = "RLE", 
-    feature_set = endog_genes,
-    return_log = TRUE,
-    return_norm_as_exprs = TRUE
-)
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual"
-)
-```
-```{r norm-ours-rle-rle, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", RLE = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
-    colour_by = "batch"
-)
-```
-
-
-### Upperquantile
-```{r norm-pca-uq, fig.cap = "PCA plot of the tung data after UQ normalisation"}
-umi.qc <- normaliseExprs(
-    umi.qc,
-    method = "upperquartile", 
-    feature_set = endog_genes,
-    p = 0.99,
-    return_log = TRUE,
-    return_norm_as_exprs = TRUE
-)
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual"
-)
-```
-```{r norm-ours-rle-uq, fig.cap = "Cell-wise RLE of the tung data"}
-plotRLE(
-    umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", UQ = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
-    colour_by = "batch"
-)
-```
-
-### TMM
-```{r norm-pca-tmm, fig.cap = "PCA plot of the tung data after TMM normalisation"}
-umi.qc <- normaliseExprs(
-    umi.qc,
-    method = "TMM",
-    feature_set = endog_genes,
-    return_log = TRUE,
-    return_norm_as_exprs = TRUE
-)
-plotPCA(
-    umi.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features",
-    shape_by = "individual"
-)
-```
-```{r norm-ours-rle-tmm, fig.cap = "Cell-wise RLE of the tung data"}
-plotRLE(
-    umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", TMM = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
+    exprs_values = "logcounts",
     colour_by = "batch"
 )
 ```
@@ -230,15 +160,19 @@ umi.qc <- normalize(umi.qc)
 plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-scran, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", scran = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
+    exprs_values = "logcounts_raw",
+    colour_by = "batch"
+)
+plotRLE(
+    umi.qc[endog_genes, ], 
+    exprs_values = "logcounts",
     colour_by = "batch"
 )
 ```
@@ -256,15 +190,19 @@ logcounts(umi.qc) <- log2(Down_Sample_Matrix(counts(umi.qc)) + 1)
 plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
 ```{r norm-ours-rle-downsample, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     umi.qc[endog_genes, ], 
-    exprs_mats = list(Raw = "logcounts_raw", DownSample = "logcounts"),
-    exprs_logged = c(TRUE, TRUE),
+    exprs_values = "logcounts_raw",
+    colour_by = "batch"
+)
+plotRLE(
+    umi.qc[endog_genes, ], 
+    exprs_values = "logcounts",
     colour_by = "batch"
 )
 ```
@@ -286,7 +224,7 @@ gene/transcript is sequenced, not the entire length. If in doubt check
 for a relationship between gene/transcript length and expression level.
 
 However, here we show how these normalisations can be calculated using `scater`. First, we need to find the effective transcript length in Kilobases. However, our dataset containes only gene IDs, therefore we will be using the gene lengths instead of transcripts. `scater` uses the [biomaRt](https://bioconductor.org/packages/release/bioc/html/biomaRt.html) package, which allows one to annotate genes by other attributes:
-```{r, eval=FALSE}
+```{r, message = FALSE, warning = FALSE}
 umi.qc <- getBMFeatureAnnos(
     umi.qc,
     filters = "ensembl_gene_id", 
@@ -297,8 +235,6 @@ umi.qc <- getBMFeatureAnnos(
         "start_position",
         "end_position"
     ), 
-    feature_symbol = "hgnc_symbol",
-    feature_id = "ensembl_gene_id",
     biomart = "ENSEMBL_MART_ENSEMBL", 
     dataset = "hsapiens_gene_ensembl",
     host = "www.ensembl.org"
@@ -318,8 +254,6 @@ umi.qc <- getBMFeatureAnnos(
 #         "transcript_end",
 #         "transcript_count"
 #     ),
-#     feature_symbol = "mgi_symbol",
-#     feature_id = "ensembl_gene_id",
 #     biomart = "ENSEMBL_MART_ENSEMBL",
 #     dataset = "mmusculus_gene_ensembl",
 #     host = "www.ensembl.org"
@@ -327,17 +261,17 @@ umi.qc <- getBMFeatureAnnos(
 ```
 
 Some of the genes were not annotated, therefore we filter them out:
-```{r, eval=FALSE}
+```{r}
 umi.qc.ann <- umi.qc[!is.na(rowData(umi.qc)$ensembl_gene_id), ]
 ```
 
 Now we compute the total gene length in Kilobases by using the `end_position` and `start_position` fields:
-```{r, eval=FALSE}
+```{r}
 eff_length <- 
     abs(rowData(umi.qc.ann)$end_position - rowData(umi.qc.ann)$start_position) / 1000
 ```
 
-```{r length-vs-mean, fig.cap = "Gene length vs Mean Expression for the raw data", eval=FALSE}
+```{r length-vs-mean, fig.cap = "Gene length vs Mean Expression for the raw data"}
 plot(eff_length, rowMeans(counts(umi.qc.ann)))
 ```
 There is no relationship between gene length and mean expression so __FPKM__s & __TPM__s are inappropriate for this dataset. 
@@ -346,31 +280,37 @@ But we will demonstrate them anyway.
 __Note__ Here calculate the total gene length instead of the total exon length. Many genes will contain lots of introns so their `eff_length` will be very different from what we have calculated. Please consider our calculation as approximation. If you want to use the total exon lengths, please refer to [this page](https://www.biostars.org/p/83901/).
 
 Now we are ready to perform the normalisations:
-```{r, eval=FALSE}
+```{r}
 tpm(umi.qc.ann) <- log2(calculateTPM(umi.qc.ann, eff_length) + 1)
 ```
 
 Plot the results as a PCA plot:
-```{r norm-pca-fpkm, fig.cap = "PCA plot of the tung data after TPM normalisation", eval=FALSE}
+```{r norm-pca-fpkm, fig.cap = "PCA plot of the tung data after TPM normalisation"}
+tmp <- runPCA(
+  umi.qc.ann,
+  exprs_values = "tpm",
+)
 plotPCA(
-    umi.qc.ann,
-    exprs_values = "tpm",
+    tmp,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
 
-```{r, eval=FALSE}
+```{r}
 tpm(umi.qc.ann) <- log2(calculateFPKM(umi.qc.ann, eff_length) + 1)
 ```
 
-```{r norm-pca-tpm, fig.cap = "PCA plot of the tung data after FPKM normalisation", eval=FALSE}
+```{r norm-pca-tpm, fig.cap = "PCA plot of the tung data after FPKM normalisation"}
+tmp <- runPCA(
+  umi.qc.ann,
+  exprs_values = "tpm",
+)
 plotPCA(
-    umi.qc.ann,
-    exprs_values = "tpm",
+    tmp,
     colour_by = "batch",
-    size_by = "total_features",
+    size_by = "total_features_by_counts",
     shape_by = "individual"
 )
 ```
