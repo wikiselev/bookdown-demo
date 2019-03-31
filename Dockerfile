@@ -82,7 +82,7 @@ RUN Rscript -e 'BiocManager::install(c("MultiAssayExperiment", "SummarizedExperi
 
 # download data and extra files from S3
 COPY ./poststart.sh /home/jovyan
-RUN chmod u+x /home/jovyan/poststart.sh
+RUN chmod 755 /home/jovyan/poststart.sh
 
 USER $NB_UID
 

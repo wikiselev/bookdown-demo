@@ -40,9 +40,12 @@ knitr::include_graphics("figures/pca.png")
 
 Without log-transformation:
 ```{r expr-overview-pca-before-qc1, fig.cap = "PCA plot of the tung data"}
+umi <- runPCA(
+  umi[endog_genes, ],
+  exprs_values = "counts"
+)
 plotPCA(
-    umi[endog_genes, ],
-    exprs_values = "counts",
+    umi,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -51,9 +54,12 @@ plotPCA(
 
 With log-transformation:
 ```{r expr-overview-pca-before-qc2, fig.cap = "PCA plot of the tung data"}
+umi <- runPCA(
+  umi[endog_genes, ],
+  exprs_values = "logcounts_raw"
+)
 plotPCA(
-    umi[endog_genes, ],
-    exprs_values = "logcounts_raw",
+    umi,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -67,9 +73,12 @@ __However, note that just a log-transformation is not enough to account for diff
 #### After QC
 
 ```{r expr-overview-pca-after-qc, fig.cap = "PCA plot of the tung data"}
+umi.qc <- runPCA(
+  umi.qc[endog_genes, ],
+  exprs_values = "logcounts_raw"
+)
 plotPCA(
-    umi.qc[endog_genes, ],
-    exprs_values = "logcounts_raw",
+    umi.qc,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -88,10 +97,13 @@ __Hint__ Use `ntop` argument of the `plotPCA` function.
 __Our answer__
 
 ```{r expr-overview-pca-after-qc-exercise1-1, fig.cap = "PCA plot of the tung data (14214 genes)", echo=FALSE}
-plotPCA(
+umi.qc <- runPCA(
     umi.qc[endog_genes, ],
-    ntop = 14214,
     exprs_values = "logcounts_raw",
+    ntop = 14214,
+)
+plotPCA(
+    umi.qc,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
@@ -99,10 +111,13 @@ plotPCA(
 ```
 
 ```{r expr-overview-pca-after-qc-exercise1-2, fig.cap = "PCA plot of the tung data (50 genes)", echo=FALSE}
-plotPCA(
+umi.qc <- runPCA(
     umi.qc[endog_genes, ],
-    ntop = 50,
     exprs_values = "logcounts_raw",
+    ntop = 50,
+)
+plotPCA(
+    umi.qc,
     colour_by = "batch",
     size_by = "total_features_by_counts",
     shape_by = "individual"
