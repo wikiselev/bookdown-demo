@@ -100,7 +100,7 @@ __Our answer__
 umi.qc <- runPCA(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
-    ntop = 14214,
+    ntop = 14214
 )
 plotPCA(
     umi.qc,
@@ -114,7 +114,7 @@ plotPCA(
 umi.qc <- runPCA(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
-    ntop = 50,
+    ntop = 50
 )
 plotPCA(
     umi.qc,
@@ -134,28 +134,34 @@ An alternative to PCA for visualizing scRNASeq data is a tSNE plot. [tSNE](https
 #### Before QC
 
 ```{r expr-overview-tsne-before-qc, fig.cap = "tSNE map of the tung data"}
-plotTSNE(
+set.seed(123456)
+umi <- runTSNE(
     umi[endog_genes, ],
     exprs_values = "logcounts_raw",
-    perplexity = 130,
+    perplexity = 130
+)
+plotTSNE(
+    umi,
     colour_by = "batch",
     size_by = "total_features_by_counts",
-    shape_by = "individual",
-    rand_seed = 123456
+    shape_by = "individual"
 )
 ```
 
 #### After QC
 
 ```{r expr-overview-tsne-after-qc, fig.cap = "tSNE map of the tung data"}
-plotTSNE(
+set.seed(123456)
+umi.qc <- runTSNE(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
-    perplexity = 130,
+    perplexity = 130
+)
+plotTSNE(
+    umi.qc,
     colour_by = "batch",
     size_by = "total_features_by_counts",
-    shape_by = "individual",
-    rand_seed = 123456
+    shape_by = "individual"
 )
 ```
 
@@ -171,26 +177,32 @@ How do the tSNE plots change when a perplexity of 10 or 200 is used? How does th
 __Our answer__
 
 ```{r expr-overview-tsne-after-qc-exercise2-1, fig.cap = "tSNE map of the tung data (perplexity = 10)", echo=FALSE}
-plotTSNE(
+set.seed(123456)
+umi.qc <- runTSNE(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
-    perplexity = 10,
+    perplexity = 10
+)
+plotTSNE(
+    umi.qc,
     colour_by = "batch",
     size_by = "total_features_by_counts",
-    shape_by = "individual",
-    rand_seed = 123456
+    shape_by = "individual"
 )
 ```
 
 ```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the tung data (perplexity = 200)", echo=FALSE}
-plotTSNE(
+set.seed(123456)
+umi.qc <- runTSNE(
     umi.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
-    perplexity = 200,
+    perplexity = 200
+)
+plotTSNE(
+    umi.qc,
     colour_by = "batch",
     size_by = "total_features_by_counts",
-    shape_by = "individual",
-    rand_seed = 123456
+    shape_by = "individual"
 )
 ```
 

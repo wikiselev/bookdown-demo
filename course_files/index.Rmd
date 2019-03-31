@@ -34,25 +34,48 @@ Please follow this link and register for the __"Analysis of single cell RNA-seq 
 ## GitHub
 <a href="https://github.com/hemberg-lab/scRNA.seq.course" target="blank">https://github.com/hemberg-lab/scRNA.seq.course</a>
 
-## Docker image (RStudio)
+## Course Docker image
 
-The course can be reproduced without any package installation by running the course docker RStudio image which contains all the required packages.
+The course can be reproduced without any package installation by running the course docker image which contains all the required packages.
 
-Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course RStudio docker image:
+### Run the image
+Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker image (use the latest version of the course instead of v3.13):
 
 ```
-docker run -d -p 8787:8787 quay.io/hemberg-group/scrna-seq-course-rstudio
+docker run -p 8888:8888 -e PASSWORD="jupyter" quay.io/hemberg-group/scrna-seq-course:v3.13
 ```
 
-This download the docker image (may take some time) and start a new Rstudio session in a docker container with all packages installed and all data files available.
+Then follow the instructions provided, e.g.:
+```
+To access the notebook, open this file in a browser:
+    file:///home/jovyan/.local/share/jupyter/runtime/nbserver-6-open.html
+Or copy and paste one of these URLs:
+    http://(a9ee1aad5398 or 127.0.0.1):8888/?token=22debff49d9aae3c50e6b0b5241b47eefb1b8f883fcb7e6d
+```
 
-Then visit `localhost:8787` in your browser and log in with `username:password` as `rstudio:rstudio`. Now you are ready to go!
+A Jupyter session will be open in a web browser (we recommend Chrome).
 
-More details on how ot run RStudio docker with different options can be found [here](https://hub.docker.com/r/rocker/rstudio-stable/).
+#### Windows users
+
+On Windows operating system the IP address of the container can be different from `127.0.0.1` (`localhost`). To find the IP address please run:
+```
+docker-machine ip default
+```
+
+### Download data/other files
+
+Please click on `New -> Terminal`. In the new terminal window please run:
+```
+./poststart.sh
+```
+
+### RStudio
+
+Now go back to Jupyter browser tab and change word `tree` in the url to `rstudio`. RStudio server will open with all of the course files, software and the data folder available.
 
 ## Manual installation
 
-If you are not using a docker image of the course, then to be able to run all code chunks of the course you need to clone or download the [course GitHub repository](https://github.com/hemberg-lab/scRNA.seq.course) and start an R session in the cloned folder. You will also need to install all packages listed in the course docker files: [Dockerfile1](https://github.com/hemberg-lab/scRNA.seq.course-base/blob/master/Dockerfile) and [Dockerfile2](https://github.com/hemberg-lab/scRNA.seq.course-R/blob/master/Dockerfile).
+If you are not using a docker image of the course, then to be able to run all code chunks of the course you need to clone or download the [course GitHub repository](https://github.com/hemberg-lab/scRNA.seq.course) and start an R session in the `course_files` folder. You will also need to install all required packages manually.
 
 Alternatively, you can just install packages listed in a chapter of interest.
 
