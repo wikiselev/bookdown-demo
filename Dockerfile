@@ -86,4 +86,5 @@ USER $NB_UID
 ADD course_files /home/jovyan
 
 # download data and extra files from S3
-COPY ./poststart.sh /
+COPY ./poststart.sh /home/jovyan
+RUN chmod u+x /home/jovyan/poststart.sh
