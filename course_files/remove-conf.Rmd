@@ -32,6 +32,7 @@ library(scran)
 library(kBET)
 library(sva) # Combat
 library(edgeR)
+library(harmony)
 set.seed(1234567)
 options(stringsAsFactors = FALSE)
 umi <- readRDS("data/tung/umi.rds")
@@ -108,7 +109,7 @@ mod0 = model.matrix(~ 1, data = mod_data)
 # Preserve biological variability
 mod1 = model.matrix(~ umi.qc$individual, data = mod_data) 
 # adjust for total genes detected
-mod2 = model.matrix(~ umi.qc$total_features, data = mod_data)
+mod2 = model.matrix(~ umi.qc$total_features_by_counts, data = mod_data)
 assay(umi.qc, "combat") <- ComBat(
     dat = t(mod_data), 
     batch = factor(umi.qc$batch), 
@@ -237,6 +238,28 @@ indi3 <- do_glm(umi.qc[, umi.qc$individual == "NA19239"])
 assay(umi.qc, "glm_indi") <- cbind(indi1, indi2, indi3);
 ```
 
+### Harmony
+
+Harmony [Korsunsky2018fast] is a newer batch correction method, which is designed to operate on PC space. The algorithm proceeds to iteratively cluster the cells, with the objective function formulated to promote cells from multiple datasets within each cluster. Once a clustering is obtained, the positions of the centroids of each dataset are obtained on a per-cluster basis and the coordinates are corrected. This procedure is iterated until convergence. Harmony comes with a `theta` parameter that controls the degree of batch correction (higher values lead to more dataset integration), and can account for multiple experimental and biological factors on input.
+
+Seeing how the end result of Harmony is an altered dimensional reduction space created on the basis of PCA, we plot the obtained manifold here and exclude it from the rest of the follow-ups in the section.
+
+```{r}
+umi.qc.endog = umi.qc[endog_genes,]
+umi.qc.endog = runPCA(umi.qc.endog, exprs_values = 'logcounts', ncomponents = 20)
+pca <- as.matrix(umi.qc.endog@reducedDims@listData[["PCA"]])
+harmony_emb <- HarmonyMatrix(pca, umi.qc.endog$batch, theta=2)
+umi.qc.endog@reducedDims@listData[['harmony']] <- harmony_emb
+
+plotReducedDim(
+    umi.qc.endog,
+    use_dimred = 'harmony',
+    colour_by = "batch",
+    size_by = "total_features_by_counts",
+    shape_by = "individual"
+)
+```
+
 ### How to evaluate and compare confounder removal strategies
 
 A key question when considering the different methods for removing confounders is how to quantitatively determine which one is the most effective. The main reason why comparisons are challenging is because it is often difficult to know what corresponds to technical counfounders and what is interesting biological variability. Here, we consider three different metrics which are all reasonable based on our knowledge of the experimental design. Depending on the biological question that you wish to address, it is important to choose a metric that allows you to evaluate the confounders that are likely to be the biggest concern for the given situation.
@@ -255,7 +278,7 @@ for(n in assayNames(umi.qc)) {
         plotPCA(
             umi.qc[endog_genes, ],
             colour_by = "batch",
-            size_by = "total_features",
+            size_by = "total_features_by_counts",
             shape_by = "individual",
             exprs_values = n
         ) +
@@ -292,7 +315,7 @@ for(n in assayNames(umi.qc)) {
             type = "expl",
             exprs_values = n,
             variables = c(
-                "total_features",
+                "total_features_by_counts",
                 "total_counts",
                 "batch",
                 "individual",
