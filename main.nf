@@ -1,6 +1,6 @@
 
 Channel
-    .fromPath('course_files', type: 'dir')
+    .fromPath("$baseDir/course_files", type: 'dir')
     .into { ch_course_files1; ch_course_files2 }
 
 Channel
