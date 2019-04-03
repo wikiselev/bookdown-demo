@@ -274,13 +274,16 @@ removed. We always use log2-cpm normalized data to match the assumptions of PCA.
 
 ```{r}
 for(n in assayNames(umi.qc)) {
+    tmp <- runPCA(
+        umi[endog_genes, ],
+        exprs_values = n
+    )
     print(
         plotPCA(
-            umi.qc[endog_genes, ],
+            tmp,
             colour_by = "batch",
             size_by = "total_features_by_counts",
-            shape_by = "individual",
-            exprs_values = n
+            shape_by = "individual"
         ) +
         ggtitle(n)
     )
