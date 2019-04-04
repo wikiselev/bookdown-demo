@@ -275,7 +275,7 @@ removed. We always use log2-cpm normalized data to match the assumptions of PCA.
 ```{r}
 for(n in assayNames(umi.qc)) {
     tmp <- runPCA(
-        umi[endog_genes, ],
+        umi.qc[endog_genes, ],
         exprs_values = n
     )
     print(

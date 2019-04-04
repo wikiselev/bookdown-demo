@@ -17,6 +17,7 @@ library(SingleCellExperiment)
 library(scran)
 library(kBET)
 library(sva) # Combat
+library(harmony)
 library(edgeR)
 set.seed(1234567)
 options(stringsAsFactors = FALSE)
@@ -68,7 +69,7 @@ mod0 = model.matrix(~ 1, data = mod_data)
 # Preserve biological variability
 mod1 = model.matrix(~ reads.qc$individual, data = mod_data) 
 # adjust for total genes detected
-mod2 = model.matrix(~ reads.qc$total_features, data = mod_data)
+mod2 = model.matrix(~ reads.qc$total_features_by_counts, data = mod_data)
 assay(reads.qc, "combat") <- ComBat(
     dat = t(mod_data), 
     batch = factor(reads.qc$batch), 
@@ -187,14 +188,33 @@ assay(reads.qc, "glm_indi") <- cbind(indi1, indi2, indi3);
 ```
 
 ```{r}
+reads.qc.endog = reads.qc[endog_genes,]
+reads.qc.endog = runPCA(reads.qc.endog, exprs_values = 'logcounts', ncomponents = 20)
+pca <- as.matrix(reads.qc.endog@reducedDims@listData[["PCA"]])
+harmony_emb <- HarmonyMatrix(pca, reads.qc.endog$batch, theta=2)
+reads.qc.endog@reducedDims@listData[['harmony']] <- harmony_emb
+
+plotReducedDim(
+    reads.qc.endog,
+    use_dimred = 'harmony',
+    colour_by = "batch",
+    size_by = "total_features_by_counts",
+    shape_by = "individual"
+)
+```
+
+```{r}
 for(n in assayNames(reads.qc)) {
+    tmp <- runPCA(
+        reads.qc[endog_genes, ],
+        exprs_values = n
+    )
     print(
         plotPCA(
-            reads.qc[endog_genes, ],
+            tmp,
             colour_by = "batch",
-            size_by = "total_features",
-            shape_by = "individual",
-            exprs_values = n
+            size_by = "total_features_by_counts",
+            shape_by = "individual"
         ) +
         ggtitle(n)
     )
@@ -218,7 +238,7 @@ for(n in assayNames(reads.qc)) {
             type = "expl",
             exprs_values = n,
             variables = c(
-                "total_features",
+                "total_features_by_counts",
                 "total_counts",
                 "batch",
                 "individual",
