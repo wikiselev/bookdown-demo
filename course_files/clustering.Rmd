@@ -158,7 +158,7 @@ adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$pcaReduce)
 [tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. Here we will do the same:
 ```{r clust-tsne, fig.cap = "tSNE map of the patient data"}
 deng <- runTSNE(deng, rand_seed = 1)
-plotTSNE()
+plotTSNE(deng)
 ```
 
 Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.
