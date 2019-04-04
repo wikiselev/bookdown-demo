@@ -58,7 +58,7 @@ plotPCA(deng, colour_by = "cell_type1")
 
 Now we are ready to run `SC3` (we also ask it to calculate biological properties of the clusters): 
 ```{r}
-deng <- sc3(deng, ks = 10, biology = TRUE)
+deng <- sc3(deng, ks = 10, biology = TRUE, n_cores = 1)
 ```
 
 `SC3` result consists of several different outputs (please look in [@Kiselev2016-bq] and [SC3 vignette](http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html) for more details). Here we show some of them:
@@ -157,7 +157,8 @@ adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$pcaReduce)
 
 [tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. Here we will do the same:
 ```{r clust-tsne, fig.cap = "tSNE map of the patient data"}
-deng <- plotTSNE(deng, rand_seed = 1, return_SCE = TRUE)
+deng <- runTSNE(deng, rand_seed = 1)
+plotTSNE()
 ```
 
 Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.
@@ -183,50 +184,6 @@ adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$tSNE_kmeans)
 As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
 and give different results every time they are run. To get a better
 overview of the solutions, we need to run the methods multiple times. `SC3` is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.
-
-### SNN-Cliq
-
-Here we run SNN-cliq with te default parameters provided in the author's example:
-
-```{r}
-distan <- "euclidean"
-par.k <- 3
-par.r <- 0.7
-par.m <- 0.5
-# construct a graph
-scRNA.seq.funcs::SNN(
-    data = t(input),
-    outfile = "snn-cliq.txt",
-    k = par.k,
-    distance = distan
-)
-# find clusters in the graph
-snn.res <- 
-    system(
-        paste0(
-            "python utils/Cliq.py ", 
-            "-i snn-cliq.txt ",
-            "-o res-snn-cliq.txt ",
-            "-r ", par.r,
-            " -m ", par.m
-        ),
-        intern = TRUE
-    )
-cat(paste(snn.res, collapse = "\n"))
-snn.res <- read.table("res-snn-cliq.txt")
-# remove files that were created during the analysis
-system("rm snn-cliq.txt res-snn-cliq.txt")
-
-colData(deng)$SNNCliq <- as.character(snn.res[,1])
-plotPCA(deng, colour_by = "SNNCliq")
-```
-
-__Exercise 9__: Compare the results between `SNN-Cliq` and the original publication cell types.
-
-__Our solution__:
-```{r, echo=FALSE}
-adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$SNNCliq)
-```
 
 ### SINCERA
 
