@@ -168,7 +168,7 @@ Now we are going to apply _k_-means clustering algorithm to the cloud of points 
 We will start with $k=8$:
 ```{r clust-tsne-kmeans2, fig.cap = "tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm"}
 colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 8)$clust)
-plotTSNE(deng, rand_seed = 1, colour_by = "tSNE_kmeans")
+plotTSNE(deng, colour_by = "tSNE_kmeans")
 ```
 
 __Exercise 7__: Make the same plot for $k=10$.
