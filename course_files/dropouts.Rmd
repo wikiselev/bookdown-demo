@@ -275,7 +275,7 @@ by effect size.
 deng_int <- NBumiConvertData(deng)
 DANB_fit <- NBumiFitModel(deng_int) # DANB is fit to the raw count matrix
 # Perform DANB feature selection
-DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit, method="fdr", qval.thresh=0.01)
+DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit, method="fdr", qval.thresh=0.01, suppress.plot=FALSE)
 DANB_genes <- names(DropFS[1:1500])
 ```
 __Exercise 5__
