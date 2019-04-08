@@ -46,27 +46,37 @@ For this section we will continue working with the Deng data.
 ```{r}
 deng <- readRDS("data/deng/deng-reads.rds")
 cellLabels <- colData(deng)$cell_type2
+cell_colors <- brewer.pal(max(3,length(unique(cellLabels))), "Set3")
 ```
 
-This data can be QCed and normalized for library size using M3Drop,
-which removes cells with few detected genes, removes
-undetected genes, and converts raw counts to CPM.
+Feature selection is performed after QC, however this data has already been QCed so
+we can skip that step here. M3Drop contain two different feature selection methods
+"M3DropFeatureSelection" which is based on a Michaelis-Menten curve and is designed
+for full-transcript single-cell RNA-seq data (such as Smartseq2) and 
+"NBumiFeatureSelectionCombinedDrop" which is based on a negative binomial model and
+is designed for UMI count data. We will demonstrate both on the Deng Smartseq2 data.
+
+M3Drop feature selection is runs direction on a normalized (but not log-transformed) 
+expression matrix. This can be extracted from our SingleCellExperiment object using the 
+command below. 
 
 ```{r}
-deng_list <- M3DropCleanData(
-    counts(deng),
-    labels = cellLabels,
-    min_detected_genes = 100,
-    is.counts = TRUE
-)
-expr_matrix <- deng_list$data # Normalized & filtered expression matrix
-celltype_labs <- factor(deng_list$labels) # filtered cell-type labels
-cell_colors <- brewer.pal(max(3,length(unique(celltype_labs))), "Set3")
+expr_mat <- M3Drop::M3DropConvertData(deng)
 ```
 
-__Exercise 1__: How many cells & genes have been removed by this filtering? 
+This function is compatible with most single-cell RNA-seq analysis packages including:
+scater, SingleCellExperiment, monocle, and Seurat. It can also convert an existing 
+expression matrix to the correct form (removing undetected genes & normalizing/delogging) 
+if you specify whether the matrix is raw counts, or log transformed. Check the manual for details:
+
+```{r eval=FALSE}
+?M3Drop::M3DropConvertData
+```
+
+__Exercise 1__: Confirm that the conversion function has removed undetected genes:
 ```{r, include=FALSE}
-ncol(counts(deng)) - ncol(deng_list$data)
+nrow(counts(deng)) - nrow(expr_mat)
+summary( rowSums(counts(deng))[! rownames(counts(deng)) %in% rownames(expr_mat) ] )
 ```
 
 ### Identifying Genes vs a Null Model
@@ -123,16 +133,30 @@ after multiple-testing correction.
 
 ```{r, fig.width = 7, fig.height = 6}
 Brennecke_HVG <- BrenneckeGetVariableGenes(
-    expr_matrix,
+    expr_mat,
     fdr = 0.01,
     minBiolDisp = 0.5
 )
+```
+
+This function returns a matrix of significant genes as well as their estimated effect size (difference 
+between observed and expected coefficient of variation), and their significance as raw p.values and 
+FDR corrected q.values. For now we will just keep the names of the significant HVG genes.
+
+```{r}
 HVG_genes <- Brennecke_HVG$Gene
+```
+
+__Exercise 3__
+How many genes were signifcant using BrenneckeGetVariableGenes? 
+
+```{r, echo=FALSE, fig.width = 8.5, fig.height = 6}
+length(HVG_genes)
 ```
 #### High Dropout Genes
 
 An alternative to finding HVGs is to identify genes with unexpectedly high numbers of zeros.
-The frequency of zeros, know as the "dropout rate", is very closely related to expression level
+The frequency of zeros, known as the "dropout rate", is very closely related to expression level
 in scRNASeq data. Zeros are the dominant feature of single-cell RNASeq data, typically accounting
 for over half of the entries in the final expression matrix. These zeros predominantly result
 from the failure of mRNAs failing to be reversed transcribed [(Andrews and Hemberg, 2016)](http://www.biorxiv.org/content/early/2017/05/25/065094). Reverse transcription
@@ -160,10 +184,10 @@ plot(
     ylab = "Dropout Rate", 
     xlim = c(1,1000)
 )
-S1 <- 10
-P1 <- 1 - S1 / (K + S1) # Expression & dropouts for cells in condition 1
-S2 <- 750
-P2 <- 1 - S2 / (K + S2) # Expression & dropouts for cells in condition 2
+S1 <- 10 # Mean expression in population 1
+P1 <- 1 - S1 / (K + S1) # Dropouts for cells in condition 1
+S2 <- 750 # Mean expression in population 2
+P2 <- 1 - S2 / (K + S2) # Dropouts for cells in condition 2
 points(
     c(S1, S2),
     c(P1, P2), 
@@ -182,7 +206,7 @@ points(
 ```
 __Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures.
 
-__Exercise 3__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
+__Exercise 4__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
 
 ```{r, include=FALSE}
 plot(
@@ -233,17 +257,32 @@ in addition to those resulting from insufficient reverse-transcription. This mod
 Depth-Adjusted Negative Binomial (DANB). This method describes each expression observation
 as a negative binomial model with a mean related to both the mean expression of the
 respective gene and the sequencing depth of the respective cell, and a variance related to
-the mean-expression of the gene.
+the mean-expression of the gene. 
 
-Unlike the Michaelis-Menten and HVG methods there isn't a reliable statistical test for features
-selected by this model, so we will consider the top 1500 genes instead.
+This method is designed to model the raw counts in a dataset directly, and we can extract
+the appropriate matrix using the "NBumiConvertData" function similar to M3Drop. However,
+we have an extra step for fitting the model since that is the slowest step of the method
+and we are currently working on additional methods that can use this model information
+for other things (such as normalization, co-expression testing, highly variable gene
+detection).
+
+This method includes a binomial test of the significance of each feature, but since
+the Deng data is not UMI counts the model does not fit the noise sufficiently and 
+far too many genes will be called as significant. Thus we will take the top 1500
+by effect size.
 
 ```{r, fig.width=8, fig.height=5}
-deng_int <- NBumiConvertToInteger(counts(deng))
+deng_int <- NBumiConvertData(deng)
 DANB_fit <- NBumiFitModel(deng_int) # DANB is fit to the raw count matrix
 # Perform DANB feature selection
-DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit)
+DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit, method="fdr", qval.thresh=0.01)
 DANB_genes <- names(DropFS[1:1500])
+```
+__Exercise 5__
+How many genes were signifcant using NBumiFeatureSelectionCombinedDrop? 
+
+```{r, echo=FALSE, fig.width = 8.5, fig.height = 6}
+nrow(DropFS)
 ```
 
 ### Correlated Expression
@@ -263,13 +302,10 @@ consider the significance of the correlations.
 
 
 ```{r, eval=FALSE}
-cor_mat <- cor(t(expr_matrix), method = "spearman") # Gene-gene correlations
-diag(cor_mat) <- rep(0, times = nrow(expr_matrix))
-score <- apply(cor_mat, 1, function(x) {max(abs(x))}) #Correlation of highest magnitude
-names(score) <- rownames(expr_matrix);
-score <- score[order(-score)]
-Cor_genes <- names(score[1:1500])
+cor_feat <- M3Drop::corFS(expr_mat)
+Cor_genes <- names(cor_feat)[1:1500]
 ```
+
 Lastly, another common method for feature selection in scRNASeq data is to use PCA loadings. Genes with
 high PCA loadings are likely to be highly variable and correlated with many other variable genes, thus
 may be relevant to the underlying biology. However, as with gene-gene correlations PCA loadings tend to
@@ -293,7 +329,7 @@ names(score) <- rownames(expr_matrix)
 score <- score[order(-score)]
 PCA_genes <- names(score[1:1500])
 ```
-__Exercise 4__
+__Exercise 6__
 Consider the top 5 principal components. Which appear to be most biologically relevant? How does the top 1,500
 features change if you consider the loadings for those components?
 ```{r, include=FALSE}
@@ -333,7 +369,7 @@ We can also consider how consistent each feature selection method is with the ot
 J <- sum(M3Drop_genes %in% HVG_genes)/length(unique(c(M3Drop_genes, HVG_genes)))
 ```
 
-__Exercise 5__
+__Exercise 7__
 
 Plot the expression of the features for each of the other methods. Which appear to be differentially expressed? How consistent are the different methods for this dataset?
 
