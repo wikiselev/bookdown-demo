@@ -1,4 +1,4 @@
-FROM quay.io/cellgeni/cellgeni-jupyter:v0.4.9
+FROM quay.io/cellgeni/notebooks-base:master
 
 USER root
 
@@ -69,7 +69,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     r-cran-corrplot
 
 # Install other CRAN
-RUN Rscript -e 'install.packages(c("bookdown", "cluster", "KernSmooth", "ROCR", "googleVis", "ggbeeswarm", "SLICER", "ggfortify", "mclust"))'
+RUN Rscript -e 'install.packages(c("bookdown", "cluster", "KernSmooth", "ROCR", "googleVis", "ggbeeswarm", "SLICER", "ggfortify", "mclust", "Rmagic"))'
 
 # install github packages
 # see here for with_libpaths description:
