@@ -133,7 +133,7 @@ after multiple-testing correction.
 
 ```{r, fig.width = 7, fig.height = 6}
 Brennecke_HVG <- BrenneckeGetVariableGenes(
-    expr_mat,
+    expr_matrix,
     fdr = 0.01,
     minBiolDisp = 0.5
 )
@@ -302,7 +302,7 @@ consider the significance of the correlations.
 
 
 ```{r, eval=FALSE}
-cor_feat <- M3Drop::corFS(expr_mat)
+cor_feat <- M3Drop::corFS(expr_matrix)
 Cor_genes <- names(cor_feat)[1:1500]
 ```
 
