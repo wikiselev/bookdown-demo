@@ -61,7 +61,7 @@ expression matrix. This can be extracted from our SingleCellExperiment object us
 command below. 
 
 ```{r}
-expr_mat <- M3Drop::M3DropConvertData(deng)
+expr_matrix <- M3Drop::M3DropConvertData(deng)
 ```
 
 This function is compatible with most single-cell RNA-seq analysis packages including:
@@ -75,8 +75,8 @@ if you specify whether the matrix is raw counts, or log transformed. Check the m
 
 __Exercise 1__: Confirm that the conversion function has removed undetected genes:
 ```{r, include=FALSE}
-nrow(counts(deng)) - nrow(expr_mat)
-summary( rowSums(counts(deng))[! rownames(counts(deng)) %in% rownames(expr_mat) ] )
+nrow(counts(deng)) - nrow(expr_matrix)
+summary( rowSums(counts(deng))[! rownames(counts(deng)) %in% rownames(expr_matrix) ] )
 ```
 
 ### Identifying Genes vs a Null Model
