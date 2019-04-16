@@ -1,7 +1,6 @@
 ---
 output: html_document
 ---
-
 ## Imputation
 
 ```{r, echo=FALSE}
@@ -14,19 +13,39 @@ library(SC3)
 library(scater)
 library(SingleCellExperiment)
 library(mclust)
+library(DrImpute)
 set.seed(1234567)
 ```
 
 
-As discussed previously, one of the main challenges when analyzing scRNA-seq data is the presence of zeros, or dropouts. The dropouts are assumed to have arisen for three possible reasons:
+As discussed previously, one of the main challenges when analyzing scRNA-seq 
+data is the presence of zeros, or dropouts. The dropouts are assumed to have 
+arisen for three possible reasons:
 
 * The gene was not expressed in the cell and hence there are no transcripts to sequence
 * The gene was expressed, but for some reason the transcripts were lost somewhere prior to sequencing
 * The gene was expressed and transcripts were captured and turned into cDNA, but the sequencing depth was not sufficient to produce any reads.
 
-Thus, dropouts could be result of experimental shortcomings, and if this is the case then we would like to provide computational corrections. One possible solution is to impute the dropouts in the expression matrix. To be able to impute gene expression values, one must have an underlying model. However, since we do not know which dropout events are technical artefacts and which correspond to the transcript being truly absent, imputation is a difficult challenge.
+Thus, dropouts could be result of experimental shortcomings, and if this is 
+the case then we would like to provide computational corrections. One possible
+ solution is to impute the dropouts in the expression matrix. To be able to 
+impute gene expression values, one must have an underlying model. However, 
+since we do not know which dropout events are technical artefacts and which 
+correspond to the transcript being truly absent, imputation is a difficult 
+challenge.
 
-To the best of our knowledge, there are currently two different imputation methods available: [MAGIC](https://github.com/pkathail/magic) [@Van_Dijk2017-bh] and [scImpute](https://github.com/Vivianstats/scImpute) [@Li2017-tz]. MAGIC is only available for Python or Matlab, but we will run it from within R.
+There are many different imputation methods available we will consider three 
+fast, published methods:
+[MAGIC](https://github.com/pkathail/magic) [@Van_Dijk2017-bh], 
+[DrImpute](https://github.com/gongx030/DrImpute) and 
+[scImpute](https://github.com/Vivianstats/scImpute) [@Li2017-tz]. 
+
+DrImpute and scImpute both use a model to determine which zeros are technical
+and impute only those values. Both use clustering to identify a group of cells
+that are assumed to have homogenous expression. DrImpute imputes all values that
+are not consistently zero in all cells of a cluster. Whereas, scImpute uses a
+zero-inflated normal distribution fit to log-normalized expression values and
+imputed all inflated zeros. 
 
 ### scImpute
 
@@ -63,6 +82,14 @@ plotPCA(
 
 Compare this result to the original data in Chapter \@ref(clust-methods). What are the most significant differences?
 
+We can examine the expression of specific genes to directly see the effect of
+ imputation on the expression distribution.
+```{r}
+plotExpression(res, c("Sox2", "Eomes", "Zscan4d", "Fgf4"))
+plotExpression(deng, c("Sox2", "Eomes", "Zscan4d", "Fgf4"))
+```
+
+
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 res <- sc3_estimate_k(res)
@@ -77,17 +104,48 @@ plotPCA(
 
 __Exercise:__ Based on the PCA and the clustering results, do you think that imputation using `scImpute` is a good idea for the Deng dataset?
 
-### MAGIC
+### DrImpute
+
+We can do the same for DrImpute. DrImpute runs on a log-normalized expression matrix directly in R, we generate this matrix using scater, then run DrImpute. Unlike scImpute, DrImpute considers the consensus imputation across a range of ks using two differ correlation distances:
 
 ```{r}
-system("python3 utils/MAGIC.py -d deng.csv -o MAGIC_count.csv --cell-axis columns -l 1 --pca-non-random csv")
+deng <- normalize(deng)
+res <- DrImpute(deng@assays[["logcounts"]], ks=8:12)
+colnames(res) <- colnames(deng)
+rownames(res) <- rownames(deng)
+res <- SingleCellExperiment(
+    assays = list(logcounts = as.matrix(res)), 
+    colData = colData(deng)
+)
+rowData(res)$feature_symbol <- rowData(deng)$feature_symbol
+plotPCA(
+    res, 
+    colour_by = "cell_type2"
+)
+plotExpression(res, c("Sox2", "Eomes", "Zscan4d", "Fgf4"))
+```
+__Exercise:__ Check the sc3 clustering of the DrImpute matrix, do you think that imputation using `DrImpute` is a good idea for the Deng dataset?
+
+
+### MAGIC
+
+MAGIC is a python package but the authors have provided an R package wrapper,
+so it can be run seemlessly from R.
+
+Unlike scImpute and DrImpute, MAGIC smoothes the entire dataset. It imputes 
+zeros but also smoothes non-zero values to further exaggerate any structure
+within the dataset. Since it is based on a diffusion process, it specifically
+enhances trajectory-like structure in a dataset, in contrast to scImpute and 
+DrImpute which assume a cluster-like structure to the underlying data.
+
+```{r}
+res <- magic(t(deng@assays[["logcounts"]]), genes="all_genes", knn=10, t="auto")
 ```
 
 ```{r}
-res <- read.csv("MAGIC_count.csv", header = TRUE)
-rownames(res) <- res[,1]
-res <- res[,-1]
-res <- t(res)
+res <- t(as.matrix(res))
+rownames(res) <- rownames(deng)
+colnames(res) <- colnames(deng)
 res <- SingleCellExperiment(
     assays = list(logcounts = res), 
     colData = colData(deng)
@@ -112,6 +170,11 @@ plotPCA(
     colour_by = "sc3_10_clusters"
 )
 ```
+
+__Exercise:__ MAGIC contains two parameters which affect the degree of imputation: t and knn, what is the effect of increase/decreasing these parameters? (Hint: try t=1, t=10, knn=2, knn=50)
+
+
+
 __Exercise:__ What is the difference between `scImpute` and `MAGIC` based on the PCA and clustering analysis? Which one do you think is best to use?
 
 

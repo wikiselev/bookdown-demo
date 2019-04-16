@@ -276,7 +276,7 @@ deng_int <- NBumiConvertData(deng)
 DANB_fit <- NBumiFitModel(deng_int) # DANB is fit to the raw count matrix
 # Perform DANB feature selection
 DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit, method="fdr", qval.thresh=0.01, suppress.plot=FALSE)
-DANB_genes <- names(DropFS[1:1500])
+DANB_genes <- DropFS[1:1500,]$Gene
 ```
 __Exercise 5__
 How many genes were signifcant using NBumiFeatureSelectionCombinedDrop? 
