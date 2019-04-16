@@ -3,4 +3,4 @@ chapter_name: ""
 output_dir: website
 new_session: yes
 # rmd_files: ["index.Rmd", "intro.Rmd", "exp-methods.Rmd", "process-raw-QC.Rmd", "process-raw.Rmd", "process-raw-align.Rmd", "exprs-constr.Rmd", "umis.Rmd", "intro-to-R.Rmd", "Intro-to-Bioconductor.Rmd", "scater.Rmd", "ggplot2-pheatmap-PCA.Rmd", "Intro-TabulaMuris.Rmd", "exprs-qc.Rmd", "exprs-qc-reads.Rmd", "exprs-overview.Rmd", "exprs-overview-reads.Rmd", "confounders.Rmd", "confounders-reads.Rmd", "exprs-norm.Rmd", "exprs-norm-reads.Rmd", "remove-conf.Rmd", "remove-conf-reads.Rmd", "clust-intro.Rmd", "clustering.Rmd", "dropouts.Rmd", "pseudotime.Rmd", "imputation.Rmd", "de-intro.Rmd", "de-real.Rmd", "projection.Rmd", "search.Rmd", "seurat.Rmd", "ideal-scrnaseq-pipeline.Rmd", "advanced.Rmd", "tools.Rmd", "references.Rmd"]
-rmd_files: ["index.Rmd", "dropouts.Rmd", "advanced.Rmd", "tools.Rmd", "references.Rmd"]
+rmd_files: ["index.Rmd", "dropouts.Rmd", "imputation.Rmd", "advanced.Rmd", "tools.Rmd", "references.Rmd"]
