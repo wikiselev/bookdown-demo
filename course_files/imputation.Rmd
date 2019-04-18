@@ -14,6 +14,7 @@ library(scater)
 library(SingleCellExperiment)
 library(mclust)
 library(DrImpute)
+library(Rmagic)
 set.seed(1234567)
 ```
 
