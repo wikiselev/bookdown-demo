@@ -45,8 +45,8 @@ For this section we will continue working with the Deng data.
 
 ```{r}
 deng <- readRDS("data/deng/deng-reads.rds")
-cellLabels <- colData(deng)$cell_type2
-cell_colors <- brewer.pal(max(3,length(unique(cellLabels))), "Set3")
+celltype_labs <- colData(deng)$cell_type2
+cell_colors <- brewer.pal(max(3,length(unique(celltype_labs))), "Set3")
 ```
 
 Feature selection is performed after QC, however this data has already been QCed so
