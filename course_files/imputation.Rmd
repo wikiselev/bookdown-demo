@@ -140,7 +140,7 @@ enhances trajectory-like structure in a dataset, in contrast to scImpute and
 DrImpute which assume a cluster-like structure to the underlying data.
 
 ```{r}
-res <- magic(t(deng@assays[["logcounts"]]), genes="all_genes", knn=10, t="auto")
+res <- magic(t(deng@assays[["logcounts"]]), genes="all_genes", k=10, t="auto")
 ```
 
 ```{r}
@@ -172,7 +172,7 @@ plotPCA(
 )
 ```
 
-__Exercise:__ MAGIC contains two parameters which affect the degree of imputation: t and knn, what is the effect of increase/decreasing these parameters? (Hint: try t=1, t=10, knn=2, knn=50)
+__Exercise:__ MAGIC contains two parameters which affect the degree of imputation: `t` and `k`, what is the effect of increase/decreasing these parameters? (Hint: try t=1, t=10, k=2, k=50)
 
 
 
