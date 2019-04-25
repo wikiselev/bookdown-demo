@@ -95,7 +95,7 @@ To evaluate the impact of the imputation, we use `SC3` to cluster the imputed ma
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
-res <- sc3(res, ks = 10, gene_filter = FALSE)
+res <- sc3(res, ks = 10, n_cores = 1, gene_filter = FALSE)
 adjustedRandIndex(colData(deng)$cell_type2, colData(res)$sc3_10_clusters)
 plotPCA(
     res, 
@@ -164,7 +164,7 @@ To evaluate the impact of the imputation, we use `SC3` to cluster the imputed ma
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
-res <- sc3(res, ks = 10, gene_filter = FALSE)
+res <- sc3(res, ks = 10, n_cores = 1, gene_filter = FALSE)
 adjustedRandIndex(colData(deng)$cell_type2, colData(res)$sc3_10_clusters)
 plotPCA(
     res, 
