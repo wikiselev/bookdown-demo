@@ -191,7 +191,7 @@ assay(reads.qc, "glm_indi") <- cbind(indi1, indi2, indi3);
 reads.qc.endog = reads.qc[endog_genes,]
 reads.qc.endog = runPCA(reads.qc.endog, exprs_values = 'logcounts', ncomponents = 20)
 pca <- as.matrix(reads.qc.endog@reducedDims@listData[["PCA"]])
-harmony_emb <- HarmonyMatrix(pca, reads.qc.endog$batch, theta=2)
+harmony_emb <- HarmonyMatrix(pca, reads.qc.endog$batch, theta=2, do_pca=FALSE)
 reads.qc.endog@reducedDims@listData[['harmony']] <- harmony_emb
 
 plotReducedDim(
