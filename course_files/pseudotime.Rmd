@@ -97,8 +97,8 @@ deng_SCE$cell_type2 <- factor(
 cellLabels <- deng_SCE$cell_type2
 deng <- counts(deng_SCE)
 colnames(deng) <- cellLabels
-deng_SCE <- plotPCA(deng_SCE, colour_by = "cell_type2", 
-                    return_SCE = TRUE)
+deng_SCE <- runPCA(deng_SCE)
+plotPCA(deng_SCE, colour_by = "cell_type2")
 ```
 
 PCA, here, provides a useful baseline for assessing different pseudotime methods. For a very naive pseudotime we can just take the co-ordinates of the first principal component.
