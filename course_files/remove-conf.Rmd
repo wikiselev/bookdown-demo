@@ -248,7 +248,7 @@ Seeing how the end result of Harmony is an altered dimensional reduction space c
 umi.qc.endog = umi.qc[endog_genes,]
 umi.qc.endog = runPCA(umi.qc.endog, exprs_values = 'logcounts', ncomponents = 20)
 pca <- as.matrix(umi.qc.endog@reducedDims@listData[["PCA"]])
-harmony_emb <- HarmonyMatrix(pca, umi.qc.endog$batch, theta=2)
+harmony_emb <- HarmonyMatrix(pca, umi.qc.endog$batch, theta=2, do_pca=FALSE)
 umi.qc.endog@reducedDims@listData[['harmony']] <- harmony_emb
 
 plotReducedDim(
