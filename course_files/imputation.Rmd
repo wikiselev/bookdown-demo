@@ -130,6 +130,8 @@ __Exercise:__ Check the sc3 clustering of the DrImpute matrix, do you think that
 
 ### MAGIC
 
+__(due to technical issues please run this chapter as an exercise)__
+
 MAGIC is a python package but the authors have provided an R package wrapper,
 so it can be run seemlessly from R.
 
@@ -139,11 +141,11 @@ within the dataset. Since it is based on a diffusion process, it specifically
 enhances trajectory-like structure in a dataset, in contrast to scImpute and 
 DrImpute which assume a cluster-like structure to the underlying data.
 
-```{r}
+```{r, eval=FALSE}
 res <- magic(t(deng@assays[["logcounts"]]), genes="all_genes", k=10, t="auto")
 ```
 
-```{r}
+```{r, eval=FALSE}
 res <- t(as.matrix(res))
 rownames(res) <- rownames(deng)
 colnames(res) <- colnames(deng)
@@ -161,7 +163,7 @@ plotPCA(
 Compare this result to the original data in Chapter \@ref(clust-methods). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
-```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r message=FALSE, warning=FALSE, paged.print=FALSE, eval=FALSE}
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
 res <- sc3(res, ks = 10, n_cores = 1, gene_filter = FALSE)
