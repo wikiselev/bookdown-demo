@@ -31,7 +31,7 @@ Please follow this link and register for the __"Analysis of single cell RNA-seq 
 The course can be reproduced without any package installation by running the course docker image which contains all the required packages.
 
 ### Run the image
-Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker image (use the latest version of the course instead of v3.13):
+Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker image (use [the latest version](https://quay.io/repository/hemberg-group/scrna-seq-course?tab=tags) of the course instead of v3.13):
 
 ```
 docker run -p 8888:8888 -e PASSWORD="jupyter" quay.io/hemberg-group/scrna-seq-course:v3.13

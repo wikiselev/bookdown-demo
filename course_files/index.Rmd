@@ -1,6 +1,6 @@
 --- 
 title: "Analysis of single cell RNA-seq data"
-author: "Vladimir Kiselev (<a href = 'https://twitter.com/wikiselev'>wikiselev</a>), Tallulah Andrews, Jennifer Westoby (<a href = 'https://twitter.com/Jenni_Westoby'>Jenni_Westoby</a>), Davis McCarthy (<a href = 'https://twitter.com/davisjmcc'>davisjmcc</a>), Maren Büttner (<a href = 'https://twitter.com/marenbuettner'>marenbuettner</a>) and Martin Hemberg (<a href = 'https://twitter.com/m_hemberg'>m_hemberg</a>)"
+author: "Vladimir Kiselev (<a href = 'https://twitter.com/wikiselev'>wikiselev</a>), Tallulah Andrews (<a href = 'https://twitter.com/talandrews'>talandrews</a>), Jennifer Westoby (<a href = 'https://twitter.com/Jenni_Westoby'>Jenni_Westoby</a>), Davis McCarthy (<a href = 'https://twitter.com/davisjmcc'>davisjmcc</a>), Maren Büttner (<a href = 'https://twitter.com/marenbuettner'>marenbuettner</a>), Jimmy Lee, Sebastian Y. Müller, Elo Madissoon, Stephane Ballereau, Maria Do Nascimento Lopes Primo, Rocio Martinez Nunez and Martin Hemberg (<a href = 'https://twitter.com/m_hemberg'>m_hemberg</a>)"
 date: "`r Sys.Date()`"
 knit: "bookdown::render_book"
 documentclass: book
@@ -39,7 +39,7 @@ Please follow this link and register for the __"Analysis of single cell RNA-seq 
 The course can be reproduced without any package installation by running the course docker image which contains all the required packages.
 
 ### Run the image
-Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker image (use the latest version of the course instead of v3.13):
+Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker image (use [the latest version](https://quay.io/repository/hemberg-group/scrna-seq-course?tab=tags) of the course instead of v3.13):
 
 ```
 docker run -p 8888:8888 -e PASSWORD="jupyter" quay.io/hemberg-group/scrna-seq-course:v3.13
