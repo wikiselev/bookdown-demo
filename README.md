@@ -8,7 +8,7 @@ The number of computational tools is increasing rapidly and we are doing our bes
 
 ## Web page
 
-__[http://hemberg-lab.github.io/scRNA.seq.course](http://hemberg-lab.github.io/scRNA.seq.course)__
+__[https://scrnaseq-course.cog.sanger.ac.uk/website/index.html](https://scrnaseq-course.cog.sanger.ac.uk/website/index.html)__
 
 ## Video
 
