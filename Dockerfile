@@ -1,4 +1,4 @@
-FROM quay.io/cellgeni/notebooks-base:master
+FROM quay.io/cellgeni/notebooks:14.05-01
 
 USER root
 
@@ -61,6 +61,80 @@ RUN curl -fsSL https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedt
 
 # install CRAN packages
 RUN apt-get update && apt-get install -yq --no-install-recommends \
+    r-cran-devtools \
+    r-cran-tidyverse \
+    r-cran-pheatmap \
+    r-cran-plyr \
+    r-cran-dplyr \
+    r-cran-readr \
+    r-cran-reshape \
+    r-cran-reshape2 \
+    r-cran-reticulate \
+    r-cran-viridis \
+    r-cran-ggplot2 \
+    r-cran-ggthemes \
+    r-cran-cowplot \
+    r-cran-ggforce \
+    r-cran-ggridges \
+    r-cran-ggrepel \
+    r-cran-gplots \
+    r-cran-igraph \
+    r-cran-car \
+    r-cran-ggpubr \
+    r-cran-httpuv \
+    r-cran-xtable \
+    r-cran-sourcetools \
+    r-cran-modeltools \
+    r-cran-R.oo \
+    r-cran-R.methodsS3 \
+    r-cran-shiny \
+    r-cran-later \
+    r-cran-checkmate \
+    r-cran-bibtex \
+    r-cran-lsei \
+    r-cran-bit \
+    r-cran-segmented \
+    r-cran-mclust \
+    r-cran-flexmix \
+    r-cran-prabclus \
+    r-cran-diptest \
+    r-cran-mvtnorm \
+    r-cran-robustbase \
+    r-cran-kernlab \
+    r-cran-trimcluster \
+    r-cran-proxy \
+    r-cran-R.utils \
+    r-cran-htmlwidgets \
+    r-cran-hexbin \
+    r-cran-crosstalk \
+    r-cran-promises \
+    r-cran-acepack \
+    r-cran-zoo \
+    r-cran-npsurv \
+    r-cran-iterators \
+    r-cran-snow \
+    r-cran-bit64 \
+    r-cran-permute \
+    r-cran-mixtools \
+    r-cran-lars \
+    r-cran-ica \
+    r-cran-fpc \
+    r-cran-ape \
+    r-cran-pbapply \
+    r-cran-irlba \
+    r-cran-dtw \
+    r-cran-plotly \
+    r-cran-metap \
+    r-cran-lmtest \
+    r-cran-fitdistrplus \
+    r-cran-png \
+    r-cran-foreach \
+    r-cran-vegan \
+    r-cran-tidyr \
+    r-cran-withr \
+    r-cran-magrittr \
+    r-cran-rmpi \
+    r-cran-biocmanager \
     r-cran-knitr \
     r-cran-statmod \
     r-cran-mvoutlier \
@@ -69,18 +143,13 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     r-cran-corrplot
 
 # Install other CRAN
-RUN Rscript -e 'install.packages(c("bookdown", "cluster", "KernSmooth", "ROCR", "googleVis", "ggbeeswarm", "SLICER", "ggfortify", "mclust", "Rmagic", "DrImpute", "plotly"))'
+RUN Rscript -e 'install.packages(c(Seurat", "rJava", "umap", "bookdown", "cluster", "KernSmooth", "ROCR", "googleVis", "ggbeeswarm", "SLICER", "ggfortify", "mclust", "Rmagic", "DrImpute"))'
 
 # install github packages
-# see here for with_libpaths description:
-# https://stackoverflow.com/questions/24646065/how-to-specify-lib-directory-when-installing-development-version-r-packages-from
-# (do not install anything in the home directory, it will be wiped out when a volume is mounted to the docker container)
-RUN Rscript -e 'withr::with_libpaths(new = "/usr/lib/R/site-library/", devtools::install_github(c("hemberg-lab/scRNA.seq.funcs", "Vivianstats/scImpute", "theislab/kBET", "JustinaZ/pcaReduce", "kieranrcampbell/ouija")))'
-
-RUN Rscript -e 'devtools::install_github("hemberg-lab/scfind")'
+RUN Rscript -e 'devtools::install_github(c("immunogenomics/harmony", "LTLA/beachmat", "MarioniLab/DropletUtils", "tallulandrews/M3Drop", "hemberg-lab/scRNA.seq.funcs", "Vivianstats/scImpute", "theislab/kBET", "JustinaZ/pcaReduce", "kieranrcampbell/ouija", "hemberg-lab/scfind"))'
 
 # Install Bioconductor packages
-RUN Rscript -e 'BiocManager::install(c("MultiAssayExperiment", "SummarizedExperiment"), version = "3.8")'
+RUN Rscript -e 'BiocManager::install(c("graph", "RBGL", "gtools", "xtable", "pcaMethods", "limma", "SingleCellExperiment", "Rhdf5lib", "scater", "scran", "RUVSeq", "sva", "SC3", "TSCAN", "monocle", "destiny", "DESeq2", "edgeR", "MAST", "scmap", "biomaRt", "MultiAssayExperiment", "SummarizedExperiment"))'
 
 # download data and extra files from S3
 COPY ./poststart.sh /home/jovyan
