@@ -9,12 +9,6 @@ library(knitr)
 opts_chunk$set(fig.align="center")
 ```
 
-# Installing `scfind`
-```{r eval=FALSE, include=FALSE}
-devtools::install_github("hemberg-lab/scfind")
-```
-
-
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(scfind)
 library(SingleCellExperiment)
@@ -48,8 +42,7 @@ heart_index <- buildCellTypeIndex(
   assay.name = "counts",
   cell.type.label = "cell_type1",
   dataset.name = "Heart"
-  )
-
+)
 ```
 
 `scfind` adopts a two-step compression strategy which allows efficient compression of large cell-by-gene matrix and allows fast retrieval of data by gene query. We estimated that one can achieve 2 orders of magnitude compression with this method.
@@ -65,13 +58,12 @@ thymus_index <- buildCellTypeIndex(
   assay.name = "counts", 
   cell.type.label = "cell_type1", 
   dataset.name = "Thymus"
-  )
+)
 scfind_index <- mergeDataset(heart_index, thymus_index)
 
 scfind_index@datasets
 cellTypeNames(scfind_index)
 sample(scfindGenes(scfind_index),20)
-
 ```
 
 
@@ -98,7 +90,7 @@ evaluateMarkers(
   gene.list = as.character(t_cell_markers$genes), 
   cell.types = "Thymus.stromal cell", 
   sort.field = "f1"
-  )
+)
 ```
 
 # By default, the marker evaluation takes all cell types in the dataset as background cell type, but you can use the argument `background.cell.types` to fine tune the evaluation
@@ -112,8 +104,7 @@ evaluateMarkers(
   cell.types = "Thymus.stromal cell", 
   sort.field = "f1", 
   background.cell.types = background
-  )
-
+)
 ```
 
 
@@ -125,7 +116,7 @@ cardiomyocytes <- c("Mef2c", "Gata4", "Nkx2.5", "Myh6", "tnnt2", "tnni3", "CDH2"
 result <- markerGenes(
   scfind_index, 
   gene.list = cardiomyocytes
-    )
+)
 result
 ```
 
@@ -175,7 +166,6 @@ result <- markerGenes(scfind_index, cardiac_contractility)
 best_sub_query <- as.character(result[which.max(result$tfidf), c("Query")])
 best_sub_query <- strsplit(best_sub_query, ",")[[1]]
 hyperQueryCellTypes(scfind_index, best_sub_query)
-
 ```
 
 ### In-silico gating
@@ -209,8 +199,6 @@ map$cell_type[subset_treg$`Thymus.T cell`] <- "Effector T Regulatory Cell"
 map$cell_type[subset_tmem$`Thymus.T cell`] <- "Effector Memory T Cell"
 
 plot_ly(map, x = ~X1 , y = ~X2, type="scatter", color = ~cell_type)
-
-
 ```
 
 
@@ -219,4 +207,3 @@ plot_ly(map, x = ~X1 , y = ~X2, type="scatter", color = ~cell_type)
 ```{r}
 sessionInfo()
 ```
-
