@@ -1,4 +1,4 @@
-FROM quay.io/cellgeni/notebooks:14.05-01
+FROM quay.io/cellgeni/cellgeni-jupyter:14.05-01
 
 USER root
 
