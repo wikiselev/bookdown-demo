@@ -143,7 +143,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     r-cran-corrplot
 
 # Install other CRAN
-RUN Rscript -e 'install.packages(c(Seurat", "rJava", "umap", "bookdown", "cluster", "KernSmooth", "ROCR", "googleVis", "ggbeeswarm", "SLICER", "ggfortify", "mclust", "Rmagic", "DrImpute"))'
+RUN Rscript -e 'install.packages(c("Seurat", "rJava", "umap", "bookdown", "cluster", "KernSmooth", "ROCR", "googleVis", "ggbeeswarm", "SLICER", "ggfortify", "mclust", "Rmagic", "DrImpute"))'
 
 # install github packages
 RUN Rscript -e 'devtools::install_github(c("immunogenomics/harmony", "LTLA/beachmat", "MarioniLab/DropletUtils", "tallulandrews/M3Drop", "hemberg-lab/scRNA.seq.funcs", "Vivianstats/scImpute", "theislab/kBET", "JustinaZ/pcaReduce", "kieranrcampbell/ouija", "hemberg-lab/scfind"))'
