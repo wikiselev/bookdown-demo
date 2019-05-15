@@ -309,34 +309,6 @@ boxplot(res, las=2)
 
 #### Effectiveness 3
 
-We can repeat the analysis from Chapter 12 to check whether batch effects have been removed.
-```{r confound-cpm, fig.cap = "Explanatory variables (mnn)", message=FALSE, warning=FALSE}
-for(n in assayNames(umi.qc)) {
-    print(
-        plotQC(
-            umi.qc[endog_genes, ],
-            type = "expl",
-            exprs_values = n,
-            variables = c(
-                "total_features_by_counts",
-                "total_counts",
-                "batch",
-                "individual",
-                "pct_counts_ERCC",
-                "pct_counts_MT"
-            )
-        ) +
-        ggtitle(n)
-    )
-}
-```
-
-__Exercise 4__
-
-Perform the above analysis for each normalization/batch correction method. Which method(s) are most/least effective? Why is the variance accounted for by batch never lower than the variance accounted for by individual?
-
-#### Effectiveness 4
-
 Another method to check the efficacy of batch-effect correction is to consider the intermingling of points from different batches in local subsamples of the data. If there are no batch-effects then proportion of cells from each batch in any local region should be equal to the global proportion of cells in each batch. 
 
 `kBET` [@Buttner2017-ds] takes `kNN` networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). `kBET` assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, `kBET` can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply `kBET` to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, `kBET` does not determine if biological signal has been preserved. 
@@ -394,7 +366,7 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
     ggtitle("Effect of batch regression methods per individual")
 ```
 
-__Exercise 5__
+__Exercise 4__
 
 Why do the raw counts appear to have little batch effects?
 

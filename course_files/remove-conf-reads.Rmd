@@ -230,27 +230,6 @@ par(mar=c(6,4,1,1))
 boxplot(res, las=2)
 ```
 
-```{r message=FALSE, warning=FALSE}
-for(n in assayNames(reads.qc)) {
-    print(
-        plotQC(
-            reads.qc[endog_genes, ],
-            type = "expl",
-            exprs_values = n,
-            variables = c(
-                "total_features_by_counts",
-                "total_counts",
-                "batch",
-                "individual",
-                "pct_counts_ERCC",
-                "pct_counts_MT"
-            )
-        ) +
-        ggtitle(n)
-    )
-}
-```
-
 ```{r, message = FALSE}
 compare_kBET_results <- function(sce){
     indiv <- unique(sce$individual)
