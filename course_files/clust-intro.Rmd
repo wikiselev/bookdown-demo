@@ -99,10 +99,6 @@ to scRNA-seq data by building a graph where each node represents a cell. Note th
 * Data is converted to _z_-scores before clustering
 * Identify _k_ by finding the first singleton cluster in the hierarchy
 
-#### [pcaReduce](https://github.com/JustinaZ/pcaReduce)
-
-pcaReduce [@Zurauskiene2016-kg] combines PCA, _k_-means and “iterative” hierarchical clustering. Starting from a large number of clusters pcaReduce iteratively merges similar clusters; after each merging event it removes the principle component explaning the least variance in the data.
-
 #### [SC3](http://bioconductor.org/packages/SC3/)
 
 ```{r clust-sc3, out.width = '100%', fig.cap="SC3 pipeline"}
@@ -117,10 +113,6 @@ knitr::include_graphics("figures/sc3.png")
 
 * Based on __tSNE__ maps
 * Utilises _k_-means
-
-#### [SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/)
-
-`SNN-Cliq` [@Xu2015-vf] is a graph-based method. First the method identifies the k-nearest-neighbours of each cell according to the _distance_ measure. This is used to calculate the number of Shared Nearest Neighbours (SNN) between each pair of cells. A graph is built by placing an edge between two cells If they have at least one SNN. Clusters are defined as groups of cells with many edges between them using a "clique" method. SNN-Cliq requires several parameters to be defined manually.
 
 #### Seurat clustering
 

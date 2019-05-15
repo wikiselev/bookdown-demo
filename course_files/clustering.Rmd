@@ -11,7 +11,6 @@ opts_chunk$set(fig.align = "center")
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(pcaMethods)
-library(pcaReduce)
 library(SC3)
 library(scater)
 library(SingleCellExperiment)
@@ -110,49 +109,6 @@ __Note__ Due to direct calculation of distances `SC3` becomes very slow when the
 
 * __Exercise 4__: Change the marker genes threshold (the default is 0.85). Does __SC3__ find more marker genes?
 
-### pcaReduce
-
-`pcaReduce` operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will use the default `SC3` gene filter (note that the `exprs` slot of a `scater` object is log-transformed by default).
-
-```{r}
-# use the same gene filter as in SC3
-input <- logcounts(deng[rowData(deng)$sc3_gene_filter, ])
-```
-
-There are several parameters used by `pcaReduce`:
-* `nbt` defines a number of `pcaReduce` runs (it is stochastic and may have different solutions after different runs)
-* `q` defines number of dimensions to start clustering with. The output will contain partitions for all $k$ from 2 to q+1.
-* `method` defines a method used for clustering. `S` - to perform sampling based merging, `M` - to perform merging based on largest probability.
-
-We will run `pcaReduce` 1 time:
-```{r}
-# run pcaReduce 1 time creating hierarchies from 1 to 30 clusters
-pca.red <- PCAreduce(t(input), nbt = 1, q = 30, method = 'S')[[1]]
-```
-
-```{r}
-colData(deng)$pcaReduce <- as.character(pca.red[,32 - 10])
-plotPCA(deng, colour_by = "pcaReduce")
-```
-
-__Exercise 5__: Run pcaReduce for $k=2$ and plot a similar PCA plot. Does it look good?
-
-__Hint__: When running pcaReduce for different $k$s you do not need to rerun PCAreduce function, just use already calculated `pca.red` object.
-
-__Our solution__:
-```{r clust-pca-reduce2, fig.cap = "Clustering solutions of pcaReduce method for $k=2$.", echo=FALSE}
-colData(deng)$pcaReduce <- as.character(pca.red[,32 - 2])
-plotPCA(deng, colour_by = "pcaReduce")
-```
-
-__Exercise 6__: Compare the results between `pcaReduce` and the original publication cell types for $k=10$.
-
-__Our solution__:
-```{r, echo=FALSE}
-colData(deng)$pcaReduce <- as.character(pca.red[,32 - 10])
-adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$pcaReduce)
-```
-
 ### tSNE + kmeans
 
 [tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. Here we will do the same:
@@ -181,8 +137,8 @@ colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers 
 adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$tSNE_kmeans)
 ```
 
-As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
-and give different results every time they are run. To get a better
+As you may have noticed, `tSNE+kmeans` is stochastic
+and gives different results every time they are run. To get a better
 overview of the solutions, we need to run the methods multiple times. `SC3` is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.
 
 ### SINCERA
