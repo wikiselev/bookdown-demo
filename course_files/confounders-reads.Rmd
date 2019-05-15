@@ -27,11 +27,12 @@ plotPCA(
 ```
 
 ```{r confound-find-pcs-total-features-reads, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
+logcounts(reads.qc) <- assay(reads.qc, "logcounts_raw")
 plotExplanatoryPCs(
   reads.qc[endog_genes, ],
-  exprs_values = "logcounts_raw",
   variables = "total_features_by_counts"
 )
+logcounts(reads.qc) <- NULL
 ```
 
 ```{r confound-find-expl-vars-reads, fig.cap = "Explanatory variables"}

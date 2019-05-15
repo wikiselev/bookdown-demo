@@ -45,11 +45,12 @@ Let's test whether some of the variables correlate with any of the PCs.
 #### Detected genes
 
 ```{r confound-find-pcs-total-features, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
+logcounts(umi.qc) <- assay(umi.qc, "logcounts_raw")
 plotExplanatoryPCs(
   umi.qc[endog_genes, ],
-  exprs_values = "logcounts_raw",
   variables = "total_features_by_counts"
 )
+logcounts(umi.qc) <- NULL
 ```
 
 Indeed, we can see that `PC1` can be almost completely explained by the number of detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
