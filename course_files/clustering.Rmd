@@ -145,6 +145,11 @@ overview of the solutions, we need to run the methods multiple times. `SC3` is a
 
 As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:
 
+```{r}
+# use the same gene filter as in SC3
+input <- logcounts(deng[rowData(deng)$sc3_gene_filter, ])
+```
+
 ```{r, echo=TRUE, fig.height=7, fig.width=7}
 # perform gene-by-gene per-sample z-score transformation
 dat <- apply(input, 1, function(y) scRNA.seq.funcs::z.transform.helper(y))
