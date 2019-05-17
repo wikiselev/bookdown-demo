@@ -240,12 +240,12 @@ pbmc <- FindClusters(pbmc, resolution = 0.5, algorithm = 1)
 
 Seurat continues to use tSNE as a powerful tool to visualize and explore these datasets. While we no longer advise clustering directly on tSNE components, cells within the graph-based clusters determined above should co-localize on the tSNE plot. This is because the tSNE aims to place cells with similar local neighborhoods in high-dimensional space together in low-dimensional space. As input to the tSNE, we suggest using the same PCs as input to the clustering analysis, although computing the tSNE based on scaled gene expression is also supported using the genes.use argument.
 
-```{r, eval = FALSE}
+```{r}
 # please run this in your R session interactively
 # it does not work as a script
 pbmc <- RunTSNE(object = pbmc, dims.use = 1:10, do.fast = TRUE)
 # note that you can set do.label=T to help label individual clusters
-TSNEPlot(object = pbmc)
+DimPlot(object = pbmc, reduction = "tsne")
 ```
 
 # Run UMAP
@@ -308,7 +308,7 @@ VlnPlot(object = pbmc, features =c("NKG7", "PF4"))
 
 
 ```{r}
-FeaturePlot(object = pbmc, features = c("MS4A1", "GNLY", "CD3E", "CD14", "FCER1A", "FCGR3A", "LYZ", "PPBP", "CD8A"), cols = c("grey", "blue"), reduction = "tsne")
+FeaturePlot(object = pbmc, features = c("MS4A1", "GNLY", "CD3E", "CD14", "FCER1A", "FCGR3A", "LYZ", "PPBP", "CD8A"), cols = c("grey", "blue"))
 ```
 
 `DoHeatmap` generates an expression heatmap for given cells and genes. In this case, we are plotting the top 20 markers (or all markers if less than 20) for each cluster.
@@ -328,7 +328,7 @@ Fortunately in the case of this dataset, we can use canonical markers to easily 
 current.cluster.ids <- c(0, 1, 2, 3, 4, 5, 6, 7)
 new.cluster.ids <- c("CD4 T cells", "CD14+ Monocytes", "B cells", "CD8 T cells", "FCGR3A+ Monocytes", "NK cells", "Dendritic cells", "Megakaryocytes")
 pbmc@active.ident <- plyr::mapvalues(x = pbmc@active.ident, from = current.cluster.ids, to = new.cluster.ids)
-TSNEPlot(object = pbmc, do.label = TRUE, pt.size = 0.5)
+UMAPPlot(object = pbmc, do.label = TRUE, pt.size = 0.5)
 ```
 
 ## Further subdivisions within cell types
@@ -345,10 +345,10 @@ pbmc <- FindClusters(object = pbmc, reduction.type = "pca", dims.use = 1:10, res
 ```
 
 ```{r}
-# Demonstration of how to plot two tSNE plots side by side, and how to color
+# Demonstration of how to plot two UMAP plots side by side, and how to color
 # points based on different criteria
-plot1 <- TSNEPlot(object = pbmc, do.return = TRUE, no.legend = TRUE, do.label = TRUE)
-plot2 <- TSNEPlot(object = pbmc, do.return = TRUE, group.by = "ClusterNames_0.6", no.legend = TRUE, do.label = TRUE)
+plot1 <- UMAPPlot(object = pbmc, do.return = TRUE, no.legend = TRUE, do.label = TRUE)
+plot2 <- UMAPPlot(object = pbmc, do.return = TRUE, group.by = "ClusterNames_0.6", no.legend = TRUE, do.label = TRUE)
 plot_grid(plot1, plot2)
 ```
 
