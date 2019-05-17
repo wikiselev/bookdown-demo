@@ -28,7 +28,7 @@ knitr::include_graphics("figures/scfind.png")
 
 We will run `scfind` on the Tabula Muris 10X dataset. `scfind` also operates on `SingleCellExperiment` class:
 ```{r, message=FALSE, warning=FALSE}
-tm10x_heart <- readRDS("~/data/sce/Heart_10X.rds")
+tm10x_heart <- readRDS("data/sce/Heart_10X.rds")
 tm10x_heart
 colData(tm10x_heart)
 ```
@@ -52,7 +52,7 @@ The input matrix for indexing is the raw count matrix of the `SingleCellExperime
 The index can be saved in .rds format using `saveObject` function and loaded using `loadObject` function for future use.
 
 ```{r}
-tm10x_thymus <- readRDS("~/data/sce/Thymus_10X.rds")
+tm10x_thymus <- readRDS("data/sce/Thymus_10X.rds")
 thymus_index <- buildCellTypeIndex(
   sce = tm10x_thymus, 
   assay.name = "counts", 
