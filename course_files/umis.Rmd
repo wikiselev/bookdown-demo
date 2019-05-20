@@ -38,6 +38,9 @@ After processing the reads from a UMI experiment, the following conventions are 
 knitr::include_graphics("figures/UMI-Seq-reads.png")
 ```
 
+```{r intro-umi-fastqc-adapter, out.width = '90%', fig.cap="FastQC adapter content plot of too long Read 1 for a DropSeq sample. Barcode (12bp) and UMI (8bp) make up first 20 bp, the remaining sequence is ininformative poly-T."}
+knitr::include_graphics("figures/barcode_UMI_read1_adapter_fastqc.png")
+```
 ### Counting Barcodes
 
 In theory, every unique UMI-transcript pair should represent all reads originating from a single RNA molecule. However, in practice this is frequently not the case and the most common reasons are:
