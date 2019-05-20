@@ -93,8 +93,9 @@ evaluateMarkers(
 )
 ```
 
-# By default, the marker evaluation takes all cell types in the dataset as background cell type, but you can use the argument `background.cell.types` to fine tune the evaluation
 ```{r}
+# By default, the marker evaluation takes all cell types in the dataset as background cell type, but you can use the argument `background.cell.types` to fine tune the evaluation
+
 background <- cellTypeNames(scfind_index, datasets = "Thymus")
 background
 

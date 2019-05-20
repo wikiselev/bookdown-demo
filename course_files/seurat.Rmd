@@ -246,7 +246,7 @@ pbmc <- RunTSNE(object = pbmc, dims.use = 1:10, do.fast = TRUE)
 DimPlot(object = pbmc, reduction = "tsne")
 ```
 
-# Run UMAP
+## Run UMAP
 
 To visualize the two conditions side-by-side, we can use the split.by argument to show each condition colored by cluster.
 ```{r}
