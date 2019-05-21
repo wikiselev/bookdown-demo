@@ -133,7 +133,7 @@ top10 <- head(VariableFeatures(pbmc), 10)
  # plot variable features with and without labels
 plot1 <- VariableFeaturePlot(pbmc)
 plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
-CombinePlots(plots = list(plot1, plot2))
+CombinePlots(plots = list(plot1, plot2), ncol=1)
 ```
 
 ## Scaling the data and removing unwanted sources of variation
@@ -150,10 +150,11 @@ pbmc <- ScaleData(object = pbmc, vars.to.regress = c("nCounts_RNA", "percent.mit
 
 ## Perform linear dimensional reduction
 
---> refered to Seurat v2: Next we perform PCA on the scaled data. By default, the genes in `object@var.genes` are used as input, but can be defined using pc.genes. We have typically found that running dimensionality reduction on highly variable genes can improve performance. However, with UMI data - particularly after regressing out technical variables, we often see that PCA returns similar (albeit slower) results when run on much larger subsets of genes, including the whole transcriptome.
+Next we perform PCA on the scaled data. By default, the genes in `object@var.genes` are used as input, but can be defined using pc.genes. We have typically found that running dimensionality reduction on highly variable genes can improve performance. However, with UMI data - particularly after regressing out technical variables, we often see that PCA returns similar (albeit slower) results when run on much larger subsets of genes, including the whole transcriptome. With Seurat v3 (latest) variable features can be accessed with VariableFeatures() and fed to RunPCA().
 
---> refered to Seurat v3 (latest): high variable features are accessed through the function HVFInfo(object). Despite RunPCA has a features argument where to specify the features to compute PCA on, I've been modifying its values and the output PCA graph has always the same dimensions, indicating that the provided genes in the features argument are not exactly the ones used to compute PCA. Wether the function gets the HVG directly or does not take them into account, I don't know.
 <!--
+refered to Seurat v3 (latest): high variable features are accessed through the function HVFInfo(object). Despite RunPCA has a features argument where to specify the features to compute PCA on, I've been modifying its values and the output PCA graph has always the same dimensions, indicating that the provided genes in the features argument are not exactly the ones used to compute PCA. Wether the function gets the HVG directly or does not take them into account, I don't know.
+
 Variable genes may also be accessed with VariableFeatures(). I tried setting features (see below) and could see an effect.
 pbmc <- RunPCA(object = pbmc,  npcs = 30, verbose = FALSE)
 pbmc2 <- RunPCA(object = pbmc,  npcs = 30, verbose = FALSE, features = VariableFeatures(object = pbmc)[1:100])
@@ -163,12 +164,11 @@ DimPlot(object = pbmc2, reduction = "pca")
 
 ```{r}
 pbmc <- RunPCA(object = pbmc,  npcs = 30, verbose = FALSE)
+# pbmc2 <- RunPCA(object = pbmc,  npcs = 30, verbose = FALSE, features = VariableFeatures(object = pbmc)[1:100])
 ```
 
---> refered to Seurat v2: Seurat provides several useful ways of visualizing both cells and genes that define the PCA, including `PrintPCA`, `VizPCA`,  `PCAPlot`, and `PCHeatmap`
+Seurat v2 provides several useful ways of visualizing both cells and genes that define the PCA, including `PrintPCA`, `VizPCA`,  `PCAPlot`, and `PCHeatmap`. Seurat v3 also provides functions for visualizing:
 
---> refered to Seurat v3 (latest):
-Seurat v3 provides functions for visualizing:
 - PCA
 - PCA plot coloured by a quantitative feature
 - Scatter plot across single cells
@@ -194,7 +194,7 @@ FeatureScatter(object = pbmc, feature1 = "MS4A1", feature2 = "CD3D")
 ```
 
 ```{r}
-# Scatter plot across individual features, repleaces CellPlot
+# Scatter plot across individual features, replaces CellPlot
 CellScatter(object = pbmc, cell1 = "AGTCTACTAGGGTG", cell2 = "CACAGATGGTTTCT")
 ```
 
@@ -278,7 +278,7 @@ DimPlot(object = pbmc, reduction = "tsne")
 
 To visualize the two conditions side-by-side, we can use the split.by argument to show each condition colored by cluster.
 
-```{r}
+```{r, eval=FALSE}
 pbmc <- RunUMAP(pbmc, reduction = "pca", dims = 1:20)
 DimPlot(pbmc, reduction = "umap", split.by = "seurat_clusters")
 ```
@@ -286,6 +286,7 @@ DimPlot(pbmc, reduction = "umap", split.by = "seurat_clusters")
 You can save the object at this point so that it can easily be loaded back in without having to rerun the computationally intensive steps performed above, or easily shared with collaborators.
 
 ```{r}
+dir.create("data", recursive=T)
 saveRDS(pbmc, file = "data/pbmc_tutorial.rds")
 ```
 
@@ -376,7 +377,9 @@ pbmc <- FindClusters(object = pbmc, reduction.type = "pca", dims.use = 1:10, res
 # points based on different criteria
 plot1 <- DimPlot(object = pbmc, reduction = "tsne", do.return = TRUE, no.legend = TRUE, do.label = TRUE)
 plot2 <- DimPlot(object = pbmc, reduction = "tsne", do.return = TRUE, group.by = "ClusterNames_0.6", no.legend = TRUE, do.label = TRUE)
-plot_grid(plot1, plot2)
+plot1 <- plot1 + coord_fixed(ratio = 1)
+plot2 <- plot2 + coord_fixed(ratio = 1)
+plot_grid(plot1, plot2, ncol=1)
 ```
 
 ```{r}
@@ -387,7 +390,7 @@ tcell.markers <- FindMarkers(object = pbmc, ident.1 = 0, ident.2 = 1)
 # can see that CCR7 is upregulated in C0, strongly indicating that we can
 # differentiate memory from naive CD4 cells.  cols.use demarcates the color
 # palette from low to high expression
-FeaturePlot(object = pbmc, features = c("S100A4", "CCR7"), cols = c("green", "blue"))
+FeaturePlot(object = pbmc, features = c("S100A4", "CCR7"), cols = c("green", "blue"), ncol=1)
 ```
 
 The memory/naive split is bit weak, and we would probably benefit from looking at more cells to see if this becomes more convincing. In the meantime, we can restore our old cluster identities for downstream processing.
