@@ -8,7 +8,7 @@ Channel
     .into { ch_data1; ch_data2 }
 
 process html {
-  publishDir 's3://scrnaseq-course', mode: 'copy' , overwrite: true
+  //publishDir 's3://scrnaseq-course', mode: 'copy' , overwrite: true
   input: 
     file fs from ch_course_files1
     file dat from ch_data1
@@ -22,7 +22,6 @@ process html {
 }
 
 process latex {
-  when: false
   input: 
     file fs from ch_course_files2
     file dat from ch_data2
