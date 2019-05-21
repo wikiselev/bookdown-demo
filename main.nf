@@ -16,18 +16,19 @@ process html {
     file website
   script:
   """
-  cp -r course_files/* .
+  cp -r $fs/* .
   Rscript -e "bookdown::render_book('index.html', 'bookdown::gitbook')"
   """
 }
 
 process latex {
+  when: false
   input: 
     file fs from ch_course_files2
     file dat from ch_data2
   script:
   """
-  cp -r course_files/* .
+  cp -r $fs/* .
   Rscript -e "bookdown::render_book('index.html', 'bookdown::pdf_book')"
   """
 }
