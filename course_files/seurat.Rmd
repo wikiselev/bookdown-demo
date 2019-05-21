@@ -34,8 +34,7 @@ library(dplyr)
 library(cowplot)
 
 # Load the PBMC dataset
-###pbmc.data <- Read10X(data.dir = "data/pbmc3k_filtered_gene_bc_matrices/hg19/")
-pbmc.data <- Read10X(data.dir = "/mnt/scratchb/bioinformatics/baller01/20190121_BallereauS_BC_ScRsCrs/filtered_gene_bc_matrices/hg19/")
+pbmc.data <- Read10X(data.dir = "data/pbmc3k_filtered_gene_bc_matrices/hg19/")
 
 # Examine the memory savings between regular and sparse matrices
 dense.size <- object.size(x = as.matrix(x = pbmc.data))
