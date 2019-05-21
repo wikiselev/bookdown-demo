@@ -33,7 +33,7 @@ the case then we would like to provide computational corrections. One possible
 impute gene expression values, one must have an underlying model. However, 
 since we do not know which dropout events are technical artefacts and which 
 correspond to the transcript being truly absent, imputation is a difficult 
-challenge.
+challenge and prone to creating [false-positive results in downstream analysis](https://f1000research.com/articles/7-1740/v2).
 
 There are many different imputation methods available we will consider three 
 fast, published methods:
