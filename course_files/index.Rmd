@@ -1,6 +1,6 @@
 --- 
 title: "Analysis of single cell RNA-seq data"
-author: "Vladimir Kiselev (<a href = 'https://twitter.com/wikiselev'>wikiselev</a>), Tallulah Andrews (<a href = 'https://twitter.com/talandrews'>talandrews</a>), Jennifer Westoby (<a href = 'https://twitter.com/Jenni_Westoby'>Jenni_Westoby</a>), Davis McCarthy (<a href = 'https://twitter.com/davisjmcc'>davisjmcc</a>), Maren Büttner (<a href = 'https://twitter.com/marenbuettner'>marenbuettner</a>), Jimmy Lee, Krzysztof Polanski, Sebastian Y. Müller, Elo Madissoon, Stephane Ballereau, Maria Do Nascimento Lopes Primo, Rocio Martinez Nunez and Martin Hemberg (<a href = 'https://twitter.com/m_hemberg'>m_hemberg</a>)"
+author: "Vladimir Kiselev (<a href = 'https://twitter.com/wikiselev'>wikiselev</a>), Tallulah Andrews (<a href = 'https://twitter.com/talandrews'>talandrews</a>), Jennifer Westoby (<a href = 'https://twitter.com/Jenni_Westoby'>Jenni_Westoby</a>), Davis McCarthy (<a href = 'https://twitter.com/davisjmcc'>davisjmcc</a>), Maren Büttner (<a href = 'https://twitter.com/marenbuettner'>marenbuettner</a>), Jimmy Lee (<a href = 'https://twitter.com/THJimmyLee'>THJimmyLee</a>), Krzysztof Polanski, Sebastian Y. Müller, Elo Madissoon, Stephane Ballereau, Maria Do Nascimento Lopes Primo, Rocio Martinez Nunez and Martin Hemberg (<a href = 'https://twitter.com/m_hemberg'>m_hemberg</a>)"
 date: "`r Sys.Date()`"
 knit: "bookdown::render_book"
 documentclass: book
