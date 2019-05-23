@@ -63,6 +63,8 @@ Please click on `New -> Terminal`. In the new terminal window please run:
 
 If you want to download data files outside of Docker image you can still use the same `poststart.sh` script but you will need to install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-bundle.html) on your computer.
 
+Alternatively, you can browse and download the files in you web-browser by visiting [this link](https://scrnaseq-course.cog.sanger.ac.uk/index.html?prefix=data/)
+
 ### RStudio
 
 Now go back to Jupyter browser tab and change word `tree` in the url to `rstudio`. RStudio server will open with all of the course files, software and the data folder available.
