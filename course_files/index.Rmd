@@ -22,9 +22,15 @@ The number of computational tools is increasing rapidly and we are doing our bes
 
 ## Video
 
-This video was recorded in November 2017, at that time the course contained less chapters than the current version.
+This video was recorded during the course (2 days) in May 2019.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/56n77bpjiKo?list=PLEyKDyF1qdOYAhwU71qlrOXYsYHtyIu8n" frameborder="0" allowfullscreen></iframe>
+### Day 1
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/thHgPqQpkE4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+### Day 2
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7dQ_pleDO2Y" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Registration  
 

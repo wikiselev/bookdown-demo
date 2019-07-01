@@ -12,9 +12,11 @@ __[https://scrnaseq-course.cog.sanger.ac.uk/website/index.html](https://scrnaseq
 
 ## Video
 
-This video was recorded in November 2017, at that time the course contained less chapters than the current version.
+This video was recorded during the course (2 days) in May 2019.
 
-__[https://www.youtube.com/embed/IrlNcJwPClQ?list=PLEyKDyF1qdObdFBc3JncwXAnMUHlcd0ap](https://www.youtube.com/embed/IrlNcJwPClQ?list=PLEyKDyF1qdObdFBc3JncwXAnMUHlcd0ap)__
+__[Day 1](https://www.youtube.com/watch?v=thHgPqQpkE4)__
+
+__[Day 2](https://www.youtube.com/watch?v=7dQ_pleDO2Y)__
 
 ## Registration  
 
