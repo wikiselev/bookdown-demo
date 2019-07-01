@@ -65,7 +65,7 @@ Please click on `New -> Terminal`. In the new terminal window please run:
 
 If you want to download data files outside of Docker image you can still use the same `poststart.sh` script but you will need to install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-bundle.html) on your computer.
 
-Alternatively, you can browse and download the files in you web-browser by visiting [this link](https://scrnaseq-course.cog.sanger.ac.uk/index.html?prefix=data/)
+Alternatively, you can browse and download the files in you web-browser by visiting [this link](https://scrnaseq-course.cog.sanger.ac.uk/index.html?prefix=data/).
 
 ### RStudio
 
