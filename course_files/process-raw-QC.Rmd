@@ -3,8 +3,9 @@ output: html_document
 code_folding: hide
 ---
 
-```{r include=FALSE}
-library('bookdown')
+```{r process-raw-QC0, include=FALSE, cache=TRUE, cache.extra = list(R.version, sessionInfo())}
+library(knitr)
+opts_chunk$set(cache=TRUE, cache.extra = list(R.version, sessionInfo()))
 ```
 
 # Processing Raw scRNA-seq Data
@@ -24,14 +25,14 @@ Today we will be performing our analysis using a single cell from an mESC datase
 __Note__ The current text of the course is written for an AWS server for people who attend our course in person. You will have to download the files (both `ERR522959_1.fastq` and `ERR522959_2.fastq`) and create `Share` directory yourself to run the commands. You can find the files here: https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-2600/samples/
 
 Now let's look at the files:
-```{bash, eval=FALSE}
+```{bash process-raw-QC1, eval=FALSE}
 less Share/ERR522959_1.fastq
 less Share/ERR522959_2.fastq
 ```
 
 Task 1: Try to work out what command you should use to produce the FastQC report. Hint: Try executing
 
-```{bash, eval=FALSE, collapse=TRUE}
+```{bash process-raw-QC2, eval=FALSE, collapse=TRUE}
 fastqc -h
 ```
 
@@ -42,7 +43,7 @@ This command will tell you what options are available to pass to FastQC. Feel fr
 
 If you haven't done so already, generate the FastQC report using the commands below:
 
-```{bash, eval=FALSE, echo = TRUE}
+```{bash process-raw-QC3, eval=FALSE, echo = TRUE}
 mkdir fastqc_results
 fastqc -o fastqc_results Share/ERR522959_1.fastq Share/ERR522959_2.fastq
 ```
@@ -65,7 +66,7 @@ Now let's try to use Trim Galore! to remove those problematic adapters. It's a g
 
 Task 3: Work out the command you should use to trim the adapters from our data. Hint 1: You can use 
 
-```{bash, eval=FALSE}
+```{bash process-raw-QC4, eval=FALSE}
 trim_galore -h
 ```
 
@@ -80,7 +81,7 @@ Once you think you have successfully trimmed your reads and have confirmed this 
 
 You can use the command(s) below to trim the Nextera sequencing adapters:
 
-```{bash, eval=FALSE}
+```{bash process-raw-QC5, eval=FALSE}
 mkdir fastqc_trimmed_results
 trim_galore --nextera -o fastqc_trimmed_results Share/ERR522959_1.fastq Share/ERR522959_2.fastq
 ```

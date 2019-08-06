@@ -2,6 +2,11 @@
 output: html_document
 ---
 
+```{r ggplot2-pheatmap-PCA0, echo=FALSE}
+library(knitr)
+opts_chunk$set(cache=TRUE, cache.extra = list(R.version, sessionInfo()))
+```
+
 ## An Introduction to ggplot2
 
 ### What is ggplot2?
@@ -19,7 +24,7 @@ ggplot2 is an R package designed by Hadley Wickham which facilitates data plotti
 
 The `aes` function specifies how variables in your dataframe map to features on your plot. To understand how this works, let's look at an example:
 
-```{R, eval=TRUE, message=FALSE}
+```{R ggplot2-pheatmap-PCA1, eval=TRUE, message=FALSE}
 library(ggplot2)
 library(tidyverse)
 set.seed(1)
@@ -43,7 +48,7 @@ We can use geoms to specify how we would like data to be displayed on our graphs
 
 Let's see how our graph would look as a scatterplot.
 
-```{R, eval=TRUE}
+```{R ggplot2-pheatmap-PCA2, eval=TRUE}
 ggplot(data = counts, mapping = aes(x = cell1, y = cell2)) + geom_point()
 ```
 
@@ -57,14 +62,14 @@ So far we've been considering the gene counts from 2 of the cells in our datafra
 
 At the moment we can't do this because we are treating each individual cell as a variable and assigning that variable to either the x or the y axis. We could create a 10 dimensional graph to plot data from all 10 cells on, but this is a) not possible to do with ggplot and b) not very easy to interpret. What we could do instead is to tidy our data so that we had one variable representing cell ID and another variable representing gene counts, and plot those against each other. In code, this would look like:
 
-```{R, eval=TRUE}
+```{R ggplot2-pheatmap-PCA3, eval=TRUE}
 counts<-gather(counts, colnames(counts)[2:11], key = 'Cell_ID', value='Counts')
 head(counts)
 ```
 
 Essentially, the problem before was that our data was not tidy because one variable (Cell_ID) was spread over multiple columns. Now that we've fixed this problem, it is much easier for us to plot data from all 10 cells on one graph.
 
-```{R, eval=TRUE}
+```{R ggplot2-pheatmap-PCA4, eval=TRUE}
 ggplot(counts,aes(x=Cell_ID, y=Counts)) + geom_boxplot()
 ```
 
@@ -76,7 +81,7 @@ Task 4: Use the updated `counts` dataframe to plot a scatterplot with Gene_ids a
 
 A common method for visualising gene expression data is with a heatmap. Here we will use the R package `pheatmap` to perform this analysis with some gene expression data we will name `test`.
 
-```{R, eval=TRUE, message=FALSE}
+```{R ggplot2-pheatmap-PCA5, eval=TRUE, message=FALSE}
 library(pheatmap)
 set.seed(2)
 test = matrix(rnorm(200), 20, 10)
@@ -94,7 +99,7 @@ This plot also gives us information on the results of a clustering algorithm. In
 
 If we look closely at the trees, we can see that eventually they have the same number of branches as there are cells and genes. In other words, the total number of cell clusters is the same as the total number of cells, and the total number of gene clusters is the same as the total number of genes. Clearly, this is not very informative, and will become impractical when we are looking at more than 10 cells and 20 genes. Fortunately, we can set the number of clusters we see on the plot. Let's try setting the number of gene clusters to 2:
 
-```{R, eval=TRUE}
+```{R ggplot2-pheatmap-PCA6, eval=TRUE}
 pheatmap(test, kmeans_k = 2)
 ```
 
@@ -110,7 +115,7 @@ PCA plots are a good way to get an overview of your data, and can sometimes help
 
 Let's make a PCA plot for our `test` data. We can use the  `ggfortify` package to let ggplot know how to interpret principle components.
 
-```{R,eval=TRUE, message=FALSE}
+```{R ggplot2-pheatmap-PCA7,eval=TRUE, message=FALSE}
 library(ggfortify)
 Principal_Components<-prcomp(test)
 autoplot(Principal_Components, label=TRUE)
@@ -120,7 +125,7 @@ Task 6: Compare your clusters to the pheatmap clusters. Are they related? (Hint:
 
 Task 7: Produce a heatmap and PCA plot for `counts` (below):
 
-```{R,eval=TRUE}
+```{R ggplot2-pheatmap-PCA8,eval=TRUE}
 set.seed(1)
 counts <- as.data.frame(matrix(rpois(100, lambda = 10), ncol=10, nrow=10))
 rownames(counts) <- paste("gene", 1:10, sep = "")
