@@ -10,7 +10,7 @@ opts_chunk$set(fig.align = "center", echo=FALSE, out.width = '70%', cache=TRUE, 
 ## Experimental methods
 
 ```{r exp-methods1, fig.cap="Moore's law in single cell transcriptomics (image taken from [Svensson et al](https://arxiv.org/abs/1704.01379))", out.width = '100%'}
-knitr::include_graphics("figures/moores-law.png", cache=TRUE)
+knitr::include_graphics("figures/moores-law.png")
 ```
 
 Development of new methods and protocols for scRNA-seq is currently a very active area of research, and several protocols have been published over the last few years. A non-comprehensive list includes:
