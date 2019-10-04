@@ -4,7 +4,7 @@ Channel
     .into { ch_course_files1; ch_course_files2 }
 
 Channel
-    .fromPath('s3://scrnaseq-course/data', checkIfExists: false)
+    .fromPath('s3://scrnaseq-course/data/', checkIfExists: false)
     .into { ch_data1; ch_data2 }
 
 process html {
