@@ -22,6 +22,7 @@ process html {
 }
 
 process latex {
+  when: false
   input: 
     file fs from ch_course_files2
     file dat from ch_data2
