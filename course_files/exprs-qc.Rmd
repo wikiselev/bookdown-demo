@@ -64,13 +64,18 @@ umi <- umi[keep_feature, ]
 
 Define control features (genes) - ERCC spike-ins and mitochondrial genes ([provided](http://jdblischak.github.io/singleCellSeq/analysis/qc-filter-ipsc.html) by the authors):
 ```{r}
-isSpike(umi, "ERCC") <- grepl("^ERCC-", rownames(umi))
-isSpike(umi, "MT") <- rownames(umi) %in% 
-    c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
+is.spike <- grepl("^ERCC-", rownames(umi))
+umi  <- splitAltExps(umi, ifelse(is.spike, "ERCC", "gene"))
+altExpNames(umi)
+
+is.mt <- rownames(umi) %in%        
+  c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
     "ENSG00000198886", "ENSG00000212907", "ENSG00000198786",
     "ENSG00000198695", "ENSG00000198712", "ENSG00000198804",
     "ENSG00000198763", "ENSG00000228253", "ENSG00000198938",
     "ENSG00000198840")
+umi <-  splitAltExps(umi, ifelse(is.mt, "MT", "gene"))
+altExpNames(umi)
 ```
 
 Calculate the quality metrics:
@@ -253,7 +258,7 @@ Then, we can use a PCA plot to see a 2D representation of the cells ordered by t
 ```{r}
 plotReducedDim(
     umi,
-    use_dimred = "PCA_coldata",
+    use_dimred = "PCA",
     size_by = "total_features_by_counts", 
     shape_by = "use", 
     colour_by = "outlier"
