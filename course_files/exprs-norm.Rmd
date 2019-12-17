@@ -131,7 +131,7 @@ plotPCA(
 
 ### CPM
 ```{r norm-pca-cpm, fig.cap = "PCA plot of the tung data after CPM normalisation"}
-logcounts(umi.qc) <- log2(calculateCPM(umi.qc, use_size_factors = FALSE) + 1)
+logcounts(umi.qc) <- log2(calculateCPM(umi.qc, use_size_factors = NULL) + 1)
 plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
@@ -156,7 +156,7 @@ plotRLE(
 ```{r norm-pca-lsf, fig.cap = "PCA plot of the tung data after LSF normalisation"}
 qclust <- quickCluster(umi.qc, min.size = 30)
 umi.qc <- computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
-umi.qc <- normalize(umi.qc)
+umi.qc <- logNormCounts(umi.qc)
 plotPCA(
     umi.qc[endog_genes, ],
     colour_by = "batch",
