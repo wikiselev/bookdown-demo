@@ -142,7 +142,7 @@ enhances trajectory-like structure in a dataset, in contrast to scImpute and
 DrImpute which assume a cluster-like structure to the underlying data.
 
 ```{r, eval=FALSE}
-res <- magic(t(deng@assays[["logcounts"]]), genes="all_genes", k=10, t="auto")
+res <- magic(t(deng@assays@data$logcounts), genes="all_genes", k=10, t="auto")
 ```
 
 ```{r, eval=FALSE}

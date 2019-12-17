@@ -61,7 +61,7 @@ expression matrix. This can be extracted from our SingleCellExperiment object us
 command below. 
 
 ```{r}
-expr_matrix <- M3Drop::M3DropConvertData(deng)
+expr_matrix <- M3Drop::M3DropConvertData(counts(deng))
 ```
 
 This function is compatible with most single-cell RNA-seq analysis packages including:
@@ -272,7 +272,7 @@ far too many genes will be called as significant. Thus we will take the top 1500
 by effect size.
 
 ```{r, fig.width=8, fig.height=5}
-deng_int <- NBumiConvertData(deng)
+deng_int <- NBumiConvertData(counts(deng))
 DANB_fit <- NBumiFitModel(deng_int) # DANB is fit to the raw count matrix
 # Perform DANB feature selection
 DropFS <- NBumiFeatureSelectionCombinedDrop(DANB_fit, method="fdr", qval.thresh=0.01, suppress.plot=FALSE)

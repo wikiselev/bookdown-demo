@@ -60,7 +60,7 @@ Now we are ready to run `SC3` (we also ask it to calculate biological properties
 deng <- sc3(deng, ks = 10, biology = TRUE, n_cores = 1)
 ```
 
-`SC3` result consists of several different outputs (please look in [@Kiselev2016-bq] and [SC3 vignette](http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html) for more details). Here we show some of them:
+`SC3` result consists of several different outputs (please look in [@Kiselev2016-bq] and [SC3 vignette](https://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/SC3.html) for more details). Here we show some of them:
 
 Consensus matrix:
 ```{r, fig.height=6}
@@ -123,7 +123,7 @@ Now we are going to apply _k_-means clustering algorithm to the cloud of points 
 
 We will start with $k=8$:
 ```{r clust-tsne-kmeans2, fig.cap = "tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm"}
-colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 8)$clust)
+colData(deng)$tSNE_kmeans <- as.character(kmeans(reducedDim(deng), centers = 8)$clust)
 plotTSNE(deng, colour_by = "tSNE_kmeans")
 ```
 

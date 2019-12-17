@@ -31,7 +31,7 @@ plotPCA(
 ```
 
 ```{r norm-pca-cpm-reads, fig.cap = "PCA plot of the tung data after CPM normalisation"}
-logcounts(reads.qc) <- log2(calculateCPM(reads.qc, use_size_factors = FALSE) + 1)
+logcounts(reads.qc) <- log2(calculateCPM(reads.qc, use_size_factors = NULL) + 1)
 plotPCA(
     reads.qc[endog_genes, ],
     colour_by = "batch",
@@ -55,7 +55,7 @@ plotRLE(
 ```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the tung data after LSF normalisation"}
 qclust <- quickCluster(reads.qc, min.size = 30)
 reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
-reads.qc <- normalize(reads.qc)
+reads.qc <- logNormCounts(reads.qc)
 plotPCA(
     reads.qc[endog_genes, ],
     colour_by = "batch",

@@ -38,13 +38,18 @@ reads <- reads[keep_feature, ]
 ```
 
 ```{r}
-isSpike(reads, "ERCC") <- grepl("^ERCC-", rownames(reads))
-isSpike(reads, "MT") <- rownames(reads) %in% 
-    c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
+is.spike=grepl("^ERCC-", rownames(reads))
+reads  <- splitAltExps(reads, ifelse(is.spike, "ERCC", "gene"))
+altExpNames(reads)
+
+is.mt <- rownames(reads) %in%        
+  c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
     "ENSG00000198886", "ENSG00000212907", "ENSG00000198786",
     "ENSG00000198695", "ENSG00000198712", "ENSG00000198804",
     "ENSG00000198763", "ENSG00000228253", "ENSG00000198938",
     "ENSG00000198840")
+reads <-  splitAltExps(reads, ifelse(is.mt, "MT", "gene"))
+altExpNames(reads)
 ```
 
 ```{r}
@@ -148,7 +153,7 @@ table(reads$outlier)
 ```{r}
 plotReducedDim(
     reads,
-    use_dimred = "PCA_coldata",
+    use_dimred = "PCA",
     size_by = "total_features_by_counts", 
     shape_by = "use", 
     colour_by = "outlier"
