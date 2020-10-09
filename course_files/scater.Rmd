@@ -4,9 +4,9 @@ output: html_document
 
 ## Bioconductor, `SingleCellExperiment` and `scater`
 
-```{r, echo=FALSE}
+```{r scater0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = "center")
+opts_chunk$set(cache = TRUE, fig.align = "center")
 set.seed(1)
 ```
 
@@ -22,7 +22,7 @@ We strongly recommend all new comers and even experienced high-throughput data a
 [`SingleCellExperiment`](http://bioconductor.org/packages/SingleCellExperiment) (SCE) is a S4 class for storing data from single-cell experiments. This includes specialized methods to store and retrieve spike-in information, dimensionality reduction coordinates and size factors for each cell, along with the usual metadata for genes and libraries.
 
 In practice, an object of this class can be created using its constructor:
-```{r message=FALSE, warning=FALSE}
+```{r scater1, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 counts <- matrix(rpois(100, lambda = 10), ncol=10, nrow=10)
 rownames(counts) <- paste("gene", 1:10, sep = "")
@@ -45,7 +45,7 @@ In the `SingleCellExperiment`, users can assign arbitrary names to entries of as
 
 Each of these suggested names has an appropriate getter/setter method for convenient manipulation of the `SingleCellExperiment`. For example, we can take the (very specifically named) `counts` slot, normalise it and assign it to `normcounts` instead:
 
-```{r}
+```{r scater2}
 normcounts(sce) <- log2(counts(sce) + 1)
 sce
 dim(normcounts(sce))

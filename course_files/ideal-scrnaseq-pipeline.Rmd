@@ -4,9 +4,9 @@ output: html_document
 
 # "Ideal" scRNAseq pipeline (as of Oct 2017)
 
-```{r, echo=FALSE}
+```{r ideal0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = "center", echo=FALSE)
+opts_chunk$set(cache = TRUE, fig.align = "center", echo=FALSE)
 ```
 
 ## Experimental Design
@@ -35,7 +35,7 @@ opts_chunk$set(fig.align = "center", echo=FALSE)
     * Transcription factor detection (regulatory networks) require high read depth and most sensitive protocols (i.e. Fluidigm C1)
     * Cell clustering & cell-type identification benefits from large number of cells and doesn't requireas high sequencing depth (~100,000 reads per cell).
 
-```{r pipeline-batches, out.width = '90%', fig.cap="Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction."}
+```{r ideal1, out.width = '90%', fig.cap="Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction."}
 knitr::include_graphics("figures/Pipeline-batches.png")
 ```
 ## Processing Reads

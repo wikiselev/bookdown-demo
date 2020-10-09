@@ -18,12 +18,12 @@ Given the issues with using spike-ins, better results can often be obtained by u
 
 We explore both general approaches below.
 
-```{r, echo=FALSE}
+```{r remove-conf0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = 'center')
+opts_chunk$set(cache= TRUE, fig.align = 'center')
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r remove-conf1, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
 library(RUVSeq)
 library(scater)
@@ -66,7 +66,7 @@ We will concentrate on the first two approaches.
 
 #### RUVg
 
-```{r, message=FALSE, warning=FALSE}
+```{r remove-conf2, message=FALSE, warning=FALSE}
 ruvg <- RUVg(counts(umi.qc), erccs, k = 1)
 assay(umi.qc, "ruvg1") <- log2(
     t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
@@ -79,7 +79,7 @@ assay(umi.qc, "ruvg10") <- log2(
 
 #### RUVs
 
-```{r}
+```{r remove-conf3}
 scIdx <- matrix(-1, ncol = max(table(umi.qc$individual)), nrow = 3)
 tmp <- which(umi.qc$individual == "NA19098")
 scIdx[1, 1:length(tmp)] <- tmp
@@ -101,7 +101,7 @@ assay(umi.qc, "ruvs10") <- log2(
 ### Combat
 
 If you have an experiment with a balanced design, `Combat` can be used to eliminate batch effects while preserving biological effects by specifying the biological effects using the `mod` parameter. However the `Tung` data contains multiple experimental replicates rather than a balanced design so using `mod1` to preserve biological variability will result in an error. 
-```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r remove-conf4, message=FALSE, warning=FALSE, paged.print=FALSE}
 combat_data <- logcounts(umi.qc)
 mod_data <- as.data.frame(t(combat_data))
 # Basic batch removal
@@ -123,7 +123,7 @@ __Exercise 1__
 
 Perform `ComBat` correction accounting for total features as a co-variate. Store the corrected matrix in the `combat_tf` slot.
 
-```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r remove-conf5, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 assay(umi.qc, "combat_tf") <- ComBat(
     dat = t(mod_data), 
     batch = factor(umi.qc$batch), 
@@ -137,7 +137,7 @@ assay(umi.qc, "combat_tf") <- ComBat(
 `mnnCorrect` [@Haghverdi2017-vh] assumes that each batch shares at least one biological condition with each other batch. Thus it works well for a variety of balanced experimental designs. However, the `Tung` data contains multiple replicates for each invidividual rather than balanced batches, thus we will normalized each individual separately. Note that this will remove batch effects between batches within the same individual but not the batch effects between batches in different individuals, due to the confounded experimental design. 
 
 Thus we will merge a replicate from each individual to form three batches. 
-```{r}
+```{r remove-conf6}
 do_mnn <- function(data.qc) {
     batch1 <- logcounts(data.qc[, data.qc$replicate == "r1"])
     batch2 <- logcounts(data.qc[, data.qc$replicate == "r2"])
@@ -193,7 +193,7 @@ assay(umi.qc, "mnn") <- cbind(indi1, indi2, indi3)
 ### GLM
 A general linear model is a simpler version of `Combat`. It can correct for batches while preserving biological effects if you have a balanced design. In a confounded/replicate design biological effects will not be fit/preserved. Similar to `mnnCorrect` we could remove batch effects from each individual separately in order to preserve biological (and technical) variance between individuals. For demonstation purposes we will naively correct all cofounded batch effects: 
 
-```{r}
+```{r remove-conf7}
 glm_fun <- function(g, batch, indi) {
   model <- glm(g ~ batch + indi)
   model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
@@ -214,7 +214,7 @@ __Exercise 2__
 
 Perform GLM correction for each individual separately. Store the final corrected matrix in the `glm_indi` slot.
 
-```{r, echo=FALSE}
+```{r remove-conf8, echo=FALSE}
 glm_fun1 <- function(g, batch) {
   model <- glm(g ~ batch)
   model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
@@ -244,7 +244,7 @@ Harmony [Korsunsky2018fast] is a newer batch correction method, which is designe
 
 Seeing how the end result of Harmony is an altered dimensional reduction space created on the basis of PCA, we plot the obtained manifold here and exclude it from the rest of the follow-ups in the section.
 
-```{r}
+```{r remove-conf9}
 umi.qc.endog = umi.qc[endog_genes,]
 umi.qc.endog = runPCA(umi.qc.endog, exprs_values = 'logcounts', ncomponents = 20)
 pca <- as.matrix(umi.qc.endog@reducedDims@listData[["PCA"]])
@@ -272,7 +272,7 @@ corresponds to different biological samples (individuals). Separation of biologi
 interspersed batches indicates that technical variation has been
 removed. We always use log2-cpm normalized data to match the assumptions of PCA.
 
-```{r}
+```{r remove-conf10}
 for(n in assayNames(umi.qc)) {
     tmp <- runPCA(
         umi.qc[endog_genes, ],
@@ -298,7 +298,7 @@ Consider different `ks` for RUV normalizations. Which gives the best results?
 
 We can also examine the effectiveness of correction using the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset. Note RLE only evaluates whether the number of genes higher and lower than average are equal for each cell - i.e. systemic technical effects. Random technical noise between batches may not be detected by RLE.
 
-```{r}
+```{r remove-conf11}
 res <- list()
 for(n in assayNames(umi.qc)) {
 	res[[n]] <- suppressWarnings(calc_cell_RLE(assay(umi.qc, n), erccs))
@@ -313,7 +313,7 @@ Another method to check the efficacy of batch-effect correction is to consider t
 
 `kBET` [@Buttner2017-ds] takes `kNN` networks around random cells and tests the number of cells from each batch against a binomial distribution. The rejection rate of these tests indicates the severity of batch-effects still present in the data (high rejection rate = strong batch effects). `kBET` assumes each batch contains the same complement of biological groups, thus it can only be applied to the entire dataset if a perfectly balanced design has been used. However, `kBET` can also be applied to replicate-data if it is applied to each biological group separately. In the case of the Tung data, we will apply `kBET` to each individual independently to check for residual batch effects. However, this method will not identify residual batch-effects which are confounded with biological conditions. In addition, `kBET` does not determine if biological signal has been preserved. 
 
-```{r, message = FALSE}
+```{r remove-conf12, message = FALSE}
 compare_kBET_results <- function(sce){
     indiv <- unique(sce$individual)
     norms <- assayNames(sce) # Get all normalizations
@@ -336,7 +336,7 @@ compare_kBET_results <- function(sce){
 eff_debatching <- compare_kBET_results(umi.qc)
 ```
 
-```{r, message = FALSE}
+```{r remove-conf13, message = FALSE}
 require("reshape2")
 require("RColorBrewer")
 # Plot results
@@ -376,7 +376,7 @@ Perform the same analysis with read counts of the `tung` data. Use `tung/reads.r
 
 ### sessionInfo()
 
-```{r echo=FALSE}
+```{r remove-conf14, echo=FALSE}
 sessionInfo()
 ```
 

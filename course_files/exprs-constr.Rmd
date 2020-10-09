@@ -4,9 +4,9 @@ output: html_document
 
 # Construction of expression matrix
 
-```{r, echo=FALSE}
+```{r Exprs-constr0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = "center", echo=FALSE)
+opts_chunk$set(cache = TRUE, fig.align = "center", echo=FALSE)
 ```
 
 Many analyses of scRNA-seq data take as their starting point an __expression matrix__. By convention, the each row of the expression matrix represents a gene and each column represents a cell (although some authors use the transpose). Each entry represents the expression level of a particular gene in a given cell. The units by which the expression is meassured depends on the protocol and the normalization strategy used.
@@ -22,7 +22,7 @@ $<path_to_fastQC>/fastQC experiment.bam
 
 Below is an example of the output from FastQC for a dataset of 125 bp reads. The plot reveals a technical error which resulted in a couple of bases failing to be read correctly in the centre of the read. However, since the rest of the read was of high quality this error will most likely have a negligible effect on mapping efficiency.
 
-```{r exprs-constr-fastqc, out.width = '90%', fig.cap="Example of FastQC output"}
+```{r Exprs-constr1, out.width = '90%', fig.cap="Example of FastQC output"}
 knitr::include_graphics("figures/per_base_quality.png")
 ```
 
@@ -73,7 +73,7 @@ analysis. The two yellow arrows point to cells with a surprisingly
 large number of unmapped reads. In this example we kept the cells during the alignment QC step, but they were later removed during 
 cell QC due to a high proportion of ribosomal RNA reads. 
 
-```{r exprs-constr-total-num-cells, out.width = '90%', fig.cap="Example of the total number of reads mapped to each cell."}
+```{r Exprs-constr2, out.width = '90%', fig.cap="Example of the total number of reads mapped to each cell."}
 knitr::include_graphics("figures/Bergiers_exp1_mapping_by_cell.png")
 ```
 
@@ -89,7 +89,7 @@ python <RSeQCpath>/split_bam.py -i input.bam -r rRNAmask.bed -o output.txt
 
 However the expected results will depend on the experimental protocol, e.g. many scRNA-seq methods use poly-A selection to avoid sequencing rRNAs which results in a 3' bias in the read coverage across the genes (aka gene body coverage). The figure below shows this 3' bias as well as three cells which were outliers and removed from the dataset:
 
-```{r exprs-constr-3-bias, out.width = '90%', fig.cap="Example of the 3' bias in the read coverage."}
+```{r Exprs-constr3, out.width = '90%', fig.cap="Example of the 3' bias in the read coverage."}
 knitr::include_graphics("figures/Exp1_RSEQC_geneBodyCoverage_plot_Combined.png")
 ```
 

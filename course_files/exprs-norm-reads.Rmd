@@ -4,20 +4,20 @@ output: html_document
 
 ## Normalization practice (Reads)
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r exprs-norm-read0, echo=FALSE, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
 library(scater)
 library(scran)
 options(stringsAsFactors = FALSE)
 set.seed(1234567)
 library(knitr)
-opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
+opts_chunk$set(cache= TRUE, out.width='90%', fig.align = 'center', echo=FALSE)
 reads <- readRDS("data/tung/reads.rds")
 reads.qc <- reads[rowData(reads)$use, colData(reads)$use]
 endog_genes <- !rowData(reads.qc)$is_feature_control
 ```
 
-```{r norm-pca-raw-reads, fig.cap = "PCA plot of the tung data"}
+```{r exprs-norm-read1, fig.cap = "PCA plot of the tung data"}
 tmp <- runPCA(
   reads.qc[endog_genes, ],
   exprs_values = "logcounts_raw"
@@ -30,7 +30,7 @@ plotPCA(
 )
 ```
 
-```{r norm-pca-cpm-reads, fig.cap = "PCA plot of the tung data after CPM normalisation"}
+```{r exprs-norm-read2, fig.cap = "PCA plot of the tung data after CPM normalisation"}
 logcounts(reads.qc) <- log2(calculateCPM(reads.qc, use_size_factors = FALSE) + 1)
 plotPCA(
     reads.qc[endog_genes, ],
@@ -39,7 +39,7 @@ plotPCA(
     shape_by = "individual"
 )
 ```
-```{r norm-ours-rle-cpm-reads, fig.cap = "Cell-wise RLE of the tung data", warning=FALSE}
+```{r exprs-norm-read3, fig.cap = "Cell-wise RLE of the tung data", warning=FALSE}
 plotRLE(
     reads.qc[endog_genes, ], 
     exprs_values = "logcounts_raw",
@@ -52,7 +52,7 @@ plotRLE(
 )
 ```
 
-```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the tung data after LSF normalisation"}
+```{r exprs-norm-read4, fig.cap = "PCA plot of the tung data after LSF normalisation"}
 qclust <- quickCluster(reads.qc, min.size = 30)
 reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- normalize(reads.qc)
@@ -64,7 +64,7 @@ plotPCA(
 )
 ```
 
-```{r norm-ours-rle-scran-reads, fig.cap = "Cell-wise RLE of the tung data"}
+```{r exprs-norm-read5, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     reads.qc[endog_genes, ], 
     exprs_values = "logcounts_raw",
@@ -77,7 +77,7 @@ plotRLE(
 )
 ```
 
-```{r norm-pca-downsample-reads, fig.cap = "PCA plot of the tung data after downsampling"}
+```{r exprs-norm-read6, fig.cap = "PCA plot of the tung data after downsampling"}
 logcounts(reads.qc) <- log2(Down_Sample_Matrix(counts(reads.qc)) + 1)
 plotPCA(
     reads.qc[endog_genes, ],
@@ -86,7 +86,7 @@ plotPCA(
     shape_by = "individual"
 )
 ```
-```{r norm-ours-rle-downsample-reads, fig.cap = "Cell-wise RLE of the tung data"}
+```{r exprs-norm-read7, fig.cap = "Cell-wise RLE of the tung data"}
 plotRLE(
     reads.qc[endog_genes, ], 
     exprs_values = "logcounts_raw",
@@ -99,7 +99,7 @@ plotRLE(
 )
 ```
 
-```{r}
+```{r exprs-norm-read8}
 reads.qc <- getBMFeatureAnnos(
     reads.qc,
     filters = "ensembl_gene_id", 
@@ -116,20 +116,20 @@ reads.qc <- getBMFeatureAnnos(
 )
 ```
 
-```{r}
+```{r exprs-norm-read9}
 reads.qc.ann <- reads.qc[!is.na(rowData(reads.qc)$ensembl_gene_id), ]
 ```
 
-```{r}
+```{r exprs-norm-read10}
 eff_length <- 
     abs(rowData(reads.qc.ann)$end_position - rowData(reads.qc.ann)$start_position) / 1000
 ```
 
-```{r}
+```{r exprs-norm-read11}
 tpm(reads.qc.ann) <- log2(calculateTPM(reads.qc.ann, eff_length) + 1)
 ```
 
-```{r norm-pca-tpm-reads, fig.cap = "PCA plot of the tung data after TPM normalisation"}
+```{r exprs-norm-read12, fig.cap = "PCA plot of the tung data after TPM normalisation"}
 tmp <- runPCA(
   reads.qc.ann,
   exprs_values = "tpm",
@@ -142,11 +142,11 @@ plotPCA(
 )
 ```
 
-```{r}
+```{r exprs-norm-read13}
 tpm(reads.qc.ann) <- log2(calculateFPKM(reads.qc.ann, eff_length) + 1)
 ```
 
-```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the tung data after FPKM normalisation", eval=FALSE}
+```{r exprs-norm-read14, fig.cap = "PCA plot of the tung data after FPKM normalisation", eval=FALSE}
 tmp <- runPCA(
   reads.qc.ann,
   exprs_values = "tpm",
@@ -159,7 +159,7 @@ plotPCA(
 )
 ```
 
-```{r}
+```{r exprs-norm-read15}
 sessionInfo()
 ```
 

@@ -2,12 +2,12 @@
 output: html_document
 ---
 
-```{r, echo=FALSE}
+```{r seurat0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = "center")
+opts_chunk$set(cache = TRUE, fig.align = "center")
 ```
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r seurat1, echo=TRUE, message=FALSE, warning=FALSE}
 set.seed(1234567)
 ```
 
@@ -25,7 +25,7 @@ We will be analyzing the a dataset of Peripheral Blood Mononuclear Cells (PBMC) 
 
 We start by reading in the data. All features in Seurat have been configured to work with sparse matrices which results in significant memory and speed savings for Drop-seq/inDrop/10x data.
 
-```{r}
+```{r seurat2}
 library(Seurat)
 library(dplyr)
 library(cowplot)
@@ -57,7 +57,7 @@ The steps below encompass the standard pre-processing workflow for scRNA-seq dat
 
 While the `CreateSeuratObject` imposes a basic minimum gene-cutoff, you may want to filter out cells at this stage based on technical or biological parameters. Seurat allows you to easily explore QC metrics and filter cells based on any user-defined criteria. In the example below, we visualize gene and molecule counts, plot their relationship, and exclude cells with a clear outlier number of genes detected as potential multiplets. Of course this is not a guaranteed method to exclude cell doublets, but we include this as an example of filtering user-defined outlier cells. We also filter cells based on the percentage of mitochondrial genes present.
 
-```{r}
+```{r seurat3}
 # The number of genes and UMIs (nGene and nUMI) are automatically calculated
 # for every object by Seurat.  For non-UMI data, nUMI represents the sum of
 # the non-normalized values within a cell We calculate the percentage of
@@ -80,7 +80,7 @@ pbmc$percent.mito <- percent.mito
 VlnPlot(object = pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mito"), ncol = 3)
 ```
 
-```{r}
+```{r seurat4}
 # GenePlot is typically used to visualize gene-gene relationships, but can
 # be used for anything calculated by the object, i.e. columns in
 # object@meta.data, PC scores etc.  Since there is a rare subset of cells
@@ -91,7 +91,7 @@ FeatureScatter(object = pbmc, feature1 = "nCount_RNA", feature2 = "percent.mito"
 FeatureScatter(object = pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 ```
 
-```{r}
+```{r seurat5}
 # We filter out cells that have unique gene counts (nFeature_RNA) over 2,500 or less than
 # 200 Note that > and < are used to define a'gate'.  
 #-Inf and Inf should be used if you don't want a lower or upper threshold.
@@ -102,7 +102,7 @@ pbmc <- subset(x = pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & per
 
 After removing unwanted cells from the dataset, the next step is to normalize the data. By default, we employ a global-scaling normalization method “LogNormalize” that normalizes the gene expression measurements for each cell by the total expression, multiplies this by a scale factor (10,000 by default), and log-transforms the result.
 
-```{r}
+```{r seurat6}
 pbmc <- NormalizeData(object = pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 ```
 
@@ -110,12 +110,12 @@ pbmc <- NormalizeData(object = pbmc, normalization.method = "LogNormalize", scal
 
 Seurat calculates highly variable genes and focuses on these for downstream analysis. `FindVariableGenes` calculates the average expression and dispersion for each gene, places these genes into bins, and then calculates a z-score for dispersion within each bin. This helps control for the relationship between variability and average expression. This function is unchanged from (Macosko et al.), but new methods for variable gene expression identification are coming soon. We suggest that users set these parameters to mark visual outliers on the dispersion plot, but the exact parameter settings may vary based on the data type, heterogeneity in the sample, and normalization strategy. The parameters here identify ~2,000 variable genes, and represent typical parameter settings for UMI data that is normalized to a total of 1e4 molecules.
 
-```{r}
+```{r seurat7}
 pbmc <- FindVariableFeatures(object = pbmc, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.0125, x.high.cutoff = 3, y.cutoff = 0.5, nfeatures = 2000)
 ```
 
 To view the output of the FindVariableFeatures output we use this function. The genes appear not to be stored in the object, but can be accessed this way.
-```{r}
+```{r seurat8}
 head(x = HVFInfo(object = pbmc))
 ```
 
@@ -127,7 +127,7 @@ We can regress out cell-cell variation in gene expression driven by batch (if ap
 
 Seurat v2.0 implements this regression as part of the data scaling process. Therefore, the `RegressOut` function has been deprecated, and replaced with the vars.to.regress argument in `ScaleData`.
 
-```{r}
+```{r seurat9}
 pbmc <- ScaleData(object = pbmc, vars.to.regress = c("nCounts_RNA", "percent.mito"))
 ```
 
@@ -137,7 +137,7 @@ pbmc <- ScaleData(object = pbmc, vars.to.regress = c("nCounts_RNA", "percent.mit
 
 --> refered to Seurat v3 (latest): high variable features are accessed through the function HVFInfo(object). Despite RunPCA has a features argument where to specify the features to compute PCA on, I've been modifying its values and the output PCA graph has always the same dimensions, indicating that the provided genes in the features argument are not exactly the ones used to compute PCA. Wether the function gets the HVG directly or does not take them into account, I don't know.
 
-```{r}
+```{r seurat10}
 pbmc <- RunPCA(object = pbmc,  npcs = 30, verbose = FALSE)
 ```
 
@@ -153,38 +153,38 @@ Seurat v3 provides functions for visualizing:
 - Violin and Ridge plots
 - Heatmaps
 
-```{r}
+```{r seurat11}
 # Examine and visualize PCA results a few different ways
 DimPlot(object = pbmc, reduction = "pca")
 ```
-```{r}
+```{r seurat12}
 # Dimensional reduction plot, with cells colored by a quantitative feature
 FeaturePlot(object = pbmc, features = "MS4A1")
 ```
 
 
-```{r}
+```{r seurat13}
 # Scatter plot across single cells, replaces GenePlot
 FeatureScatter(object = pbmc, feature1 = "MS4A1", feature2 = "PC_1")
 FeatureScatter(object = pbmc, feature1 = "MS4A1", feature2 = "CD3D")
 ```
 
-```{r}
+```{r seurat14}
 # Scatter plot across individual features, repleaces CellPlot
 CellScatter(object = pbmc, cell1 = "AGTCTACTAGGGTG", cell2 = "CACAGATGGTTTCT")
 ```
 
-```{r}
+```{r seurat15}
 VariableFeaturePlot(object = pbmc)
 ```
-```{r}
+```{r seurat16}
 # Violin and Ridge plots
 VlnPlot(object = pbmc, features = c("LYZ", "CCL5", "IL32"))
 RidgePlot(object = pbmc, feature = c("LYZ", "CCL5", "IL32"))
 ```
 
 In particular `DimHeatmap` allows for easy exploration of the primary sources of heterogeneity in a dataset, and can be useful when trying to decide which PCs to include for further downstream analyses. Both cells and genes are ordered according to their PCA scores. Setting cells.use to a number plots the ‘extreme’ cells on both ends of the spectrum, which dramatically speeds plotting for large datasets. Though clearly a supervised analysis, we find this to be a valuable tool for exploring correlated gene sets.
-```{r}
+```{r seurat17}
 # Heatmaps
 DimHeatmap(object = pbmc, reduction = "pca", cells = 200, balanced = TRUE)
 ```
@@ -197,7 +197,7 @@ To overcome the extensive technical noise in any single gene for scRNA-seq data,
 
 In [Macosko et al](http://www.cell.com/abstract/S0092-8674(15)00549-8), we implemented a resampling test inspired by the jackStraw procedure. We randomly permute a subset of the data (1% by default) and rerun PCA, constructing a ‘null distribution’ of gene scores, and repeat this procedure. We identify ‘significant’ PCs as those who have a strong enrichment of low p-value genes.
 
-```{r}
+```{r seurat18}
 # NOTE: This process can take a long time for big datasets, comment out for
 # expediency.  More approximate techniques such as those implemented in
 # PCElbowPlot() can be used to reduce computation time
@@ -206,17 +206,17 @@ pbmc <- JackStraw(object = pbmc, reduction = "pca", dims = 20, num.replicate = 1
 
 The `JackStrawPlot` function provides a visualization tool for comparing the distribution of p-values for each PC with a uniform distribution (dashed line). ‘Significant’ PCs will show a strong enrichment of genes with low p-values (solid curve above the dashed line). In this case it appears that PCs 1-10 are significant.
 
-```{r}
+```{r seurat19}
 pbmc <- ScoreJackStraw(object = pbmc, dims = 1:20, reduction = "pca")
 ```
 
-```{r}
+```{r seurat20}
 JackStrawPlot(object = pbmc, dims = 1:20, reduction = "pca")
 ```
 
 A more ad hoc method for determining which PCs to use is to look at a plot of the standard deviations of the principle components and draw your cutoff where there is a clear elbow in the graph. This can be done with `ElbowPlot`. In this example, it looks like the elbow would fall around PC 5.
 
-```{r}
+```{r seurat21}
 ElbowPlot(object = pbmc)
 ```
 
@@ -231,7 +231,7 @@ Latest clustering results will be stored in object metadata under `seurat_cluste
 
 First calculate k-nearest neighbors and construct the SNN graph (`FindNeighbors`), then run `FindClusters`.
 
-```{r}
+```{r seurat22}
 pbmc <- FindNeighbors(pbmc, reduction = "pca", dims = 1:20)
 pbmc <- FindClusters(pbmc, resolution = 0.5, algorithm = 1)
 ```
@@ -240,7 +240,7 @@ pbmc <- FindClusters(pbmc, resolution = 0.5, algorithm = 1)
 
 Seurat continues to use tSNE as a powerful tool to visualize and explore these datasets. While we no longer advise clustering directly on tSNE components, cells within the graph-based clusters determined above should co-localize on the tSNE plot. This is because the tSNE aims to place cells with similar local neighborhoods in high-dimensional space together in low-dimensional space. As input to the tSNE, we suggest using the same PCs as input to the clustering analysis, although computing the tSNE based on scaled gene expression is also supported using the genes.use argument.
 
-```{r}
+```{r seurat23}
 pbmc <- RunTSNE(object = pbmc, dims.use = 1:10, do.fast = TRUE)
 # note that you can set do.label=T to help label individual clusters
 DimPlot(object = pbmc, reduction = "tsne")
@@ -249,7 +249,7 @@ DimPlot(object = pbmc, reduction = "tsne")
 ## Run UMAP
 
 To visualize the two conditions side-by-side, we can use the split.by argument to show each condition colored by cluster.
-```{r}
+```{r seurat24}
 pbmc <- RunUMAP(pbmc, reduction = "pca", dims = 1:20)
 DimPlot(pbmc, reduction = "umap", split.by = "seurat_clusters")
 ```
@@ -257,7 +257,7 @@ DimPlot(pbmc, reduction = "umap", split.by = "seurat_clusters")
 
 You can save the object at this point so that it can easily be loaded back in without having to rerun the computationally intensive steps performed above, or easily shared with collaborators.
 
-```{r}
+```{r seurat25}
 saveRDS(pbmc, file = "data/pbmc_tutorial.rds")
 ```
 
@@ -267,19 +267,19 @@ Seurat can help you find markers that define clusters via differential expressio
 
 The `min.pct` argument requires a gene to be detected at a minimum percentage in either of the two groups of cells, and the thresh.test argument requires a gene to be differentially expressed (on average) by some amount between the two groups. You can set both of these to 0, but with a dramatic increase in time - since this will test a large number of genes that are unlikely to be highly discriminatory. As another option to speed up these computations, `max.cells.per.ident` can be set. This will downsample each identity class to have no more cells than whatever this is set to. While there is generally going to be a loss in power, the speed increases can be significiant and the most highly differentially expressed genes will likely still rise to the top.
 
-```{r}
+```{r seurat26}
 # find all markers of cluster 1
 cluster1.markers <- FindMarkers(object = pbmc, ident.1 = 1, min.pct = 0.25)
 print(x = head(x = cluster1.markers, n = 5))
 ```
 
-```{r}
+```{r seurat27}
 # find all markers distinguishing cluster 5 from clusters 0 and 3
 cluster5.markers <- FindMarkers(object = pbmc, ident.1 = 2, ident.2 = c(0, 3), min.pct = 0.25)
 print(x = head(x = cluster5.markers, n = 5))
 ```
 
-```{r}
+```{r seurat28}
 # find markers for every cluster compared to all remaining cells, report
 # only the positive ones
 pbmc.markers <- FindAllMarkers(object = pbmc, only.pos = TRUE, min.pct = 0.25, thresh.use = 0.25)
@@ -288,7 +288,7 @@ pbmc.markers %>% group_by(cluster) %>% top_n(2, avg_logFC)
 
 Seurat has several tests for differential expression which can be set with the test.use parameter (see our [DE vignette](http://satijalab.org/seurat/de_vignette.html) for details). For example, the ROC test returns the ‘classification power’ for any individual marker (ranging from 0 - random, to 1 - perfect).
 
-```{r}
+```{r seurat29}
 cluster1.markers <- FindMarkers(object = pbmc, ident.1 = 0, thresh.use = 0.25, test.use = "roc", only.pos = TRUE)
 ```
 
@@ -300,18 +300,18 @@ We also suggest exploring:
 • `CellPlot`, and 
 • `DotPlot` as additional methods to view your dataset.
 
-```{r}
+```{r seurat30}
 VlnPlot(object = pbmc, features =c("NKG7", "PF4"))
 ```
 
 
-```{r}
+```{r seurat31}
 FeaturePlot(object = pbmc, features = c("MS4A1", "GNLY", "CD3E", "CD14", "FCER1A", "FCGR3A", "LYZ", "PPBP", "CD8A"), cols = c("grey", "blue"), reduction = "tsne")
 ```
 
 `DoHeatmap` generates an expression heatmap for given cells and genes. In this case, we are plotting the top 20 markers (or all markers if less than 20) for each cluster.
 
-```{r}
+```{r seurat32}
 top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
 # setting slim.col.label to TRUE will print just the cluster IDS instead of
 # every cell name
@@ -322,7 +322,7 @@ DoHeatmap(object = pbmc, features = top10$gene, label = TRUE)
 
 Fortunately in the case of this dataset, we can use canonical markers to easily match the unbiased clustering to known cell types.
 
-```{r}
+```{r seurat33}
 current.cluster.ids <- c(0, 1, 2, 3, 4, 5, 6, 7)
 new.cluster.ids <- c("CD4 T cells", "CD14+ Monocytes", "B cells", "CD8 T cells", "FCGR3A+ Monocytes", "NK cells", "Dendritic cells", "Megakaryocytes")
 pbmc@active.ident <- plyr::mapvalues(x = pbmc@active.ident, from = current.cluster.ids, to = new.cluster.ids)
@@ -333,7 +333,7 @@ DimPlot(object = pbmc, reduction = "tsne", do.label = TRUE, pt.size = 0.5)
 
 If you perturb some of our parameter choices above (for example, setting `resolution=0.8` or changing the number of PCs), you might see the CD4 T cells subdivide into two groups. You can explore this subdivision to find markers separating the two T cell subsets. However, before reclustering (which will overwrite `object@ident`), we can stash our renamed identities to be easily recovered later.
 
-```{r}
+```{r seurat34}
 # First lets stash our identities for later
 pbmc <- StashIdent(object = pbmc, save.name = "ClusterNames_0.6")
 
@@ -342,7 +342,7 @@ pbmc <- StashIdent(object = pbmc, save.name = "ClusterNames_0.6")
 pbmc <- FindClusters(object = pbmc, reduction.type = "pca", dims.use = 1:10, resolution = 0.8, print.output = FALSE)
 ```
 
-```{r}
+```{r seurat35}
 # Demonstration of how to plot two tSNE plots side by side, and how to color
 # points based on different criteria
 plot1 <- DimPlot(object = pbmc, reduction = "tsne", do.return = TRUE, no.legend = TRUE, do.label = TRUE)
@@ -350,7 +350,7 @@ plot2 <- DimPlot(object = pbmc, reduction = "tsne", do.return = TRUE, group.by =
 plot_grid(plot1, plot2)
 ```
 
-```{r}
+```{r seurat36}
 # Find discriminating markers
 tcell.markers <- FindMarkers(object = pbmc, ident.1 = 0, ident.2 = 1)
 
@@ -363,13 +363,13 @@ FeaturePlot(object = pbmc, features = c("S100A4", "CCR7"), cols = c("green", "bl
 
 The memory/naive split is bit weak, and we would probably benefit from looking at more cells to see if this becomes more convincing. In the meantime, we can restore our old cluster identities for downstream processing.
 
-```{r}
+```{r seurat37}
 pbmc <- SetIdent(object = pbmc, value = "ClusterNames_0.6")
 saveRDS(pbmc, file = "data/pbmc3k_final.rds")
 ```
 
 ## sessionInfo()
 
-```{r echo=FALSE}
+```{r seurat38, echo=FALSE}
 sessionInfo()
 ```

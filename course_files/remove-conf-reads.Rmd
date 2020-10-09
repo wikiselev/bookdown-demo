@@ -4,12 +4,12 @@ output: html_document
 
 ## Dealing with confounders (Reads)
 
-```{r, echo=FALSE}
+```{r remove-conf-read0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = 'center')
+opts_chunk$set(cache = TRUE, fig.align = 'center')
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r remove-conf-read1, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
 library(RUVSeq)
 library(scater)
@@ -31,7 +31,7 @@ reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- normalize(reads.qc)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r remove-conf-read2, message=FALSE, warning=FALSE}
 ruvg <- RUVg(counts(reads.qc), erccs, k = 1)
 assay(reads.qc, "ruvg1") <- log2(
     t(t(ruvg$normalizedCounts) / colSums(ruvg$normalizedCounts) * 1e6) + 1
@@ -42,7 +42,7 @@ assay(reads.qc, "ruvg10") <- log2(
 )
 ```
 
-```{r}
+```{r remove-conf-read3}
 scIdx <- matrix(-1, ncol = max(table(reads.qc$individual)), nrow = 3)
 tmp <- which(reads.qc$individual == "NA19098")
 scIdx[1, 1:length(tmp)] <- tmp
@@ -61,7 +61,7 @@ assay(reads.qc, "ruvs10") <- log2(
 )
 ```
 
-```{r, eval = TRUE, message=FALSE, warning=FALSE}
+```{r remove-conf-read4, eval = TRUE, message=FALSE, warning=FALSE}
 combat_data <- logcounts(reads.qc)
 mod_data <- as.data.frame(t(combat_data))
 # Basic batch removal
@@ -81,7 +81,7 @@ assay(reads.qc, "combat") <- ComBat(
 
 __Exercise 1__
 
-```{r, eval = TRUE, echo = FALSE, message=FALSE, warning=FALSE}
+```{r remove-conf-read5, eval = TRUE, echo = FALSE, message=FALSE, warning=FALSE}
 assay(reads.qc, "combat_tf") <- ComBat(
     dat = t(mod_data), 
     batch = factor(reads.qc$batch), 
@@ -91,7 +91,7 @@ assay(reads.qc, "combat_tf") <- ComBat(
 )
 ```
 
-```{r}
+```{r remove-conf-read6}
 do_mnn <- function(data.qc) {
     batch1 <- logcounts(data.qc[, data.qc$replicate == "r1"])
     batch2 <- logcounts(data.qc[, data.qc$replicate == "r2"])
@@ -144,7 +144,7 @@ assay(reads.qc, "mnn") <- cbind(indi1, indi2, indi3)
 #)
 ```
 
-```{r}
+```{r remove-conf-read7}
 glm_fun <- function(g, batch, indi) {
   model <- glm(g ~ batch + indi)
   model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
@@ -163,7 +163,7 @@ assay(reads.qc, "glm") <- corrected
 
 __Exercise 2__
 
-```{r, echo=FALSE}
+```{r remove-conf-read8, echo=FALSE}
 glm_fun1 <- function(g, batch) {
   model <- glm(g ~ batch)
   model$coef[1] <- 0 # replace intercept with 0 to preserve reference batch.
@@ -187,7 +187,7 @@ indi3 <- do_glm(reads.qc[, reads.qc$individual == "NA19239"])
 assay(reads.qc, "glm_indi") <- cbind(indi1, indi2, indi3);
 ```
 
-```{r}
+```{r remove-conf-read9}
 reads.qc.endog = reads.qc[endog_genes,]
 reads.qc.endog = runPCA(reads.qc.endog, exprs_values = 'logcounts', ncomponents = 20)
 pca <- as.matrix(reads.qc.endog@reducedDims@listData[["PCA"]])
@@ -203,7 +203,7 @@ plotReducedDim(
 )
 ```
 
-```{r}
+```{r remove-conf-read10}
 for(n in assayNames(reads.qc)) {
     tmp <- runPCA(
         reads.qc[endog_genes, ],
@@ -221,7 +221,7 @@ for(n in assayNames(reads.qc)) {
 }
 ```
 
-```{r}
+```{r remove-conf-read11}
 res <- list()
 for(n in assayNames(reads.qc)) {
 	res[[n]] <- suppressWarnings(calc_cell_RLE(assay(reads.qc, n), erccs))
@@ -230,7 +230,7 @@ par(mar=c(6,4,1,1))
 boxplot(res, las=2)
 ```
 
-```{r, message = FALSE}
+```{r remove-conf-read12, message = FALSE}
 compare_kBET_results <- function(sce){
     indiv <- unique(sce$individual)
     norms <- assayNames(sce) # Get all normalizations
@@ -253,7 +253,7 @@ compare_kBET_results <- function(sce){
 eff_debatching <- compare_kBET_results(reads.qc)
 ```
 
-```{r, message = FALSE}
+```{r remove-conf-read13, message = FALSE}
 require("reshape2")
 require("RColorBrewer")
 # Plot results
@@ -283,6 +283,6 @@ ggplot(dod, aes(Normalisation, Individual, fill=kBET)) +
     ggtitle("Effect of batch regression methods per individual")
 ```
 
-```{r echo=FALSE}
+```{r remove-conf-read14, echo=FALSE}
 sessionInfo()
 ```
