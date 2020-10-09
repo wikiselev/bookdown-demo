@@ -4,40 +4,40 @@ output: html_document
 
 ## Expression QC (Reads)
 
-```{r, echo=FALSE}
+```{r exprs-qc-reads0, echo=FALSE}
 library(knitr)
-opts_chunk$set(out.width='90%', fig.align = 'center')
+opts_chunk$set(cache = TRUE, out.width='90%', fig.align = 'center')
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r exprs-qc-reads1, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 library(scater)
 options(stringsAsFactors = FALSE)
 ```
 
-```{r}
+```{r exprs-qc-reads2}
 reads <- read.table("data/tung/reads.txt", sep = "\t")
 anno <- read.table("data/tung/annotation.txt", sep = "\t", header = TRUE)
 ```
 
-```{r}
+```{r exprs-qc-reads3}
 head(reads[ , 1:3])
 head(anno)
 ```
 
-```{r}
+```{r exprs-qc-reads4}
 reads <- SingleCellExperiment(
     assays = list(counts = as.matrix(reads)), 
     colData = anno
 )
 ```
 
-```{r}
+```{r exprs-qc-reads5}
 keep_feature <- rowSums(counts(reads) > 0) > 0
 reads <- reads[keep_feature, ]
 ```
 
-```{r}
+```{r exprs-qc-reads6}
 isSpike(reads, "ERCC") <- grepl("^ERCC-", rownames(reads))
 isSpike(reads, "MT") <- rownames(reads) %in% 
     c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
@@ -47,7 +47,7 @@ isSpike(reads, "MT") <- rownames(reads) %in%
     "ENSG00000198840")
 ```
 
-```{r}
+```{r exprs-qc-reads7}
 reads <- calculateQCMetrics(
     reads,
     feature_controls = list(
@@ -57,7 +57,7 @@ reads <- calculateQCMetrics(
 )
 ```
 
-```{r total-counts-hist-reads, fig.cap = "Histogram of library sizes for all cells"}
+```{r exprs-qc-reads8, fig.cap = "Histogram of library sizes for all cells"}
 hist(
     reads$total_counts,
     breaks = 100
@@ -65,15 +65,15 @@ hist(
 abline(v = 1.3e6, col = "red")
 ```
 
-```{r}
+```{r exprs-qc-reads9}
 filter_by_total_counts <- (reads$total_counts > 1.3e6)
 ```
 
-```{r}
+```{r exprs-qc-reads10}
 table(filter_by_total_counts)
 ```
 
-```{r total-features-hist-reads, fig.cap = "Histogram of the number of detected genes in all cells"}
+```{r exprs-qc-reads11, fig.cap = "Histogram of the number of detected genes in all cells"}
 hist(
     reads$total_features_by_counts,
     breaks = 100
@@ -81,15 +81,15 @@ hist(
 abline(v = 7000, col = "red")
 ```
 
-```{r}
+```{r exprs-qc-reads12}
 filter_by_expr_features <- (reads$total_features_by_counts > 7000)
 ```
 
-```{r}
+```{r exprs-qc-reads13}
 table(filter_by_expr_features)
 ```
 
-```{r mt-vs-counts-reads, fig.cap = "Percentage of counts in MT genes"}
+```{r exprs-qc-reads14, fig.cap = "Percentage of counts in MT genes"}
 plotColData(
     reads,
     x = "total_features_by_counts",
@@ -98,7 +98,7 @@ plotColData(
 )
 ```
 
-```{r ercc-vs-counts-reads, fig.cap = "Percentage of counts in ERCCs"}
+```{r exprs-qc-reads15, fig.cap = "Percentage of counts in ERCCs"}
 plotColData(
     reads,
     x = "total_features_by_counts",
@@ -107,7 +107,7 @@ plotColData(
 )
 ```
 
-```{r}
+```{r exprs-qc-reads16}
 filter_by_ERCC <- 
     reads$batch != "NA19098.r2" & reads$pct_counts_ERCC < 25
 table(filter_by_ERCC)
@@ -115,7 +115,7 @@ filter_by_MT <- reads$pct_counts_MT < 30
 table(filter_by_MT)
 ```
 
-```{r}
+```{r exprs-qc-reads17}
 reads$use <- (
     # sufficient features (genes)
     filter_by_expr_features &
@@ -128,11 +128,11 @@ reads$use <- (
 )
 ```
 
-```{r}
+```{r exprs-qc-reads18}
 table(reads$use)
 ```
 
-```{r auto-cell-filt-reads, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
+```{r exprs-qc-reads19, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
 reads <- runPCA(
     reads,
     use_coldata = TRUE, 
@@ -141,11 +141,11 @@ reads <- runPCA(
 reducedDimNames(reads)
 ```
 
-```{r}
+```{r exprs-qc-reads20}
 table(reads$outlier)
 ```
 
-```{r}
+```{r exprs-qc-reads21}
 plotReducedDim(
     reads,
     use_dimred = "PCA_coldata",
@@ -155,7 +155,7 @@ plotReducedDim(
 )
 ```
 
-```{r cell-filt-comp-reads, fig.cap = "Comparison of the default, automatic and manual cell filters"}
+```{r exprs-qc-reads22, fig.cap = "Comparison of the default, automatic and manual cell filters"}
 library(limma)
 auto <- colnames(reads)[reads$outlier]
 man <- colnames(reads)[!reads$use]
@@ -170,11 +170,11 @@ vennDiagram(
 )
 ```
 
-```{r top50-gene-expr-reads, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
+```{r exprs-qc-reads23, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
 plotHighestExprs(reads, exprs_values = "counts")
 ```
 
-```{r}
+```{r exprs-qc-reads24}
 keep_feature <- nexprs(
   reads[,colData(reads)$use], 
   byrow = TRUE, 
@@ -183,25 +183,25 @@ keep_feature <- nexprs(
 rowData(reads)$use <- keep_feature
 ```
 
-```{r}
+```{r exprs-qc-reads25}
 table(keep_feature)
 ```
 
-```{r}
+```{r exprs-qc-reads26}
 dim(reads[rowData(reads)$use, colData(reads)$use])
 ```
 
-```{r}
+```{r exprs-qc-reads27}
 assay(reads, "logcounts_raw") <- log2(counts(reads) + 1)
 reducedDim(reads) <- NULL
 ```
 
-```{r}
+```{r exprs-qc-reads28}
 saveRDS(reads, file = "data/tung/reads.rds")
 ```
 
 By comparing Figure \@ref(fig:cell-filt-comp) and Figure \@ref(fig:cell-filt-comp-reads), it is clear that the reads based filtering removed more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.
 
-```{r}
+```{r exprs-qc-reads29}
 sessionInfo()
 ```

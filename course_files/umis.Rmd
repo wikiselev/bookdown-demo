@@ -2,9 +2,9 @@
 output: html_document
 ---
 
-```{r, echo=FALSE}
+```{r Umis0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = "center", echo=FALSE)
+opts_chunk$set(cache = TRUE, fig.align = "center", echo=FALSE)
 ```
 
 ## Unique Molecular Identifiers (UMIs) {#umichapter}
@@ -15,7 +15,7 @@ Thanks to Andreas Buness from [EMBL Monterotondo](https://www.embl.it/services/b
 
 Unique Molecular Identifiers are short (4-10bp) random barcodes added to transcripts during reverse-transcription. They enable sequencing reads to be assigned to individual transcript molecules and thus the removal of amplification noise and biases from scRNASeq data. 
 
-```{r intro-umi-protocol, out.width = '90%', fig.cap="UMI sequencing protocol"}
+```{r Umis1, out.width = '90%', fig.cap="UMI sequencing protocol"}
 knitr::include_graphics("figures/UMI-Seq-protocol.png")
 ```
 
@@ -34,7 +34,7 @@ After processing the reads from a UMI experiment, the following conventions are 
 2. Reads are sorted into separate files by cell barcode
 	+ For extremely large, shallow datasets, the cell barcode may be added to the read name as well to reduce the number of files.
 
-```{r intro-umi-reads, out.width = '90%', fig.cap="UMI sequencing reads, red lightning bolts represent different fragmentation locations"}
+```{r Umis2, out.width = '90%', fig.cap="UMI sequencing reads, red lightning bolts represent different fragmentation locations"}
 knitr::include_graphics("figures/UMI-Seq-reads.png")
 ```
 
@@ -51,7 +51,7 @@ In theory, every unique UMI-transcript pair should represent all reads originati
 3. __Same UMI does not necessarily mean same molecule__
 	+ Biases in UMI frequency and short UMIs can result in the same UMI being attached to different mRNA molecules from the same gene. Thus, the number of transcripts may be underestimated.
 
-```{r intro-umi-errors, out.width = '90%', fig.cap="Potential Errors in UMIs"}
+```{r Umis3, out.width = '90%', fig.cap="Potential Errors in UMIs"}
 knitr::include_graphics("figures/UMI-Seq-errors.png")
 ```
 
@@ -70,7 +70,7 @@ where N = total number of unique UMI barcodes and n = number of observed barcode
  
 An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content. 
 
-```{r intro-umi-amp, out.width = '60%', fig.cap="Per gene amplification rate"}
+```{r Umis4, out.width = '60%', fig.cap="Per gene amplification rate"}
 knitr::include_graphics("figures/UMI-Seq-amp.png")
 ```
 
@@ -85,7 +85,7 @@ Determining how to best process and use UMIs is currently an active area of rese
 
 Current UMI platforms (DropSeq, InDrop, ICell8) exhibit low and highly variable capture efficiency as shown in the figure below. 
 
-```{r intro-umi-capture, out.width = '70%', fig.cap="Variability in Capture Efficiency"}
+```{r Umis5, out.width = '70%', fig.cap="Variability in Capture Efficiency"}
 knitr::include_graphics("figures/UMI-Seq-capture.png")
 ```
 
@@ -93,7 +93,7 @@ This variability can introduce strong biases and it needs to be considered in do
 
 __Exercise 1__ We have provided you with UMI counts and read counts from induced pluripotent stem cells generated from three different individuals [@Tung2017-ba] (see: Chapter \@ref(exprs-qc) for details of this dataset).
 
-```{r, echo=TRUE, include=TRUE}
+```{r Umis6, echo=TRUE, include=TRUE}
 umi_counts <- read.table("data/tung/molecules.txt", sep = "\t")
 read_counts <- read.table("data/tung/reads.txt", sep = "\t")
 ```
@@ -103,7 +103,7 @@ Using this data:
 
 2. Determine the amplification rate: average number of reads per UMI.
 
-```{r, include=FALSE}
+```{r Umis7, include=FALSE}
 # Exercise 1
 # Part 1
 plot(colSums(umi_counts), colSums(umi_counts > 0), xlab="Total Molecules Detected", ylab="Total Genes Detected")

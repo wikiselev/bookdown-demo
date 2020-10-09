@@ -3,13 +3,13 @@ output: html_document
 ---
 ## Comparing/Combining scRNASeq datasets
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r projection0, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(knitr)
 library(googleVis)
-opts_chunk$set(fig.align="center", dev = 'png')
+opts_chunk$set(cache = TRUE, fig.align="center", dev = 'png', cache.lazy = FALSE)
 op <- options(gvis.plot.tag='chart')
 ```
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r projection1, echo=TRUE, message=FALSE, warning=FALSE}
 library(scater)
 library(SingleCellExperiment)
 ```
@@ -30,24 +30,24 @@ match in a database for a newly identified nucleotide or amino acid sequence. Th
 compare datasets of similar biological origin collected by different labs to ensure that the annotation and the analysis is
 consistent.
 
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="Label-centric dataset comparison can be used to compare the annotations of two different samples."}
+```{r projection2, echo=FALSE, merged_seurat.width = '80%', fig.cap="Label-centric dataset comparison can be used to compare the annotations of two different samples."}
 knitr::include_graphics("figures/CourseCompareTypes.png")
 ```
 
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="Label-centric dataset comparison can project cells from a new experiment onto an annotated reference."}
+```{r projection3, echo=FALSE, merged_seurat.width = '80%', fig.cap="Label-centric dataset comparison can project cells from a new experiment onto an annotated reference."}
 knitr::include_graphics("figures/CourseAtlasAssignment.png")
 ```
 
 The cross-dataset normalization approach can also be used to compare datasets of similar biological origin, unlike the label-centric approach it enables the join analysis of multiple datasets to facilitate the identification of rare cell-types which may to too sparsely sampled in each individual dataset to be reliably detected. However, cross-dataset normalization is not applicable to very large and diverse references since it assumes a significant portion of the biological variablility in each of the datasets overlaps with others.
 
 
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="Cross-dataset normalization enables joint-analysis of 2+ scRNASeq datasets."}
+```{r projection4, echo=FALSE, merged_seurat.width = '80%', fig.cap="Cross-dataset normalization enables joint-analysis of 2+ scRNASeq datasets."}
 knitr::include_graphics("figures/CourseCrossNorm.png")
 ```
 ### Datasets
 
 We will running these methods on two human pancreas datasets: [@Muraro2016-yk] and [@Segerstolpe2016-wc]. Since the pancreas has been widely studied, these datasets are well annotated.
-```{r}
+```{r projection5}
 muraro <- readRDS("data/pancreas/muraro.rds")
 segerstolpe <- readRDS("data/pancreas/segerstolpe.rds")
 ```
@@ -55,7 +55,7 @@ segerstolpe <- readRDS("data/pancreas/segerstolpe.rds")
 This data has already been formatted for scmap. Cell type labels must be stored in the `cell_type1` column of the `colData` slots, and gene ids that are consistent across both datasets must be stored in the `feature_symbol` column of the `rowData` slots.
 
 First, lets check our gene-ids match across both datasets:
-```{r}
+```{r projection6}
 sum(rowData(muraro)$feature_symbol %in% rowData(segerstolpe)$feature_symbol)/nrow(muraro)
 sum(rowData(segerstolpe)$feature_symbol %in% rowData(muraro)$feature_symbol)/nrow(segerstolpe)
 ```
@@ -64,14 +64,14 @@ genes in muraro. This is as expected because the segerstolpe dataset was more de
 However, it highlights some of the difficulties in comparing scRNASeq datasets.
 
 We can confirm this by checking the overall size of these two datasets.
-```{r}
+```{r projection7}
 dim(muraro)
 dim(segerstolpe)
 ```
 
 In addition, we can check the cell-type annotations for each of these dataset using the command below:
 
-```{r}
+```{r projection8}
 summary(factor(colData(muraro)$cell_type1))
 summary(factor(colData(segerstolpe)$cell_type1))
 ```
@@ -89,14 +89,14 @@ to uncover a novel cell-type among them (or a sub-type within the existing annot
 To simplify our demonstration analyses we will remove the small classes of unassigned cells, and the poor quality cells. We will retain the "unclassified endocrine" to
 see if any of these methods can elucidate what cell-type they belong to.
 
-```{r}
+```{r projection9}
 segerstolpe <- segerstolpe[,colData(segerstolpe)$cell_type1 != "unclassified"]
 segerstolpe <- segerstolpe[,colData(segerstolpe)$cell_type1 != "not applicable",]
 muraro <- muraro[,colData(muraro)$cell_type1 != "unclear"]
 ```
 ### Projecting cells onto annotated cell-types (scmap)
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r projection10, echo=TRUE, message=FALSE, warning=FALSE}
 library(scmap)
 set.seed(1234567)
 ```
@@ -110,25 +110,25 @@ clusters. Since we want to know whether PSCs and mesenchymal cells are synonymou
 other so we will build an index for each dataset. This requires first selecting the most informative features for the
 reference dataset.
 
-```{r}
+```{r projection11}
 muraro <- selectFeatures(muraro, suppress_plot = FALSE)
 ```
 
 Genes highlighted with the red colour will be used in the futher analysis (projection).
 
-```{r}
+```{r projection12}
 segerstolpe <- selectFeatures(segerstolpe, suppress_plot = FALSE)
 ```
 From the y-axis of these plots we can see that scmap uses a dropmerged_seurat-based feature selection method.
 
 Now calculate the cell-type index:
-```{r}
+```{r projection13}
 muraro <- indexCluster(muraro)
 segerstolpe <- indexCluster(segerstolpe)
 ```
 
 We can also visualize the index:
-```{r}
+```{r projection14}
 heatmap(as.matrix(metadata(muraro)$scmap_cluster_index))
 ```
 
@@ -138,7 +138,7 @@ __Exercise__
 Using the rowData of each dataset how many genes were selected as features in both datasets? What does this tell you abmerged_seurat these datasets?
 
 __Answer__
-```{r, include=FALSE, eval=TRUE}
+```{r projection15, include=FALSE, eval=TRUE}
 ans = sum(rowData(muraro)[rowData(muraro)$scmap_features, "feature_symbol"] %in% rowData(segerstolpe)[rowData(segerstolpe)$scmap_features, "feature_symbol"])
 print(ans)
 ```
@@ -148,7 +148,7 @@ print(ans)
 scmap computes the distance from each cell to each cell-type in the reference index, then applies an empirically derived threshold to determine which cells are assigned to the closest reference cell-type and which are unassigned. To account for differences in sequencing depth distance is calculated using the spearman correlation and cosine distance and only cells with a consistent assignment with both distances are returned as assigned.
 
 We will project the `segerstolpe` dataset to `muraro` dataset:
-```{r, warning=FALSE}
+```{r projection16, warning=FALSE}
 seger_to_muraro <- scmapCluster(
   projection = segerstolpe,
   index_list = list(
@@ -159,7 +159,7 @@ seger_to_muraro <- scmapCluster(
 
 and `muraro` onto `segerstolpe`
 
-```{r, warning=FALSE}
+```{r projection17, warning=FALSE}
 muraro_to_seger <- scmapCluster(
   projection = muraro,
   index_list = list(
@@ -170,18 +170,18 @@ muraro_to_seger <- scmapCluster(
 Note that in each case we are projecting to a single dataset but that this could be extended to any number of datasets for which we have computed indices.
 
 Now lets compare the original cell-type labels with the projected labels:
-```{r}
+```{r projection18}
 table(colData(muraro)$cell_type1, muraro_to_seger$scmap_cluster_labs)
 ```
 Here we can see that cell-types do map to their equivalents in segerstolpe, and importantly we see that all but one of the "mesenchymal" cells were assigned to the "PSC" class.
 
-```{r}
+```{r projection19}
 table(colData(segerstolpe)$cell_type1, seger_to_muraro$scmap_cluster_labs)
 ```
 Again we see cell-types match each other and that all but one of the "PSCs" match the "mesenchymal" cells providing strong evidence that these two annotations should be considered synonymous.
 
 We can also visualize these tables using a [Sankey diagram](https://developers.google.com/chart/interactive/docs/gallery/sankey):
-```{r results='asis', tidy=FALSE}
+```{r projection20, results='asis', tidy=FALSE}
 plot(getSankey(colData(muraro)$cell_type1,  muraro_to_seger$scmap_cluster_labs[,1], plot_height=400))
 ```
 
@@ -189,7 +189,7 @@ __Exercise__
 How many of the previously unclassified cells would be be able to assign to cell-types using scmap?
 
 __Answer__
-```{r, include=FALSE}
+```{r projection21, include=FALSE}
 t2 <- table(colData(segerstolpe)$cell_type1, seger_to_muraro$scmap_cluster_labs)
 seger_assigned <- sum(t2[c("unclassified endocrine"), 1:9])
 ```
@@ -201,7 +201,7 @@ cells). However, this process is stochastic so we must fix the random seed to en
 
 We have already performed feature selection for this dataset so we can go straight to building the index.
 
-```{r}
+```{r projection22}
 set.seed(193047)
 segerstolpe <- indexCell(segerstolpe)
 muraro <- indexCell(muraro)
@@ -213,12 +213,12 @@ number of clusters and the number of features used in each of these subclusterin
 dataset with the same or most similar pattern of cluster assignments.
 
 We can examine the cluster assignment patterns for the reference datasets using:
-```{r}
+```{r projection23}
 metadata(muraro)$scmap_cell_index$subclusters[1:5,1:5]
 ```
 
 To project and find the `w` nearest neighbours we use a similar command as before:
-```{r}
+```{r projection24}
 muraro_to_seger <- scmapCell(
   projection = muraro,
   index_list = list(
@@ -229,12 +229,12 @@ muraro_to_seger <- scmapCell(
 ```
 
 We can again look at the results:
-```{r}
+```{r projection25}
 muraro_to_seger$seger[[1]][,1:5]
 ```
 This shows the column number of the 5 nearest neighbours in segerstolpe to each of the cells in muraro. We could then calculate a pseudotime estimate, branch assignment, or other cell-level data by selecting the appropriate data from the colData of
 the segerstolpe data set. As a demonstration we will find the cell-type of the nearest neighbour of each cell.
-```{r}
+```{r projection26}
 cell_type_NN <- colData(segerstolpe)$cell_type1[muraro_to_seger$seger[[1]][1,]]
 head(cell_type_NN)
 ```
@@ -247,14 +247,14 @@ versions. First is a fully supervised method which assumes cell-types are known 
 Metaneighbour compares cell-types across datasets by building a cell-cell spearman correlation network. The method then tries to predict the label of each cell through weighted "votes" of its nearest-neighbours. Then scores the overall similarity between two clusters as the AUROC for assigning cells of typeA to typeB based on these weighted votes. AUROC of 1 would indicate all the cells of typeA were assigned to typeB before any other cells were, and an AUROC of 0.5 is what you would get if cells were being randomly assigned.
 
 Metanighbour is just a couple of R functions not a complete package so we have to load them using `source`
-```{r}
+```{r projection27}
 source("utils/2017-08-28-runMN-US.R")
 ```
 #### Prepare Data
 
 Metaneighbour requires all datasets to be combined into a single expression matrix prior to running:
 
-```{r}
+```{r projection28}
 is.common <- rowData(muraro)$feature_symbol %in% rowData(segerstolpe)$feature_symbol
 muraro <- muraro[is.common,]
 segerstolpe <- segerstolpe[match(rowData(muraro)$feature_symbol, rowData(segerstolpe)$feature_symbol),]
@@ -274,13 +274,13 @@ rownames(pheno) <- colnames(combined_logcounts)
 
 Metaneighbor includes a feature selection method to identify highly variable genes.
 
-```{r}
+```{r projection29}
 var.genes = get_variable_genes(combined_logcounts, pheno)
 ```
 
 Since Metaneighbor is much slower than `scmap`, we will down sample these datasets.
 
-```{r}
+```{r projection30}
 subset <- sample(1:nrow(pheno), 2000)
 combined_logcounts <- combined_logcounts[,subset]
 pheno <- pheno[subset,]
@@ -292,7 +292,7 @@ Now we are ready to run Metaneighbor. First we will run the unsupervised
 version that will let us see which cell-types are most similar across the
 two datasets.
 
-```{r}
+```{r projection31}
 unsup <- run_MetaNeighbor_US(var.genes, combined_logcounts, unique(pheno$Celltype), pheno)
 heatmap(unsup)
 ```
@@ -306,22 +306,22 @@ Learning the biological/techncial effects is done with either singular value dec
 
 mnnCorrect also assumes you've already subset your expression matricies so that they contain identical genes in the same order, fortunately we have already done with for our datasets when we set up our data for Metaneighbor.
 
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="mnnCorrect batch/dataset effect correction. From Haghverdi et al. 2017"}
+```{r projection32, echo=FALSE, merged_seurat.width = '80%', fig.cap="mnnCorrect batch/dataset effect correction. From Haghverdi et al. 2017"}
 knitr::include_graphics("figures/mnnCorrectDiagramCropped.png")
 ```
-```{r}
+```{r projection33}
 require("scran")
 # mnnCorrect will take several minutes to run
 corrected <- mnnCorrect(logcounts(muraro), logcounts(segerstolpe), k=20, sigma=1, pc.approx=TRUE, subset.row=var.genes, svd.dim=3)
 ```
 First let's check that we found a sufficient number of mnn pairs, mnnCorrect returns a list of dataframe with the mnn pairs for each dataset.
-```{r}
+```{r projection34}
 dim(corrected$pairs[[1]]) # muraro -> others
 dim(corrected$pairs[[2]]) # seger -> others
 ```
 The first and second columns contain the cell column IDs and the third column contains a number indicating which dataset/batch the column 2 cell belongs to. In our case,
 we are only comparing two datasets so all the mnn pairs have been assigned to the second table and the third column contains only ones
-```{r}
+```{r projection35}
 head(corrected$pairs[[2]])
 total_pairs <- nrow(corrected$pairs[[2]])
 n_unique_seger <- length(unique((corrected$pairs[[2]][,1])))
@@ -334,7 +334,7 @@ __Exercise__
 Which cell-types had mnns across these datasets? Should we increase/decrease k?
 
 __Answer__
-```{r, include=FALSE, eval=FALSE}
+```{r projection36, include=FALSE, eval=FALSE}
 seger_matched_cells <- unique((corrected$pairs[[2]][,1]))
 summary(factor(colData(segerstolpe)$cell_type1[seger_matched_cells]))
 
@@ -344,7 +344,7 @@ summary(factor(colData(muraro)$cell_type1[muraro_matched_cells]))
 
 Now we could create a combined dataset to jointly analyse these data. However, the corrected data is no longer counts and usually will contain negative expression values thus some analysis tools may no longer be appropriate. For simplicity let's just plot a joint TSNE.
 
-```{r}
+```{r projection37}
 require("Rtsne")
 joint_expression_matrix <- cbind(corrected$corrected[[1]], corrected$corrected[[2]])
 
@@ -365,7 +365,7 @@ Seurat uses gene-gene correlations to identify the biological structure in the d
 Note because Seurat uses up a lot of library space you will have to restart your R-session to load it, and the plots/merged_seuratput won't be automatically generated on this page.
 
 Reload the data:
-```{r, eval=FALSE}
+```{r projection38, eval=FALSE}
 muraro <- readRDS("data/pancreas/muraro.rds")
 segerstolpe <- readRDS("data/pancreas/segerstolpe.rds")
 segerstolpe <- segerstolpe[,colData(segerstolpe)$cell_type1 != "unclassified"]
@@ -382,7 +382,7 @@ identical(rownames(segerstolpe), rownames(muraro))
 
 First we will reformat our data into Seurat objects:
 
-```{r, eval=FALSE}
+```{r projection39, eval=FALSE}
 require("Seurat")
 set.seed(4719364)
 muraro_seurat <- CreateSeuratObject(raw.data=assays(muraro)[["normcounts"]]) # raw counts aren't available for muraro
@@ -394,7 +394,7 @@ seger_seurat@meta.data[, "dataset"] <- 2
 seger_seurat@meta.data[, "celltype"] <- paste("s",colData(segerstolpe)$cell_type1, sep="-")
 ```
 Next we must normalize, scale and identify highly variable genes for each dataset:
-```{r, eval=FALSE}
+```{r projection40, eval=FALSE}
 muraro_seurat <- NormalizeData(object=muraro_seurat)
 muraro_seurat <- ScaleData(object=muraro_seurat)
 muraro_seurat <- FindVariableGenes(object=muraro_seurat, do.plot=TRUE)
@@ -404,22 +404,22 @@ seger_seurat <- ScaleData(object=seger_seurat)
 seger_seurat <- FindVariableGenes(object=seger_seurat, do.plot=TRUE)
 ```
 
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="muraro variable genes"}
+```{r projection41, echo=FALSE, merged_seurat.width = '80%', fig.cap="muraro variable genes"}
 knitr::include_graphics("figures/muraro_seurat_hvg.png")
 ```
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="segerstolpe variable genes"}
+```{r projection42, echo=FALSE, merged_seurat.width = '80%', fig.cap="segerstolpe variable genes"}
 knitr::include_graphics("figures/seger_seurat_hvg.png")
 ```
 Eventhough Seurat corrects for the relationship between dispersion and mean expression, it doesn't use the corrected value when ranking features. Compare the results of the command below with the results in the plots above:
 
-```{r, eval=FALSE}
+```{r projection43, eval=FALSE}
 head(muraro_seurat@hvg.info, 50)
 head(seger_seurat@hvg.info, 50)
 ```
 
 But we will follow their example and use the top 2000 most dispersed genes withmerged_seurat correcting for mean expression from each dataset anyway.
 
-```{r, eval=FALSE}
+```{r projection44, eval=FALSE}
 gene.use <- union(rownames(x = head(x = muraro_seurat@hvg.info, n = 2000)),
                   rownames(x = head(x = seger_seurat@hvg.info, n = 2000)))
 
@@ -429,7 +429,7 @@ __Exercise__
 Find the features we would use if we selected the top 2000 most dispersed after scaling by mean. (Hint: consider the `order` function)
 
 __Answer__
-```{r, include=FALSE, eval=FALSE}
+```{r projection45, include=FALSE, eval=FALSE}
 seger_hvg <- seger_seurat@hvg.info
 seger_hvg <- seger_hvg[order(seger_hvg[,3], decreasing=TRUE),]
 muraro_hvg <- seger_seurat@hvg.info
@@ -442,16 +442,16 @@ Now we will run CCA to find the shared correlation structure for these two datas
 
 Note to speed up the calculations we will be using only the top 5 dimensions but ideally you would consider many more and then select the top most informative ones using `DimHeatmap`.
 
-```{r, eval=FALSE}
+```{r projection46, eval=FALSE}
 merged_seurat <- RunCCA(object=muraro_seurat, object2=seger_seurat, genes.use=gene.use, add.cell.id1="m", add.cell.id2="s", num.cc = 5)
 DimPlot(object = merged_seurat, reduction.use = "cca", group.by = "dataset", pt.size = 0.5) # Before correcting
 ```
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="Before Aligning"}
+```{r projection47, echo=FALSE, merged_seurat.width = '80%', fig.cap="Before Aligning"}
 knitr::include_graphics("figures/cca_before.png")
 ```
 To identify dataset specific cell-types we compare how well cells are 'explained' by CCA vs dataset-specific principal component analysis.
 
-```{r, eval=FALSE}
+```{r projection48, eval=FALSE}
 merged_seurat <- CalcVarExpRatio(object = merged_seurat, reduction.type = "pca", grouping.var = "dataset", dims.use = 1:5)
 merged.all <- merged_seurat
 merged_seurat <- SubsetData(object=merged_seurat, subset.name="var.ratio.pca", accept.low = 0.5) # CCA > 1/2 as good as PCA
@@ -461,12 +461,12 @@ summary(factor(merged.discard@meta.data$celltype)) # check the cell-type of the 
 ```
 Here we can see that despite both datasets containing endothelial cells, almost all of them have been discarded as "dataset-specific". Now we can align the datasets:
 
-```{r, eval=FALSE}
+```{r projection49, eval=FALSE}
 merged_seurat <- AlignSubspace(object = merged_seurat, reduction.type = "cca", grouping.var = "dataset", dims.align = 1:5)
 DimPlot(object = merged_seurat, reduction.use = "cca.aligned", group.by = "dataset", pt.size = 0.5) # After aligning subspaces
 ```
 
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="After Aligning"}
+```{r projection50, echo=FALSE, merged_seurat.width = '80%', fig.cap="After Aligning"}
 knitr::include_graphics("figures/cca_after.png")
 ```
 
@@ -474,12 +474,12 @@ __Exercise__
 Compare the results for if you use the features after scaling dispersions.
 
 __Answer__
-```{r, eval=FALSE, include=FALSE}
+```{r projection51, eval=FALSE, include=FALSE}
 merged_seurat <- RunCCA(object=muraro_seurat, object2=seger_seurat, genes.use=gene.use.scaled, add.cell.id1="m", add.cell.id2="s", num.cc = 5)
 merged_seurat <- AlignSubspace(object = merged_seurat, reduction.type = "cca", grouping.var = "dataset", dims.align = 1:5)
 DimPlot(object = merged_seurat, reduction.use = "cca.aligned", group.by = "dataset", pt.size = 0.5) # After aligning subspaces
 ```
-```{r, echo=FALSE, merged_seurat.width = '80%', fig.cap="After Aligning"}
+```{r projection52, echo=FALSE, merged_seurat.width = '80%', fig.cap="After Aligning"}
 knitr::include_graphics("figures/cca_after2.png")
 ```
 
@@ -491,6 +491,6 @@ Use the clustering methods we previously covered on the combined datasets. Do yo
 
 ### sessionInfo()
 
-```{r echo=FALSE}
+```{r projection53, echo=FALSE}
 sessionInfo()
 ```

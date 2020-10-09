@@ -5,11 +5,11 @@ output: html_document
 
 ## DE in a real dataset
 
-```{r, echo=FALSE}
+```{r de-real0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = "center")
+opts_chunk$set(cache = TRUE, fig.align = "center")
 ```
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r de-real1, echo=TRUE, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
 library(edgeR)
 library(monocle)
@@ -25,7 +25,7 @@ For this experiment bulk RNA-seq data for each cell-line was generated in additi
 differentially expressed genes identified using standard methods on the respective bulk data as the ground truth for evaluating the
 accuracy of each single-cell method. To save time we have pre-computed these for you. You can run the commands below to load these data.
 
-```{r}
+```{r de-real2}
 DE <- read.table("data/tung/TPs.txt")
 notDE <- read.table("data/tung/TNs.txt")
 GroundTruth <- list(
@@ -36,7 +36,7 @@ GroundTruth <- list(
 
 This ground truth has been produce for the comparison of individual NA19101 to NA19239. Now load the respective single-cell data:
 
-```{r}
+```{r de-real3}
 molecules <- read.table("data/tung/molecules.txt", sep = "\t")
 anno <- read.table("data/tung/annotation.txt", sep = "\t", header = TRUE)
 keep <- anno[,1] == "NA19101" | anno[,1] == "NA19239"
@@ -62,13 +62,13 @@ ones. The most commonly used non-parametric test is the
 
 The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experession and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros). Another issue with the KS-test is that it can be very sensitive for large sample sizes and thus it may end up as significant even though the magnitude of the difference is very small.
 
-```{r ks-statistic, echo=FALSE, out.width = '60%', fig.cap="Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))"}
+```{r de-real4, echo=FALSE, out.width = '60%', fig.cap="Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))"}
 knitr::include_graphics("figures/KS2_Example.png")
 ```
 
 Now run the test:
 
-```{r, message=FALSE, warning=FALSE}
+```{r de-real5, message=FALSE, warning=FALSE}
 pVals <- apply(
     norm, 1, function(x) {
         ks.test(
@@ -84,7 +84,7 @@ This code "applies" the function to each row (specified by 1) of the expression 
 
 #### Evaluating Accuracy
 
-```{r}
+```{r de-real6}
 sigDE <- names(pVals)[pVals < 0.05]
 length(sigDE) 
 # Number of KS-DE genes
@@ -96,7 +96,7 @@ sum(GroundTruth$notDE %in% sigDE)
 
 As you can see many more of our ground truth negative genes were identified as DE by the KS-test (false positives) than ground truth positive genes (true positives), however this may be due to the larger number of notDE genes thus we typically normalize these counts as the True positive rate (TPR), TP/(TP + FN), and False positive rate (FPR), FP/(FP+TP).
 
-```{r}
+```{r de-real7}
 tp <- sum(GroundTruth$DE %in% sigDE)
 fp <- sum(GroundTruth$notDE %in% sigDE)
 tn <- sum(GroundTruth$notDE %in% names(pVals)[pVals >= 0.05])
@@ -109,7 +109,7 @@ Now we can see the TPR is much higher than the FPR indicating the KS test is ide
 
 So far we've only evaluated the performance at a single significance threshold. Often it is informative to vary the threshold and evaluate performance across a range of values. This is then plotted as a receiver-operating-characteristic curve (ROC) and a general accuracy statistic can be calculated as the area under this curve (AUC). We will use the ROCR package to facilitate this plotting.
 
-```{r ks-roc-plot, fig.cap="ROC curve for KS-test."}
+```{r de-real8, fig.cap="ROC curve for KS-test."}
 # Only consider genes for which we know the ground truth
 pVals <- pVals[names(pVals) %in% GroundTruth$DE | 
                names(pVals) %in% GroundTruth$notDE] 
@@ -123,7 +123,7 @@ aucObj@y.values[[1]] # AUC
 ```
 Finally to facilitate the comparisons of other DE methods let's put this code into a function so we don't need to repeat it:
 
-```{r}
+```{r de-real9}
 DE_Quality_AUC <- function(pVals) {
     pVals <- pVals[names(pVals) %in% GroundTruth$DE | 
                    names(pVals) %in% GroundTruth$notDE]
@@ -140,7 +140,7 @@ DE_Quality_AUC <- function(pVals) {
 
 The Wilcox-rank-sum test is another non-parametric test, but tests specifically if values in one group are greater/less than the values in the other group. Thus it is often considered a test for difference in median expression between two groups; whereas the KS-test is sensitive to any change in distribution of expression values.
 
-```{r wilcox-plot, fig.cap="ROC curve for Wilcox test.", message=FALSE, warning=FALSE}
+```{r de-real10, fig.cap="ROC curve for Wilcox test.", message=FALSE, warning=FALSE}
 pVals <- apply(
     norm, 1, function(x) {
         wilcox.test(
@@ -158,7 +158,7 @@ DE_Quality_AUC(pVals)
 
 We've already used edgeR for differential expression in Chapter \@ref(dealing-with-confounders). edgeR is based on a negative binomial model of gene expression and uses a generalized linear model (GLM) framework, the enables us to include other factors such as batch to the model.
 
-```{r edger-plot, fig.cap="ROC curve for edgeR.", message=FALSE}
+```{r de-real11, fig.cap="ROC curve for edgeR.", message=FALSE}
 dge <- DGEList(
     counts = counts, 
     norm.factors = rep(1, length(counts[1,])), 
@@ -180,7 +180,7 @@ DE_Quality_AUC(pVals)
 
 [Monocle](https://bioconductor.org/packages/release/bioc/html/monocle.html) can use several different models for DE. For count data it recommends the Negative Binomial model (negbinomial.size). For normalized data it recommends log-transforming it then using a normal distribution (gaussianff). Similar to edgeR this method uses a GLM framework so in theory can account for batches, however in practice the model fails for this dataset if batches are included.
 
-```{r Monocle-plot, fig.cap="ROC curve for Monocle.", message=FALSE, warning=FALSE}
+```{r de-real12, fig.cap="ROC curve for Monocle.", message=FALSE, warning=FALSE}
 pd <- data.frame(group = group, batch = batch)
 rownames(pd) <- colnames(counts)
 pd <- new("AnnotatedDataFrame", data = pd)
@@ -202,7 +202,7 @@ DE_Quality_AUC(pVals)
 __Exercise__: Compare the results using the negative binomial model on counts and those from using the normal/gaussian model (`gaussianff()`) on log-transformed normalized counts.
 
 __Answer__:
-```{r Monocle-plot2, fig.cap="ROC curve for Monocle-gaussian.", message=FALSE, echo=FALSE, warning=FALSE}
+```{r de-real13, fig.cap="ROC curve for Monocle-gaussian.", message=FALSE, echo=FALSE, warning=FALSE}
 pd <- data.frame(group = group, batch = batch)
 rownames(pd) <- colnames(norm)
 pd <- new("AnnotatedDataFrame", data = pd)
@@ -226,7 +226,7 @@ DE_Quality_AUC(pVals)
 
 [MAST](https://bioconductor.org/packages/release/bioc/html/MAST.html) is based on a zero-inflated negative binomial model. It tests for differential expression using a hurdle model to combine tests of discrete (0 vs not zero) and continuous (non-zero values) aspects of gene expression. Again this uses a linear modelling framework to enable complex models to be considered.
 
-```{r MAST-plot, fig.cap="ROC curve for MAST.", message=FALSE}
+```{r de-real14, fig.cap="ROC curve for MAST.", message=FALSE}
 log_counts <- log(counts + 1) / log(2)
 fData <- data.frame(names = rownames(log_counts))
 rownames(fData) <- rownames(log_counts);
@@ -258,7 +258,7 @@ These methods are too slow to run today but we encourage you to try them out on 
 
 [BPSC](https://academic.oup.com/bioinformatics/article/32/14/2128/2288270/Beta-Poisson-model-for-single-cell-RNA-seq-data) uses the Poisson-Beta model of single-cell gene expression, which we discussed in the previous chapter, and combines it with generalized linear models which we've already encountered when using edgeR. BPSC performs comparisons of one or more groups to a reference group ("control") and can include other factors such as batches in the model.
 
-```{r, message=FALSE, eval=FALSE}
+```{r de-real15, message=FALSE, eval=FALSE}
 library(BPSC)
 bpsc_data <- norm[,batch=="NA19101.r1" | batch=="NA19239.r1"]
 bpsc_group = group[batch=="NA19101.r1" | batch=="NA19239.r1"]
@@ -276,7 +276,7 @@ DE_Quality_AUC(pVals)
 ### SCDE
 [SCDE](http://hms-dbmi.github.io/scde/) is the first single-cell specific DE method. It fits a zero-inflated negative binomial model to expression data using Bayesian statistics. The usage below tests for differences in mean expression of individual genes across groups but recent versions include methods to test for differences in mean expression or dispersion of groups of genes, usually representing a pathway.
 
-```{r, eval=FALSE}
+```{r de-real16, eval=FALSE}
 library(scde)
 cnts <- apply(
     counts,
@@ -320,6 +320,6 @@ DE_Quality_AUC(pVals)
 
 ### sessionInfo()
 
-```{r echo=FALSE}
+```{r de-real17, echo=FALSE}
 sessionInfo()
 ```
