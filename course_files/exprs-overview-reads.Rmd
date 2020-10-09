@@ -4,7 +4,7 @@ output: html_document
 
 ## Data visualization (Reads)
 
-```{r, message=FALSE, warning=FALSE}
+```{r exprs-over-read0, message=FALSE, warning=FALSE}
 library(scater)
 options(stringsAsFactors = FALSE)
 reads <- readRDS("data/tung/reads.rds")
@@ -12,12 +12,12 @@ reads.qc <- reads[rowData(reads)$use, colData(reads)$use]
 endog_genes <- !rowData(reads.qc)$is_feature_control
 ```
 
-```{r, echo=FALSE}
+```{r exprs-over-read1, echo=FALSE}
 library(knitr)
-opts_chunk$set(out.width='90%', fig.align = 'center')
+opts_chunk$set(cache = TRUE, out.width='90%', fig.align = 'center')
 ```
 
-```{r expr-overview-pca-before-qc-reads1, fig.cap = "PCA plot of the tung data"}
+```{r exprs-over-read2, fig.cap = "PCA plot of the tung data"}
 tmp <- runPCA(
   reads[endog_genes, ],
   exprs_values = "counts"
@@ -30,7 +30,7 @@ plotPCA(
 )
 ```
 
-```{r expr-overview-pca-before-qc-reads2, fig.cap = "PCA plot of the tung data"}
+```{r exprs-over-read3, fig.cap = "PCA plot of the tung data"}
 tmp <- runPCA(
   reads[endog_genes, ],
   exprs_values = "logcounts_raw"
@@ -43,7 +43,7 @@ plotPCA(
 )
 ```
 
-```{r expr-overview-pca-after-qc-reads, fig.cap = "PCA plot of the tung data"}
+```{r exprs-over-read4, fig.cap = "PCA plot of the tung data"}
 tmp <- runPCA(
   reads.qc[endog_genes, ],
   exprs_values = "logcounts_raw"
@@ -56,7 +56,7 @@ plotPCA(
 )
 ```
 
-```{r expr-overview-tsne-before-qc-reads, fig.cap = "tSNE map of the tung data"}
+```{r exprs-over-read5, fig.cap = "tSNE map of the tung data"}
 set.seed(123456)
 tmp <- runTSNE(
     reads[endog_genes, ],
@@ -71,7 +71,7 @@ plotTSNE(
 )
 ```
 
-```{r expr-overview-tsne-after-qc-reads, fig.cap = "tSNE map of the tung data"}
+```{r exprs-over-read6, fig.cap = "tSNE map of the tung data"}
 set.seed(123456)
 tmp <- runTSNE(
     reads.qc[endog_genes, ],
@@ -86,7 +86,7 @@ plotTSNE(
 )
 ```
 
-```{r expr-overview-tsne-after-qc-exercise2-1, fig.cap = "tSNE map of the tung data (perplexity = 10)", echo=FALSE}
+```{r exprs-over-read7, fig.cap = "tSNE map of the tung data (perplexity = 10)", echo=FALSE}
 set.seed(123456)
 tmp <- runTSNE(
     reads.qc[endog_genes, ],
@@ -101,7 +101,7 @@ plotTSNE(
 )
 ```
 
-```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the tung data (perplexity = 200)", echo=FALSE}
+```{r exprs-over-read8, fig.cap = "tSNE map of the tung data (perplexity = 200)", echo=FALSE}
 set.seed(123456)
 tmp <- runTSNE(
     reads.qc[endog_genes, ],
@@ -116,6 +116,6 @@ plotTSNE(
 )
 ```
 
-```{r}
+```{r exprs-over-read9}
 sessionInfo()
 ```

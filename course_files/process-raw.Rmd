@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-```{r process-raw0, include=FALSE, cache=TRUE, cache.extra = list(R.version, sessionInfo())}
+```{r Process-raw0, include=FALSE, cache=TRUE, cache.extra = list(R.version, sessionInfo())}
 library(knitr)
 opts_chunk$set(cache=TRUE, cache.extra = list(R.version, sessionInfo()))
 ```
@@ -19,7 +19,7 @@ Thus reads will be mapped as if they are single-end sequenced despite actually
 being paired end. 
 
 FastQ files have the format:
-```{bash process-raw1, eval=FALSE}
+```{Process-raw1, eval=FALSE}
 >ReadID
 READ SEQUENCE
 +
@@ -59,7 +59,7 @@ Alignment rows employ a standard format with the following columns:
 
 BAM/SAM files can be converted to the other format using 'samtools':
 
-```{bash process-raw2, eval=FALSE}
+```{bash Process-raw2, eval=FALSE}
 samtools view -S -b file.sam > file.bam
 samtools view -h file.bam > file.sam
 ```
@@ -77,7 +77,7 @@ multi-mapping reads first sort by read name and remove secondary alignments
 using samtools. [Picard](https://broadinstitute.github.io/picard/index.html) 
 also contains a method for converting BAM to FastQ files. 
 
-```{bash process-raw3, eval=FALSE}
+```{bash Process-raw3, eval=FALSE}
 # sort reads by name
 samtools sort -n original.bam -o sorted_by_name.bam
 # remove secondary alignments
@@ -99,7 +99,7 @@ Alternatively, you may pre-download the correct reference either from metadata i
 of the CRAM file, or from talking to whomever generated the CRAM and specify that file using '-T'
 Thus we recommend setting a specific cache location prior to doing this:
 
-```{bash process-raw4, eval=FALSE}
+```{bash Process-raw4, eval=FALSE}
 export REF_CACHE=/path_to/cache_directory_for_reference_genome
 samtools view -b -h -T reference_genome.fasta file.cram -o file.bam
 samtools view -C -h -T reference_genome.fasta file.bam -o file.cram
@@ -112,7 +112,7 @@ are from the correct sample. 'less' and 'more' can be used to inspect any text f
 By "pipe-ing" the output of samtools view into these commands using '|' we check each of these file types without having to save
 multiple copies of each file.
 
-```{bash process-raw5, eval=FALSE}
+```{bash Process-raw5, eval=FALSE}
 less file.txt
 more file.txt
 # counts the number of lines in file.txt
@@ -137,7 +137,7 @@ by entering running the command "naked" - e.g. 'samtools view', 'bedtools'
 
 
 __Answer__
-```{bash process-raw6, eval=TRUE, include=FALSE}
+```{bash Process-raw6, eval=TRUE, include=FALSE}
 samtools view -T data/2000_reference.transcripts.fa -H data/EXAMPLE.cram | more
 samtools view -T data/2000_reference.transcripts.fa -f 4 data/EXAMPLE.cram | wc -l # unmapped
 samtools view -T data/2000_reference.transcripts.fa -F 260 data/EXAMPLE.cram | wc -l # mapped
@@ -188,7 +188,7 @@ for any non-standard sequences added.
 There is no standardized way to do this. So below is our custom perl script for creating a gtf and fasta file for ERCCs which can be appended to the genome. You may also need to alter a gtf file to deal with repetitive elements in introns when/if you want to quantify intronic reads. Any scripting language or even 'awk' and/or some text editors can be used to do this relatively efficiently, but they are beyond the scope of this course. 
 
 
-```{bash process-raw7, eval=FALSE}
+```{bash Process-raw7, eval=FALSE}
 # Converts the Annotation file from 
 # https://www.thermofisher.com/order/catalog/product/4456740 to 
 # gtf and fasta files that can be added to existing genome fasta & gtf files.
@@ -244,11 +244,11 @@ the expected barcodes and assign the associated reads to the closest cell-barcod
 
 We have [publicly available](https://github.com/tallulandrews/scRNASeqPipeline) perl scripts capable of demultiplexing any scRNASeq data with a single cell-barcode with or without UMIs for plate-based protocols. These can be used as so:
 
-```{bash process-raw8, eval=TRUE}
+```{bash Process-raw8, eval=TRUE}
 perl utils/1_Flexible_UMI_Demultiplexing.pl data/10cells_read1.fq data/10cells_read2.fq "C12U8" data/10cells_barcodes.txt 2 Ex
 ```
 
-```{bash process-raw9, eval=TRUE}
+```{bash Process-raw9, eval=TRUE}
 perl utils/1_Flexible_FullTranscript_Demultiplexing.pl data/10cells_read1.fq data/10cells_read2.fq "start" 12 data/10cells_barcodes.txt 2 Ex
 ```
 
@@ -271,7 +271,7 @@ barcode and try to find a "break point" between bigger libraries which are
 cells + some background and smaller libraries assumed to be purely background. 
 Let's load some example simulated data which contain both large and small cells:
 
-```{r process-raw10}
+```{r Process-raw10}
 umi_per_barcode <- read.table("data/droplet_id_example_per_barcode.txt.gz")
 truth <- read.delim("data/droplet_id_example_truth.gz", sep=",")
 ```
@@ -282,7 +282,7 @@ To simplify calculations for this section exclude all barcodes
 with fewer than 10 total molecules.
 
 __Answer__
-```{r process-raw11, include=FALSE}
+```{r Process-raw11, include=FALSE}
 dim(umi_per_barcode)[1]
 dim(truth)[1]
 umi_per_barcode <- umi_per_barcode[umi_per_barcode[,2] > 10,]
@@ -291,7 +291,7 @@ umi_per_barcode <- umi_per_barcode[umi_per_barcode[,2] > 10,]
 One approach is to look for the inflection point where the total molecules per 
 barcode suddenly drops: 
 
-```{r process-raw12}
+```{r Process-raw12}
 barcode_rank <- rank(-umi_per_barcode[,2])
 plot(barcode_rank, umi_per_barcode[,2], xlim=c(1,8000))
 ```
@@ -299,7 +299,7 @@ plot(barcode_rank, umi_per_barcode[,2], xlim=c(1,8000))
 Here we can see an roughly exponential curve of library sizes, so to make
 things simpler lets log-transform them.
 
-```{r process-raw13}
+```{r Process-raw13}
 log_lib_size <- log10(umi_per_barcode[,2])
 plot(barcode_rank, log_lib_size, xlim=c(1,8000))
 ```
@@ -307,7 +307,7 @@ That's better, the "knee" in the distribution is much more pronounced. We
 could manually estimate where the "knee" is but it much more reproducible to
 algorithmically identify this point.
 
-```{r process-raw14}
+```{r Process-raw14}
 # inflection point
 o <- order(barcode_rank)
 log_lib_size <- log_lib_size[o]
@@ -329,7 +329,7 @@ c(TPR, Recall)
 
 Another is to fix a mixture model and find where the higher and lower distributions intersect. However, data may not fit the assumed distributions very well:
 
-```{r process-raw15}
+```{r Process-raw15}
 set.seed(-92497)
 # mixture model
 require("mixtools")
@@ -348,7 +348,7 @@ Identify cells using this split point and calculate the TPR and Recall.
 
 __Answer__
 
-```{r process-raw16, include=FALSE}
+```{r Process-raw16, include=FALSE}
 cells <- umi_per_barcode[umi_per_barcode[,2] > 10^split,1]
 
 TPR <- sum(cells %in% truth[,1])/length(cells)
@@ -359,7 +359,7 @@ c(TPR, Recall)
 A third, used by CellRanger, assumes a ~10-fold range of library sizes for real 
 cells and estimates this range using the expected number of cells.
 
-```{r process-raw17}
+```{r Process-raw17}
 n_cells <- length(truth[,1])
 # CellRanger
 totals <- umi_per_barcode[,2]
@@ -373,7 +373,7 @@ __Exercise__
 Identify cells using this threshodl and calculate the TPR and Recall.
 
 __Answer__
-```{r process-raw18, include=FALSE}
+```{r Process-raw18, include=FALSE}
 cells <- umi_per_barcode[umi_per_barcode[,2] > thresh,1]
 
 TPR <- sum(cells %in% truth[,1])/length(cells)
@@ -393,7 +393,7 @@ cells in highly diverse samples.
 Below we have provided code for how this method is currently run:
 (We will update this page when the method is officially released)
 
-```{r process-raw19, eval=FALSE}
+```{r Proces-raw19, eval=FALSE}
 require("Matrix")
 raw.counts <- readRDS("data/droplet_id_example.rds")
 

@@ -4,17 +4,17 @@ knit: bookdown::preview_chapter
 
 ## Identifying confounding factors (Reads)
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r confounders-read0, echo=FALSE, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
 library(knitr)
 options(stringsAsFactors = FALSE)
-opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
+opts_chunk$set(cache = TRUE, out.width='90%', fig.align = 'center', echo=FALSE)
 reads <- readRDS("data/tung/reads.rds")
 reads.qc <- reads[rowData(reads)$use, colData(reads)$use]
 endog_genes <- !rowData(reads.qc)$is_feature_control
 ```
 
-```{r confound-pca-reads, fig.cap = "PCA plot of the tung data"}
+```{r confounders-read1, fig.cap = "PCA plot of the tung data"}
 tmp <- runPCA(
   reads.qc[endog_genes, ],
   exprs_values = "logcounts_raw"
@@ -26,7 +26,7 @@ plotPCA(
 )
 ```
 
-```{r confound-find-pcs-total-features-reads, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
+```{r confounders-read2, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
 logcounts(reads.qc) <- assay(reads.qc, "logcounts_raw")
 plotExplanatoryPCs(
   reads.qc[endog_genes, ],
@@ -35,7 +35,7 @@ plotExplanatoryPCs(
 logcounts(reads.qc) <- NULL
 ```
 
-```{r confound-find-expl-vars-reads, fig.cap = "Explanatory variables"}
+```{r confounders-read3, fig.cap = "Explanatory variables"}
 plotExplanatoryVariables(
     reads.qc[endog_genes, ],
     exprs_values = "logcounts_raw",
@@ -50,6 +50,6 @@ plotExplanatoryVariables(
 )
 ```
 
-```{r}
+```{r confounders-read4}
 sessionInfo()
 ```

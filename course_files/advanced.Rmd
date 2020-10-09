@@ -2,6 +2,11 @@
 output: html_document
 ---
 
+```{r advanced0, include=FALSE, cache=TRUE, cache.extra = list(R.version, sessionInfo())}
+library(knitr)
+opts_chunk$set(cache=TRUE, cache.extra = list(R.version, sessionInfo()))
+```
+
 # Advanced exercises
 
 For the final part of the course we would like you to work on more open ended problems. The goal is to carry out the type of analyses that you would be doing for an actual research project. 
@@ -27,7 +32,7 @@ The `MultiAssayExperiment` also contains the phenotypic data (in the `colData` s
 
 Here we will show you how to create an `SCE` from a `MultiAssayExperiment` object. For example, if you download `Shalek2013` dataset you will be able to create an `SCE` using the following code:
 
-```{r, message=FALSE, warning=FALSE, eval=FALSE}
+```{r advanced1, message=FALSE, warning=FALSE, eval=FALSE}
 library(MultiAssayExperiment)
 library(SummarizedExperiment)
 library(scater)

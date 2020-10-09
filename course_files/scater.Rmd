@@ -6,7 +6,7 @@ output: html_document
 
 ```{r scater0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = "center", cache=TRUE, cache.extra = list(R.version, sessionInfo()))
+opts_chunk$set(cache = TRUE, fig.align = "center")
 set.seed(1)
 ```
 

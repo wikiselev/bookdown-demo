@@ -6,9 +6,9 @@ output: html_document
 
 ## Clustering Introduction
 
-```{r, echo=FALSE}
+```{r clust-intro0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = "center", echo=FALSE)
+opts_chunk$set(cache = TRUE, fig.align = "center", echo=FALSE)
 ```
 
 Once we have normalized the data and removed confounders we can carry out analyses that are relevant to the biological questions at hand. The exact nature of the analysis depends on the dataset. Nevertheless, there are a few aspects that are useful in a wide range of contexts and we will be discussing some of them in the next few chapters. We will start with the clustering of scRNA-seq data.
@@ -46,11 +46,11 @@ top-down approach. In the former case, each cell is initially assigned to
 its own cluster and pairs of clusters are subsequently merged to
 create a hieararchy:
 
-```{r clust-hierarch-raw, out.width = '30%', fig.cap="Raw data"}
+```{r clust-intro1, out.width = '30%', fig.cap="Raw data"}
 knitr::include_graphics("figures/hierarchical_clustering1.png")
 ```
 
-```{r clust-hierarch-dendr, out.width = '50%', fig.cap="The hierarchical clustering dendrogram"}
+```{r clust-intro2, out.width = '50%', fig.cap="The hierarchical clustering dendrogram"}
 knitr::include_graphics("figures/hierarchical_clustering2.png")
 ```
 
@@ -65,7 +65,7 @@ In [_k_-means clustering](https://en.wikipedia.org/wiki/K-means_clustering), the
 different clusters. In an iterative manner, cluster centers are
 assigned and each cell is assigned to its nearest cluster:
 
-```{r clust-k-means, out.width = '100%', fig.cap="Schematic representation of the k-means clustering"}
+```{r clust-intro3, out.width = '100%', fig.cap="Schematic representation of the k-means clustering"}
 knitr::include_graphics("figures/k-means.png")
 ```
 
@@ -77,7 +77,7 @@ Over the last two decades there has been a lot of interest in
 analyzing networks in various domains. One goal is to identify groups
 or modules of nodes in a network.
 
-```{r clust-graph, out.width = '100%', fig.cap="Schematic representation of the graph network"}
+```{r clust-intro4, out.width = '100%', fig.cap="Schematic representation of the graph network"}
 knitr::include_graphics("figures/graph_network.jpg")
 ```
 
@@ -101,7 +101,7 @@ to scRNA-seq data by building a graph where each node represents a cell. Note th
 
 #### [SC3](http://bioconductor.org/packages/SC3/)
 
-```{r clust-sc3, out.width = '100%', fig.cap="SC3 pipeline"}
+```{r clust-intro5, out.width = '100%', fig.cap="SC3 pipeline"}
 knitr::include_graphics("figures/sc3.png")
 ```
 

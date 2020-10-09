@@ -1,33 +1,54 @@
-
 Channel
     .fromPath("$baseDir/course_files", type: 'dir')
-    .into { ch_course_files1; ch_course_files2 }
+    .set { ch_course_files }
+
 
 Channel
-    .fromPath('s3://scrnaseq-course/data', checkIfExists: false)
-    .into { ch_data1; ch_data2 }
+    .fromPath('s3://scrnaseq-course/data/', checkIfExists: false)
+    .set { ch_data }
+
+Channel
+    .fromPath('s3://scrnaseq-course/_bookdown_files/', checkIfExists: false)
+    .set { ch_cached_files }
 
 process html {
-  //publishDir 's3://scrnaseq-course', mode: 'copy' , overwrite: true
+
+  echo true
+
   input: 
-    file fs from ch_course_files1
-    file dat from ch_data1
+    file 'course_dir_work/data' from ch_data
+    file 'course_dir' from ch_course_files
+    path '_bookdown_files' from ch_cached_files
+  
   output:
-    file website
-  script:
-  """
-  cp -r $fs/* .
+    file 'course_dir_work/website'
+  
+  shell:
+  '''
+  cp -r course_dir/* course_dir_work
+  cd course_dir_work
+  ln -s ../_bookdown_files .
   Rscript -e "bookdown::render_book('index.html', 'bookdown::gitbook')"
-  """
+  '''
 }
 
+/*
+
 process latex {
-  input: 
-    file fs from ch_course_files2
-    file dat from ch_data2
-  script:
-  """
-  cp -r $fs/* .
-  Rscript -e "bookdown::render_book('index.html', 'bookdown::pdf_book')"
-  """
+  
+  echo true
+
+  input:
+    file 'course_dir_work/data' from ch_data2
+    file 'course_dir' from ch_course_files2
+    path '_bookdown_files' from ch_cached_files
+  shell::
+  '''
+  cp -r course_dir/* course_dir_work
+  cd course_dir_work
+  ln -s ../_bookdown_files .
+  Rscript -e "bookdown::render_book('index.html', 'bookdown::gitbook')"
+  ```
 }
+
+*/

@@ -4,12 +4,12 @@ output: html_document
 
 ## Clustering example {#clust-methods}
 
-```{r, echo=FALSE}
+```{r clustering0, echo=FALSE}
 library(knitr)
-opts_chunk$set(fig.align = "center")
+opts_chunk$set(cache = TRUE, fig.align = "center")
 ```
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r clustering1, echo=TRUE, message=FALSE, warning=FALSE}
 library(pcaMethods)
 library(SC3)
 library(scater)
@@ -24,18 +24,18 @@ To illustrate clustering of scRNA-seq data, we consider the `Deng` dataset of ce
 ### Deng dataset
 
 Let's load the data and look at it:
-```{r}
+```{r clustering2}
 deng <- readRDS("data/deng/deng-reads.rds")
 deng
 ```
 
 Let's look at the cell type annotation:
-```{r}
+```{r clustering3}
 table(colData(deng)$cell_type2)
 ```
 
 A simple PCA analysis already separates some strong cell types and provides some insights in the data structure:
-```{r}
+```{r clustering4}
 plotPCA(deng, colour_by = "cell_type2")
 ```
 As you can see, the early cell types separate quite well, but the three blastocyst timepoints are more difficult to distinguish.
@@ -45,55 +45,55 @@ As you can see, the early cell types separate quite well, but the three blastocy
 Let's run `SC3` clustering on the Deng data. The advantage of the `SC3` is that it can directly ingest a `SingleCellExperiment` object.
 
 Now let's image we do not know the number of clusters _k_ (cell types). `SC3` can estimate a number of clusters for you:
-```{r}
+```{r clustering5}
 deng <- sc3_estimate_k(deng)
 metadata(deng)$sc3$k_estimation
 ```
 
 Interestingly, the number of cell types predicted by `SC3` is smaller than in the original data annotation. However, early, mid and late stages of different cell types together, we will have exactly 6 cell types. We store the merged cell types in `cell_type1` column of the `colData` slot:
-```{r}
+```{r clustering6}
 plotPCA(deng, colour_by = "cell_type1")
 ```
 
 Now we are ready to run `SC3` (we also ask it to calculate biological properties of the clusters): 
-```{r}
+```{r clustering7}
 deng <- sc3(deng, ks = 10, biology = TRUE, n_cores = 1)
 ```
 
 `SC3` result consists of several different outputs (please look in [@Kiselev2016-bq] and [SC3 vignette](http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html) for more details). Here we show some of them:
 
 Consensus matrix:
-```{r, fig.height=6}
+```{r clustering8, fig.height=6}
 sc3_plot_consensus(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 Silhouette plot:
-```{r, fig.height=9}
+```{r clustering9, fig.height=9}
 sc3_plot_silhouette(deng, k = 10)
 ```
 
 Heatmap of the expression matrix:
-```{r, fig.height=6}
+```{r clustering10, fig.height=6}
 sc3_plot_expression(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 Identified marker genes:
-```{r, fig.height=11}
+```{r clustering11, fig.height=11}
 sc3_plot_markers(deng, k = 10, show_pdata = "cell_type2")
 ```
 
 PCA plot with highlighted `SC3` clusters:
-```{r}
+```{r clustering12}
 plotPCA(deng, colour_by = "sc3_10_clusters")
 ```
 
 Compare the results of `SC3` clustering with the original publication cell type labels:
-```{r}
+```{r clustering13}
 adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$sc3_10_clusters)
 ```
 
 __Note__ `SC3` can also be run in an interactive `Shiny` session:
-```{r, eval=FALSE}
+```{r clustering14, eval=FALSE}
 sc3_interactive(deng)
 ```
 
@@ -112,7 +112,7 @@ __Note__ Due to direct calculation of distances `SC3` becomes very slow when the
 ### tSNE + kmeans
 
 [tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. Here we will do the same:
-```{r clust-tsne, fig.cap = "tSNE map of the patient data"}
+```{r clustering15, fig.cap = "tSNE map of the patient data"}
 deng <- runTSNE(deng, rand_seed = 1)
 plotTSNE(deng)
 ```
@@ -122,7 +122,7 @@ Note that all points on the plot above are black. This is different from what we
 Now we are going to apply _k_-means clustering algorithm to the cloud of points on the tSNE map. How many groups do you see in the cloud?
 
 We will start with $k=8$:
-```{r clust-tsne-kmeans2, fig.cap = "tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm"}
+```{r clustering16, fig.cap = "tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm"}
 colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 8)$clust)
 plotTSNE(deng, colour_by = "tSNE_kmeans")
 ```
@@ -132,7 +132,7 @@ __Exercise 7__: Make the same plot for $k=10$.
 __Exercise 8__: Compare the results between `tSNE+kmeans` and the original publication cell types. Can the results be improved by changing the `perplexity` parameter?
 
 __Our solution__:
-```{r, echo=FALSE}
+```{r clustering17, echo=FALSE}
 colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 10)$clust)
 adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$tSNE_kmeans)
 ```
@@ -145,12 +145,12 @@ overview of the solutions, we need to run the methods multiple times. `SC3` is a
 
 As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:
 
-```{r}
+```{r clustering18}
 # use the same gene filter as in SC3
 input <- logcounts(deng[rowData(deng)$sc3_gene_filter, ])
 ```
 
-```{r, echo=TRUE, fig.height=7, fig.width=7}
+```{r clustering19, echo=TRUE, fig.height=7, fig.width=7}
 # perform gene-by-gene per-sample z-score transformation
 dat <- apply(input, 1, function(y) scRNA.seq.funcs::z.transform.helper(y))
 # hierarchical clustering
@@ -159,7 +159,7 @@ hc <- hclust(dd, method = "average")
 ```
 
 If the number of cluster is not known [SINCERA](https://research.cchmc.org/pbge/sincera.html) can identify __k__ as the minimum height of the hierarchical tree that generates no more than a specified number of singleton clusters (clusters containing only 1 cell)
-```{r, echo=TRUE}
+```{r clustering20, echo=TRUE}
 num.singleton <- 0
 kk <- 1
 for (i in 2:dim(dat)[2]) {
@@ -176,7 +176,7 @@ cat(kk)
 ```
 
 Let's now visualize the SINCERA results as a heatmap:
-```{r clust-sincera, fig.cap = "Clustering solutions of SINCERA method using found $k$"}
+```{r clustering21, fig.cap = "Clustering solutions of SINCERA method using found $k$"}
 pheatmap(
     t(dat),
     cluster_cols = hc,
@@ -189,7 +189,7 @@ pheatmap(
 __Exercise 10__: Compare the results between `SINCERA` and the original publication cell types.
 
 __Our solution__:
-```{r, echo=FALSE}
+```{r clustering22, echo=FALSE}
 colData(deng)$SINCERA <- as.character(cutree(hc, k = kk))
 adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$SINCERA)
 ```
@@ -198,6 +198,6 @@ __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a goo
 
 ### sessionInfo()
 
-```{r echo=FALSE}
+```{r clustering23, echo=FALSE}
 sessionInfo()
 ```

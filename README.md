@@ -8,7 +8,7 @@ The number of computational tools is increasing rapidly and we are doing our bes
 
 ## Web page
 
-__[https://scrnaseq-course.cog.sanger.ac.uk/website/index.html](https://scrnaseq-course.cog.sanger.ac.uk/website/index.html)__
+__[https://scrnaseq-course.cog.sanger.ac.uk/browser.html?shared=data/](https://scrnaseq-course.cog.sanger.ac.uk/browser.html?shared=data/)__
 
 ## Video
 

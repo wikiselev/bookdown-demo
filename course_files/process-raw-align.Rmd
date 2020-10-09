@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-```{r process-raw-align0, include=FALSE, cache=TRUE, cache.extra = list(R.version, sessionInfo())}
+```{r Process-raw-align0, include=FALSE, cache=TRUE, cache.extra = list(R.version, sessionInfo())}
 library(knitr)
 opts_chunk$set(cache=TRUE, cache.extra = list(R.version, sessionInfo()))
 ```
@@ -22,7 +22,7 @@ Two steps are required to perform STAR alignment. In the first step, the user pr
 Let's create the index now. Remember, for reasons of time we are aligning to a transcriptome rather than a genome today, meaning we only need to provide STAR with the sequences of the transcripts we will be aligning reads to. You can obtain transcriptomes for many model organisms from Ensembl (https://www.ensembl.org/info/data/ftp/index.html).
 
 Task 1: Execute the commands below to create the index:
-```{bash process-raw-align1, eval=FALSE}
+```{bash Process-raw-align1, eval=FALSE}
 mkdir indices
 mkdir indices/STAR
 STAR --runThreadN 4 --runMode genomeGenerate --genomeDir indices/STAR --genomeFastaFiles Share/2000_reference.transcripts.fa
@@ -41,7 +41,7 @@ Task 5: Try to understand the output of your alignment. Talk to one of the instr
 ### Solution for STAR Alignment
 
 You can use the folowing commands to perform the mapping step:
-```{bash process-raw-align2,eval=FALSE}
+```{bash Process-raw-align2, eval=FALSE}
 mkdir results
 mkdir results/STAR
 
@@ -83,7 +83,7 @@ As for STAR, you will need to produce an index for Kallisto before the pseudo-al
 
 Task 6: Use the below command to produce the Kallisto index. Use the Kallisto manual (https://pachterlab.github.io/kallisto/manual) to work out what the options do in this command.
 
-```{bash process-raw-align3, eval=FALSE}
+```{bash Process-raw-align3, eval=FALSE}
 mkdir indices/Kallisto
 kallisto index -i indices/Kallisto/transcripts.idx Share/2000_reference.transcripts.fa
 ```
@@ -94,7 +94,7 @@ Task 7: Use the Kallisto manual to work out what command to use to perform pseud
 
 Use the below command to perform pseudo-alignment
 
-```{bash process-raw-align4, eval=FALSE}
+```{bash Process-raw-align4, eval=FALSE}
 mkdir results/Kallisto
 kallisto pseudo -i indices/Kallisto/transcripts.idx -o results/Kallisto -b batch.txt 
 ```
