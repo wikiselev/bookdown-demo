@@ -1,4 +1,4 @@
-FROM quay.io/cellgeni/cellgeni-jupyter:14.05-01
+FROM quay.io/cellgeni/cellgeni-jupyter:course-09-20
 
 USER root
 
