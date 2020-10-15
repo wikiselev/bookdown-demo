@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     libncurses5-dev \
     libncursesw5-dev \
     procps \
-    texlive
+    texlive \
+    libv8-dev
 
 # Install FastQC
 RUN curl -fsSL http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip -o /opt/fastqc_v0.11.5.zip && \
@@ -42,7 +43,7 @@ RUN curl -fsSL http://downloads.sourceforge.net/project/subread/subread-1.5.1/su
     rm /opt/subread-1.5.1-Linux-x86_64.tar.gz
 
 # Install cutadapt and MAGIC and awscli (to download data)
-RUN pip install cutadapt magic-impute awscli
+RUN pip install cutadapt magic-impute awscli==1.16.14
 
 # Install TrimGalore
 RUN mkdir /opt/TrimGalore && \
@@ -61,7 +62,7 @@ RUN curl -fsSL https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedt
     rm /opt/bedtools-2.27.1.tar.gz
 
 # install CRAN packages
-RUN apt-get update && apt-get install -yq --no-install-recommends \
+RUN apt-get update && apt-get install -yq \
     r-cran-devtools \
     r-cran-tidyverse \
     r-cran-pheatmap \
@@ -143,14 +144,17 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     r-cran-mgcv \
     r-cran-corrplot
 
+# Set Rprofile for binary installs
+RUN echo 'options(repos = c(REPO_NAME = "https://packagemanager.rstudio.com/all/__linux__/focal/latest"))' > /home/jovyan/.Rprofile
+
 # Install other CRAN
 RUN Rscript -e 'install.packages(c("Seurat", "rJava", "umap", "bookdown", "cluster", "KernSmooth", "ROCR", "googleVis", "ggbeeswarm", "SLICER", "ggfortify", "mclust", "Rmagic", "DrImpute"))'
 
 # Install Bioconductor packages
-RUN Rscript -e 'BiocManager::install(c("graph", "RBGL", "gtools", "xtable", "pcaMethods", "limma", "SingleCellExperiment", "Rhdf5lib", "scater", "scran", "RUVSeq", "sva", "SC3", "TSCAN", "monocle", "destiny", "DESeq2", "edgeR", "MAST", "scmap", "biomaRt", "MultiAssayExperiment", "SummarizedExperiment"))'
+RUN Rscript -e 'BiocManager::install(c("graph", "RBGL", "gtools", "xtable", "pcaMethods", "limma", "SingleCellExperiment", "Rhdf5lib", "scater", "scran", "RUVSeq", "sva", "SC3", "TSCAN", "monocle", "destiny", "DESeq2", "edgeR", "MAST", "scmap", "biomaRt", "MultiAssayExperiment", "SummarizedExperiment", "beachmat", "DropletUtils"))'
 
 # install github packages
-RUN Rscript -e 'devtools::install_github(c("immunogenomics/harmony", "LTLA/beachmat", "MarioniLab/DropletUtils", "tallulandrews/M3Drop", "hemberg-lab/scRNA.seq.funcs", "Vivianstats/scImpute", "theislab/kBET", "kieranrcampbell/ouija", "hemberg-lab/scfind"))'
+RUN Rscript -e 'devtools::install_github(c("immunogenomics/harmony", "tallulandrews/M3Drop", "hemberg-lab/scRNA.seq.funcs", "Vivianstats/scImpute", "theislab/kBET", "kieranrcampbell/ouija", "hemberg-lab/scfind"))'
 
 # download data and extra files from S3
 COPY ./poststart.sh /home/jovyan
