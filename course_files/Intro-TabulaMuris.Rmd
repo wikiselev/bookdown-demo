@@ -121,14 +121,12 @@ library("SingleCellExperiment")
 library("scater")
 cell_anns <- data.frame(mouse = Mouse, well=Well, type=celltype)
 rownames(cell_anns) <- colnames(dat)
-sceset2 <- SummarizedExperiment(assays = list(counts = as.matrix(dat)), colData=cell_anns)
 sceset <- SingleCellExperiment(assays = list(counts = as.matrix(dat)), colData=cell_anns)
 ```
 
 Finally if the dataset contains spike-ins we a hidden variable in the SingleCellExperiment object to track them:
 ```{r intro-tab13}
-altExp(sceset) <- sceset2 
-#isSpike(sceset, "ERCC") <- grepl("ERCC-", rownames(sceset))
+altExp(sceset) <- sceset 
 ```
 
 ## Reading the data (10X)
