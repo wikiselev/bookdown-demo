@@ -126,8 +126,7 @@ sceset <- SingleCellExperiment(assays = list(counts = as.matrix(dat)), colData=c
 
 Finally if the dataset contains spike-ins we a hidden variable in the SingleCellExperiment object to track them:
 ```{r intro-tab13}
-isSpike(sceset, "ERCC") <- grepl("ERCC-", rownames(sceset))
-
+altExp(sceset) <- sceset 
 ```
 
 ## Reading the data (10X)
