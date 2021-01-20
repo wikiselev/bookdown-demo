@@ -69,7 +69,8 @@ keep = setdiff(rownames(molecules),c(SpikeIn,MTgenes))
 
 We generate our SCE object.
 ```{r exprs-qc7}
-umi <- SingleCellExperiment(assays=list(counts=as.matrix(molecules[keep,])),colData=annotation)
+umi <- SingleCellExperiment(
+  assays=list(counts=as.matrix(molecules[keep,])),colData=annotation)
 ```
 
 Remove genes that are not expressed in any cell:
