@@ -31,50 +31,61 @@ opts_chunk$set(cache = TRUE, out.width='90%', fig.align = 'center')
 ```{r exprs-qc1, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 library(scater)
+library(EnsDb.Hsapiens.v86)
 options(stringsAsFactors = FALSE)
 ```
 
 Load the data and annotations:
 ```{r exprs-qc2}
-molecules <- read.table("data/tung/molecules.txt", sep = "\t")
-anno <- read.table("data/tung/annotation.txt", sep = "\t", header = TRUE)
+molecules <- read.delim("course_dir_work/data/tung/molecules.txt",row.names=1)
+annotation <- read.delim("course_dir_work/data/tung/annotation.txt")
 ```
 
 Inspect a small portion of the expression matrix
 ```{r exprs-qc3}
 head(molecules[ , 1:3])
-head(anno)
+head(annotation)
 ```
 
-The data consists of `r length(unique(anno$individual))` individuals and `r length(unique(anno$replicate))` replicates and therefore has `r length(unique(anno$batch))` batches in total.
+The data consists of `r length(unique(annotation$individual))` individuals and `r length(unique(annotation$replicate))` replicates and therefore has `r length(unique(annotation$batch))` batches in total.
 
-We standardize the analysis by using both `SingleCellExperiment` (SCE) and `scater` packages. First, create the SCE object:
+We calculate what genes are caused by Spike-Ins and create a matrix containing all Spike-In genes.
 ```{r exprs-qc4}
-umi <- SingleCellExperiment(
-    assays = list(counts = as.matrix(molecules)), 
-    colData = anno
-)
+Spikein_names = grep("^ERCC-",rownames(molecules),value=TRUE)
+SpikeIn = molecules[Spikein_names,]
+```
+
+We calculate which genes are Mitochondrial
+```{r exprs-qc5}
+g = genes(EnsDb.Hsapiens.v86)
+MTgene_names = g[seqnames(g)=="MT"]$gene_id
+MTgenes = molecules[rownames(molecules) %in% MTgene_names,]
+```
+
+We keep all genes present that are not mitochondrial and Spike-in
+```{r exprs-qc6}
+keep = setdiff(rownames(molecules),c(SpikeIn,MTgenes))
+```
+
+We generate our SCE object.
+```{r exprs-qc7}
+umi <- SingleCellExperiment(assays=list(counts=as.matrix(molecules[keep,])),colData=annotation)
 ```
 
 Remove genes that are not expressed in any cell:
-```{r exprs-qc5}
+```{r exprs-qc8}
 keep_feature <- rowSums(counts(umi) > 0) > 0
 umi <- umi[keep_feature, ]
 ```
 
-Define control features (genes) - ERCC spike-ins and mitochondrial genes ([provided](http://jdblischak.github.io/singleCellSeq/analysis/qc-filter-ipsc.html) by the authors):
-```{r exprs-qc6}
-isSpike(umi, "ERCC") <- grepl("^ERCC-", rownames(umi))
-isSpike(umi, "MT") <- rownames(umi) %in% 
-    c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
-    "ENSG00000198886", "ENSG00000212907", "ENSG00000198786",
-    "ENSG00000198695", "ENSG00000198712", "ENSG00000198804",
-    "ENSG00000198763", "ENSG00000228253", "ENSG00000198938",
-    "ENSG00000198840")
+Define control features (genes) - ERCC spike-ins and mitochondrial genes:
+```{r exprs-qc9}
+altExp(umi, "spike-in") <- SummarizedExperiment(SpikeIn)
+altExp(umi, "MTgenes") <- SummarizedExperiment(MTgenes)
 ```
 
 Calculate the quality metrics:
-```{r exprs-qc7}
+```{r exprs-qc10}
 umi <- calculateQCMetrics(
     umi,
     feature_controls = list(
@@ -93,7 +104,7 @@ Next we consider the total number of RNA molecules detected per
 sample (if we were using read counts rather than UMI counts this would
 be the total number of reads). Wells with few reads/molecules are likely to have been broken or failed to capture a cell, and should thus be removed.
 
-```{r exprs-qc8, fig.cap = "Histogram of library sizes for all cells"}
+```{r exprs-qc11, fig.cap = "Histogram of library sizes for all cells"}
 hist(
     umi$total_counts,
     breaks = 100
@@ -110,7 +121,7 @@ total number of molecules for each cell should follow?
 
 __Our answer__
 
-```{r exprs-qc9, echo=FALSE}
+```{r exprs-qc12, echo=FALSE}
 filter_by_total_counts <- (umi$total_counts > 25000)
 table(filter_by_total_counts)
 ```
@@ -119,7 +130,7 @@ table(filter_by_total_counts)
 
 In addition to ensuring sufficient sequencing depth for each sample, we also want to make sure that the reads are distributed across the transcriptome. Thus, we count the total number of unique genes detected in each sample.
 
-```{r exprs-qc10, fig.cap = "Histogram of the number of detected genes in all cells"}
+```{r exprs-qc13, fig.cap = "Histogram of the number of detected genes in all cells"}
 hist(
     umi$total_features_by_counts,
     breaks = 100
@@ -141,7 +152,7 @@ How many cells does our filter remove?
 
 __Our answer__
 
-```{r exprs-qc11, echo=FALSE}
+```{r exprs-qc14, echo=FALSE}
 filter_by_expr_features <- (umi$total_features_by_counts > 7000)
 table(filter_by_expr_features)
 ```
@@ -154,7 +165,7 @@ of RNA in the captured cells. Cells with a high level of _spike-in_ RNAs
 had low starting amounts of RNA, likely due to the cell being
 dead or stressed which may result in the RNA being degraded.
 
-```{r exprs-qc12, fig.cap = "Percentage of counts in MT genes"}
+```{r exprs-qc15, fig.cap = "Percentage of counts in MT genes"}
 plotColData(
     umi,
     x = "total_features_by_counts",
@@ -163,7 +174,7 @@ plotColData(
 )
 ```
 
-```{r exprs-qc13, fig.cap = "Percentage of counts in ERCCs"}
+```{r exprs-qc16, fig.cap = "Percentage of counts in ERCCs"}
 plotColData(
     umi,
     x = "total_features_by_counts",
@@ -180,7 +191,7 @@ Create filters for removing batch NA19098.r2 and cells with high expression of m
 
 __Our answer__
 
-```{r exprs-qc14, echo=FALSE}
+```{r exprs-qc17, echo=FALSE}
 filter_by_ERCC <- umi$batch != "NA19098.r2"
 table(filter_by_ERCC)
 filter_by_MT <- umi$pct_counts_MT < 10
@@ -201,7 +212,7 @@ You would expect to see a group corresponding to the smaller cells (normal) with
 
 Now we can define a cell filter based on our previous analysis:
 
-```{r exprs-qc15}
+```{r exprs-qc18}
 umi$use <- (
     # sufficient features (genes)
     filter_by_expr_features &
@@ -214,7 +225,7 @@ umi$use <- (
 )
 ```
 
-```{r exprs-qc16}
+```{r exprs-qc19}
 table(umi$use)
 ```
 
@@ -233,7 +244,7 @@ By default, the following metrics are used for PCA-based outlier detection:
 
 `scater` first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Then, outlier cells can also be identified by using the `mvoutlier` package on the QC metrics for all cells. This will identify cells that have substantially different QC metrics from the others, possibly corresponding to low-quality cells. We can visualize any outliers using a principal components plot as shown below:
 
-```{r exprs-qc17, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
+```{r exprs-qc20, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
 umi <- runPCA(
     umi, 
     use_coldata = TRUE, 
@@ -244,13 +255,13 @@ reducedDimNames(umi)
 
 Column subsetting can then be performed based on the `$outlier` slot, which indicates whether or not each cell has been designated as an outlier. Automatic outlier detection can be informative, but a close inspection of QC metrics and tailored filtering for the specifics of the dataset at hand is strongly recommended.
 
-```{r exprs-qc18}
+```{r exprs-qc21}
 table(umi$outlier)
 ```
 
 Then, we can use a PCA plot to see a 2D representation of the cells ordered by their quality metrics.
 
-```{r exprs-qc19}
+```{r exprs-qc22}
 plotReducedDim(
     umi,
     use_dimred = "PCA_coldata",
@@ -270,7 +281,7 @@ __Hint__: Use `vennCounts` and `vennDiagram` functions from the [limma](https://
 
 __Answer__
 
-```{r exprs-qc20, fig.cap = "Comparison of the default, automatic and manual cell filters", echo=FALSE}
+```{r exprs-qc23, fig.cap = "Comparison of the default, automatic and manual cell filters", echo=FALSE}
 library(limma)
 auto <- colnames(umi)[umi$outlier]
 man <- colnames(umi)[!umi$use]
@@ -293,7 +304,7 @@ In addition to removing cells with poor quality, it is usually a good idea to ex
 
 It is often instructive to consider the number of reads consumed by the top 50 expressed genes.
 
-```{r exprs-qc21, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
+```{r exprs-qc24, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
 plotHighestExprs(umi, exprs_values = "counts")
 ```
 
@@ -304,7 +315,7 @@ The distributions are relatively flat indicating (but not guaranteeing!) good co
 
 It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells (__note__ `colData(umi)$use` filter applied to the `umi` dataset).
 
-```{r exprs-qc22}
+```{r exprs-qc25}
 keep_feature <- nexprs(
   umi[,colData(umi)$use], 
   byrow = TRUE, 
@@ -313,7 +324,7 @@ keep_feature <- nexprs(
 rowData(umi)$use <- keep_feature
 ```
 
-```{r exprs-qc23}
+```{r exprs-qc26}
 table(keep_feature)
 ```
 
@@ -323,18 +334,18 @@ Depending on the cell-type, protocol and sequencing depth, other cut-offs may be
 ### Save the data
 
 Dimensions of the QCed dataset (do not forget about the gene filter we defined above):
-```{r exprs-qc24}
+```{r exprs-qc27}
 dim(umi[rowData(umi)$use, colData(umi)$use])
 ```
 
 Let's create an additional slot with log-transformed counts (we will need it in the next chapters) and remove saved PCA results from the `reducedDim` slot:
-```{r exprs-qc25}
+```{r exprs-qc28}
 assay(umi, "logcounts_raw") <- log2(counts(umi) + 1)
 reducedDim(umi) <- NULL
 ```
 
 Save the data:
-```{r exprs-qc26}
+```{r exprs-qc29}
 saveRDS(umi, file = "data/tung/umi.rds")
 ```
 
@@ -344,6 +355,6 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 
 ### sessionInfo()
 
-```{r exprs-qc27, echo=FALSE}
+```{r exprs-qc30, echo=FALSE}
 sessionInfo()
 ```
