@@ -77,10 +77,12 @@ rownames(dat) <- dat[,1]
 dat <- dat[,-1]
 ```
 
-Since this is a Smartseq2 dataset it may contain spike-ins so lets check:
+Since this is a Smartseq2 dataset it may contain spike-ins so lets check and obtain them:
 
 ```{r intro-tab7}
 rownames(dat)[grep("^ERCC-", rownames(dat))]
+Spikein_names = grep("^ERCC-",rownames(dat),value=TRUE)
+SpikeIn = dat[Spikein_names,]
 ```
 
 Now we can extract much of the metadata for this data from the column names:
@@ -121,12 +123,13 @@ library("SingleCellExperiment")
 library("scater")
 cell_anns <- data.frame(mouse = Mouse, well=Well, type=celltype)
 rownames(cell_anns) <- colnames(dat)
-sceset <- SingleCellExperiment(assays = list(counts = as.matrix(dat)), colData=cell_anns)
+keep = setdiff(rownames(dat),SpikeIn)
+sceset <- SingleCellExperiment(assays=list(counts=as.matrix(dat[keep,])),colData=cell_anns)
 ```
 
 Finally if the dataset contains spike-ins we a hidden variable in the SingleCellExperiment object to track them:
 ```{r intro-tab13}
-altExp(sceset) <- sceset 
+altExp(sceset, "spike-in") <- SummarizedExperiment(SpikeIn)
 ```
 
 ## Reading the data (10X)
