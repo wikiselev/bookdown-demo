@@ -147,7 +147,7 @@ RUN Rscript -e 'BiocManager::install(c( \
     "graph", "RBGL", "gtools", "xtable", "pcaMethods", "limma", "SingleCellExperiment", \
     "Rhdf5lib", "scater", "scran", "RUVSeq", "sva", "SC3", "TSCAN", "monocle", "destiny", \
     "DESeq2", "edgeR", "MAST", "scmap", "biomaRt", "MultiAssayExperiment", "SummarizedExperiment", \
-    "beachmat", "DropletUtils"))'
+    "beachmat", "DropletUtils", "EnsDb.Hsapiens.v86"))'
 
 # Install github packages
 RUN Rscript -e 'devtools::install_github(c( \
