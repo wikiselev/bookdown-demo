@@ -37,8 +37,8 @@ options(stringsAsFactors = FALSE)
 
 Load the data and annotations:
 ```{r exprs-qc2}
-molecules <- read.delim("course_dir_work/data/tung/molecules.txt",row.names=1)
-annotation <- read.delim("course_dir_work/data/tung/annotation.txt")
+molecules <- read.delim("data/tung/molecules.txt",row.names=1)
+annotation <- read.delim("data/tung/annotation.txt")
 ```
 
 Inspect a small portion of the expression matrix
