@@ -78,23 +78,38 @@ keep_feature <- rowSums(counts(umi) > 0) > 0
 umi <- umi[keep_feature, ]
 ```
 
-Define control features (genes) - ERCC spike-ins and mitochondrial genes:
-```{r exprs-qc9}
-altExp(umi, "spike-in") <- SummarizedExperiment(SpikeIn)
-altExp(umi, "MTgenes") <- SummarizedExperiment(MTgenes)
-```
-
 Calculate the quality metrics:
 ```{r exprs-qc10}
-umi <- calculateQCMetrics(
-    umi,
-    feature_controls = list(
-        ERCC = isSpike(umi, "ERCC"), 
-        MT = isSpike(umi, "MT")
-    )
-)
+umi_cell <- perCellQCMetrics(umi)
+
+umi_feature <- perFeatureQCMetrics(umi)
+
+umi <- addPerCellQC(umi)
+
+umi <- addPerFeatureQC(umi)
+
+#umi_feature <- perFeatureQCMetrics(
+#  umi, 
+#  subsets = list(
+#    ERCC = altExp(umi, "spike-in") <- SummarizedExperiment(SpikeIn),
+#    MT = altExp(umi, "MTgenes") <- SummarizedExperiment(MTgenes)
+#  )
+#)
+
+#umi <- calculateQCMetrics(
+#    umi,
+#    feature_controls = list(
+#        ERCC = isSpike(umi, "ERCC"), 
+#        MT = isSpike(umi, "MT")
+#    )
+#)
 ```
 
+Define control features (genes) - ERCC spike-ins and mitochondrial genes:
+```{r exprs-qc9}
+#altExp(umi, "spike-in") <- SummarizedExperiment(SpikeIn)
+#altExp(umi, "MTgenes") <- SummarizedExperiment(MTgenes)
+```
 
 ### Cell QC
 
@@ -106,9 +121,14 @@ be the total number of reads). Wells with few reads/molecules are likely to have
 
 ```{r exprs-qc11, fig.cap = "Histogram of library sizes for all cells"}
 hist(
-    umi$total_counts,
-    breaks = 100
+  umi_cell$total,
+  breaks=100
 )
+
+#hist(
+#    umi$total_counts,
+#    breaks = 100
+#)
 abline(v = 25000, col = "red")
 ```
 
@@ -122,7 +142,8 @@ total number of molecules for each cell should follow?
 __Our answer__
 
 ```{r exprs-qc12, echo=FALSE}
-filter_by_total_counts <- (umi$total_counts > 25000)
+filter_by_total_counts <- (umi_cell$total > 25000)
+#filter_by_total_counts <- (umi$total_counts > 25000)
 table(filter_by_total_counts)
 ```
 
@@ -132,9 +153,14 @@ In addition to ensuring sufficient sequencing depth for each sample, we also wan
 
 ```{r exprs-qc13, fig.cap = "Histogram of the number of detected genes in all cells"}
 hist(
-    umi$total_features_by_counts,
-    breaks = 100
+  umi_feature$detected,
+  breaks = 100
 )
+
+#hist(
+#    umi$total_features_by_counts,
+#    breaks = 100
+#)
 abline(v = 7000, col = "red")
 ```
 
@@ -153,7 +179,8 @@ How many cells does our filter remove?
 __Our answer__
 
 ```{r exprs-qc14, echo=FALSE}
-filter_by_expr_features <- (umi$total_features_by_counts > 7000)
+filter_by_expr_features <- (umi_feature$detected > 7000)
+#filter_by_expr_features <- (umi$total_features_by_counts > 7000)
 table(filter_by_expr_features)
 ```
 
@@ -166,21 +193,21 @@ had low starting amounts of RNA, likely due to the cell being
 dead or stressed which may result in the RNA being degraded.
 
 ```{r exprs-qc15, fig.cap = "Percentage of counts in MT genes"}
-plotColData(
-    umi,
-    x = "total_features_by_counts",
-    y = "pct_counts_MT",
-    colour = "batch"
-)
+#plotColData(
+#    umi,
+#    x = "total_features_by_counts",
+#    y = "pct_counts_MT",
+#    colour = "batch"
+#)
 ```
 
 ```{r exprs-qc16, fig.cap = "Percentage of counts in ERCCs"}
-plotColData(
-    umi,
-    x = "total_features_by_counts",
-    y = "pct_counts_ERCC",
-    colour = "batch"
-)
+#plotColData(
+#    umi,
+#    x = "total_features_by_counts",
+#    y = "pct_counts_ERCC",
+#    colour = "batch"
+#)
 ```
 
 The above analysis shows that majority of the cells from NA19098.r2 batch have a very high ERCC/Endo ratio. Indeed, it has been shown by the authors that this batch contains cells of smaller size. 
@@ -215,13 +242,13 @@ Now we can define a cell filter based on our previous analysis:
 ```{r exprs-qc18}
 umi$use <- (
     # sufficient features (genes)
-    filter_by_expr_features &
+    #filter_by_expr_features &
     # sufficient molecules counted
     filter_by_total_counts &
     # sufficient endogenous RNA
-    filter_by_ERCC &
+    filter_by_ERCC #&
     # remove cells with unusual number of reads in MT genes
-    filter_by_MT
+    #filter_by_MT
 )
 ```
 
@@ -247,16 +274,22 @@ By default, the following metrics are used for PCA-based outlier detection:
 ```{r exprs-qc20, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
 umi <- runPCA(
     umi, 
-    use_coldata = TRUE, 
-    detect_outliers = TRUE
+    exprs_values = "counts", 
 )
+
+#umi <- runPCA(
+#    umi, 
+#    use_coldata = TRUE, 
+#    detect_outliers = TRUE
+#)
+
 reducedDimNames(umi)
 ```
 
 Column subsetting can then be performed based on the `$outlier` slot, which indicates whether or not each cell has been designated as an outlier. Automatic outlier detection can be informative, but a close inspection of QC metrics and tailored filtering for the specifics of the dataset at hand is strongly recommended.
 
 ```{r exprs-qc21}
-table(umi$outlier)
+#table(umi$outlier)
 ```
 
 Then, we can use a PCA plot to see a 2D representation of the cells ordered by their quality metrics.
@@ -264,11 +297,18 @@ Then, we can use a PCA plot to see a 2D representation of the cells ordered by t
 ```{r exprs-qc22}
 plotReducedDim(
     umi,
-    use_dimred = "PCA_coldata",
-    size_by = "total_features_by_counts", 
-    shape_by = "use", 
-    colour_by = "outlier"
+    dimred = "PCA",
+#    size_by = "total", 
+    shape_by = "use" 
 )
+
+#plotReducedDim(
+#    umi,
+#    use_dimred = "PCA_coldata",
+#    size_by = "total_features_by_counts", 
+#    shape_by = "use", 
+#    colour_by = "outlier"
+#)
 ```
 
 ### Compare filterings
