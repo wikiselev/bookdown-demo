@@ -107,8 +107,8 @@ umi <- addPerFeatureQC(umi)
 
 Define control features (genes) - ERCC spike-ins and mitochondrial genes:
 ```{r exprs-qc9}
-#altExp(umi, "spike-in") <- SummarizedExperiment(SpikeIn)
-#altExp(umi, "MTgenes") <- SummarizedExperiment(MTgenes)
+altExp(umi, "spike-in") <- SummarizedExperiment(SpikeIn)
+altExp(umi, "MTgenes") <- SummarizedExperiment(MTgenes)
 ```
 
 ### Cell QC
