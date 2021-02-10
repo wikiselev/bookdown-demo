@@ -21,3 +21,10 @@ pre {
 pre code {
   white-space: inherit;
 }
+
+.book-header {
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: 85% !important;
+    background-image: url("figures/sanger-logo-header.png") !important; 
+}
