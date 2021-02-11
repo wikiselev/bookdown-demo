@@ -25,6 +25,6 @@ pre code {
 .book-header {
     background-size: contain !important;
     background-repeat: no-repeat !important;
-    background-position: 85% !important;
+    background-position: calc(100% - 130px) !important;
     background-image: url("figures/sanger-logo-header.png") !important; 
 }
