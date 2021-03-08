@@ -35,357 +35,114 @@ library(EnsDb.Hsapiens.v86)
 options(stringsAsFactors = FALSE)
 ```
 
-Load the data and annotations:
 ```{r exprs-qc2}
 molecules <- read.delim("data/tung/molecules.txt",row.names=1)
 annotation <- read.delim("data/tung/annotation.txt")
 ```
 
-Inspect a small portion of the expression matrix
 ```{r exprs-qc3}
 head(molecules[ , 1:3])
 head(annotation)
 ```
 
-The data consists of `r length(unique(annotation$individual))` individuals and `r length(unique(annotation$replicate))` replicates and therefore has `r length(unique(annotation$batch))` batches in total.
-
-We calculate what genes are caused by Spike-Ins and create a matrix containing all Spike-In genes.
 ```{r exprs-qc4}
-Spikein_names = grep("^ERCC-",rownames(molecules),value=TRUE)
-SpikeIn = molecules[Spikein_names,]
+## set altExp to contain ERCC, remove ERCC from the main object
+umi <- SingleCellExperiment(assays = list(counts = as.matrix(molecules)), colData = annotation)
+altExp(umi,"ERCC") <- umi[grep("^ERCC-",rownames(umi)), ]
+umi <- umi[grep("^ERCC-",rownames(umi),invert = T), ]
 ```
 
-We calculate which genes are Mitochondrial
 ```{r exprs-qc5}
+## define is.mito vector (T/F values, length same as number of genes in the main assay)
 g = genes(EnsDb.Hsapiens.v86)
-MTgene_names = g[seqnames(g)=="MT"]$gene_id
-MTgenes = molecules[rownames(molecules) %in% MTgene_names,]
+MT_names = g[seqnames(g)=="MT"]$gene_id
+is.mito = rownames(umi) %in% MT_names
 ```
 
-We keep all genes present that are not mitochondrial and Spike-in
 ```{r exprs-qc6}
-keep = setdiff(rownames(molecules),c(SpikeIn,MTgenes))
-```
-
-We generate our SCE object.
-```{r exprs-qc7}
-umi <- SingleCellExperiment(assays=list(counts=as.matrix(molecules[keep,])),colData=annotation)
-```
-
-Remove genes that are not expressed in any cell:
-```{r exprs-qc8}
-keep_feature <- rowSums(counts(umi) > 0) > 0
-umi <- umi[keep_feature, ]
-```
-
-Calculate the quality metrics:
-```{r exprs-qc10}
-umi_cell <- perCellQCMetrics(umi)
-
+## set all PerCell and PerFeature QC metrics
+umi_cell <- perCellQCMetrics(umi,subsets=list(Mito=is.mito))
 umi_feature <- perFeatureQCMetrics(umi)
-
-umi <- addPerCellQC(umi)
-
+head(umi_cell)
+head(umi_feature)
+umi <- addPerCellQC(umi, subsets=list(Mito=is.mito))
 umi <- addPerFeatureQC(umi)
-
-#umi_feature <- perFeatureQCMetrics(
-#  umi, 
-#  subsets = list(
-#    ERCC = altExp(umi, "spike-in") <- SummarizedExperiment(SpikeIn),
-#    MT = altExp(umi, "MTgenes") <- SummarizedExperiment(MTgenes)
-#  )
-#)
-
-#umi <- calculateQCMetrics(
-#    umi,
-#    feature_controls = list(
-#        ERCC = isSpike(umi, "ERCC"), 
-#        MT = isSpike(umi, "MT")
-#    )
-#)
 ```
 
-Define control features (genes) - ERCC spike-ins and mitochondrial genes:
-```{r exprs-qc9}
-altExp(umi, "spike-in") <- SummarizedExperiment(SpikeIn)
-altExp(umi, "MTgenes") <- SummarizedExperiment(MTgenes)
-```
-
-### Cell QC
-
-#### Library size
-
-Next we consider the total number of RNA molecules detected per
-sample (if we were using read counts rather than UMI counts this would
-be the total number of reads). Wells with few reads/molecules are likely to have been broken or failed to capture a cell, and should thus be removed.
-
-```{r exprs-qc11, fig.cap = "Histogram of library sizes for all cells"}
+```{r exprs-qc7}
+## filtering options: manual 
 hist(
-  umi_cell$total,
-  breaks=100
+    umi$total,
+    breaks = 100
 )
-
-#hist(
-#    umi$total_counts,
-#    breaks = 100
-#)
 abline(v = 25000, col = "red")
 ```
 
-__Exercise 1__
-
-1. How many cells does our filter remove?
-
-2. What distribution do you expect that the
-total number of molecules for each cell should follow?
-
-__Our answer__
-
-```{r exprs-qc12, echo=FALSE}
-filter_by_total_counts <- (umi_cell$total > 25000)
-#filter_by_total_counts <- (umi$total_counts > 25000)
-table(filter_by_total_counts)
-```
-
-#### Detected genes
-
-In addition to ensuring sufficient sequencing depth for each sample, we also want to make sure that the reads are distributed across the transcriptome. Thus, we count the total number of unique genes detected in each sample.
-
-```{r exprs-qc13, fig.cap = "Histogram of the number of detected genes in all cells"}
+```{r exprs-qc8}
 hist(
-  umi_feature$detected,
+  umi_cell$detected,
   breaks = 100
 )
-
-#hist(
-#    umi$total_features_by_counts,
-#    breaks = 100
-#)
 abline(v = 7000, col = "red")
 ```
 
-From the plot we conclude that most cells have between 7,000-10,000 detected genes,
-which is normal for high-depth scRNA-seq. However, this varies by
-experimental protocol and sequencing depth. For example, droplet-based methods
-or samples with lower sequencing-depth typically detect fewer genes per cell. The most notable feature in the above plot is the __"heavy tail"__ on the left hand side of the
-distribution. If detection rates were equal across the cells then the
-distribution should be approximately normal. Thus we remove those
-cells in the tail of the distribution (fewer than 7,000 detected genes).
-
-__Exercise 2__
-
-How many cells does our filter remove?
-
-__Our answer__
-
-```{r exprs-qc14, echo=FALSE}
-filter_by_expr_features <- (umi_feature$detected > 7000)
-#filter_by_expr_features <- (umi$total_features_by_counts > 7000)
-table(filter_by_expr_features)
+```{r exprs-qc9}
+## ADAPTIVE threshold - filters whatever is more than 3 standard deviations away from the mean
+qc.lib2 <- isOutlier(umi_cell$sum, log=TRUE, type="lower")
+attr(qc.lib2, "thresholds")
+qc.nexprs2 <- isOutlier(umi_cell$detected, log=TRUE, type="lower")
+attr(qc.nexprs2, "thresholds")
+qc.spike2 <- isOutlier(umi_cell$altexps_ERCC_percent, type="higher")
+attr(qc.spike2, "thresholds")
+qc.mito2 <- isOutlier(umi_cell$subsets_Mito_percent, type="higher")
+attr(qc.mito2, "thresholds")
+discard2 <- qc.lib2 | qc.nexprs2 | qc.spike2 | qc.mito2
+DataFrame(LibSize=sum(qc.lib2), NExprs=sum(qc.nexprs2), SpikeProp=sum(qc.spike2), MitoProp=sum(qc.mito2), Total=sum(discard2))
 ```
 
-#### ERCCs and MTs
-
-Another measure of cell quality is the ratio between ERCC _spike-in_
-RNAs and endogenous RNAs. This ratio can be used to estimate the total amount
-of RNA in the captured cells. Cells with a high level of _spike-in_ RNAs
-had low starting amounts of RNA, likely due to the cell being
-dead or stressed which may result in the RNA being degraded.
-
-```{r exprs-qc15, fig.cap = "Percentage of counts in MT genes"}
-#plotColData(
-#    umi,
-#    x = "total_features_by_counts",
-#    y = "pct_counts_MT",
-#    colour = "batch"
-#)
+```{r exprs-qc10}
+## ADAPTIVE threshold in one command
+reasons <- quickPerCellQC(umi_cell, sub.fields=c("subsets_Mito_percent", "altexps_ERCC_percent"))
+colSums(as.matrix(reasons))
 ```
 
-```{r exprs-qc16, fig.cap = "Percentage of counts in ERCCs"}
-#plotColData(
-#    umi,
-#    x = "total_features_by_counts",
-#    y = "pct_counts_ERCC",
-#    colour = "batch"
-#)
+```{r exprs-qc11}
+## Add discarded data as own coldata assay called discard
+umi$discard <- reasons$discard
 ```
 
-The above analysis shows that majority of the cells from NA19098.r2 batch have a very high ERCC/Endo ratio. Indeed, it has been shown by the authors that this batch contains cells of smaller size. 
-
-__Exercise 3__
-
-Create filters for removing batch NA19098.r2 and cells with high expression of mitochondrial genes (>10% of total counts in a cell).
-
-__Our answer__
-
-```{r exprs-qc17, echo=FALSE}
-filter_by_ERCC <- umi$batch != "NA19098.r2"
-table(filter_by_ERCC)
-filter_by_MT <- umi$pct_counts_MT < 10
-table(filter_by_MT)
+```{r exprs-qc12}
+## Plotting various coldata assays against each other
+plotColData(umi, x="sum", y="subsets_Mito_percent", colour_by="discard")
+plotColData(umi, x="sum", y="detected", colour_by="discard")
+plotColData(umi, x="altexps_ERCC_percent", y="subsets_Mito_percent",colour_by="discard")
 ```
 
-__Exercise 4__
-
-What would you expect to see in the ERCC vs counts plot if you were examining a dataset containing cells of different sizes (eg. normal & senescent cells)?
-
-__Answer__
-
-You would expect to see a group corresponding to the smaller cells (normal) with a higher fraction of ERCC reads than a separate group corresponding to the larger cells (senescent).
-
-### Cell filtering
-
-#### Manual
-
-Now we can define a cell filter based on our previous analysis:
-
-```{r exprs-qc18}
-umi$use <- (
-    # sufficient features (genes)
-    #filter_by_expr_features &
-    # sufficient molecules counted
-    filter_by_total_counts &
-    # sufficient endogenous RNA
-    filter_by_ERCC #&
-    # remove cells with unusual number of reads in MT genes
-    #filter_by_MT
-)
+```{r exprs-qc13}
+## Plot coldata with splitting by batches to see if there are substantial differences
+plotColData(umi, x="sum", y="detected", colour_by="discard", other_fields = "individual") + facet_wrap(~individual)
+plotColData(umi, x="sum", y="detected", colour_by="discard", other_fields = "replicate") + facet_wrap(~replicate)
 ```
 
-```{r exprs-qc19}
-table(umi$use)
-```
-
-#### Automatic
-
-Another option available in `scater` is to conduct PCA on a set of QC metrics and then use automatic outlier detection to identify potentially problematic cells. 
-
-By default, the following metrics are used for PCA-based outlier detection:
-
-* __pct_counts_top_100_features__
-* __total_features__
-* __pct_counts_feature_controls__
-* __n_detected_feature_controls__
-* __log10_counts_endogenous_features__
-* __log10_counts_feature_controls__
-
-`scater` first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Then, outlier cells can also be identified by using the `mvoutlier` package on the QC metrics for all cells. This will identify cells that have substantially different QC metrics from the others, possibly corresponding to low-quality cells. We can visualize any outliers using a principal components plot as shown below:
-
-```{r exprs-qc20, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
-umi <- runPCA(
-    umi, 
-    exprs_values = "counts", 
-)
-
-#umi <- runPCA(
-#    umi, 
-#    use_coldata = TRUE, 
-#    detect_outliers = TRUE
-#)
-
-reducedDimNames(umi)
-```
-
-Column subsetting can then be performed based on the `$outlier` slot, which indicates whether or not each cell has been designated as an outlier. Automatic outlier detection can be informative, but a close inspection of QC metrics and tailored filtering for the specifics of the dataset at hand is strongly recommended.
-
-```{r exprs-qc21}
-#table(umi$outlier)
-```
-
-Then, we can use a PCA plot to see a 2D representation of the cells ordered by their quality metrics.
-
-```{r exprs-qc22}
-plotReducedDim(
-    umi,
-    dimred = "PCA",
-#    size_by = "total", 
-    shape_by = "use" 
-)
-
-#plotReducedDim(
-#    umi,
-#    use_dimred = "PCA_coldata",
-#    size_by = "total_features_by_counts", 
-#    shape_by = "use", 
-#    colour_by = "outlier"
-#)
-```
-
-### Compare filterings
-
-__Exercise 5__
-
-Compare the default, automatic and manual cell filters. Plot a Venn diagram of the outlier cells from these filterings.
-
-__Hint__: Use `vennCounts` and `vennDiagram` functions from the [limma](https://bioconductor.org/packages/release/bioc/html/limma.html) package to make a Venn diagram.
-
-__Answer__
-
-```{r exprs-qc23, fig.cap = "Comparison of the default, automatic and manual cell filters", echo=FALSE}
-library(limma)
-auto <- colnames(umi)[umi$outlier]
-man <- colnames(umi)[!umi$use]
-venn.diag <- vennCounts(
-    cbind(colnames(umi) %in% auto,
-    colnames(umi) %in% man)
-)
-vennDiagram(
-    venn.diag,
-    names = c("Automatic", "Manual"),
-    circle.col = c("blue", "green")
-)
-```
-
-### Gene analysis
-
-#### Gene expression
-
-In addition to removing cells with poor quality, it is usually a good idea to exclude genes where we suspect that technical artefacts may have skewed the results. Moreover, inspection of the gene expression profiles may provide insights about how the experimental procedures could be improved.
-
-It is often instructive to consider the number of reads consumed by the top 50 expressed genes.
-
-```{r exprs-qc24, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
+```{r exprs-qc14}
+## Plotting highest expressed genes
 plotHighestExprs(umi, exprs_values = "counts")
 ```
 
-The distributions are relatively flat indicating (but not guaranteeing!) good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
-
-
-#### Gene filtering
-
-It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells (__note__ `colData(umi)$use` filter applied to the `umi` dataset).
-
-```{r exprs-qc25}
-keep_feature <- nexprs(
-  umi[,colData(umi)$use], 
-  byrow = TRUE, 
-  detection_limit = 1
-) >= 2
+```{r exprs-qc15}
+## Keeping highly expressed genes
+keep_feature <- nexprs(umi,byrow = TRUE,detection_limit = 1) >= 2
 rowData(umi)$use <- keep_feature
-```
-
-```{r exprs-qc26}
 table(keep_feature)
-```
-
-Depending on the cell-type, protocol and sequencing depth, other cut-offs may be appropriate.
-
-
-### Save the data
-
-Dimensions of the QCed dataset (do not forget about the gene filter we defined above):
-```{r exprs-qc27}
-dim(umi[rowData(umi)$use, colData(umi)$use])
-```
-
-Let's create an additional slot with log-transformed counts (we will need it in the next chapters) and remove saved PCA results from the `reducedDim` slot:
-```{r exprs-qc28}
+``` 
+ 
+```{r exprs-qc16}
 assay(umi, "logcounts_raw") <- log2(counts(umi) + 1)
 reducedDim(umi) <- NULL
 ```
 
 Save the data:
-```{r exprs-qc29}
+```{r exprs-qc17}
 saveRDS(umi, file = "data/tung/umi.rds")
 ```
 
@@ -395,6 +152,6 @@ Perform exactly the same QC analysis with read counts of the same Blischak data.
 
 ### sessionInfo()
 
-```{r exprs-qc30, echo=FALSE}
+```{r exprs-qc18, echo=FALSE}
 sessionInfo()
 ```
