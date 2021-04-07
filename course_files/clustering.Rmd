@@ -26,7 +26,6 @@ To illustrate clustering of scRNA-seq data, we consider the `Deng` dataset of ce
 Let's load the data and look at it:
 ```{r clustering2}
 deng <- readRDS("data/deng/deng-reads.rds")
-deng
 ```
 
 Let's look at the cell type annotation:
@@ -36,6 +35,8 @@ table(colData(deng)$cell_type2)
 
 A simple PCA analysis already separates some strong cell types and provides some insights in the data structure:
 ```{r clustering4}
+### NEEDED TO ADD runPCA AS NO reducedDimNames ASSAY CALLED PCA IN OBJECT 
+deng <- runPCA(deng)
 plotPCA(deng, colour_by = "cell_type2")
 ```
 As you can see, the early cell types separate quite well, but the three blastocyst timepoints are more difficult to distinguish.
@@ -94,6 +95,7 @@ adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$sc3_10_clusters)
 
 __Note__ `SC3` can also be run in an interactive `Shiny` session:
 ```{r clustering14, eval=FALSE}
+### LOADS BROWSER BUT COULDN'T ACCESS
 sc3_interactive(deng)
 ```
 
@@ -123,7 +125,7 @@ Now we are going to apply _k_-means clustering algorithm to the cloud of points 
 
 We will start with $k=8$:
 ```{r clustering16, fig.cap = "tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm"}
-colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 8)$clust)
+colData(deng)$tSNE_kmeans <- as.character(kmeans(reducedDim(deng, "TSNE"), centers = 8)$clust)
 plotTSNE(deng, colour_by = "tSNE_kmeans")
 ```
 
@@ -133,7 +135,7 @@ __Exercise 8__: Compare the results between `tSNE+kmeans` and the original publi
 
 __Our solution__:
 ```{r clustering17, echo=FALSE}
-colData(deng)$tSNE_kmeans <- as.character(kmeans(deng@reducedDims$TSNE, centers = 10)$clust)
+colData(deng)$tSNE_kmeans <- as.character(kmeans(reducedDim(deng, "TSNE"), centers = 10)$clust)
 adjustedRandIndex(colData(deng)$cell_type2, colData(deng)$tSNE_kmeans)
 ```
 

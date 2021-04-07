@@ -2,7 +2,6 @@ Channel
     .fromPath("$baseDir/course_files", type: 'dir')
     .set { ch_course_files }
 
-
 Channel
     .fromPath('s3://scrnaseq-course/data/', checkIfExists: false)
     .set { ch_data }
