@@ -6,9 +6,11 @@ Channel
     .fromPath('s3://scrnaseq-course/data/', checkIfExists: false)
     .set { ch_data }
 
+/*
 Channel
     .fromPath('s3://scrnaseq-course/_bookdown_files/', checkIfExists: false)
     .set { ch_cached_files }
+*/
 
 process html {
 
@@ -17,7 +19,7 @@ process html {
   input: 
     file 'course_dir_work/data' from ch_data
     file 'course_dir' from ch_course_files
-    path '_bookdown_files' from ch_cached_files
+//    path '_bookdown_files' from ch_cached_files
   
   output:
     file 'course_dir_work/website'

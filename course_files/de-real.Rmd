@@ -1,5 +1,4 @@
 ---
-# knit: bookdown::preview_chapter
 output: html_document
 ---
 
@@ -238,9 +237,9 @@ colData(obj)$cngeneson <- scale(colSums(assay(obj) > 0))
 cond <- factor(colData(obj)$cond)
 
 # Model expression as function of condition & number of detected genes
-zlmCond <- zlm.SingleCellAssay(~ cond + cngeneson, obj) 
+zlmCond <- zlm(~ cond + cngeneson, obj) 
 
-summaryCond <- summary(zlmCond, doLRT = "condNA19101")
+summaryCond <- summary(zlmCond, doLRT = "condNA19239")
 summaryDt <- summaryCond$datatable
 
 summaryDt <- as.data.frame(summaryDt)
