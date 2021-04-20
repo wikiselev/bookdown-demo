@@ -140,19 +140,20 @@ RUN Rscript -e 'install.packages(c( \
     "pbapply", "irlba", "dtw", "plotly", "metap", "lmtest", "fitdistrplus", "png", \
     "foreach", "vegan", "tidyr", "withr", "magrittr", "rmpi", "knitr", \
     "statmod", "mvoutlier", "penalized", "mgcv", "corrplot", \
-    "lsa", "uwot", "optparse", "DrImpute"))'
+    "lsa", "uwot", "optparse", "DrImpute", "alluvial"))'
 
 # Install Bioconductor packages
 RUN Rscript -e 'BiocManager::install(c( \
     "graph", "RBGL", "gtools", "xtable", "pcaMethods", "limma", "SingleCellExperiment", \
     "Rhdf5lib", "scater", "scran", "RUVSeq", "sva", "SC3", "TSCAN", "monocle", "destiny", \
     "DESeq2", "edgeR", "MAST", "scmap", "biomaRt", "MultiAssayExperiment", "SummarizedExperiment", \
-    "beachmat", "DropletUtils", "EnsDb.Hsapiens.v86"))'
+    "beachmat", "DropletUtils", "EnsDb.Hsapiens.v86", "batchelor"))'
 
 # Install github packages
 RUN Rscript -e 'devtools::install_github(c( \
     "immunogenomics/harmony", "tallulandrews/M3Drop", "hemberg-lab/scRNA.seq.funcs", \
-    "Vivianstats/scImpute", "theislab/kBET", "kieranrcampbell/ouija", "hemberg-lab/scfind"))'
+    "Vivianstats/scImpute", "theislab/kBET", "kieranrcampbell/ouija", "hemberg-lab/scfind", \
+    "cole-trapnell-lab/monocle3"))'
 
 # Install python packages
 RUN pip install --upgrade --no-cache \
