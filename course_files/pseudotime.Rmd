@@ -9,11 +9,12 @@ output: html_document
 library(knitr)
 opts_chunk$set(cache = TRUE, fig.align = "center")
 ```
+
 ```{r pseudotime1, echo=TRUE, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 library(TSCAN)
 library(M3Drop)
-library(monocle)
+library(monocle3)
 library(destiny)
 library(SLICER)
 library(ouija)
@@ -183,30 +184,32 @@ colnames(d) <- 1:ncol(d)
 geneNames <- rownames(d)
 rownames(d) <- 1:nrow(d)
 pd <- data.frame(timepoint = cellLabels)
-pd <- new("AnnotatedDataFrame", data=pd)
 fd <- data.frame(gene_short_name = geneNames)
-fd <- new("AnnotatedDataFrame", data=fd)
-
-dCellData <- newCellDataSet(d, phenoData = pd, featureData = fd, expressionFamily = tobit())
-dCellData <- setOrderingFilter(dCellData, which(geneNames %in% m3dGenes))
-dCellData <- estimateSizeFactors(dCellData)
-dCellDataSet <- reduceDimension(dCellData, pseudo_expr = 1)
-dCellDataSet <- orderCells(dCellDataSet, reverse = FALSE)
-plot_cell_trajectory(dCellDataSet)
-# Store the ordering
+dCellData <- new_cell_data_set(d, cell_metadata = pd, gene_metadata =  fd)
+dCellData <- preprocess_cds(dCellData, num_dim = 50)
+dCellData <- estimate_size_factors(dCellData)
+dCellDataSet <- reduce_dimension(dCellData, reduction_method = "UMAP")
+dCellDataSet <- cluster_cells(dCellDataSet, reduction_method = "UMAP")
+dCellDataSet <- learn_graph(dCellDataSet)
+root_group <- colnames(dCellDataSet)[clusters(dCellDataSet) == 1]
+dCellDataSet <- order_cells(dCellDataSet, root_cells = root_group)
+plot_cells(dCellDataSet)
+```
+```{r pseudotime10}
 pseudotime_monocle <-
     data.frame(
-        Timepoint = phenoData(dCellDataSet)$timepoint,
-        pseudotime = phenoData(dCellDataSet)$Pseudotime,
-        State = phenoData(dCellDataSet)$State
-    )
+        Timepoint = dCellDataSet@colData$timepoint,
+        pseudotime = dCellDataSet@principal_graph_aux$UMAP$pseudotime
+        #State = phenoData(dCellDataSet)$State
+)
+
 rownames(pseudotime_monocle) <- 1:ncol(d)
 pseudotime_order_monocle <-
     rownames(pseudotime_monocle[order(pseudotime_monocle$pseudotime), ])
 ```
 
 We can again compare the inferred pseudotime to the known sampling timepoints.
-```{r pseudotime10}
+```{r pseudotime11}
 deng_SCE$pseudotime_monocle <- pseudotime_monocle$pseudotime
 ggplot(as.data.frame(colData(deng_SCE)), 
        aes(x = pseudotime_monocle, 
@@ -229,7 +232,7 @@ Monocle - at least with its default settings - performs poorly on these data. Th
 
 We will take the ranko prder of cells in the first diffusion map component as "diffusion map pseudotime" here.
 
-```{r pseudotime11}
+```{r pseudotime12}
 deng <- logcounts(deng_SCE)
 colnames(deng) <- cellLabels
 dm <- DiffusionMap(t(deng))
@@ -281,13 +284,13 @@ determine which value of "k" (number of nearest neighbours) yields an embedding 
 most resembles a trajectory. Then we estimate the [locally linear
 embedding](https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction) of the cells.
 
-```{r pseudotime12, message=FALSE, warning=FALSE}
+```{r pseudotime13, message=FALSE, warning=FALSE}
 library("lle")
 slicer_genes <- select_genes(t(deng))
 k <- select_k(t(deng[slicer_genes,]), kmin = 30, kmax=60)
 slicer_traj_lle <- lle(t(deng[slicer_genes,]), m = 2, k)$Y
 reducedDim(deng_SCE, "LLE") <- slicer_traj_lle
-plotReducedDim(deng_SCE, use_dimred = "LLE", colour_by = "cell_type2") +
+plotReducedDim(deng_SCE, dimred = "LLE", colour_by = "cell_type2") +
     xlab("LLE component 1") + ylab("LLE component 2") +
     ggtitle("Locally linear embedding of cells from SLICER")
 ```
@@ -299,7 +302,7 @@ blue. Here we show the graph computed using 10 nearest
 neighbours. Here, SLICER appears to detect one major trajectory with
 one branch.
 
-```{r pseudotime13}
+```{r pseudotime14}
 slicer_traj_graph <- conn_knn_graph(slicer_traj_lle, 10)
 plot(slicer_traj_graph, main = "Fully connected kNN graph from SLICER")
 ```
@@ -307,14 +310,14 @@ plot(slicer_traj_graph, main = "Fully connected kNN graph from SLICER")
 From this graph we can identify "extreme" cells that are candidates
 for start/end cells in the trajectory.
 
-```{r pseudotime14}
+```{r pseudotime15}
 ends <- find_extreme_cells(slicer_traj_graph, slicer_traj_lle)
 start <- ends[1]
 ```
 
 Having defined a start cell we can order the cells in the estimated pseudotime.
 
-```{r pseudotime15}
+```{r pseudotime16}
 pseudotime_order_slicer <- cell_order(slicer_traj_graph, start)
 branches <- assign_branches(slicer_traj_graph, start)
 
@@ -333,7 +336,7 @@ We can again compare the inferred pseudotime to the known sampling
 timepoints. SLICER does not provide a pseudotime value per se, just an
 ordering of cells.
 
-```{r pseudotime16}
+```{r pseudotime17}
 ggplot(as.data.frame(colData(deng_SCE)), 
        aes(x = pseudotime_slicer, 
            y = cell_type2, colour = cell_type2)) +
@@ -374,7 +377,7 @@ With Ouija we can model genes as either exhibiting monotonic up or down regulati
 
 Here we can "cheat" a little and check that our selected marker genes do actually identify different timepoints of the differentiation process.
 
-```{r pseudotime17, fig.height=11}
+```{r pseudotime18, fig.height=11}
 ouija_markers_down <- c("Dazl", "Rnf17", "Sycp3", "Fgf8", 
                         "Egfr", "Bmp5", "Bmp15", "Pou5f1")
 ouija_markers_up <- c("Creb3", "Gpx4", "Krt8", "Elf5", "Cdx2", 
@@ -400,7 +403,7 @@ In general, HMC will provide more accurate inference with approximately correct 
 To help the Ouija model, we provide it with prior information about the strength of switches for up- and down-regulated genes. By setting switch strength to -10 for down-regulated genes and 10 for up-regulated genes with a prior strength standard deviation of 0.5 we are telling the model that we are confident about the expected behaviour of these genes across the differentiation process.
 
 
-```{r pseudotime18, warning=FALSE, message=FALSE, result='hide'}
+```{r pseudotime19, warning=FALSE, message=FALSE, result='hide'}
 options(mc.cores = parallel::detectCores())
 response_type <- c(rep("switch", length(ouija_markers_down) + 
                            length(ouija_markers_up)), 
@@ -423,26 +426,26 @@ print(oui_vb)
 
 We can plot the gene expression over pseudotime along with the maximum a posteriori (MAP) estimates of the mean function (the sigmoid or Gaussian transient function) using the plot_expression function. 
 
-```{r pseudotime19}
+```{r pseudotime20}
 plot_expression(oui_vb)
 ```
 
 We can also visualise when in the trajectory gene regulation behaviour occurs, either in the form of the switch time or the peak time (for switch-like or transient genes) using the plot_switch_times and plot_transient_times functions:
 
-```{r pseudotime20}
+```{r pseudotime21}
 plot_switch_times(oui_vb)
 plot_peak_times(oui_vb)
 ```
 
 Identify metastable states using consistency matrices.
 
-```{r pseudotime21}
+```{r pseudotime22}
 cmo <- consistency_matrix(oui_vb)
 plot_consistency(oui_vb)
 cell_classifications <- cluster_consistency(cmo)
 ```
 
-```{r pseudotime22}
+```{r pseudotime23}
 map_pst <- map_pseudotime(oui_vb)
 ouija_pseudotime <- data.frame(map_pst, cell_classifications)
 
@@ -469,7 +472,7 @@ Ouija does quite well in the ordering of the cells here, although it can be sens
 
 Ouija identifies four metastable states here, which we might annotate as  "zygote/2cell", "4/8/16 cell", "blast1" and "blast2".
 
-```{r pseudotime23}
+```{r pseudotime24}
 ggplot(as.data.frame(colData(deng_SCE)), 
        aes(x = as.factor(ouija_cell_class), 
            y = pseudotime_ouija, colour = cell_type2)) +
@@ -483,10 +486,9 @@ ggplot(as.data.frame(colData(deng_SCE)),
 
 A common analysis is to work out the regulation orderings of genes. For example, is gene A upregulated before gene B? Does gene C peak before the downregulation of gene D? Ouija answers these questions in terms of a Bayesian hypothesis test of whether the difference in regulation timing (either switch time or peak time) is significantly different to 0. This is collated using the gene_regulation function.
 
-```{r pseudotime24}
+```{r pseudotime25}
 gene_regs <- gene_regulation(oui_vb)
 head(gene_regs)
-
 ```
 
 What conclusions can you draw from the gene regulation output from Ouija?
@@ -500,7 +502,7 @@ How do the trajectories inferred by TSCAN, Monocle, Diffusion Map, SLICER and Ou
 
 TSCAN and Diffusion Map methods get the trajectory the "wrong way round", so we'll adjust that for these comparisons.
 
-```{r pseudotime25, fig.width=10}
+```{r pseudotime26, fig.width=10}
 df_pseudotime <- as.data.frame(
     colData(deng_SCE)[, grep("pseudotime", colnames(colData(deng_SCE)))]
 )
@@ -535,28 +537,28 @@ SLICER that do not provide plotting functions.
 
 
 __Principal components__
-```{r pseudotime26, message=FALSE}
+```{r pseudotime27, message=FALSE}
 plotExpression(deng_SCE, "Rhoa", x = "PC1", 
                colour_by = "cell_type2", show_violin = FALSE,
                show_smooth = TRUE)
 ```
 
 __TSCAN__
-```{r pseudotime27, message=FALSE, warning=FALSE}
+```{r pseudotime28, message=FALSE, warning=FALSE}
 plotExpression(deng_SCE, "Rhoa", x = "pseudotime_order_tscan", 
                colour_by = "cell_type2", show_violin = FALSE,
                show_smooth = TRUE)
 ```
 
 __Monocle__
-```{r pseudotime28, message=FALSE}
+```{r pseudotime29, message=FALSE}
 plotExpression(deng_SCE, "Rhoa", x = "pseudotime_monocle", 
                colour_by = "cell_type2", show_violin = FALSE,
                show_smooth = TRUE)
 ```
 
 __Diffusion Map__
-```{r pseudotime29, message=FALSE}
+```{r pseudotime30, message=FALSE}
 plotExpression(deng_SCE, "Rhoa", x = "pseudotime_diffusionmap", 
                colour_by = "cell_type2", show_violin = FALSE,
                show_smooth = TRUE)
@@ -564,14 +566,14 @@ plotExpression(deng_SCE, "Rhoa", x = "pseudotime_diffusionmap",
 
 
 __SLICER__
-```{r pseudotime30, message=FALSE}
+```{r pseudotime31, message=FALSE}
 plotExpression(deng_SCE, "Rhoa", x = "pseudotime_slicer", 
                colour_by = "cell_type2", show_violin = FALSE,
                show_smooth = TRUE)
 ```
 
 __Ouija__
-```{r pseudotime31, message=FALSE}
+```{r pseudotime32, message=FALSE}
 plotExpression(deng_SCE, "Rhoa", x = "pseudotime_ouija", 
                colour_by = "cell_type2", show_violin = FALSE,
                show_smooth = TRUE)
@@ -583,6 +585,6 @@ __Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of
 
 ### sessionInfo()
 
-```{r pseudotime32, echo=FALSE}
+```{r pseudotime33, echo=FALSE}
 sessionInfo()
 ```

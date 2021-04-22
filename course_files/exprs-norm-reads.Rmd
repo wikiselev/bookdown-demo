@@ -2,104 +2,184 @@
 output: html_document
 ---
 
-## Normalization practice (Reads)
+## Normalization theory
 
-```{r exprs-norm-read0, echo=FALSE, message=FALSE, warning=FALSE}
+### Introduction
+
+```{r exprs-norm-reads0, echo=FALSE}
+library(scRNA.seq.funcs)
+library(knitr)
+opts_chunk$set(cache = TRUE, out.width='90%', fig.align = 'center')
+insert_fun <- function(name) {
+  read_chunk(lines = capture.output(dump(name, '')), labels = paste(name, 'source', sep = '-'))
+}
+insert_fun('calc_cpm')
+insert_fun('calc_sf')
+insert_fun('calc_uq')
+insert_fun('calc_cell_RLE')
+insert_fun('Down_Sample_Matrix')
+```
+
+In the previous chapter we identified important confounding factors and explanatory variables. `scater` allows one to account for these variables in subsequent statistical models or to condition them out using `normaliseExprs()`, if so desired. This can be done by providing a design matrix to `normaliseExprs()`. We are not covering this topic here, but you can try to do it yourself as an exercise.
+
+Instead we will explore how simple size-factor normalisations correcting for library size can remove the effects of some of the confounders and explanatory variables.
+
+### Library size
+
+Library sizes vary because scRNA-seq data is often sequenced on highly multiplexed platforms the total reads which are derived from each cell may differ substantially. Some quantification methods
+(eg. [`Cufflinks`](http://cole-trapnell-lab.github.io/cufflinks/), [`RSEM`](http://deweylab.github.io/RSEM/)) incorporated library size when determining gene expression estimates thus do not require this normalization.
+
+However, if another quantification method was used then library size must be corrected for by multiplying or dividing each column of the expression matrix by a "normalization factor" which is an estimate of the library size relative to the other cells. Many methods to correct for library size have been developped for bulk RNA-seq and can be equally applied to scRNA-seq (eg. __UQ__, __SF__, __CPM__, __RPKM__, __FPKM__, __TPM__). 
+
+
+### Normalisations
+
+#### CPM
+
+The simplest way to normalize this data is to convert it to counts per
+million (__CPM__) by dividing each column by its total then multiplying by
+1,000,000. Note that spike-ins should be excluded from the
+calculation of total expression in order to correct for total cell RNA
+content, therefore we will only use endogenous genes. Example of a __CPM__ function in `R`:
+
+```{r exprs-norm-reads1, eval=FALSE}
+
+```
+
+One potential drawback of __CPM__ is if your sample contains genes that are both very highly expressed and differentially expressed across the cells. In this case, the total molecules in the cell may depend of whether such genes are on/off in the cell and normalizing by total molecules may hide the differential expression of those genes and/or falsely create differential expression for the remaining genes. 
+
+__Note__ __RPKM__, __FPKM__ and __TPM__ are variants on __CPM__ which further adjust counts by the length of the respective gene/transcript.
+
+To deal with this potentiality several other measures were devised.
+
+#### RLE (SF)
+
+The __size factor (SF)__ was proposed and popularized by DESeq [@Anders2010-jr]. First the geometric mean of each gene across all cells is calculated. The size factor for each cell is the median across genes of the ratio of the expression to the gene's geometric mean. A drawback to this method is that since it uses the geometric mean only genes with non-zero expression values across all cells can be used in its calculation, making it unadvisable for large low-depth scRNASeq experiments. `edgeR` & `scater` call this method __RLE__ for "relative log expression". Example of a __SF__ function in `R`:
+
+```{r exprs-norm-reads2, eval=FALSE}
+
+```
+
+#### UQ
+
+The __upperquartile (UQ)__ was proposed by [@Bullard2010-eb]. Here each column is divided by the 75% quantile of the counts for each library. Often the calculated quantile is scaled by the median across cells to keep the absolute level of expression relatively consistent. A drawback to this method is that for low-depth scRNASeq experiments the large number of undetected genes may result in the 75% quantile being zero (or close to it). This limitation can be overcome by generalizing the idea and using a higher quantile (eg. the 99% quantile is the default in scater) or by excluding zeros prior to calculating the 75% quantile. Example of a __UQ__ function in `R`:
+
+```{r exprs-norm-reads3, eval=FALSE}
+
+```
+
+#### TMM
+
+Another method is called __TMM__ is the weighted trimmed mean of M-values (to the reference) proposed by [@Robinson2010-hz]. The M-values in question are the gene-wise log2 fold changes between individual cells. One cell is used as the reference then the M-values for each other cell is calculated compared  to this reference. These values are then trimmed by removing the top and bottom ~30%, and the average of the remaining values is calculated by weighting them to account for the effect of the log scale on variance. Each non-reference cell is multiplied by the calculated factor. Two potential issues with this method are insufficient non-zero genes left after trimming, and the assumption that most genes are not differentially expressed.
+
+#### scran
+
+`scran` package implements a variant on __CPM__ specialized for single-cell data [@L_Lun2016-pq]. Briefly this method deals with the problem of vary large numbers of zero values per cell by pooling cells together calculating a normalization factor (similar to __CPM__) for the sum of each pool. Since each cell is found in many different pools, cell-specific factors can be deconvoluted from the collection of pool-specific factors using linear algebra. 
+
+#### Downsampling
+
+A final way to correct for library size is to downsample the expression matrix so that each cell has approximately the same total number of molecules. The benefit of this method is that zero values will be introduced by the down sampling thus eliminating any biases due to differing numbers of detected genes. However, the major drawback is that the process is not deterministic so each time the downsampling is run the resulting expression matrix is slightly different. Thus, often analyses must be run on multiple downsamplings to ensure results are robust. Example of a __downsampling__ function in `R`:
+
+```{r exprs-norm-reads4, eval=FALSE}
+
+```
+
+### Effectiveness
+
+to compare the efficiency of different normalization methods we will use visual inspection of `PCA` plots and calculation of cell-wise _relative log expression_ via `scater`'s `plotRLE()` function. Namely, cells with many (few) reads have higher (lower) than median expression for most genes resulting in a positive (negative) _RLE_ across the cell, whereas normalized cells have an _RLE_ close to zero. Example of a _RLE_ function in `R`:
+
+```{r exprs-norm-reads5, eval=FALSE}
+
+```
+
+__Note__ The __RLE__, __TMM__, and __UQ__ size-factor methods were developed for bulk RNA-seq data and, depending on the experimental context, may not be appropriate for single-cell RNA-seq data, as their underlying assumptions may be problematically violated. 
+
+__Note__ `scater` acts as a wrapper for the `calcNormFactors` function from `edgeR` which implements several library size normalization methods making it easy to apply any of these methods to our data.
+
+__Note__ `edgeR` makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/DESeq) may give different results to the `estimateSizeFactorsForMatrix` method in the `DESeq`/`DESeq2` packages. In addition, some versions of `edgeR` will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
+
+__Note__ For __CPM__ normalisation we use `scater`'s `calculateCPM()` function. For __RLE__, __UQ__ and __TMM__ we used to use `scater`'s `normaliseExprs()` function (it is deprecated now and therefore we removed the corresponding subchapters). For __scran__ we use `scran` package to calculate size factors (it also operates on `SingleCellExperiment` class) and `scater`'s `normalize()` to normalise the data. All these normalization functions save the results to the `logcounts` slot of the `SCE` object. For __downsampling__ we use our own functions shown above.
+
+## Normalization practice (UMI)
+
+We will continue to work with the `tung` data that was used in the previous chapter.
+
+```{r exprs-norm-reads6, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
 library(scater)
 library(scran)
 options(stringsAsFactors = FALSE)
 set.seed(1234567)
-library(knitr)
-opts_chunk$set(cache= TRUE, out.width='90%', fig.align = 'center', echo=FALSE)
 reads <- readRDS("data/tung/reads.rds")
-reads.qc <- reads[rowData(reads)$use, colData(reads)$use]
-endog_genes <- !rowData(reads.qc)$is_feature_control
+reads.qc <- reads[rowData(reads)$use, ! colData(reads)$discard]
 ```
 
-```{r exprs-norm-read1, fig.cap = "PCA plot of the tung data"}
-tmp <- runPCA(
-  reads.qc[endog_genes, ],
-  exprs_values = "logcounts_raw"
-)
-plotPCA(
-    tmp,
-    colour_by = "batch",
-    size_by = "total_features_by_counts",
-    shape_by = "individual"
-)
+### Raw
+```{r exprs-norm-reads7, fig.cap = "PCA plot of the tung data"}
+reads.qc <- runPCA(reads.qc,exprs_values = "logcounts_raw")
+plotPCA(reads.qc,colour_by = "batch", size_by = "detected", shape_by = "individual")
 ```
 
-```{r exprs-norm-read2, fig.cap = "PCA plot of the tung data after CPM normalisation"}
-logcounts(reads.qc) <- log2(calculateCPM(reads.qc, use_size_factors = FALSE) + 1)
-plotPCA(
-    reads.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features_by_counts",
-    shape_by = "individual"
-)
-```
-```{r exprs-norm-read3, fig.cap = "Cell-wise RLE of the tung data", warning=FALSE}
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_values = "logcounts_raw",
-    colour_by = "batch"
-)
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_values = "logcounts",
-    colour_by = "batch"
-)
+### CPM
+```{r exprs-norm-reads8, fig.cap = "PCA plot of the tung data after CPM normalisation"}
+logcounts(reads.qc) <- log2(calculateCPM(reads.qc) + 1)
+plotPCA(reads.qc, colour_by = "batch", size_by = "detected", shape_by = "individual")
 ```
 
-```{r exprs-norm-read4, fig.cap = "PCA plot of the tung data after LSF normalisation"}
+```{r exprs-norm-reads9, fig.cap = "Cell-wise RLE of the tung data"}
+plotRLE(reads.qc, exprs_values = "logcounts_raw",colour_by = "batch")
+plotRLE(reads.qc, exprs_values = "logcounts",colour_by = "batch")
+```
+
+### scran
+```{r exprs-norm-reads10, fig.cap = "PCA plot of the tung data after LSF normalisation"}
 qclust <- quickCluster(reads.qc, min.size = 30)
 reads.qc <- computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
-reads.qc <- normalize(reads.qc)
-plotPCA(
-    reads.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features_by_counts",
-    shape_by = "individual"
-)
+reads.qc <- logNormCounts(reads.qc) ## normalize is defunct
+plotPCA(reads.qc, colour_by = "batch",size_by = "detected", shape_by = "individual")
 ```
 
-```{r exprs-norm-read5, fig.cap = "Cell-wise RLE of the tung data"}
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_values = "logcounts_raw",
-    colour_by = "batch"
-)
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_values = "logcounts",
-    colour_by = "batch"
-)
+```{r exprs-norm-reads11, fig.cap = "Cell-wise RLE of the tung data"}
+plotRLE(reads.qc, exprs_values = "logcounts_raw",colour_by = "batch")
+plotRLE(reads.qc, exprs_values = "logcounts",colour_by = "batch")
 ```
+scran sometimes calculates negative or zero size factors. These will completely distort the normalized expression matrix. 
+We can check the size factors scran has computed like so:
+```{r exprs-norm-reads12}
+summary(sizeFactors(reads.qc))
+```
+For this dataset all the size factors are reasonable so we are done. If you find scran has calculated negative size factors try increasing the cluster and pool sizes until they are all positive.
 
-```{r exprs-norm-read6, fig.cap = "PCA plot of the tung data after downsampling"}
+### Downsampling 
+
+```{r exprs-norm-reads13, fig.cap = "PCA plot of the tung data after downsampling"}
 logcounts(reads.qc) <- log2(Down_Sample_Matrix(counts(reads.qc)) + 1)
-plotPCA(
-    reads.qc[endog_genes, ],
-    colour_by = "batch",
-    size_by = "total_features_by_counts",
-    shape_by = "individual"
-)
-```
-```{r exprs-norm-read7, fig.cap = "Cell-wise RLE of the tung data"}
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_values = "logcounts_raw",
-    colour_by = "batch"
-)
-plotRLE(
-    reads.qc[endog_genes, ], 
-    exprs_values = "logcounts",
-    colour_by = "batch"
-)
+plotPCA(reads.qc,colour_by = "batch",size_by = "detected", shape_by = "individual")
 ```
 
-```{r exprs-norm-read8}
+```{r exprs-norm-reads14, fig.cap = "Cell-wise RLE of the tung data"}
+plotRLE(reads.qc, exprs_values = "logcounts_raw",colour_by = "batch")
+plotRLE(reads.qc, exprs_values = "logcounts",colour_by = "batch")
+```
+
+### Normalisation for gene/transcript length
+
+Some methods combine library size and fragment/gene length normalization such as:
+
+* __RPKM__ - Reads Per Kilobase Million (for single-end sequencing)
+* __FPKM__ - Fragments Per Kilobase Million (same as __RPKM__ but for paired-end sequencing, makes sure that paired ends mapped to the same fragment are not counted twice)
+* __TPM__ - Transcripts Per Kilobase Million (same as __RPKM__, but the order of normalizations is reversed - length first and sequencing depth second)
+
+These methods are not applicable to our dataset since the end
+of the transcript which contains the UMI was preferentially
+sequenced. Furthermore in general these should only be calculated
+using appropriate quantification software from aligned BAM files not
+from read counts since often only a portion of the entire
+gene/transcript is sequenced, not the entire length. If in doubt check 
+for a relationship between gene/transcript length and expression level.
+
+However, here we show how these normalisations can be calculated using `scater`. First, we need to find the effective transcript length in Kilobases. However, our dataset containes only gene IDs, therefore we will be using the gene lengths instead of transcripts. `scater` uses the [biomaRt](https://bioconductor.org/packages/release/bioc/html/biomaRt.html) package, which allows one to annotate genes by other attributes:
+```{r exprs-norm-reads15, message = FALSE, warning = FALSE}
 reads.qc <- getBMFeatureAnnos(
     reads.qc,
     filters = "ensembl_gene_id", 
@@ -109,57 +189,78 @@ reads.qc <- getBMFeatureAnnos(
         "chromosome_name",
         "start_position",
         "end_position"
-    ), 
+   ), 
     biomart = "ENSEMBL_MART_ENSEMBL", 
     dataset = "hsapiens_gene_ensembl",
     host = "www.ensembl.org"
 )
+
+# If you have mouse data, change the arguments based on this example:
+# getBMFeatureAnnos(
+#     object,
+#     filters = "ensembl_transcript_id",
+#     attributes = c(
+#         "ensembl_transcript_id",
+#         "ensembl_gene_id", 
+#         "mgi_symbol",
+#         "chromosome_name",
+#         "transcript_biotype",
+#         "transcript_start",
+#         "transcript_end",
+#         "transcript_count"
+#     ),
+#     biomart = "ENSEMBL_MART_ENSEMBL",
+#     dataset = "mmusculus_gene_ensembl",
+#     host = "www.ensembl.org"
+# )
 ```
 
-```{r exprs-norm-read9}
+Some of the genes were not annotated, therefore we filter them out:
+```{r exprs-norm-reads16}
 reads.qc.ann <- reads.qc[!is.na(rowData(reads.qc)$ensembl_gene_id), ]
 ```
 
-```{r exprs-norm-read10}
-eff_length <- 
-    abs(rowData(reads.qc.ann)$end_position - rowData(reads.qc.ann)$start_position) / 1000
+Now we compute the total gene length in Kilobases by using the `end_position` and `start_position` fields:
+```{r exprs-norm-reads17}
+eff_length <- abs(rowData(reads.qc.ann)$end_position - rowData(reads.qc.ann)$start_position) / 1000
 ```
 
-```{r exprs-norm-read11}
+```{r exprs-norm-reads18, fig.cap = "Gene length vs Mean Expression for the raw data"}
+plot(eff_length, rowMeans(counts(reads.qc.ann)))
+```
+There is no relationship between gene length and mean expression so __FPKM__s & __TPM__s are inappropriate for this dataset. 
+But we will demonstrate them anyway.
+
+__Note__ Here calculate the total gene length instead of the total exon length. Many genes will contain lots of introns so their `eff_length` will be very different from what we have calculated. Please consider our calculation as approximation. If you want to use the total exon lengths, please refer to [this page](https://www.biostars.org/p/83901/).
+
+Now we are ready to perform the normalisations:
+```{r exprs-norm-reads19}
 tpm(reads.qc.ann) <- log2(calculateTPM(reads.qc.ann, eff_length) + 1)
 ```
 
-```{r exprs-norm-read12, fig.cap = "PCA plot of the tung data after TPM normalisation"}
-tmp <- runPCA(
-  reads.qc.ann,
-  exprs_values = "tpm",
-)
-plotPCA(
-    tmp,
-    colour_by = "batch",
-    size_by = "total_features_by_counts",
-    shape_by = "individual"
-)
+Plot the results as a PCA plot:
+```{r exprs-norm-reads20, fig.cap = "PCA plot of the tung data after TPM normalisation"}
+tmp <- runPCA(reads.qc.ann, exprs_values = "tpm")
+plotPCA(tmp,colour_by = "batch",size_by = "detected",shape_by = "individual")
 ```
 
-```{r exprs-norm-read13}
+```{r exprs-norm-reads21}
 tpm(reads.qc.ann) <- log2(calculateFPKM(reads.qc.ann, eff_length) + 1)
 ```
 
-```{r exprs-norm-read14, fig.cap = "PCA plot of the tung data after FPKM normalisation", eval=FALSE}
-tmp <- runPCA(
-  reads.qc.ann,
-  exprs_values = "tpm",
-)
-plotPCA(
-    tmp,
-    colour_by = "batch",
-    size_by = "total_features_by_counts",
-    shape_by = "individual"
-)
+```{r exprs-norm-reads22, fig.cap = "PCA plot of the tung data after FPKM normalisation"}
+tmp <- runPCA(reads.qc.ann, exprs_values = "tpm")
+plotPCA(tmp,colour_by = "batch",size_by = "detected",shape_by = "individual")
 ```
 
-```{r exprs-norm-read15}
+__Note__ The `PCA` looks for differences between cells. Gene length is the same across cells for each gene thus __FPKM__ is almost identical to the __CPM__ plot (it is just rotated) since it performs __CPM__ first then normalizes gene length. Whereas, __TPM__ is different because it weights genes by their length before performing __CPM__. 
+
+### Exercise
+
+Perform the same analysis with read counts of the `tung` data. Use `tung/reads.rds` file to load the reads `SCE` object. Once you have finished please compare your results to ours (next chapter).
+
+### sessionInfo()
+
+```{r exprs-norm-reads23, echo=FALSE}
 sessionInfo()
 ```
-

@@ -19,3 +19,16 @@
 
   gtag('config', 'UA-71525309-1');
 </script>
+
+<!-- For Logo -->
+<script>
+  $(document).ready(function(){
+    $(".book-header").prepend('<img id="SangerLogo" src="figures/sanger-logo-header.png" />')
+  }
+</script>
+
+<script>
+  $(document).ready(function(){
+    $('.book-header').wrap( $('<a>').attr('href', 'https://www.sanger.ac.uk/').attr('target', '_blank'))
+  });
+</script>

@@ -7,6 +7,7 @@ output: html_document
 library(knitr)
 opts_chunk$set(cache = TRUE, fig.align="center")
 ```
+
 ```{r imputation1, echo=TRUE, message=FALSE, warning=FALSE}
 library(scImpute)
 library(SC3)
@@ -54,7 +55,13 @@ To test `scImpute`, we use the default parameters and we apply it to the Deng da
 
 ```{r imputation2, message=FALSE, warning=FALSE, paged.print=FALSE}
 deng <- readRDS("data/deng/deng-reads.rds")
+```
+
+```{r imputation3}
 write.csv(counts(deng), "deng.csv")
+```
+
+```{r imputation4}
 scimpute(
     count_path = "deng.csv",
     infile = "csv",
@@ -67,7 +74,7 @@ scimpute(
 
 Now we can compare the results with original data by considering a PCA plot
 
-```{r imputation3}
+```{r imputation5}
 res <- read.table("scimpute_count.txt")
 colnames(res) <- NULL
 res <- SingleCellExperiment(
@@ -75,6 +82,7 @@ res <- SingleCellExperiment(
     colData = colData(deng)
 )
 rowData(res)$feature_symbol <- rowData(deng)$feature_symbol
+res <- runPCA(res)
 plotPCA(
     res, 
     colour_by = "cell_type2"
@@ -85,14 +93,14 @@ Compare this result to the original data in Chapter \@ref(clust-methods). What a
 
 We can examine the expression of specific genes to directly see the effect of
  imputation on the expression distribution.
-```{r imputation4}
+```{r imputation6}
 plotExpression(res, c("Sox2", "Eomes", "Zscan4d", "Fgf4"))
 plotExpression(deng, c("Sox2", "Eomes", "Zscan4d", "Fgf4"))
 ```
 
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
-```{r imputation5, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r imputation7, message=FALSE, warning=FALSE, paged.print=FALSE}
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
 res <- sc3(res, ks = 10, n_cores = 1, gene_filter = FALSE)
@@ -109,9 +117,9 @@ __Exercise:__ Based on the PCA and the clustering results, do you think that imp
 
 We can do the same for DrImpute. DrImpute runs on a log-normalized expression matrix directly in R, we generate this matrix using scater, then run DrImpute. Unlike scImpute, DrImpute considers the consensus imputation across a range of ks using two differ correlation distances:
 
-```{r imputation6}
-deng <- normalize(deng)
-res <- DrImpute(deng@assays[["logcounts"]], ks=8:12)
+```{r imputation8}
+deng <- logNormCounts(deng)
+res <- DrImpute(deng@assays@data$logcounts, ks=8:12)
 colnames(res) <- colnames(deng)
 rownames(res) <- rownames(deng)
 res <- SingleCellExperiment(
@@ -119,6 +127,7 @@ res <- SingleCellExperiment(
     colData = colData(deng)
 )
 rowData(res)$feature_symbol <- rowData(deng)$feature_symbol
+res <- runPCA(res)
 plotPCA(
     res, 
     colour_by = "cell_type2"
@@ -141,11 +150,17 @@ within the dataset. Since it is based on a diffusion process, it specifically
 enhances trajectory-like structure in a dataset, in contrast to scImpute and 
 DrImpute which assume a cluster-like structure to the underlying data.
 
-```{r imputation7, eval=FALSE}
-res <- magic(t(deng@assays[["logcounts"]]), genes="all_genes", k=10, t="auto")
+```{r imputation9, eval=FALSE}
+### NEED TO CREATE ENV CALLED magic_env
+### NEED TO pip install python-magic and magic-impute
+library(reticulate)
+use_condaenv('magic_env')
+py_discover_config(required_module = "magic")
+magic <- reticulate::import('magic')
+res <- magic(t(deng@assays@data$logcounts), genes="all_genes", knn=10, t="auto")
 ```
 
-```{r imputation8, eval=FALSE}
+```{r imputation10, eval=FALSE}
 res <- t(as.matrix(res))
 rownames(res) <- rownames(deng)
 colnames(res) <- colnames(deng)
@@ -154,6 +169,7 @@ res <- SingleCellExperiment(
     colData = colData(deng)
 )
 rowData(res)$feature_symbol <- rownames(res)
+res <- runPCA(res)
 plotPCA(
     res, 
     colour_by = "cell_type2"
@@ -163,11 +179,12 @@ plotPCA(
 Compare this result to the original data in Chapter \@ref(clust-methods). What are the most significant differences?
 
 To evaluate the impact of the imputation, we use `SC3` to cluster the imputed matrix
-```{r imputation9, message=FALSE, warning=FALSE, paged.print=FALSE, eval=FALSE}
+```{r imputation11, message=FALSE, warning=FALSE, paged.print=FALSE, eval=FALSE}
 res <- sc3_estimate_k(res)
 metadata(res)$sc3$k_estimation
 res <- sc3(res, ks = 10, n_cores = 1, gene_filter = FALSE)
 adjustedRandIndex(colData(deng)$cell_type2, colData(res)$sc3_10_clusters)
+res <- runPCA(res)
 plotPCA(
     res, 
     colour_by = "sc3_10_clusters"
@@ -183,6 +200,6 @@ __Exercise:__ What is the difference between `scImpute` and `MAGIC` based on the
 
 ### sessionInfo()
 
-```{r imputation10, echo=FALSE}
+```{r imputation12, echo=FALSE}
 sessionInfo()
 ```
