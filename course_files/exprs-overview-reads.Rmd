@@ -19,7 +19,7 @@ opts_chunk$set(cache = TRUE, out.width='90%', fig.align = 'center')
 library(SingleCellExperiment)
 library(scater)
 options(stringsAsFactors = FALSE)
-reads <- readRDS("data/tung/umi.rds")
+reads <- readRDS("data/tung/reads.rds")
 reads.qc <- reads[rowData(reads)$use,! colData(reads)$discard]
 ```
 

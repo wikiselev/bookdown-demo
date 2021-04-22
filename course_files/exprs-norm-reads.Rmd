@@ -110,7 +110,7 @@ library(scater)
 library(scran)
 options(stringsAsFactors = FALSE)
 set.seed(1234567)
-reads <- readRDS("data/tung/umi.rds")
+reads <- readRDS("data/tung/reads.rds")
 reads.qc <- reads[rowData(reads)$use, ! colData(reads)$discard]
 ```
 
