@@ -7,7 +7,6 @@ bookdown::gitbook:
       collapse: section
       before: |
         <li><a href="index.html">Table of Contents</a></li>
-        <img src="figures/logo.jpg", alt="Sanger Logo", width = "100%" />
       after: |
         <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab</a></li>
     download: [pdf]
