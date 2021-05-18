@@ -1,0 +1,55 @@
+name: Build scRNAseq-course
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build-course:  
+    name: Build scRNAseq-course
+    
+    runs-on: self-hosted
+    container:
+      image: quay.io/cellgeni/scrna-seq-course:v5.11
+      options: --user root
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: other-v2-signature
+      BUILD_DIR: $GITHUB_WORKSPACE/build
+
+    steps:     
+      - name: Clean workspace before start
+        run: rm -rf $GITHUB_WORKSPACE/*
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create build folders
+        run: |
+          mkdir -p $BUILD_DIR
+          mkdir -p $BUILD_DIR/data
+          mkdir -p $BUILD_DIR/_bookdown_files
+          
+      - name: Copy course files to build folder
+        run : cp -r $GITHUB_WORKSPACE/course_files/* $BUILD_DIR
+
+      - name: Retrieve course data from S3
+        run: aws s3 sync s3://test-course-bucket/data/ $BUILD_DIR/data --endpoint-url ${{ secrets.AWS_S3_ENDPOINT }}
+
+      - name: Retrieve bookdown cache from S3
+        run: aws s3 sync s3://test-course-bucket/_bookdown_files/ $BUILD_DIR/_bookdown_files --endpoint-url ${{ secrets.AWS_S3_ENDPOINT }}
+          
+      - name: Render bookdown Rmd files for site generation
+        working-directory: ${{ env.BUILD_DIR }}
+        run: Rscript -e "bookdown::render_book('index.html', 'bookdown::gitbook')"
+        
+      - name: Upload rendered bookdown files to S3
+        run: aws s3 sync $BUILD_DIR/website s3://test-course-bucket/website/ --endpoint-url ${{ secrets.AWS_S3_ENDPOINT }} --acl public-read
+        
+      - name: Upload bookdown cache to S3
+        run: aws s3 sync $BUILD_DIR/_bookdown_files s3://test-course-bucket/_bookdown_files/ --endpoint-url ${{ secrets.AWS_S3_ENDPOINT }}
+
+      - name: Clean workspace after finish
+        run: rm -rf $GITHUB_WORKSPACE/*
