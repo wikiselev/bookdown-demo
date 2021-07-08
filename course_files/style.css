@@ -27,5 +27,107 @@ pre code {
     background-repeat: no-repeat !important;
     background-position: calc(100% - 130px) !important;
     background-size: 100px 40px !important;
-    background-image: url("figures/sanger-logo-header.png") !important; 
+    background-image: url("figures/sanger-logo-header.png") !important;
+}
+
+
+/*---- Boxes ---- */
+
+/* Initialise Counters */
+:root {
+  counter-reset: question;
+}
+
+.box,
+.warning,
+.note,
+.highlight,
+.exercise {
+  padding: 1em 1em 1em 3em;
+  /* specify the image properties */
+  background-repeat: no-repeat;
+  background-position: 0.5em 1em;
+  background-size: 2em;
+  margin: 10px;
+  /*border: 3px black;
+  border-style: solid;*/
+  background-color: #f7f8fa;
+  /*box-shadow: 0 0 3px 2px #eceef2;*/
+  color: black;
+}
+
+.warning:before,
+.note:before,
+.highlight:before,
+.exercise:before {
+  font-weight: bold;
+  font-size: 13px;
+  color: black;
+}
+
+.warning {
+  background-color: #fff6f5;
+  box-shadow: 0 0 3px 2px #fce4e1;
+  background-image: url("https://fonts.gstatic.com/s/i/materialiconsoutlined/error_outline/v11/24px.svg");
+}
+.warning:before {
+  content: "WATCH OUT";
+}
+
+.note {
+  background-color: #ebebf2;
+  color: #1b1b1b;
+  box-shadow: 0 0 3px 2px #ebebf2;
+  background-image: url("https://fonts.gstatic.com/s/i/materialiconsoutlined/info/v15/24px.svg");
+}
+
+.highlight {
+  background-image: url("https://fonts.gstatic.com/s/i/materialiconsoutlined/tips_and_updates/v1/24px.svg");
+  border-left: 10px solid #FFC107;
+}
+
+.exercise {
+  background-color: #fef9f1;
+  box-shadow: 0 0 3px 2px #fcedd7;
+  background-image: url("https://fonts.gstatic.com/s/i/materialiconsoutlined/quiz/v8/24px.svg");
+}
+.exercise:before {
+  counter-increment: question;
+  content: "EXERCISE " counter(question);
+}
+
+.box {
+  padding-left: 1em;
+}
+
+.figure {
+  display: table;
+  float: none;
+  text-align: center;
+  font-size: 13px;
+  text-indent: 0;
+  /*border: 1px solid;
+  border-radius: 10px;*/
+  box-shadow: grey 0 5px 15px;
+  margin: 1.5em 0.5em 2em 0.5em;
+  padding: 0.5em 0.5em 0 0.5em;
+}
+
+
+/*---- "details" element ----*/
+/* usually used for exercise answers */
+
+details {
+/*  background: #373c3e;
+  color: #f1f3f4;*/
+  padding: .5rem 1rem;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+details summary > * {
+  display: inline;
 }
